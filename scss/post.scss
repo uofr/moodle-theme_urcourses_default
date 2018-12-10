@@ -2,6 +2,21 @@
 /* stylelint-disable max-line-length */
 
 /*------------------------------------
+  Page
+  -------------------------------------*/
+
+/* Special styles for small screens (768px and down) to get more content because of reduced paddings. */
+@include media-breakpoint-down(sm) {
+    #page.container-fluid {
+        padding: 0 .5rem;
+        #region-main .card-body {
+            padding: 0.5rem 0;
+        }
+    }
+}
+
+
+/*------------------------------------
   Login page
   -------------------------------------*/
 

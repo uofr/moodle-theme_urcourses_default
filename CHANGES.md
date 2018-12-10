@@ -4,6 +4,10 @@ moodle-theme_boost_campus
 Changes
 -------
 
+### Unreleased
+
+* 2018-12-13 - Improved whitespaces on small screens to show more of the content.
+
 ### Release v3.5-r4
 
 * 2018-12-12 - Bugfix: Improved font size for all modal help text dialogues.
