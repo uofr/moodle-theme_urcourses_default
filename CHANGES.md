@@ -6,6 +6,7 @@ Changes
 
 ### Unreleased
 
+* 2018-12-17 - Setting to change the breakpoint for smaller screens.
 * 2018-12-13 - Improved whitespaces on small screens to show more of the content.
 
 ### Release v3.5-r4
