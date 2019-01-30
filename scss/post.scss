@@ -13,12 +13,13 @@
             width: calc(100% - #{$blocks-plus-gutter});
             @include media-breakpoint-down(md) {
                 width: 100%;
+                display: inline-block;
             }
         }
     }
 }
 [data-region="blocks-column"] {
-    width: 250px;
+    width: $blocks-column-width;
     @include media-breakpoint-down(md) {
         width: 100%;
     }
