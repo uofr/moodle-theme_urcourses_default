@@ -178,3 +178,9 @@ function theme_boost_campus_reset_app_cache() {
     // we also delete the complete theme cache here.
     theme_reset_all_caches();
 }
+
+function theme_boost_campus_get_fontawesome_icon_map() {                                                                                     
+      return [                                                                                                                        
+          'core:t/edit' => 'fa-cogs',                                                                                              
+      ];                                                                                                                              
+  }

@@ -15,18 +15,29 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Campus - Version file
+ * Contains class \core\output\icon_system
  *
- * @package    theme_boost_campus
- * @copyright  2017 Kathrin Osswald, Ulm University <kathrin.osswald@uni-ulm.de>
+ * @package    core
+ * @category   output
+ * @copyright  2016 Damyon Wiese
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace theme_boost_campus\output;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'theme_boost_campus';
-$plugin->version = 2019042400;
-$plugin->release = 'v3.6-r2';
-$plugin->requires = 2018120300;
-$plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = array('theme_boost' => 2018120300);
+class theme_boost_campus_icon_system_fontawesome extends \core\output\icon_system_fontawesome {
+    /**
+     * @var array $map Cached map of moodle icon names to font awesome icon names.
+     */
+    private $map = [];
+    public function get_core_icon_map() {
+        $iconmap = parent::get_core_icon_map();
+        $iconmap['core:t/editcourse'] = 'fa-cogs';
+        $iconmap['core:t/edit'] = 'fa-cogs';
+        return $iconmap;
+    }
+}
+
+
