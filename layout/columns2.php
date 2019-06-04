@@ -119,8 +119,13 @@ if ($setdarkmode > -1) {
 if($DB->get_record('theme_boost_campus_darkmode', array('userid'=>$USER->id, 'darkmode'=>1))){
    $PAGE->requires->css('/theme/boost_campus/style/darkmode.css');
 }
-   
 
+//check if user is an instructor in any course
+$role = $DB->get_record('role', array(
+    'shortname' => 'editingteacher'
+));
+$isteacher = user_has_role_assignment($USER->id, $role->id, $contextid = 0) ? true : false;   
+$sitehome = ($COURSE->id == 1) ? true : false;
 // MODIFICATION START: Setting 'navdrawerfullwidth'.
 $navdrawerfullwidth = get_config('theme_boost_campus', 'navdrawerfullwidth');
 // MODIFICATION END.
@@ -137,7 +142,9 @@ $templatecontext = [
     // MODIFICATION START: Add Boost Campus realated values to the template context.
     'catchshortcuts' => json_encode($catchshortcuts),
     'navdrawerfullwidth' => $navdrawerfullwidth,
-    'darknavbar' => $darknavbar
+    'darknavbar' => $darknavbar,
+	'isteacher' => $isteacher,
+	'sitehome' => $sitehome
     // MODIFICATION END.
 ];
 

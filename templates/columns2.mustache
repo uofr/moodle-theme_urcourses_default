@@ -90,6 +90,16 @@
                     {{#activitynode}}
                         {{> theme_boost_campus/activity_settings_incourse }}
                     {{/activitynode}}
+					<code>sitehome:{{{ sitehome }}}
+					 isteacher:{{{ isteacher }}}</code>
+					{{#sitehome}}
+					{{#isteacher}}
+					<h2>Hey teacher!</h2>
+					{{/isteacher}}
+					{{^isteacher}}
+					<h2>Hey student!</h2>
+					{{/isteacher}}
+					{{/sitehome}} 
                     {{{ output.main_content }}}
                     {{{ output.activity_navigation }}}
                     {{{ output.course_content_footer }}}
