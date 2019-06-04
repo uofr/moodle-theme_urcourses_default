@@ -27,6 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'theme_urcourses_default';
 $plugin->version = 2019051602;
 $plugin->release = 'v3.6-r2';
-$plugin->requires = 2018120300;
+$plugin->requires = 2017111306;
 $plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = array('theme_boost' => 2018120300);
+$plugin->dependencies = array('theme_boost' => 2017111300);
