@@ -224,6 +224,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 $header->course_image_uploader = $this->get_course_image_uploader();
             }
         }
+		$header->course_header_style = $this->get_course_header_style();
+		
 		
         $context = \context_course::instance($COURSE->id);
 		
@@ -327,6 +329,25 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 'courseid' => $COURSE->id,
             ];
             return $this->render_from_template('theme_boost_campus/header_course_image_uploader', $context);
+        }
+        else {
+            return false;
+        }
+    }
+	
+    /**
+     * Gets markup for image uploader button.
+     * @return string - Upload button markup, or false if user is not editing and doesn't have permission.
+     */
+    public function get_course_header_style() {
+    	global $CFG, $COURSE;
+		
+        if ($this->page->user_is_editing()) {
+            $context = [
+                'courseid' => $COURSE->id,
+            ];
+            //return $this->render_from_template('theme_boost_campus/header_course_image_uploader', $context);
+			return '<div><a href="#" class="btn">Style A</a> | <a href="#" class="btn">Style B</a></div>';
         }
         else {
             return false;
