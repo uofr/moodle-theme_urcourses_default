@@ -461,9 +461,7 @@ body.arts .page-navbkg .context-header-settings-menu .fa-cog:hover {
     .list-group-item[data-key="coursehome"] {
         padding: .75rem 1.25rem;
         /* As this node is a heading node, no icon is needed and the media span can be hidden. */
-        .media-left {
-            display: none;
-        }
+        
     }
 
     /* Menu item: my courses. */
@@ -1676,3 +1674,7 @@ ul.ctopics .content .section ul {
 }
 
 .moodleSkin span.mceIcon img.mceIcon {display:block; width:30px; height:30px; padding: 2px 0 0 2px;}
+
+
+#nav-drawer .list-group-item[data-parent-key="mycourses"] .media-left .fa-home:before {
+  content: ""; }
