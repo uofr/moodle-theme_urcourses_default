@@ -60,7 +60,7 @@ function xmldb_theme_urcourses_default_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2018121700, 'theme', 'urcourses_default');
     }
 
-    if ($oldversion < 2019051602) {
+    if ($oldversion < 2019051605) {
         $table = new xmldb_table('theme_urcourses_darkmode');
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
@@ -72,7 +72,7 @@ function xmldb_theme_urcourses_default_upgrade($oldversion) {
             $dbman->create_table($table);
         }
 
-        upgrade_plugin_savepoint(true, 2019051602, 'theme', 'urcourses_default');
+        upgrade_plugin_savepoint(true, 2019051605, 'theme', 'urcourses_default');
     }
     return true;
 }

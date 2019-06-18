@@ -13,20 +13,25 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
- * Theme Boost Campus - Version file
+ * Essential is a clean and customizable theme.
  *
- * @package    theme_urcourses_default
- * @copyright  2017 Kathrin Osswald, Ulm University <kathrin.osswald@uni-ulm.de>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     theme_essential
+ * @copyright   2017 Gareth J Barnard
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+namespace theme_urcourses_default\output;
 defined('MOODLE_INTERNAL') || die();
-
-$plugin->component = 'theme_urcourses_default';
-$plugin->version = 2019061300;
-$plugin->release = 'v3.6-r2';
-$plugin->requires = 2017111306;
-$plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = array('theme_boost' => 2017111300);
+class icon_system_fontawesome extends \core\output\icon_system_fontawesome {
+    /**
+     * @var array $map Cached map of moodle icon names to font awesome icon names.
+     */
+    private $map = [];
+    public function get_core_icon_map() {
+        $iconmap = parent::get_core_icon_map();
+        $iconmap['core:i/course'] = 'fa-home';
+        $iconmap['core:i/navigationitem'] = 'fa-angle-right';
+        $iconmap['core:i/home'] = 'fa-university';
+        return $iconmap;
+    }
+}
