@@ -44,8 +44,18 @@ if ($navdraweropen) {
     $extraclasses[] = 'drawer-open-left';
 }
 
-// get the UR Cateogry class, if one exists
-$extraclasses[] = theme_urcourses_default_get_ur_category_class($COURSE->id);
+
+$ur_categories = array('','misc'=>'','khs'=>'Faculty of Kinesiology and Health Studies','edu'=>'Faculty of Education','sci'=>'Faculty of Science','grad'=>'Grad Studies','fa'=>'Faculty of Fine Arts','map'=>'Faculty of Media, Art, and Performance','engg'=>'Faculty of Engineering','bus'=>'Business Administration','arts'=>'Faculty of Arts','sw'=>'Faculty of Social Work','nur'=>'Faculty of Nursing','misc'=>'Custom Themes');
+
+
+$sql = "SELECT a.name FROM {$CFG->prefix}course_categories a, {$CFG->prefix}course b WHERE a.id = b.category AND b.id = {$COURSE->id}";
+$check_course_category = $DB->get_record_sql($sql);
+if ($check_course_category) {
+	$key = array_search($check_course_category->name,$ur_categories);
+	if (!empty($key)) $extraclasses[] = $key;
+}
+
+
 
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $blockshtml = $OUTPUT->blocks('side-pre');
@@ -118,8 +128,8 @@ $navdrawerfullwidth = get_config('theme_urcourses_default', 'navdrawerfullwidth'
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
     'output' => $OUTPUT,
-    'sidepreblocks' => $blockshtml,
-    'hasblocks' => $hasblocks,
+    'sidepreblocks' => '',
+    'hasblocks' => 0,
     'bodyattributes' => $bodyattributes,
     'navdraweropen' => $navdraweropen,
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
