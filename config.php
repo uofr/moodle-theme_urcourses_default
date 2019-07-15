@@ -90,7 +90,7 @@ $THEME->layouts = [
     // Server administration scripts.
     'admin' => array(
         'file' => 'columns2.php',
-        'regions' => $regions,
+        'regions' => array('side-pre'),
         'defaultregion' => 'side-pre',
     ),
     // My dashboard page.
@@ -166,6 +166,9 @@ $THEME->prescsscallback = 'theme_urcourses_default_get_pre_scss';
 $THEME->yuicssmodules = array();
 $THEME->rendererfactory = 'theme_overridden_renderer_factory';
 $THEME->requiredblocks = ' ';
-$THEME->addblockposition = BLOCK_ADDBLOCK_POSITION_DEFAULT;
-
+if (get_config('theme_boost_campus', 'addablockposition') == 'positionnavdrawer') {
+    $THEME->addblockposition = BLOCK_ADDBLOCK_POSITION_FLATNAV;
+} else {
+    $THEME->addblockposition = BLOCK_ADDBLOCK_POSITION_DEFAULT;
+}
 $THEME->iconsystem = '\\theme_urcourses_default\\output\\icon_system_fontawesome';

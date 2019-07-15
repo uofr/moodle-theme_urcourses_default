@@ -72,10 +72,44 @@ class core_renderer extends \theme_boost\output\core_renderer {
      *
      * @return string
      */
-    public function get_compact_logo_url($maxwidth = 100, $maxheight = 100) {
+    public function get_compact_logosmall_url($maxwidth = 100, $maxheight = 100) {
+        global $OUTPUT;
+        return $OUTPUT->image_url('logosmall', 'theme_urcourses_default');
+    }
+
+    public function get_compact_logo_url($maxwidth = 100, $maxheight = 100){
         global $OUTPUT;
         return $OUTPUT->image_url('logo', 'theme_urcourses_default');
     }
+
+    /**
+     * get login bg img url 
+     * */ 
+    public function get_login_bg_url() {
+        global $CFG;
+        $directory =  $CFG->dirroot . '/theme/urcourses_default/pix/login_backgrounds/';
+        $bgfile = '';
+        $files = [];
+        $files = glob($directory . "*");
+        $bgfiles = count($files);
+        if ($bgfiles != 0){
+
+            if ($bgfiles > 2 ){
+                //assumes you have paired a low res file with a high res file
+                $bgfiles = $bgfiles/2;
+                $filenum = mt_rand(1,$bgfiles);
+            }
+            else {
+              $filenum = 1;
+            }
+            
+            $bgfile = 'login_backgrounds/loginlow' . $filenum;
+        }
+
+        global $OUTPUT;
+        return $OUTPUT->image_url($bgfile, 'theme_urcourses_default');
+    }
+
 
     /**
      * Override to display an edit button again by calling the parent function
@@ -119,8 +153,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
         // Only add classes for the login page.
         if ($PAGE->bodyid == 'page-login-index') {
             $additionalclasses[] = 'loginbackgroundimage';
-            // Generating a random class for displaying a random image for the login page.
-            $additionalclasses[] = theme_urcourses_default_get_random_loginbackgroundimage_class();
         }
         // MODIFICATION END.
 
@@ -162,7 +194,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
      */
     public function full_header() {
         // MODIFICATION START.
-        global $PAGE, $USER, $COURSE, $CFG;
+        global $PAGE, $USER, $COURSE, $CFG, $DB;
         // MODIFICATION END.
 
         $header = new stdClass();
@@ -232,8 +264,23 @@ class core_renderer extends \theme_boost\output\core_renderer {
         if ($COURSE->id !== SITEID) {
             if (strpos($this->page->url, '/course/view.php')) {
                 $header->course_image_uploader = $this->get_course_image_uploader();
-            }
-        }
+                $header->course_header_style = $this->get_course_header_style();
+	        }
+			
+			//check if course has alternate header style in database
+			if($record = $DB->get_record('theme_urcourses_hdrstyle', array('courseid'=>$COURSE->id, 'hdrstyle'=>1))){
+				$headerstyle = 1;
+			} else {
+				$headerstyle = 0;	
+			}
+			
+			
+        } else $headerstyle = 1;
+		
+		
+		
+		
+		$header->headerstyle = $headerstyle;
 		
         $context = \context_course::instance($COURSE->id);
 		
@@ -343,7 +390,30 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
     }
 
-
+	
+	public function get_course_header_style() {
+        global $CFG, $DB, $COURSE;
+        
+		
+		//check if course has alternate style in database
+		if($record = $DB->get_record('theme_urcourses_hdrstyle', array('courseid'=>$COURSE->id, 'hdrstyle'=>1))){
+		    $headerstyle = 1;
+		} else {
+			$headerstyle = 0;
+		}
+		
+        if ($this->page->user_is_editing()) {
+            $context = [
+                'courseid' => $COURSE->id,
+				'headerstyle' => $headerstyle
+            ];
+            return $this->render_from_template('theme_urcourses_default/header_course_style_chooser', $context);
+        }
+        else {
+            return false;
+        }
+	}
+	
     /**
      * Override to display course settings on every course site for permanent access
      *
@@ -595,8 +665,8 @@ function ur_check_course_cat() {
 	global $CFG,$DB,$COURSE;
 
 	$ur_categories = array('','misc'=>'','khs'=>'Faculty of Kinesiology and Health Studies','edu'=>'Faculty of Education','sci'=>'Faculty of Science','grad'=>'Grad Studies','fa'=>'Faculty of Fine Arts','map'=>'Faculty of Media, Art, and Performance','engg'=>'Faculty of Engineering and Applied Science','bus'=>'Business Administration','arts'=>'Faculty of Arts','sw'=>'Faculty of Social Work','nur'=>'Faculty of Nursing','misc'=>'Custom Themes');
-    error_log("theme: " . $COURSE->theme);
-	if ($COURSE->theme != 'urcourses_default' && $COURSE->theme !== NULL) {
+    //error_log("theme: " . $COURSE->theme);
+	if ($COURSE->theme != 'urcourses_default' && $COURSE->theme !== NULL && !empty($COURSE->theme)) {
 		$currthemeelms = explode('_',$COURSE->theme);
 		return array('css'=>'','name'=>$ur_categories[$currthemeelms[1]]);
 	}
@@ -676,9 +746,12 @@ public function user_menu($user = null, $withlinks = null) {
     // Get some navigation opts.
     $opts = user_get_user_navigation_info($user, $this->page);
 
-    $usedarkmode = $DB->get_record('theme_urcourses_darkmode', array('userid'=>$USER->id, 'darkmode'=>1));
-    //changes url to opposite of whatever the toggle currently is to set dark mode in db under columns2.php
-    $darkchk = $usedarkmode->darkmode;
+    if ($usedarkmode = $DB->get_record('theme_urcourses_darkmode', array('userid'=>$USER->id, 'darkmode'=>1))) {
+    	//changes url to opposite of whatever the toggle currently is to set dark mode in db under columns2.php
+    	$darkchk = $usedarkmode->darkmode;
+    } else {
+    	$darkchk = 0;
+    }
     $usedarkmodeurl = ($darkchk == 1) ? 0 : 1;
     //dark mode variable for if on/off to swap icon
     $mynodelabel = ($darkchk == 1) ? "i/item" : "i/marker";
