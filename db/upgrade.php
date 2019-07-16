@@ -76,7 +76,7 @@ function xmldb_theme_urcourses_default_upgrade($oldversion) {
     }
 	
 
-    if ($oldversion < 2019060900) {
+    if ($oldversion < 2019071600) {
         $table = new xmldb_table('theme_urcourses_hdrstyle');
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
@@ -88,7 +88,7 @@ function xmldb_theme_urcourses_default_upgrade($oldversion) {
             $dbman->create_table($table);
         }
 
-        upgrade_plugin_savepoint(true, 2019060900, 'theme', 'urcourses_default');
+        upgrade_plugin_savepoint(true, 2019071600, 'theme', 'urcourses_default');
     }
     return true;
 }
