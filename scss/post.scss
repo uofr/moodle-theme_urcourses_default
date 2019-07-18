@@ -39,6 +39,10 @@ body.loginbackgroundimage, body .loginbackgroundimage {
     background-repeat: repeat-x;
 }
 
+#page-login-index #region-main {
+    overflow-x: hidden;
+}
+
 /* This will only be needed if the setting "loginform" is checked */
 @if variable-exists(loginform) {
     @if $loginform == 'yes' {
@@ -95,9 +99,8 @@ body.loginbackgroundimage, body .loginbackgroundimage {
 .navbar {
 	background-color: #4d4d4f !important;
 	background-image: url([[pix:theme|navbkgsmall]]);
-	background-position: -0.5em 0;
+	background-position: -18px 0;
 	background-repeat: no-repeat;
-    background-size: initial;
 	
     .navbar-nav .nav-link .icon,
     .navbar-nav .nav-link,
@@ -122,10 +125,9 @@ body.loginbackgroundimage, body .loginbackgroundimage {
 @include media-breakpoint-up(md) {
 	.navbar {
 		background-color: #4d4d4f;
-		background-image: url([[pix:theme|navbkg]]);
-		background-position: 0 0;
+		background-image: url([[pix:theme|navbkgsmall]]);
+		background-position: -18px 0;
 		background-repeat: no-repeat;
-	    background-size: contain;
 	}
 }
 
@@ -148,15 +150,15 @@ body.arts .page-navbkg {
 	display: hidden;
 }
 
-@include media-breakpoint-up(md) {
+@include media-breakpoint-up(sm) {
 	
-.course-image img {
-	max-width: 10em;
-	max-height: 10em;
-	margin-top: 0;
-	margin-right: 1em;
-	float: left;
-}
+    .course-image img {
+        max-width: 10em;
+        max-height: 10em;
+        margin-top: 0;
+        margin-right: 1em;
+        float: left;
+    }
 	
 }
 
@@ -164,7 +166,7 @@ body.arts .page-navbkg {
 
 
 .course-img-uploader-container {
-    
+	
     .course-image-uploader {
         background-color: rgba(255, 255, 255, .8);
         display: block;
@@ -174,6 +176,14 @@ body.arts .page-navbkg {
         display: none;
     }
 
+}
+
+.course-head .form-control {
+    font-size: 1.9375rem;
+}
+
+.course-hdr-chooser {
+	background-color: rgba(255, 255, 255, .8);
 }
 
 .course-img-uploader-container.confirm {
@@ -189,9 +199,37 @@ body.arts .page-navbkg {
 }
 
 .course-hdr-chooser .btn:hover,
-.course-image-uploader:hover {
-    background-color: rgba(200, 200, 200, .8);
+.course-image-uploader:hover,
+.course-head .quickeditlink:hover {
+    background-color: rgba(253, 221, 155, 1);
 }
+
+.course-hdr-chooser .btn-success:hover {
+    background-color: rgba(68, 156, 68, .8) !important;
+}
+
+
+.course-hdr-chooser span { 
+	font-size: 0.85em;
+	padding: 0 0.85em;
+    display: inline-block;  
+}
+
+.course-hdr-chooser .icon { width: 40px; height: 20px; margin-right: 0; }
+
+.course-hdr-chooser .btn-sm {
+	padding: 0;
+	background-color: rgba(0,0,0,.2);
+
+	padding: 0.25rem;
+	border: 0;
+}
+
+.course-hdr-chooser .btn-sm.btn-success {
+	background-color: #5cb85c;
+	border: 0;
+}
+
 
 .course-image-uploader input[type="file"] {
     display: none;
@@ -203,6 +241,8 @@ body.arts .page-navbkg {
 
 
 .course-hdr-chooser-container {
+	
+
     
     .course-hdr-chooser {
         /*background-color: rgba(255, 255, 255, .8);*/
@@ -225,6 +265,11 @@ body.arts .page-navbkg {
 #page-header .page-navbkg {
 	padding: 0.25rem 1rem;
 	color: #fff;
+}
+
+#page-header .course-head a .page-context-header {
+    display: flex;
+    margin-bottom: 5px;
 }
 
 #page-header .course-head a .page-context-header .page-header-headings h1 {
@@ -331,12 +376,16 @@ body.arts .page-navbkg .singlebutton button:hover {
 	#page-header .page-navbkg {
 	    padding: .25rem 0.65rem;
     }
-    
-    #hdr_chooser_b_div.style-a .course-head.mr-auto {
-        position: absolute;
-        top: 34px;
-        /*ensures text stays on img and doesn't grow off of it*/
-        max-width: 300px;
+
+    .course-content ul.ctopics li.section.main .side {
+        display: none;
+    }
+    .course-content ul.ctopics li.section.main .content {
+        margin: 0;
+    }
+
+    .path-course-view li.activity form.togglecompletion img {
+        margin: 0;
     }
 }
 
@@ -1745,6 +1794,15 @@ ul.ctopics .content .section ul {
     li.inline-nav-admin a, li.inline-nav a {
         display: inline-flex!important;
     }
+
+    #hdr_chooser_b_div.style-a {
+        background-image: none!important;
+    }
+
+    #hdr_chooser_b_div.style-a div.d-flex.page-head {
+        padding: 0;
+    }
+
 }
 
 li.inline-nav-admin icon, li.inline-na icon {
@@ -1801,8 +1859,11 @@ a {
 /*throwing this in here for now. Colour and design to be fixed
 currently copying the default hover*/
 .course-content a:visited {
-    color: #464646;
+    color: #531e9f;
     text-decoration: underline;
+}
+.course-content a:visited[href="#"]{
+    color: #05779a;
 }
 
 .generaltable tbody tr:hover, table.flexible tbody tr:hover {
@@ -1811,10 +1872,6 @@ currently copying the default hover*/
 
 .hcol-hov {
     background-color: #fef2b9;
-}
-
-.course-hdr-chooser button.selected {
-border: solid 2px red;
 }
 
 body.format-topcoll.editing ul.ctopics .section .activity .activityinstance {
@@ -1840,10 +1897,6 @@ float:none;
     overflow-y: auto !important;
 }
 
-body.format-topcoll.editing ul.ctopics .section .activity .actions {
-    display: block;
-}
-
 #page-mod-page-view td, #page-mod-page-view th {
     padding-left: .5em;
     padding-right: .5em;
@@ -1862,4 +1915,93 @@ body.format-topcoll.editing ul.ctopics .section .activity .actions {
 #page-user-files #fitem_id_emailaddress .col-md-9 {
     display: block;
     word-wrap: break-word;
+}
+
+#header_a_head {
+    width: 100%;
+}
+
+/*for some reason bootstrap breakpoint sm up isn't matching sm down*/
+@media (max-width: 576px){
+    #hdr_chooser_b_div.style-a #hdr_chooser_a_div{
+        display: none!important;
+    }
+}
+
+.pageheadingbutton {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+li.activity p {
+    margin-right: 1.75em;
+}
+
+.editing-row {
+ padding-right: 1em;
+ padding-left: 1em;
+}
+
+.style-a .editing-row {
+    padding-left: 0; 
+}
+.course-img-uploader-container {
+    margin-right: auto;
+}
+
+#oublog-searchblogs-modal-dialogue {
+    color: black;
+}
+
+body.format-topcoll.editing ul.ctopics .section .activity .action {
+    justify-content: end;
+}
+
+.contentafterlink .no-overflow {
+    width: 100%;
+}
+
+.nav-search{
+    margin-right: 8px;
+}
+
+.nav .caret {
+    margin-left: 0;
+}
+
+.nav-item img.userpicture {
+    margin-right: 0;
+}
+
+.navbar {
+    padding: .5rem .5rem;
+}
+
+.nav .img.userpicture {
+    margin: 0;
+}
+
+@include media-breakpoint-down(md) {
+    .block_heatmap_view_count {
+        display: inline-block
+    }
+    
+    .mod-indent-outer > div:nth-child(2) {
+        display: inline-grid;
+        width: 100%;
+    }
+
+    #region-main {
+        border: none;
+        padding: 0;
+    }
+
+    .course-content ul.topics .section .contentafterlink {
+        max-width: 80%;
+    }
+
+    .path-course-view .completionprogress {
+        width: 100%;
+        margin-bottom: .75em;
+    }
 }

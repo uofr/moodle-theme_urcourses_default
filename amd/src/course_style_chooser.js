@@ -93,44 +93,35 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str', 'core/modal_fact
     };
 
 
-    var _styleChange = function() {
-        $(SELECTORS.HDRSTYLEA_BTN+', '+SELECTORS.HDRSTYLEB_BTN).removeClass('selected');
-        _changed = 1;
-        
-        
+    var _styleChange = function() {  
         if ('#'+_element.attr('id') == SELECTORS.HDRSTYLEB_BTN) {
+            if (!$(SELECTORS.HDRSTYLEB_BTN).hasClass('btn-success')){
             _headerstyle = 1;
-            $(SELECTORS.HDRSTYLEB_BTN).addClass('selected');
+            $(SELECTORS.HDRSTYLEA_BTN).removeClass('btn-success');
+            $(SELECTORS.HDRSTYLEB_BTN).addClass('btn-success');
             
             bkgimg = $('#hdr_chooser_a_div img').attr('src');
-            if (bkgimg){
-                $('#hdr_chooser_a_div').remove();
-                $('#hdr_chooser_b_div').removeClass('style-a');
-                var styles = {
-                    'background-image' : 'url('+bkgimg+')',
-                    'background-size' : '100%',
-                    'background-position' : 'center'
-                    };
-                
-                
-                $('#hdr_chooser_b_div').css(styles);
+            $('#hdr_chooser_a_div').addClass('d-none');
+            $('#hdr_chooser_b_div').removeClass('style-a');
+
+           _changed = 1;
+           
             }
             else {
                 return;
             }
             
         } else {
+            if(!$(SELECTORS.HDRSTYLEA_BTN).hasClass('btn-success')){
             _headerstyle = 0;
-            $(SELECTORS.HDRSTYLEA_BTN).addClass('selected');
-            
-            bkgimg = $('#hdr_chooser_b_div').css('background-image');
-            if (bkgimg !== 'none') {
-                bkgimg = bkgimg.substring(5,bkgimg.length-2);
-                $('#hdr_chooser_b_div').css('background-image','');
-                $('#hdr_chooser_b_div').addClass('style-a');
+            $(SELECTORS.HDRSTYLEB_BTN).removeClass('btn-success');
+            $(SELECTORS.HDRSTYLEA_BTN).addClass('btn-success');
 
-                $('#header_a_head').prepend('<div id="hdr_chooser_a_div" class="course-image"><img src="'+bkgimg+'" height="300" width="300" /></div>');
-                //$('#hdr_chooser_a_div').add('img').attr('src',bkgimg);
+            $('#hdr_chooser_a_div').removeClass('d-none');
+            $('#hdr_chooser_b_div').addClass('style-a');
+
+            _changed = 1;
+
             }
             else {
                 return;
