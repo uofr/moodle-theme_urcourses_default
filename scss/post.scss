@@ -360,6 +360,12 @@ body.arts .page-navbkg .singlebutton button:hover {
 	margin-left: 1rem !important;
 }
 
+
+.course-content ul.ctopics.ctportable li.section.main .content {
+	margin: 0 40px !important;
+}
+
+
 @include media-breakpoint-down(sm) {
     .page-navbkg .singlebutton button {
 		width: 1.75em;
@@ -403,9 +409,6 @@ body.format-topcoll .course-content .row-fluid {
 	margin-left: unset;
 }
 
-.course-content ul.ctopics.ctportable li.section.main .content {
-	margin: 0 40px !important;
-}
 
 /*
 .page-navbkg .context-header-settings-menu .fa-gear:before, 
