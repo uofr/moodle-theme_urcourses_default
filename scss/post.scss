@@ -380,13 +380,31 @@ body.arts .page-navbkg .singlebutton button:hover {
     .course-content ul.ctopics li.section.main .side {
         display: none;
     }
+	
+
+	.course-content ul.ctopics #section-0 .content,
     .course-content ul.ctopics li.section.main .content {
-        margin: 0;
-    }
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+	
+	.course-content ul.ctopics {
+		padding: 0 !important;
+	}
+	
 
     .path-course-view li.activity form.togglecompletion img {
         margin: 0;
     }
+}
+
+body.format-topcoll .course-content .row-fluid {
+	margin-right: unset;
+	margin-left: unset;
+}
+
+.course-content ul.ctopics.ctportable li.section.main .content {
+	margin: 0 40px !important;
 }
 
 /*
@@ -1609,6 +1627,11 @@ ul.section.img-text {
 //
 .course-content ul.ctopics {
     padding-right: 10px;
+	width: 100%;
+}
+
+body.format-topcoll .course-content ul.ctopics li.section .summary {
+	display: inline-block;
 }
 
 //was set to table earlier and making text wrap when it didn't need to. also fixes random indenting 
