@@ -362,9 +362,8 @@ body.arts .page-navbkg .singlebutton button:hover {
 
 
 .course-content ul.ctopics.ctportable li.section.main .content {
-	margin: 0 40px !important;
+	margin: 0 40px;
 }
-
 
 @include media-breakpoint-down(sm) {
     .page-navbkg .singlebutton button {
@@ -830,6 +829,14 @@ body.pagelayout-secure nav {
             display: none;
         }
     }
+}
+
+.section .activity.modtype_label.label {
+	padding: .25em 0;
+}
+
+.section li.activity {
+    padding: .25em 0;
 }
 
 /*
