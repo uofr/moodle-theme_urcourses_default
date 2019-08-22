@@ -254,6 +254,9 @@ body.arts .page-navbkg {
 .page-head {
 	padding: 1rem;
 }
+body.editing .page-head {
+	padding-bottom: 0;
+}
 
 #page-header .card-body {
 	padding: 0;
@@ -267,8 +270,12 @@ body.arts .page-navbkg {
 	color: #fff;
 }
 
+#page-header #header_a_head .course-head {
+    margin-left: 12em;
+}
+
 #page-header .course-head a .page-context-header {
-    display: flex;
+    display: inline-block;
     margin-bottom: 5px;
 }
 
@@ -395,6 +402,10 @@ body.arts .page-navbkg .singlebutton button:hover {
 
     .path-course-view li.activity form.togglecompletion img {
         margin: 0;
+    }
+
+    #page-header #header_a_head .course-head {
+        margin-left: auto;
     }
 }
 
@@ -1674,9 +1685,11 @@ body.path-mod-quiz #region-main-settings-menu.has-blocks {
 
 
 //adding on maxwidth to stop text covering checkboxes 
+/*
 .section .activity .activityinstance {
     max-width: 90%;
 }
+*/
 
 //altering grader report dropdown select to render better on mobile 
 //overriding older settings
@@ -1707,7 +1720,7 @@ ul.section.img-text {
 }
 
 //
-.course-content ul.ctopics {
+#region-main .course-content ul.ctopics {
     padding-right: 10px;
 	width: 100%;
 }
@@ -1715,13 +1728,6 @@ ul.section.img-text {
 body.format-topcoll .course-content ul.ctopics li.section .summary {
 	display: inline-block;
 }
-
-//was set to table earlier and making text wrap when it didn't need to. also fixes random indenting 
-//issues due to the table display
-.mod-indent-outer {
-    display: block;
-}
-
 
 //past here is all css tweaks to suit mobile and desktop
 .que .info, .userprofile {
@@ -1903,7 +1909,20 @@ ul.ctopics .content .section ul {
     li.inline-nav-admin a, li.inline-nav a {
         display: inline-flex!important;
     }
-
+	
+	#hdr_chooser_a_div {
+	    width: 12em !important;
+	    /* border: solid 1px red; */
+	    min-height: 100% !important;
+	    margin: 0;
+	    float: left;
+	    background-size: cover;
+	}
+	
+	#hdr_chooser_a_div img {
+		display: none;
+	}
+	
     #hdr_chooser_b_div.style-a {
         background-image: none!important;
     }
@@ -1911,7 +1930,7 @@ ul.ctopics .content .section ul {
     #hdr_chooser_b_div.style-a div.d-flex.page-head {
         padding: 0;
     }
-
+	
     #page-header .course-head .instructors .teacherlist a {
         padding-right: .5em; 
     }
@@ -2030,7 +2049,8 @@ float:none;
     word-wrap: break-word;
 }
 
-#header_a_head {
+#header_a_head,
+#header_b_head {
     width: 100%;
 }
 
@@ -2064,8 +2084,12 @@ li.activity p {
 }
 
 .editing-row {
- padding-right: 1em;
- padding-left: 1em;
+ padding-top: 0.5em;
+}
+
+body.editing #header_a_head .editing-row {
+	padding-left: 0.65em;
+	padding-right: 1em;
 }
 
 .course-img-uploader-container {
@@ -2269,4 +2293,10 @@ table.mod-data-default-template {
 .moodleSkin img.mceIcon {
     width: auto;
     height: auto;
+}
+
+@media (min-width: 991.98px) {
+    .used-region-side-pre #region-main-settings-menu > div {
+        right: 370px;
+    }
 }
