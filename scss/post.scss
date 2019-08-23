@@ -1719,7 +1719,7 @@ ul.section.img-text {
     padding-left: 0;
 }
 
-//
+
 #region-main .course-content ul.ctopics {
     padding-right: 10px;
 	width: 100%;
@@ -2299,4 +2299,176 @@ table.mod-data-default-template {
     .used-region-side-pre #region-main-settings-menu > div {
         right: 370px;
     }
+}
+
+// quick mail prod fixes
+
+@media (max-width: 979px) and (min-width: 768px) {
+	body.path-mod-mail #region-main .row-fluid {
+		width: 100%;
+    	*zoom: 1;
+	}	
+}
+
+@media (max-width: 979px) and (min-width: 768px) {
+	
+body.path-mod-mail #region-main .row-fluid:before, 
+body.path-mod-mail #region-main .row-fluid:after {
+    display: table;
+    content: "";
+    line-height: 0;
+}
+body.path-mod-mail #region-main .row-fluid:before, 
+body.path-mod-mail #region-main .row-fluid:after {
+    display: table;
+    content: "";
+    line-height: 0;
+}
+}
+@media (max-width: 979px) and (min-width: 768px) {
+	
+body.path-mod-mail #region-main .row-fluid:after {
+    clear: both;
+}
+}
+@media (max-width: 979px) and (min-width: 768px) {
+	body.path-mod-mail #region-main .row-fluid:before, 
+	body.path-mod-mail #region-main .row-fluid:after {
+	    display: table;
+	    content: "";
+	    line-height: 0;
+	}
+}
+
+
+
+@media (max-width: 979px) and (min-width: 768px) {
+	
+body.path-mod-mail #region-main .row-fluid [class*="span"]:first-child {
+    margin-left: 0;
+}
+}
+
+
+
+@media (max-width: 979px) and (min-width: 768px) {
+	body.path-mod-mail #region-main .row-fluid [class*="span"] {
+    display: block;
+    width: 100%;
+    min-height: 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    float: left;
+    margin-left: 2.76243094%;
+    *margin-left: 2.70923945%;
+}
+}
+
+
+body.path-mod-mail #region-main .span2 {
+	
+}
+
+@media (max-width: 979px) and (min-width: 768px) {
+	
+body.path-mod-mail #region-main .row-fluid .span10 {
+    width: 82.87292818%;
+    *width: 82.81973669%;
+}
+}
+@media (max-width: 979px) and (min-width: 768px) {
+	
+body.path-mod-mail #region-main .row-fluid [class*="span"] {
+    display: block;
+    width: 100%;
+    min-height: 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    float: left;
+    margin-left: 2.76243094%;
+    *margin-left: 2.70923945%;
+}
+}
+
+
+
+body.path-mod-mail #region-main .nav {
+    margin-left: 0;
+    margin-bottom: 20px;
+    list-style: none;
+}
+
+
+body.path-mod-mail #region-main .nav.nav-stacked {
+	display: block;
+}
+
+body.path-mod-mail #region-main .nav-pills:before,
+body.path-mod-mail #region-main .nav-pills:after {
+    display: table;
+    content: "";
+    line-height: 0;
+}
+
+body.path-mod-mail #region-main .nav-pills:after {
+    clear: both;
+}
+
+body.path-mod-mail #region-main .nav-stacked > li {
+    float: none;
+}
+
+body.path-mod-mail #region-main .nav > li > a {
+    display: block;
+}
+
+body.path-mod-mail #region-main .mform .form-inline .form-control, 
+body.path-mod-mail #region-main .mform .form-inline .custom-select {
+	width: 100%;
+}
+
+
+body.path-mod-mail #region-main .nav-pills.nav-stacked > li > a {
+    margin-bottom: 3px;
+}
+body.path-mod-mail #region-main .nav-stacked > li > a {
+    margin-right: 0;
+}
+body.path-mod-mail #region-main .nav-pills > li > a {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+body.path-mod-mail #region-main .nav-tabs > li > a, 
+body.path-mod-mail #region-main .nav-pills > li > a {
+    padding-right: 12px;
+    padding-left: 12px;
+    margin-right: 2px;
+    line-height: 14px;
+}
+
+body.path-mod-mail #region-main .nav-pills > .active > a, 
+body.path-mod-mail #region-main .nav-pills > .active > a:hover, 
+body.path-mod-mail #region-main .nav-pills > .active > a:focus {
+    color: #fff;
+    background-color: #0070a8;
+}
+
+
+@media (max-width: 979px) and (min-width: 768px) {
+	
+body.path-mod-mail #region-main .row-fluid .span2 {
+    width: 14.36464088%;
+    *width: 14.31144939%;
+}
+}
+
+body.path-mod-mail #region-main #recplusbtn {
+	display: none !important;
 }
