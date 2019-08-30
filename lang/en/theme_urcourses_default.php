@@ -226,3 +226,6 @@ $string['success:coursestylechosen'] = 'Course header style changed';
 
 //Modchooser
 $string['moremodchooser'] = 'More';
+
+// image_form
+$string['filepicker'] = 'Course Header Image';
