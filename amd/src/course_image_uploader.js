@@ -29,7 +29,8 @@ define(
     'core/str',
     'core/modal_factory',
     'core/modal_events',
-    'core/fragment'
+    'core/fragment',
+    'core/yui'
 ], function(
     $,
     Ajax,
@@ -37,14 +38,13 @@ define(
     Str,
     ModalFactory,
     ModalEvents,
-    Fragment
+    Fragment,
+    Y
 ) {
+
     var _root;
-    var _maxbytes;
     var _courseid;
     var _contextid;
-    var _imagedata;
-    var _imagename;
     var _modal;
 
     var SELECTORS = {
@@ -53,7 +53,6 @@ define(
 
     var init = function(root, maxbytes, courseid, contextid) {
         _root = $(root);
-        _maxbytes = maxbytes;
         _courseid = courseid;
         _contextid = contextid;
 
@@ -66,18 +65,25 @@ define(
             }, $(SELECTORS.UPLOADER));
         })
         .then(function(modal) {
-            modal.setLarge();
-            modal.getRoot().on(ModalEvents.hidden, function() {
-                modal.setBody(getModalBody());
-            });
-            modal.getRoot().on(ModalEvents.save, submitForm);
-            modal.getRoot().on('submit', 'form', submitFormAjax);
             _modal = modal;
+            _modal.setLarge();
+            // Reset form each time it is opened.
+            _modal.getRoot().on(ModalEvents.hidden, function() {
+                _modal.setBody(getModalBody());
+            });
+            _modal.getRoot().on(ModalEvents.save, submitForm);
+            _modal.getRoot().on('submit', 'form', submitFormAjax);
         });
     };
 
-    var getModalBody = function() {
-        return Fragment.loadFragment('theme_urcourses_default', 'image_form', _contextid, {jsonformdata: JSON.stringify({})});
+    var getModalBody = function(formdata) {
+        if (typeof formdata === 'undefined') {
+            formdata = {};
+        }
+        var params = {
+            jsonformdata: JSON.stringify(formdata)
+        };
+        return Fragment.loadFragment('theme_urcourses_default', 'image_form', _contextid, params);
     };
 
     var submitForm = function(event) {
@@ -87,6 +93,41 @@ define(
 
     var submitFormAjax = function(event) {
         event.preventDefault();
+
+        var changeEvent = document.createEvent('HTMLEvents');
+        changeEvent.initEvent('change', true, true);
+
+        _modal.getRoot().find(':input').each(function(index, element) {
+            element.dispatchEvent(changeEvent);
+        });
+
+        var invalid = $.merge(
+            _modal.getRoot().find('[aria-invalid="true"]'),
+            _modal.getRoot().find('.error')
+        );
+
+        if (invalid.length) {
+            invalid.first().focus();
+            return;
+        }
+
+        var formData = _modal.getRoot().find('form').serialize();
+
+        Ajax.call([{
+            methodname: 'theme_urcourses_default_upload_course_image',
+            args: {formdata: JSON.stringify(formData), courseid: _courseid},
+            done: submitDone,
+            fail: submitFail
+        }]);
+    };
+
+    var submitDone = function(response) {
+        console.log(response);
+        _modal.hide();
+    };
+
+    var submitFail = function(data) {
+        Notification.exception(data);
     };
 
     return {init: init};

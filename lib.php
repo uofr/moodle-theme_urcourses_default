@@ -216,6 +216,8 @@ function theme_urcourses_default_inplace_editable($itemtype, $itemid, $newvalue)
 function theme_urcourses_default_output_fragment_image_form($args) {
     global $CFG;
     require_once($CFG->dirroot . '/theme/urcourses_default/image_form.php');
+
     $mform = new theme_urcourses_default_image_form();
+
     return $mform->render();
 }
