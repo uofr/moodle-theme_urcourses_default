@@ -229,3 +229,4 @@ $string['moremodchooser'] = 'More';
 
 // image_form
 $string['filepicker'] = 'Course Header Image';
+$string['modal_header'] = 'Upload Course Image';

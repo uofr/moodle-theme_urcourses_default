@@ -3,7 +3,7 @@ define(['jquery'], function($) {
     var drawerButton = $('div[data-region="drawer-toggle"] > button.nav-link');
     var eventSet = false;
 
-    var init = function() {       
+    var init = function() {
         var isMobile = window.matchMedia("only screen and (max-width: 767.98px)").matches;
         if (isMobile) {
             //set listeners
@@ -19,20 +19,20 @@ define(['jquery'], function($) {
             setToggles();
         }
         else if(!isMobile && eventSet) {
-            // check if listeners set  
+            // check if listeners set
             //if so, remove them
             if(messageButton && drawerButton){
                 removeToggles();
             }
         }
-    }
+    };
 
     var setToggles = function(){
         messageButton.click(closeDrawer);
         drawerButton.click(closeDrawer);
 
         eventSet = true;
-    }
+    };
 
     var removeToggles = function(){
         console.log("remove toggles");
@@ -40,7 +40,7 @@ define(['jquery'], function($) {
         drawerButton.off("click");
 
         eventSet = false;
-    }
+    };
 
     var closeDrawer = function(e){
         if($(this).attr('id') == 'message-drawer-toggle-nav'){
@@ -54,7 +54,7 @@ define(['jquery'], function($) {
                 messageButton.click();
             }
         }
-    }
+    };
 
     return {
         init: init

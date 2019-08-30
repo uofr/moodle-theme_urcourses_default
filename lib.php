@@ -212,3 +212,10 @@ function theme_urcourses_default_inplace_editable($itemtype, $itemid, $newvalue)
         return new \core\output\inplace_editable('theme_urcourses_default', 'coursename', $course->id, $can_edit_coursename, $course_link, format_string($course->fullname));
     }
 }
+
+function theme_urcourses_default_output_fragment_image_form($args) {
+    global $CFG;
+    require_once($CFG->dirroot . '/theme/urcourses_default/image_form.php');
+    $mform = new theme_urcourses_default_image_form();
+    return $mform->render();
+}

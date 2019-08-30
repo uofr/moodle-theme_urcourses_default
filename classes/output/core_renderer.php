@@ -382,12 +382,13 @@ class core_renderer extends \theme_boost\output\core_renderer {
      */
     public function get_course_image_uploader() {
         global $CFG, $COURSE;
-        
+        $context = context_course::instance($COURSE->id);
         if ($this->page->user_is_editing()) {
             $context = [
                 'supported_types' => 'image/png,image/jpeg,image/gif',
                 'maxbytes' => get_max_upload_file_size($CFG->maxbytes),
                 'courseid' => $COURSE->id,
+                'contextid' => $context->id
             ];
             return $this->render_from_template('theme_urcourses_default/header_course_image_uploader', $context);
         }

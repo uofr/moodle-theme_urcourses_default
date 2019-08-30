@@ -13,7 +13,7 @@ class theme_urcourses_default_image_form extends moodleform {
         $mform->addElement(
             'filemanager',
             'userfile',
-            get_string('file'),
+            get_string('filepicker', 'theme_urcourses_default'),
             null,
             ['subdirs' => 0, 'maxbytes' => $maxbytes]
         );
