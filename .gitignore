@@ -1,0 +1,29 @@
+# This file specifies intentionally untracked files that all Moodle git
+# repositories should ignore. It is recommended not to modify this file in your
+# local clone. Instead, use .git/info/exclude and add new records there as
+# needed.
+#
+# Example: if you deploy a contributed plugin mod/foobar into your site, put
+# the following line into .git/info/exclude file in your Moodle clone:
+# /mod/foobar/
+#
+# See gitignore(5) man page for more details
+#
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Swap files (vim)
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
