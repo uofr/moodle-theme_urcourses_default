@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace theme_urcourses_default\output;
+namespace theme_uofr_conservatory\output;
 defined('MOODLE_INTERNAL') || die();
 
 use context;

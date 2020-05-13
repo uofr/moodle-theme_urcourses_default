@@ -17,7 +17,7 @@
 /**
  * Theme Boost Campus - Layout file.
  *
- * @package   theme_urcourses_default
+ * @package   theme_uofr_conservatory
  * @copyright 2017 Kathrin Osswald, Ulm University kathrin.osswald@uni-ulm.de
  * @copyright based on code from theme_boost by Damyon Wiese
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -31,7 +31,7 @@ global $CFG,$PAGE,$DB,$COURSE;
 user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
 require_once($CFG->libdir . '/behat/lib.php');
 // MODIFICATION Start: Require own locallib.php.
-require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
+require_once($CFG->dirroot . '/theme/uofr_conservatory/locallib.php');
 // MODIFICATION END.
 
 if (isloggedin()) {
@@ -60,7 +60,7 @@ if(in_array($PAGE->bodyid, $noblockpg) || (strpos($PAGE->bodyid, 'page-mod') !==
     $PAGE->theme->addblockposition = BLOCK_ADDBLOCK_POSITION_FLATNAV;
 }
 // get the UR Cateogry class, if one exists
-$extraclasses[] = theme_urcourses_default_get_ur_category_class($COURSE->id);
+$extraclasses[] = theme_uofr_conservatory_get_ur_category_class($COURSE->id);
 
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $blockshtml = $OUTPUT->blocks('side-pre');
@@ -70,21 +70,21 @@ $regionmainsettingsmenu = $OUTPUT->region_main_settings_menu();
 // Initialize array.
 $catchshortcuts = array();
 // If setting is enabled then add the parameter to the array.
-if (get_config('theme_urcourses_default', 'catchendkey') == true) {
+if (get_config('theme_uofr_conservatory', 'catchendkey') == true) {
     $catchshortcuts[] = 'end';
 }
 // If setting is enabled then add the parameter to the array.
-if (get_config('theme_urcourses_default', 'catchcmdarrowdown') == true) {
+if (get_config('theme_uofr_conservatory', 'catchcmdarrowdown') == true) {
     $catchshortcuts[] = 'cmdarrowdown';
 }
 // If setting is enabled then add the parameter to the array.
-if (get_config('theme_urcourses_default', 'catchctrlarrowdown') == true) {
+if (get_config('theme_uofr_conservatory', 'catchctrlarrowdown') == true) {
     $catchshortcuts[] = 'ctrlarrowdown';
 }
 // MODIFICATION END.
 
 // MODIFICATION START: Setting 'darknavbar'.
-if (get_config('theme_urcourses_default', 'darknavbar') == 'yes') {
+if (get_config('theme_uofr_conservatory', 'darknavbar') == 'yes') {
     $darknavbar = true;
 } else {
     $darknavbar = false;
@@ -98,7 +98,7 @@ $setdarkmode = optional_param('darkmode', -1, PARAM_INT);
 
 if ($setdarkmode > -1) {
     $userid = $USER->id;
-    $table = 'theme_urcourses_darkmode';
+    $table = 'theme_conservatory_darkmode';
 
     $newrecord = new stdClass();
     $newrecord->userid = $userid;
@@ -121,12 +121,12 @@ if ($setdarkmode > -1) {
 
 
 //check if user has darkmode on in database and include if so
-if($DB->get_record('theme_urcourses_darkmode', array('userid'=>$USER->id, 'darkmode'=>1))){
-   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css');
+if($DB->get_record('theme_conservatory_darkmode', array('userid'=>$USER->id, 'darkmode'=>1))){
+   $PAGE->requires->css('/theme/uofr_conservatory/style/darkmode.css');
 }
 
 // MODIFICATION START: Setting 'navdrawerfullwidth'.
-$navdrawerfullwidth = get_config('theme_urcourses_default', 'navdrawerfullwidth');
+$navdrawerfullwidth = get_config('theme_uofr_conservatory', 'navdrawerfullwidth');
 // MODIFICATION END.
 
 $templatecontext = [
@@ -146,16 +146,16 @@ $templatecontext = [
 ];
 
 // MODIDFICATION START.
-// Use the returned value from theme_urcourses_default_get_modified_flatnav_defaulthomepageontop as the template context.
-$templatecontext['flatnavigation'] = theme_urcourses_default_process_flatnav($PAGE->flatnav);
+// Use the returned value from theme_uofr_conservatory_get_modified_flatnav_defaulthomepageontop as the template context.
+$templatecontext['flatnavigation'] = theme_uofr_conservatory_process_flatnav($PAGE->flatnav);
 // If setting showsettingsincourse is enabled.
-if (get_config('theme_urcourses_default', 'showsettingsincourse') == 'yes') {
+if (get_config('theme_uofr_conservatory', 'showsettingsincourse') == 'yes') {
     // Context value for requiring incoursesettings.js.
     $templatecontext['incoursesettings'] = true;
-    // Add the returned value from theme_urcourses_default_get_incourse_settings to the template context.
-    $templatecontext['node'] = theme_urcourses_default_get_incourse_settings();
-    // Add the returned value from theme_urcourses_default_get_incourse_activity_settings to the template context.
-    $templatecontext['activitynode'] = theme_urcourses_default_get_incourse_activity_settings();
+    // Add the returned value from theme_uofr_conservatory_get_incourse_settings to the template context.
+    $templatecontext['node'] = theme_uofr_conservatory_get_incourse_settings();
+    // Add the returned value from theme_uofr_conservatory_get_incourse_activity_settings to the template context.
+    $templatecontext['activitynode'] = theme_uofr_conservatory_get_incourse_activity_settings();
 }
 
 // MODIFICATION START: Handle additional layout elements.
@@ -166,13 +166,13 @@ ob_start();
 // Add footer blocks and standard footer.
 require_once(__DIR__ . '/includes/footer.php');
 // Get imageareaitems config.
-$imageareaitems = get_config('theme_urcourses_default', 'imageareaitems');
+$imageareaitems = get_config('theme_uofr_conservatory', 'imageareaitems');
 if (!empty($imageareaitems)) {
     // Add imagearea layout file.
     require_once(__DIR__ . '/includes/imagearea.php');
 }
 // Get footnote config.
-$footnote = get_config('theme_urcourses_default', 'footnote');
+$footnote = get_config('theme_uofr_conservatory', 'footnote');
 if (!empty($footnote)) {
     // Add footnote layout file.
     require_once(__DIR__ . '/includes/footnote.php');
@@ -188,8 +188,8 @@ if ($pagebottomelements == false) {
 // Add the additional layouts to the template context.
 $templatecontext['pagebottomelements'] = $pagebottomelements; 
 
-// Render columns2.mustache from urcourses_default.
-echo $OUTPUT->render_from_template('theme_urcourses_default/columns2', $templatecontext);
+// Render columns2.mustache from uofr_conservatory.
+echo $OUTPUT->render_from_template('theme_uofr_conservatory/columns2', $templatecontext);
 // MODIFICATION END.
 /* ORIGINAL START.
 echo $OUTPUT->render_from_template('theme_boost/columns2', $templatecontext);

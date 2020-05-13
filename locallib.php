@@ -16,7 +16,7 @@
 /**
  * Theme Boost Campus - Locallib file
  *
- * @package   theme_urcourses_default
+ * @package   theme_uofr_conservatory
  * @copyright 2017 Kathrin Osswald, Ulm University kathrin.osswald@uni-ulm.de
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -28,9 +28,9 @@
  *
  * @return array
  */
-function theme_urcourses_default_get_imageareacontent() {
+function theme_uofr_conservatory_get_imageareacontent() {
     // Get cache.
-    $themeboostcampuscache = cache::make('theme_urcourses_default', 'imagearea');
+    $themeboostcampuscache = cache::make('theme_uofr_conservatory', 'imagearea');
     // If cache is filled, return the cache.
     $cachecontent = $themeboostcampuscache->get('imageareadata');
     if (!empty($cachecontent)) {
@@ -41,13 +41,13 @@ function theme_urcourses_default_get_imageareacontent() {
         // Get filearea.
         $fs = get_file_storage();
         // Get all files from filearea.
-        $files = $fs->get_area_files($systemcontext->id, 'theme_urcourses_default', 'imageareaitems', false, 'itemid', false);
+        $files = $fs->get_area_files($systemcontext->id, 'theme_uofr_conservatory', 'imageareaitems', false, 'itemid', false);
 
         // Only continue processing if there are files in the filearea.
         if (!empty($files)) {
             // Get the content from the setting imageareaitemslink and explode it to an array by the delimiter "new line".
             // The string contains: the image identifier (uploaded file name) and the corresponding link URL.
-            $lines = explode("\n", get_config('theme_urcourses_default', 'imageareaitemslink'));
+            $lines = explode("\n", get_config('theme_uofr_conservatory', 'imageareaitemslink'));
             // Parse item settings.
             foreach ($lines as $line) {
                 $line = trim($line);
@@ -105,31 +105,31 @@ function theme_urcourses_default_get_imageareacontent() {
  * @param flat_navigation $flatnav The flat navigation object.
  * @return flat_navigation.
  */
-function theme_urcourses_default_process_flatnav(flat_navigation $flatnav) {
+function theme_uofr_conservatory_process_flatnav(flat_navigation $flatnav) {
     global $USER;
     // If the setting defaulthomepageontop is enabled.
-    if (get_config('theme_urcourses_default', 'defaulthomepageontop') == 'yes') {
+    if (get_config('theme_uofr_conservatory', 'defaulthomepageontop') == 'yes') {
         // Only proceed processing if we are in a course context.
         if (($coursehomenode = $flatnav->find('coursehome', global_navigation::TYPE_CUSTOM)) != false) {
             // If the site home is set as the default homepage by the admin.
             if (get_config('core', 'defaulthomepage') == HOMEPAGE_SITE) {
                 // Return the modified flat_navigation.
-                $flatnavreturn = theme_urcourses_default_set_node_on_top($flatnav, 'home', $coursehomenode);
+                $flatnavreturn = theme_uofr_conservatory_set_node_on_top($flatnav, 'home', $coursehomenode);
             } else if (get_config('core', 'defaulthomepage') == HOMEPAGE_MY) { // If the dashboard is set as the default homepage
                 // by the admin.
                 // Return the modified flat_navigation.
-                $flatnavreturn = theme_urcourses_default_set_node_on_top($flatnav, 'myhome', $coursehomenode);
+                $flatnavreturn = theme_uofr_conservatory_set_node_on_top($flatnav, 'myhome', $coursehomenode);
             } else if (get_config('core', 'defaulthomepage') == HOMEPAGE_USER) { // If the admin defined that the user can set
                 // the default homepage for himself.
                 // Site home.
                 if (get_user_preferences('user_home_page_preference') == 0) {
                     // Return the modified flat_navigtation.
-                    $flatnavreturn = theme_urcourses_default_set_node_on_top($flatnav, 'home', $coursehomenode);
+                    $flatnavreturn = theme_uofr_conservatory_set_node_on_top($flatnav, 'home', $coursehomenode);
                 } else if (get_user_preferences('user_home_page_preference') == 1 || // Dashboard.
                     get_user_preferences('user_home_page_preference') === false) { // If no user preference is set,
                     // use the default value of core setting default homepage (Dashboard).
                     // Return the modified flat_navigtation.
-                    $flatnavreturn = theme_urcourses_default_set_node_on_top($flatnav, 'myhome', $coursehomenode);
+                    $flatnavreturn = theme_uofr_conservatory_set_node_on_top($flatnav, 'myhome', $coursehomenode);
                 } else { // Should not happen.
                     // Return the passed flat navigation without changes.
                     $flatnavreturn = $flatnav;
@@ -158,7 +158,7 @@ function theme_urcourses_default_process_flatnav(flat_navigation $flatnav) {
  * @param navigation_node $beforenode The node before which the to be modified node shall be added.
  * @return flat_navigation.
  */
-function theme_urcourses_default_set_node_on_top(flat_navigation $flatnav, $nodename, $beforenode) {
+function theme_uofr_conservatory_set_node_on_top(flat_navigation $flatnav, $nodename, $beforenode) {
     // Get the node for which the sorting shall be changed.
     $pageflatnav = $flatnav->find($nodename, global_navigation::TYPE_SYSTEM);
 
@@ -184,12 +184,12 @@ function theme_urcourses_default_set_node_on_top(flat_navigation $flatnav, $node
  *
  * @return navigation_node.
  */
-function theme_urcourses_default_get_incourse_settings() {
+function theme_uofr_conservatory_get_incourse_settings() {
     global $COURSE, $PAGE;
     // Initialize the node with false to prevent problems on pages that do not have a courseadmin node.
     $node = false;
     // If setting showsettingsincourse is enabled.
-    if (get_config('theme_urcourses_default', 'showsettingsincourse') == 'yes') {
+    if (get_config('theme_uofr_conservatory', 'showsettingsincourse') == 'yes') {
         // Only search for the courseadmin node if we are within a course or a module context.
         if ($PAGE->context->contextlevel == CONTEXT_COURSE || $PAGE->context->contextlevel == CONTEXT_MODULE) {
             // Get the courseadmin node for the current page.
@@ -198,8 +198,8 @@ function theme_urcourses_default_get_incourse_settings() {
             if (!empty($node)) {
                 // If the setting 'incoursesettingsswitchtoroleposition' is set either set to the option 'yes'
                 // or to the option 'both', then add these to the $node.
-                if (((get_config('theme_urcourses_default', 'incoursesettingsswitchtoroleposition') == 'yes') ||
-                    (get_config('theme_urcourses_default', 'incoursesettingsswitchtoroleposition') == 'both'))
+                if (((get_config('theme_uofr_conservatory', 'incoursesettingsswitchtoroleposition') == 'yes') ||
+                    (get_config('theme_uofr_conservatory', 'incoursesettingsswitchtoroleposition') == 'both'))
                     && !is_role_switched($COURSE->id)) {
                     // Build switch role link
                     // We could only access the existing menu item by creating the user menu and traversing it.
@@ -207,7 +207,7 @@ function theme_urcourses_default_get_incourse_settings() {
                     $roles = get_switchable_roles($PAGE->context);
                     if (is_array($roles) && (count($roles) > 0)) {
                         // Define the properties for a new tab.
-                        $properties = array('text' => get_string('switchroleto', 'theme_urcourses_default'),
+                        $properties = array('text' => get_string('switchroleto', 'theme_uofr_conservatory'),
                                             'type' => navigation_node::TYPE_CONTAINER,
                                             'key'  => 'switchroletotab');
                         // Create the node.
@@ -238,12 +238,12 @@ function theme_urcourses_default_get_incourse_settings() {
  *
  * @return navigation_node.
  */
-function theme_urcourses_default_get_incourse_activity_settings() {
+function theme_uofr_conservatory_get_incourse_activity_settings() {
     global $PAGE;
     $context = $PAGE->context;
     $node = false;
     // If setting showsettingsincourse is enabled.
-    if (get_config('theme_urcourses_default', 'showsettingsincourse') == 'yes') {
+    if (get_config('theme_uofr_conservatory', 'showsettingsincourse') == 'yes') {
         // Settings belonging to activity or resources.
         if ($context->contextlevel == CONTEXT_MODULE) {
             $node = $PAGE->settingsnav->find('modulesettings', navigation_node::TYPE_SETTING);
@@ -265,7 +265,7 @@ function theme_urcourses_default_get_incourse_activity_settings() {
  * @param int $courseid The course ID.
  * @return string.
  */
-function theme_urcourses_default_get_course_guest_access_hint($courseid) {
+function theme_uofr_conservatory_get_course_guest_access_hint($courseid) {
     global $CFG;
     require_once($CFG->dirroot . '/enrol/self/lib.php');
 
@@ -279,7 +279,7 @@ function theme_urcourses_default_get_course_guest_access_hint($courseid) {
         $plugin = $plugins[$instance->enrol];
         if ($plugin->show_enrolme_link($instance)) {
             $html = html_writer::tag('div', get_string('showhintcourseguestaccesslink',
-                'theme_urcourses_default', array('url' => $CFG->wwwroot . '/enrol/index.php?id=' . $courseid)));
+                'theme_uofr_conservatory', array('url' => $CFG->wwwroot . '/enrol/index.php?id=' . $courseid)));
             break;
         }
     }
@@ -295,7 +295,7 @@ function theme_urcourses_default_get_course_guest_access_hint($courseid) {
  * @return string
  */
 
-function theme_urcourses_default_get_ur_category_class($courseid) {
+function theme_uofr_conservatory_get_ur_category_class($courseid) {
 	global $CFG, $DB;
 	
 	$ur_css_class = '';

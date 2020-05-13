@@ -26,8 +26,8 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG,$PAGE,$DB;
 //check if user has darkmode on in database and include if so
-if($DB->get_record('theme_urcourses_darkmode', array('userid'=>$USER->id, 'darkmode'=>1))){
-    $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css');
+if($DB->get_record('theme_conservatory_darkmode', array('userid'=>$USER->id, 'darkmode'=>1))){
+    $PAGE->requires->css('/theme/uofr_conservatory/style/darkmode.css');
  }
 
 $templatecontext = [
@@ -35,4 +35,4 @@ $templatecontext = [
     'output' => $OUTPUT
 ];
 
-echo $OUTPUT->render_from_template('theme_urcourses_default/embedded', $templatecontext);
+echo $OUTPUT->render_from_template('theme_uofr_conservatory/embedded', $templatecontext);

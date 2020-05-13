@@ -17,7 +17,7 @@
 /**
  * Webservices for Boost Campus.
  *
- * @package    theme_urcourses_default
+ * @package    theme_uofr_conservatory
  * @author     John Lane
  * 
  */
@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . "/externallib.php");
 require_once($CFG->dirroot . "/course/lib.php");
 
-class theme_urcourses_default_external extends external_api {
+class theme_uofr_conservatory_external extends external_api {
 
     /**
      * Describes upload_course_image parameters.
@@ -126,12 +126,12 @@ class theme_urcourses_default_external extends external_api {
 
         // verify size
         if (strlen($binary_data) > get_max_upload_file_size($CFG->maxbytes)) {
-            throw new \moodle_exception('error:courseimageexceedsmaxbytes', 'theme_urcourses_default', $CFG->maxbytes);
+            throw new \moodle_exception('error:courseimageexceedsmaxbytes', 'theme_uofr_conservatory', $CFG->maxbytes);
         }
 
         // verify filetype
         if ($filetype !== 'jpg' && $filetype !== 'png' && $filetype !== 'gif') {
-            throw new \moodle_exception('error:courseimageinvalidfiletype', 'theme_urcourses_default');
+            throw new \moodle_exception('error:courseimageinvalidfiletype', 'theme_uofr_conservatory');
         }
 
         if ($context->contextlevel === CONTEXT_COURSE) {
@@ -176,7 +176,7 @@ class theme_urcourses_default_external extends external_api {
         require_capability('moodle/course:changesummary', $context);
 		
 		//update the db
-		$table = 'theme_urcourses_hdrstyle';
+		$table = 'theme_conservatory_hdrstyle';
 		
 	    $newrecord = new stdClass();
 	    $newrecord->courseid = $courseid;

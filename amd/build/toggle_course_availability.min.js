@@ -16,7 +16,7 @@
 /**
  * Theme Boost Campus - Code for course header image uploader.
  *
- * @package    theme_urcourses_default
+ * @package    theme_uofr_conservatory
  * @author     John Lane
  * 
  */
@@ -111,7 +111,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
 
         // set ajax call
         var ajaxCall = {
-            methodname: 'theme_urcourses_default_toggle_course_availability',
+            methodname: 'theme_uofr_conservatory_toggle_course_availability',
             args: args,
             done: _choiceDone,
             fail: notification.exception
@@ -121,11 +121,11 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         ajax.call([ajaxCall]);
     };
     /**
-     * Handles theme_urcourses_default_upload_course_image response data.
+     * Handles theme_uofr_conservatory_upload_course_image response data.
      * @param {Object} response 
      */
     var _choiceDone = function() {
-        str.get_string('success:courseavailabilitychanged', 'theme_urcourses_default')
+        str.get_string('success:courseavailabilitychanged', 'theme_uofr_conservatory')
             .done(_createSuccessPopup);
     };
 

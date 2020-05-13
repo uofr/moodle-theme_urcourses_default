@@ -17,7 +17,7 @@
 /**
  * Theme UR Courses Default - Language pack
  *
- * @package    theme_urcourses_default
+ * @package    theme_uofr_conservatory
  * @copyright  2017 Kathrin Osswald, Ulm University <kathrin.osswald@uni-ulm.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,16 +25,16 @@
 defined('MOODLE_INTERNAL') || die();
 
 // GENERAL.
-$string['pluginname'] = 'UR Courses: Default (Fall 2019)';
-$string['choosereadme'] = 'UR Courses: Default (Fall 2019) is a child theme of Boost for University of Regina courses.';
+$string['pluginname'] = 'U of R: Conservatory';
+$string['choosereadme'] = 'U of R: Conservatory is a child theme of Boost for the University of Regina Conservatory.';
 
 // SETTINGS.
-$string['configtitle'] = 'UR Courses: Default (Fall 2019) settings';
+$string['configtitle'] = 'U of R: Conservatory settings';
 
 // General settings.
 $string['presetheadingsetting'] = 'Theme presets';
 // ...Background image.
-$string['backgroundimage_desc_note'] = '<br/> Please note: This will not override the setting "theme_urcourses_default | loginbackgroundimage" which means that the pictures uploaded to the login page background will be displayed anyway.';
+$string['backgroundimage_desc_note'] = '<br/> Please note: This will not override the setting "theme_uofr_conservatory | loginbackgroundimage" which means that the pictures uploaded to the login page background will be displayed anyway.';
 // ...Brand colors.
 $string['brandcolorheadingsetting'] = 'Brand colors';
 $string['brandsuccesscolorsetting'] = 'Brand success color';

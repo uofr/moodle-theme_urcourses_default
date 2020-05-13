@@ -3,7 +3,7 @@ require_once("../../../../config.php");
 ?>
 <div class="mceTmpl">
     <div class="callout callout-blue d-sm-inline-flex float-right"> 
-        <img src="<?php echo $CFG->wwwroot; ?>/theme/urcourses_default/callouts/question.png" class="icon img-fluid float-left">
+        <img src="<?php echo $CFG->wwwroot; ?>/theme/uofr_conservatory/callouts/question.png" class="icon img-fluid float-left">
         <div>
          <h2> 
             Your Title Here

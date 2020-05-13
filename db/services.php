@@ -23,28 +23,28 @@ defined('MOODLE_INTERNAL') || die();
 
 $functions = array(
 
-    'theme_urcourses_default_upload_course_image' => array(
-        'classname'     => 'theme_urcourses_default_external',
+    'theme_uofr_conservatory_upload_course_image' => array(
+        'classname'     => 'theme_uofr_conservatory_external',
         'methodname'    => 'upload_course_image',
-        'classpath'     => 'theme/urcourses_default/externallib.php',
+        'classpath'     => 'theme/uofr_conservatory/externallib.php',
         'description'   => 'Changes course image.',
         'type'          => 'write',
         'ajax'          => 'true',
     ),
 	
-    'theme_urcourses_default_header_choose_style' => array(
-        'classname'     => 'theme_urcourses_default_external',
+    'theme_uofr_conservatory_header_choose_style' => array(
+        'classname'     => 'theme_uofr_conservatory_external',
         'methodname'    => 'choose_header_style',
-        'classpath'     => 'theme/urcourses_default/externallib.php',
+        'classpath'     => 'theme/uofr_conservatory/externallib.php',
         'description'   => 'Changes header style',
         'type'          => 'write',
         'ajax'          => 'true',
     ),
 
-    'theme_urcourses_default_toggle_course_availability' => array(
-        'classname'     => 'theme_urcourses_default_external',
+    'theme_uofr_conservatory_toggle_course_availability' => array(
+        'classname'     => 'theme_uofr_conservatory_external',
         'methodname'    => 'toggle_course_availability',
-        'classpath'     => 'theme/urcourses_default/externallib.php',
+        'classpath'     => 'theme/uofr_conservatory/externallib.php',
         'description'   => 'Toggles course availability',
         'type'          => 'write',
         'ajax'          => 'true',

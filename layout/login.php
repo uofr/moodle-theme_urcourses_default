@@ -17,7 +17,7 @@
 /**
  * Theme Boost Campus Login - Layout file.
  *
- * @package   theme_urcourses_default
+ * @package   theme_uofr_conservatory
  * @copyright 2017 Kathrin Osswald, Ulm University kathrin.osswald@uni-ulm.de
  * @copyright based on code from theme_boost by Damyon Wiese
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -43,7 +43,7 @@ ob_start();
 // The footer blocks and the image area are currently not shown on the login page.
 // Here, we will add the footnote only.
 // Get footnote config.
-$footnote = get_config('theme_urcourses_default', 'footnote');
+$footnote = get_config('theme_uofr_conservatory', 'footnote');
 if (!empty($footnote)) {
     // Add footnote layout file.
     require_once(__DIR__ . '/includes/footnote.php');
@@ -62,7 +62,7 @@ $templatecontext['pagebottomelements'] = $pagebottomelements;
 
 
 // Render own template.
-echo $OUTPUT->render_from_template('theme_urcourses_default/login', $templatecontext);
+echo $OUTPUT->render_from_template('theme_uofr_conservatory/login', $templatecontext);
 // MODIFICATION END.
 /* ORIGINAL START.
 echo $OUTPUT->render_from_template('theme_boost/login', $templatecontext);

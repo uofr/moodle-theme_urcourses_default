@@ -17,19 +17,19 @@
 /**
  * Theme Boost Campus - Layout file for Image area.
  *
- * @package   theme_urcourses_default
+ * @package   theme_uofr_conservatory
  * @copyright 2017 Kathrin Osswald, Ulm University kathrin.osswald@uni-ulm.de
  * @copyright based on code from theme_boost by Damyon Wiese
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
-require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
+require_once($CFG->dirroot . '/theme/uofr_conservatory/locallib.php');
 
-$imageareafiles = theme_urcourses_default_get_imageareacontent();
+$imageareafiles = theme_uofr_conservatory_get_imageareacontent();
 
 // Only proceed if received array is not empty.
 if (!empty($imageareafiles)) {
     $templatecontext['imageareafiles'] = $imageareafiles;
-    echo $OUTPUT->render_from_template('theme_urcourses_default/imagearea', $templatecontext);
+    echo $OUTPUT->render_from_template('theme_uofr_conservatory/imagearea', $templatecontext);
 }

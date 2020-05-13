@@ -3,7 +3,7 @@ require_once("../../../../config.php");
 ?>
 <div class="mceTmpl">
     <div class="callout d-sm-inline-flex"> 
-        <img src="<?php echo $CFG->wwwroot; ?>/theme/urcourses_default/callouts/resources.png" class="icon img-fluid float-left">
+        <img src="<?php echo $CFG->wwwroot; ?>/theme/uofr_conservatory/callouts/resources.png" class="icon img-fluid float-left">
         <div>
          <h2> 
             Resources Block

@@ -17,7 +17,7 @@
 /**
  * Theme Boost Campus - Library
  *
- * @package    theme_urcourses_default
+ * @package    theme_uofr_conservatory
  * @copyright  2017 Kathrin Osswald, Ulm University <kathrin.osswald@uni-ulm.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -35,7 +35,7 @@ defined('MOODLE_INTERNAL') || die();
  * @param theme_config $theme The theme config object.
  * @return string
  */
-function theme_urcourses_default_get_main_scss_content($theme) {
+function theme_uofr_conservatory_get_main_scss_content($theme) {
     global $CFG;
 
     $scss = '';
@@ -50,8 +50,8 @@ function theme_urcourses_default_get_main_scss_content($theme) {
         // We still load the default preset files directly from the boost theme. No sense in duplicating them.
         $scss .= file_get_contents($CFG->dirroot . '/theme/boost/scss/preset/plain.scss');
 
-    } else if ($filename && ($presetfile = $fs->get_file($context->id, 'theme_urcourses_default', 'preset', 0, '/', $filename))) {
-        // This preset file was fetched from the file area for theme_urcourses_default and not theme_boost (see the line above).
+    } else if ($filename && ($presetfile = $fs->get_file($context->id, 'theme_uofr_conservatory', 'preset', 0, '/', $filename))) {
+        // This preset file was fetched from the file area for theme_uofr_conservatory and not theme_boost (see the line above).
         $scss .= $presetfile->get_content();
     } else {
         // Safety fallback - maybe new installs etc.
@@ -59,17 +59,17 @@ function theme_urcourses_default_get_main_scss_content($theme) {
     }
 
     // Pre CSS - this is loaded AFTER any prescss from the setting but before the main scss.
-    $pre = file_get_contents($CFG->dirroot . '/theme/urcourses_default/scss/pre.scss');
+    $pre = file_get_contents($CFG->dirroot . '/theme/uofr_conservatory/scss/pre.scss');
     // Post CSS - this is loaded AFTER the main scss but before the extra scss from the setting.
-    $post = file_get_contents($CFG->dirroot . '/theme/urcourses_default/scss/post.scss');
+    $post = file_get_contents($CFG->dirroot . '/theme/uofr_conservatory/scss/post.scss');
     // legacy css for older styles
-    $legacy = file_get_contents($CFG->dirroot . '/theme/urcourses_default/style/legacy.css');
+    $legacy = file_get_contents($CFG->dirroot . '/theme/uofr_conservatory/style/legacy.css');
     //callout css
-    $callout = file_get_contents($CFG->dirroot . '/theme/urcourses_default/style/callout.css');
+    $callout = file_get_contents($CFG->dirroot . '/theme/uofr_conservatory/style/callout.css');
     //alert override css
-    $alerts = file_get_contents($CFG->dirroot . '/theme/urcourses_default/style/alert.css');
+    $alerts = file_get_contents($CFG->dirroot . '/theme/uofr_conservatory/style/alert.css');
     //pullquote css
-    $pquote = file_get_contents($CFG->dirroot . '/theme/urcourses_default/style/pullquote.css');
+    $pquote = file_get_contents($CFG->dirroot . '/theme/uofr_conservatory/style/pullquote.css');
     // Combine them together.
     return $pre . "\n" . $scss . "\n" . $post . "\n" . $callout . "\n" . $alerts . "\n" . $pquote . "\n" . $legacy;
 }
@@ -82,10 +82,10 @@ function theme_urcourses_default_get_main_scss_content($theme) {
  * @param theme_config $theme The theme config object.
  * @return array
  */
-function theme_urcourses_default_get_pre_scss($theme) {
+function theme_uofr_conservatory_get_pre_scss($theme) {
     global $CFG;
     // MODIFICATION START.
-    require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
+    require_once($CFG->dirroot . '/theme/uofr_conservatory/locallib.php');
     // MODIFICATION END.
 
     $scss = '';
@@ -148,9 +148,9 @@ function theme_urcourses_default_get_pre_scss($theme) {
  * @param array $options additional options affecting the file serving
  * @return bool
  */
-function theme_urcourses_default_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
+function theme_uofr_conservatory_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
     if ($context->contextlevel == CONTEXT_SYSTEM) {
-        $theme = theme_config::load('urcourses_default');
+        $theme = theme_config::load('uofr_conservatory');
         // By default, theme files must be cache-able by both browsers and proxies.
         // TODO: For new file areas: Check if the cacheability needs to be restricted.
         if (!array_key_exists('cacheability', $options)) {
@@ -173,11 +173,11 @@ function theme_urcourses_default_pluginfile($course, $cm, $context, $filearea, $
 }
 
 /**
- * If setting is updated, use this callback to clear the theme_urcourses_default' own application cache.
+ * If setting is updated, use this callback to clear the theme_uofr_conservatory' own application cache.
  */
-function theme_urcourses_default_reset_app_cache() {
+function theme_uofr_conservatory_reset_app_cache() {
     // Get the cache from area.
-    $themeboostcampuscache = cache::make('theme_urcourses_default', 'imagearea');
+    $themeboostcampuscache = cache::make('theme_uofr_conservatory', 'imagearea');
     // Delete the cache for the imagearea.
     $themeboostcampuscache->delete('imageareadata');
     // To be safe and because there can only be one callback function added to a plugin setting,
@@ -192,7 +192,7 @@ function theme_urcourses_default_reset_app_cache() {
  * @param string $newvalue
  * @return \core\output\inplace_editable
  */
-function theme_urcourses_default_inplace_editable($itemtype, $itemid, $newvalue) {
+function theme_uofr_conservatory_inplace_editable($itemtype, $itemid, $newvalue) {
     // coursename: allows instructors to change course name inline if editing is on
     if ($itemtype === 'coursename') {
         global $CFG;
@@ -209,6 +209,6 @@ function theme_urcourses_default_inplace_editable($itemtype, $itemid, $newvalue)
 
         $can_edit_coursename = has_capability('moodle/course:changefullname', $context);
         $course_link = '<h1 class="d-inline"><a href="'.$CFG->wwwroot.'/course/view.php?id='.$course->id.'">'.$course->fullname.'</a></h1>';
-        return new \core\output\inplace_editable('theme_urcourses_default', 'coursename', $course->id, $can_edit_coursename, $course_link, format_string($course->fullname));
+        return new \core\output\inplace_editable('theme_uofr_conservatory', 'coursename', $course->id, $can_edit_coursename, $course_link, format_string($course->fullname));
     }
 }

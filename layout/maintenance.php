@@ -31,4 +31,4 @@ $templatecontext = [
     'output' => $OUTPUT
 ];
 
-echo $OUTPUT->render_from_template('theme_urcourses_default/maintenance', $templatecontext);
+echo $OUTPUT->render_from_template('theme_uofr_conservatory/maintenance', $templatecontext);

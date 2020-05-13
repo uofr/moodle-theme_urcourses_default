@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template theme_urcourses_default/loginform
+    @template theme_uofr_conservatory/loginform
 
     Moodle template for the login page.
 
@@ -102,11 +102,18 @@
     <div class="col-sm-12 col-md-6 col-lg-4">
         <div class="card">
             <div class="card-block">
-                <h2 class="card-header text-center" ><img src="{{loginlogourl}}" title="{{sitename}}" alt="{{sitename}}" /></h2>
+                <h2 class="card-header text-center" >
+					<p><img src="{{loginlogourl}}" title="{{sitename}}" alt="{{sitename}}" style="width: 4em" /></p>
+					<div class="row">
+						<div class="col-sm-1"></div>
+						<div class="col-sm-1 align-right"><img src="../theme/uofr_conservatory/pix/conservatory_logo.jpg" height="65" class="rounded-circle align-middle mr-0" /></div>
+						<div class="col-sm-9 align-left"><h2>Conservatory of Performing Arts</h2></div>
+						<div class="col-sm-1"></div>
+					</div></h2>
                 <div class="card-body">
 					{{#maintenance}}
                     <div class="alert alert-info">
-                        <h5><b>UR Courses is in maintenance mode.</b></h5>
+                        <h5>The <b>U of R Conservatory</b> is currently in maintenance mode.</h5>
 						<p><small>{{#str}}sitemaintenance, core_admin{{/str}}</small></p>
                     </div>
 					{{/maintenance}}
@@ -118,10 +125,13 @@
                         </div>
                     {{/cansignup}}
 					
-					<h2>UR Courses Login</h2>
+					
+					
+					
+					
 
 					<div class="mt-3">
-					Log in below using your U of R username and password<br />
+					If you have an existing account, please login below<br />
 					<span>{{#str}} cookiesenabled {{/str}}
 					{{{cookieshelpiconformatted}}}</span>
 					</div>
@@ -213,12 +223,17 @@
             </div>
         </div>
     </div>
-	<div class="col-sm-12 col-md-4 offset-md-2 col-lg-3 offset-lg-5">
-        <div class="card p-3 mt-2 login-art-credit">
-		<p class="small mb-0" title="">
-			<a class="text-dark" href="http://www2.uregina.ca/president/art/outdoor/lionel-peyachew/" target="_blank"><b>The Four Directions, 2005</b></a><br />
-			Lionel Peyachew</p>
-		<p class="small my-0 mt-2" style="color: #395a77"><i>Reproduced with the permission of the artist. Photograph by the University of Regina.</i></p>
+	<div class="col-sm-12 col-md-4 offset-md-2 col-lg-4 offset-lg-4 mt-5">
+        <div class="card p-3 mt-2">
+			<h4>Learn More Than Music! 😀</h4>
+			<p class="small" title="">
+			From voice to violin, music lessons teach more than just tunes! Numerous studies have shown that participation in music programs from a young age has an extremely positive impact on children's cognitive and social skills.</p>
+
+		<p class="small">Music facilitates learning, instills respect and pride and increases self-esteem and social interaction.</p>
+		
+					<div class="embed-responsive embed-responsive-16by9">
+					  <iframe class="embed-responsive-item" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="allowfullscreen" src="https://www.youtube.com/embed/vYAMXuXJmuA" width="365" height="197" frameborder="0"></iframe>
+					</div>
 		</div>
 	</div>	
 </div>
