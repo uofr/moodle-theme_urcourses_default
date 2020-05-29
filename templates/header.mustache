@@ -66,7 +66,14 @@
                     {{/hasnavbar}}
                     <div class="pageheadingbutton ml-auto d-flex">
 						<div class="ml-auto d-flex">
-                           <span id="root_rtl_{{uniqid}}"><i id="rtl_trigger" class="fa fa-question-circle text-light fa-2x fa-fw align-middle mt-1" title="Help with Remote Teaching & Learning" aria-label="Help with Remote Teaching & Learning"></i></span> {{{pageheadingbutton}}}
+                           <span id="root_rtl_{{uniqid}}">
+                                <i id="rtl_trigger"
+                                    class="fa fa-question-circle text-light fa-2x fa-fw align-middle mt-1"
+                                    title="Help with Remote Teaching & Learning"
+                                    aria-label="Help with Remote Teaching & Learning">
+                                </i>
+                            </span>
+                            {{{pageheadingbutton}}}
                         </div>
                         {{#settingsmenu}}
                             <div class="context-header-settings-menu">
@@ -88,7 +95,7 @@
     require(['theme_urcourses_default/lightboxes'], function(main) {
         main.init();
     });
-    require(['theme_urcourses_default/course_rtl_chooser'], function(main) {
-        main.init('#root_rtl_{{uniqid}}', {{courseid}});
+    require(['theme_urcourses_default/course_rtl_help'], function(main) {
+        main.init('#root_rtl_{{uniqid}}');
     });
 {{/js}}

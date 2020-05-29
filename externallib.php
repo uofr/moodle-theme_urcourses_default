@@ -19,7 +19,7 @@
  *
  * @package    theme_urcourses_default
  * @author     John Lane
- * 
+ *
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -42,9 +42,9 @@ class theme_urcourses_default_external extends external_api {
             )
         );
     }
-	
-	
-	
+
+
+
 	public static function choose_header_style_parameters() {
         return new external_function_parameters(
             array(
@@ -53,9 +53,9 @@ class theme_urcourses_default_external extends external_api {
             )
         );
     }
-	
-	
-	
+
+
+
 	public static function toggle_course_availability_parameters() {
         return new external_function_parameters(
             array(
@@ -64,8 +64,8 @@ class theme_urcourses_default_external extends external_api {
             )
         );
     }
-	
-	
+
+
     /**
      * Describes upload_couse_image return value.
      * @return external_single_structure
@@ -73,8 +73,8 @@ class theme_urcourses_default_external extends external_api {
     public static function upload_course_image_returns() {
         return new external_single_structure(array('success' => new external_value(PARAM_BOOL)));
     }
-	
-	
+
+
     /**
      * Describes choose_header_style return value.
      * @return external_single_structure
@@ -82,8 +82,8 @@ class theme_urcourses_default_external extends external_api {
     public static function choose_header_style_returns() {
         return new external_single_structure(array('success' => new external_value(PARAM_BOOL)));
     }
-	
-	
+
+
     /**
      * Describes choose_header_style return value.
      * @return external_single_structure
@@ -155,9 +155,9 @@ class theme_urcourses_default_external extends external_api {
         // return
         return array('success' => $success);
     }
-	
-	
-	
+
+
+
 	public static function choose_header_style($courseid, $headerstyle) {
         global $CFG, $DB;
 
@@ -174,10 +174,10 @@ class theme_urcourses_default_external extends external_api {
         $context = \context_course::instance($params['courseid']);
         self::validate_context($context);
         require_capability('moodle/course:changesummary', $context);
-		
+
 		//update the db
 		$table = 'theme_urcourses_hdrstyle';
-		
+
 	    $newrecord = new stdClass();
 	    $newrecord->courseid = $courseid;
 	    $newrecord->hdrstyle = $headerstyle;
@@ -185,23 +185,23 @@ class theme_urcourses_default_external extends external_api {
 	    //database check if user has a record, insert if not
 	    if ($record = $DB->get_record($table, array('courseid'=>$courseid))) {
 	     	//if has a record, update record to $setdarkmode
-			
+
 			$newrecord->id = $record->id;
      	 	$success = $DB->update_record($table, $newrecord);
 	    } else {
 	        //create a record
 	        $success = $DB->insert_record($table, $newrecord);
-	    } 
-		
+	    }
+
 		return array('success' => $success);
-		
+
 	}
-	
-	
-	
+
+
+
 	public static function toggle_course_availability($courseid, $availability) {
         global $CFG, $DB;
-		
+
         // get params
         $params = self::validate_parameters(
             self::toggle_course_availability_parameters(),
@@ -215,9 +215,9 @@ class theme_urcourses_default_external extends external_api {
         $context = \context_course::instance($params['courseid']);
         self::validate_context($context);
         require_capability('moodle/course:changesummary', $context);
-		
+
 		$table = 'course';
-		
+
 	    $newrecord = new stdClass();
 	    $newrecord->courseid = $courseid;
 	    $newrecord->visible = $availability==1?0:1;
@@ -230,9 +230,52 @@ class theme_urcourses_default_external extends external_api {
 		} else {
 			return array('error' => 'Record not found');
 		}
-		
+
 	}
-	
+
+    public static function get_remtl_help_parameters() {
+        return new external_function_parameters(
+            array(
+                'param' => new external_value(PARAM_TEXT)
+            )
+        );
+    }
+
+    public static function get_remtl_help_returns() {
+        return new external_function_parameters(
+            array(
+                'json_output' => new external_value(PARAM_RAW)
+            )
+        );
+    }
+
+    public static function get_remtl_help($param) {
+        global $USER;
+
+        $params = self::validate_parameters(
+            self::get_remtl_help_parameters(),
+            array (
+                'param' => $param
+            )
+        );
+
+        switch ($USER->username) {
+            case 'urteacher':
+                $url = 'https://urcourses.uregina.ca/test/guides/instructor/remote-teaching.json';
+                break;
+            default:
+                $url = 'https://urcourses.uregina.ca/test/guides/student/remote-learning.json';
+                break;
+        }
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $json_output = curl_exec($ch);
+        curl_close($ch);
+
+        return array('json_output' => $json_output);
+    }
 
 }
 

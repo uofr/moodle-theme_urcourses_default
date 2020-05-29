@@ -22,7 +22,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 $functions = array(
-
     'theme_urcourses_default_upload_course_image' => array(
         'classname'     => 'theme_urcourses_default_external',
         'methodname'    => 'upload_course_image',
@@ -31,7 +30,6 @@ $functions = array(
         'type'          => 'write',
         'ajax'          => 'true',
     ),
-	
     'theme_urcourses_default_header_choose_style' => array(
         'classname'     => 'theme_urcourses_default_external',
         'methodname'    => 'choose_header_style',
@@ -40,7 +38,6 @@ $functions = array(
         'type'          => 'write',
         'ajax'          => 'true',
     ),
-
     'theme_urcourses_default_toggle_course_availability' => array(
         'classname'     => 'theme_urcourses_default_external',
         'methodname'    => 'toggle_course_availability',
@@ -49,5 +46,12 @@ $functions = array(
         'type'          => 'write',
         'ajax'          => 'true',
     ),
-
+    'theme_urcourses_default_get_remtl_help' => array(
+        'classname'     => 'theme_urcourses_default_external',
+        'methodname'    => 'get_remtl_help',
+        'classpath'     => 'theme/urcourses_default/externallib.php',
+        'description'   => 'Gets help from guides.',
+        'type'          => 'read',
+        'ajax'          => 'true'
+    )
 );
