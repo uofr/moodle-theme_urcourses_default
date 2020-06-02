@@ -27,6 +27,7 @@ define(
     'core/ajax',
     'core/notification',
     'core/str',
+    'theme_urcourses_default/modal_help',
     'core/modal_factory',
     'core/modal_events',
     'core/loadingicon'
@@ -36,6 +37,7 @@ function(
     ajax,
     notification,
     str,
+    ModalHelp,
     ModalFactory,
     ModalEvents,
     LoadingIcon
@@ -58,7 +60,7 @@ function(
 
     var init = function() {
         ModalFactory.create({
-            type: ModalFactory.types.CANCEL,
+            type: ModalHelp.TYPE,
             title: 'RTL Guide',
             large: true
         }, $(SELECTORS.RTL_BTN))
