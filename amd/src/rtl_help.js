@@ -28,7 +28,8 @@ define(
     'core/notification',
     'core/str',
     'core/modal_factory',
-    'core/modal_events'
+    'core/modal_events',
+    'core/loadingicon'
 ],
 function(
     $,
@@ -36,9 +37,9 @@ function(
     notification,
     str,
     ModalFactory,
-    ModalEvents
+    ModalEvents,
+    LoadingIcon
 ) {
-    var _root;
 
     var SELECTORS = {
         RTL_BTN: '#rtl_trigger'
@@ -52,16 +53,10 @@ function(
             methodname: 'theme_urcourses_default_get_remtl_help',
             args: args
         };
-        return ajax.call([ajaxCall])[0];
+        return ajax.call([ajaxCall]);
     };
 
-    /**
-     * Entry point to module. Sets globals and registers event listeners.
-     * @param {String} root Jquery selector for container.
-     * @return void
-     */
-    var init = function(root) {
-        _root = $(root);
+    var init = function() {
         ModalFactory.create({
             type: ModalFactory.types.CANCEL,
             title: 'RTL Guide',
@@ -70,10 +65,12 @@ function(
         .done(function(modal) {
             var modalRoot = modal.getRoot();
             modalRoot.on(ModalEvents.shown, function() {
-               getRemtlHelp()
-               .then(function(response) {
+               var requests = getRemtlHelp();
+               var loadingicon = LoadingIcon.addIconToContainerWithPromise($(modal.getBody()));
+               requests[0].then(function(response) {
                    var json_output = JSON.parse(response.json_output);
                    modal.setBody(json_output.content);
+                   loadingicon.resolve();
                });
             });
         });
