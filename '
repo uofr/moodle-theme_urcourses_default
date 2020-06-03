@@ -1,0 +1,5 @@
+set nowrap
+set formatoptions-=t
+set number
+set tabstop=4 shiftwidth=4 expandtab
+colorscheme simple-dark

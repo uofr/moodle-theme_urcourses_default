@@ -55,7 +55,7 @@
     border-width: 1px;
     border-style: solid;
     border-color: transparent;
-    border-radius: 3px;
+    border-radius: 0px;
     box-shadow: none;
     -webkit-box-shadow: none;
     transition: color 142ms linear, border 142ms linear, background 142ms linear;
@@ -105,7 +105,7 @@
     border-width: 1px;
     border-style: solid;
     border-color: #CCCCCC;
-    border-radius: 0.2rem;
+    border-radius: 0rem;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     transition: border 142ms linear, box-shadow 142ms linear;
@@ -130,7 +130,7 @@
     margin: 0;
     padding: 3px;
     text-align: left;
-    border-radius: 3px;
+    border-radius: 0px;
 }
 .tail-select-container .select-handle{
     width: auto;
@@ -150,7 +150,7 @@
     border-width: 0;
     border-style: solid;
     border-color: transparent;
-    border-radius: 3px;
+    border-radius: 0px;
     transition: background 142ms linear;
     -webkit-transition: background 142ms linear;
 }
@@ -181,7 +181,7 @@
     border-width: 1px;
     border-style: solid;
     border-color: #CCCCCC;
-    border-radius: 3px;
+    border-radius: 0px;
     transition: border 142ms linear, background 142ms linear, box-shadow 142ms linear;
     -webkit-transition: border 142ms linear, background 142ms linear, box-shadow 142ms linear;
 }
@@ -208,7 +208,7 @@
     line-height: 1;
     text-shadow: none;
     white-space: nowrap;
-    border-radius: 0.25rem;
+    border-radius: 0rem;
     background-color: #343A40;
 }
 .tail-select .select-label .label-inner{
@@ -243,7 +243,7 @@
     border-width: 1px;
     border-style: solid;
     border-color: rgba(0, 0, 0, 0.15);
-    border-radius: 0.25rem;
+    border-radius: 0rem;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
 }
@@ -397,7 +397,7 @@
 .tail-select .select-dropdown ul li.dropdown-option.hover{
     transition: all 0.4s ease;
     color: #343a40;
-    background-color: #ffffff;
+    background-color: #f8f9fa;
 }
 .tail-select .select-dropdown ul li.dropdown-option:hover .option-description,
 .tail-select .select-dropdown ul li.dropdown-option.hover .option-description{
