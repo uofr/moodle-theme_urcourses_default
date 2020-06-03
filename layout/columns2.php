@@ -83,6 +83,8 @@ if (get_config('theme_urcourses_default', 'catchctrlarrowdown') == true) {
 }
 // MODIFICATION END.
 
+$PAGE->requires->css('/theme/urcourses_default/style/tail.select-default.css');
+
 // MODIFICATION START: Setting 'darknavbar'.
 if (get_config('theme_urcourses_default', 'darknavbar') == 'yes') {
     $darknavbar = true;

@@ -61,7 +61,6 @@ function(
     var init = function() {
         ModalFactory.create({
             type: ModalHelp.TYPE,
-            title: 'RTL Guide',
             large: true
         }, $(SELECTORS.RTL_BTN))
         .done(function(modal) {

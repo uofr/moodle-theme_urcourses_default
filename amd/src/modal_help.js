@@ -1,11 +1,17 @@
 define(
 [
+    'jquery',
     'core/modal',
-    'core/modal_registry'
+    'core/modal_registry',
+    'core/modal_events',
+    'theme_urcourses_default/tail.select'
 ],
 function(
+    $,
     Modal,
-    ModalRegistry
+    ModalRegistry,
+    ModalEvents,
+    TailSelect
 ) {
     var registered = false;
 
@@ -29,6 +35,12 @@ function(
      */
     ModalHelp.prototype.registerEventListeners = function() {
         Modal.prototype.registerEventListeners.call(this);
+
+        this.getRoot().on(ModalEvents.shown, function() {
+            TailSelect('#test_select', {
+                search: true
+            });
+        }.bind(this));
     };
 
     if (!registered) {
