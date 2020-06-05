@@ -1,17 +1,25 @@
 {{< core/modal }}
+    {{$header}}
+        <div class="w-100">
+            <h5 id="{{uniqid}}-modal-title" class="modal-title" data-region="title">{{$title}}{{title}}{{/title}}</h5>
+            <div class="form-group">
+                <label for="modal_help_search">How Do I...</label>
+                <div style="position: relative;">
+                    <div class="input-group">
+                        <input id="modal_help_search" type="text" class="form-control" aria-describedby="modal_help_search_desc" autocomplete="off">
+                        <div class="input-group-append">
+                            <button id="modal_help_search_btn" type="button" class="btn btn-primary">Search</button>
+                        </div>
+                    </div>
+                    <div id="modal_help_search_suggestions"></div>
+                </div>
+                <small id="modal_help_search_desc" class="text-muted">Search the guides for help.</small>
+            </div>
+        </div>
+    {{/header}}
+
     {{$title}}
-    </h5>
-    <select id="test_select">
-        <option value="" selected disabled hidden>How do I...</option>
-        <option value="A">Abc</option>
-        <option value="B">Bcd</option>
-        <option value="C">Cde</option>
-        <option value="D">Def</option>
-        <option value="E">Efg</option>
-        <option value="F">Fgh</option>
-        <option value="G">Ghi</option>
-	</select>
-    <h5>
+        <h5>Title</h5>
     {{/title}}
 
     {{$body}}
