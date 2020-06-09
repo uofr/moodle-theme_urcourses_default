@@ -50,26 +50,40 @@ function(
         Modal.prototype.registerEventListeners.call(this);
 
         this.getRoot().on(ModalEvents.shown, function() {
-            console.log('shown');
+            this.topicsList = countries;
         }.bind(this));
 
         this.getModal().on('input', SELECTORS.SEARCH, function(e, data) {
-            $(SELECTORS.SUGGESTIONS).html('');
-            if (!this.value.length) {
+            var searchValue = this.searchBox.val().toLowerCase();
+            var regex = RegExp(searchValue.split('').join('.*'));
+            var suggestions = [];
+            this.suggestionBox.html('');
+            if (!searchValue.length) {
                 return;
             }
-            for (var i = 0; i < countries.length; i++) {
-                if (countries[i].substr(0, this.value.length).toUpperCase() === this.value.toUpperCase()) {
-                    var suggestionItem = $('<a href="#"></a>');
-                    suggestionItem.addClass('dropdown-item suggestion-item');
-                    suggestionItem.attr('data-value', countries[i]);
-                    suggestionItem.html(`<strong>${countries[i].substr(0, this.value.length)}</strong>${countries[i].substr(this.value.length)}`);
-                    $(SELECTORS.SUGGESTIONS).append(suggestionItem);
+            for (var topic of this.topicsList) {
+                var match = regex.exec(topic.toLowerCase());
+                if (match) {
+                    suggestions.push({
+                        text: topic,
+                        length: match[0].length,
+                        start: match.index
+                    });
                 }
             }
-        });
+            suggestions.sort(function(a, b) {
+                if (a.length < b.length) return -1;
+                if (a.length > b.length) return 1;
+                if (a.start < b.start) return -1;
+                if (a.start > b.start) return 1;
+            });
+            for (var suggestion of suggestions) {
+                var html = `<a href="#" class="dropdown-item suggestion-item">${suggestion.text}</a>`;
+                this.suggestionBox.append(html);
+            }
+        }.bind(this));
 
-        this.getModal().on('keydown', SELECTORS.SEARCH, function(e, data) {     
+        this.getModal().on('keydown', SELECTORS.SEARCH, function(e, data) {
             switch (e.keyCode) {
                 case KeyCodes.arrowUp:
                     e.preventDefault();
@@ -142,6 +156,7 @@ function(
         });
     };
 
+    // Weird setup code. Don't touch!
     if (!registered) {
         ModalRegistry.register(ModalHelp.TYPE, ModalHelp, 'theme_urcourses_default/modal_help');
         registered = true;
