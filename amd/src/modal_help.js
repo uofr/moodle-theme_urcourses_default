@@ -54,15 +54,15 @@ function(
         }.bind(this));
 
         this.getModal().on('input', SELECTORS.SEARCH, function(e, data) {
-            var searchValue = this.searchBox.val().toLowerCase();
-            var regex = RegExp(searchValue.split('').join('.*'));
+            var searchValue = this.searchBox.val();
+            var regex = RegExp(searchValue.split('').join('.*'), 'i');
             var suggestions = [];
             this.suggestionBox.html('');
             if (!searchValue.length) {
                 return;
             }
             for (var topic of this.topicsList) {
-                var match = regex.exec(topic.toLowerCase());
+                var match = regex.exec(topic);
                 if (match) {
                     suggestions.push({
                         text: topic,
@@ -78,7 +78,7 @@ function(
                 if (a.start > b.start) return 1;
             });
             for (var suggestion of suggestions) {
-                var html = `<a href="#" class="dropdown-item suggestion-item">${suggestion.text}</a>`;
+                var html = `<a href="#" class="dropdown-item suggestion-item" data-value="${suggestion.text}">${suggestion.text}</a>`;
                 this.suggestionBox.append(html);
             }
         }.bind(this));
