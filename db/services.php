@@ -53,5 +53,13 @@ $functions = array(
         'description'   => 'Gets help from guides.',
         'type'          => 'read',
         'ajax'          => 'true'
+    ),
+    'theme_urcourses_default_get_topic_list' => array(
+        'classname'     => 'theme_urcourses_default_external',
+        'methodname'    => 'get_topic_list',
+        'classpath'     => 'theme/urcourses_default/externallib.php',
+        'description'   => 'Gets topic list for help menu.',
+        'type'          => 'read',
+        'ajax'          => 'true'
     )
 );

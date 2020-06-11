@@ -22,6 +22,8 @@
  *
  */
 
+use Symfony\Component\Console\Descriptor\JsonDescriptor;
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . "/externallib.php");
@@ -235,29 +237,22 @@ class theme_urcourses_default_external extends external_api {
 
     public static function get_remtl_help_parameters() {
         return new external_function_parameters(
-            array(
-                'param' => new external_value(PARAM_TEXT)
-            )
+            array()
         );
     }
 
     public static function get_remtl_help_returns() {
-        return new external_function_parameters(
+        return new external_single_structure(
             array(
-                'json_output' => new external_value(PARAM_RAW)
+                'html' => new external_value(PARAM_RAW)
             )
         );
     }
 
-    public static function get_remtl_help($param) {
+    public static function get_remtl_help() {
         global $USER;
 
-        $params = self::validate_parameters(
-            self::get_remtl_help_parameters(),
-            array (
-                'param' => $param
-            )
-        );
+        $params = self::validate_parameters(self::get_remtl_help_parameters(), array());
 
         switch ($USER->username) {
             case 'urteacher':
@@ -267,14 +262,51 @@ class theme_urcourses_default_external extends external_api {
                 $url = 'https://urcourses.uregina.ca/test/guides/student/remote-learning.json';
                 break;
         }
+
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $json_output = curl_exec($ch);
+        $output = curl_exec($ch);
         curl_close($ch);
 
-        return array('json_output' => $json_output);
+        $json_output = json_decode($output);
+
+        return array('html' => $json_output->content);
+    }
+
+    public static function get_topic_list_parameters() {
+        return new external_function_parameters(
+            array()
+        );
+    }
+
+    public static function get_topic_list_returns() {
+        return new external_multiple_structure(
+            new external_single_structure(
+                array(
+                    'prefix' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL),
+                    'title' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL),
+                    'url' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL),
+                    'excerpt' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL)
+                )
+            )
+        );
+    }
+
+    public static function get_topic_list() {
+        $params = self::validate_parameters(self::get_topic_list_parameters(), array());
+        $url = 'https://urcourses.uregina.ca/test/guides/social/sample-b.json';
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($ch);
+        curl_close($ch);
+
+        $json_output = json_decode($output);
+
+        return $json_output->jsondata->page_data[0]->all_pages;
     }
 
 }

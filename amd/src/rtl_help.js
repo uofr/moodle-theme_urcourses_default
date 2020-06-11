@@ -24,57 +24,24 @@
 define(
 [
     'jquery',
-    'core/ajax',
-    'core/notification',
-    'core/str',
     'theme_urcourses_default/modal_help',
-    'core/modal_factory',
-    'core/modal_events',
-    'core/loadingicon'
+    'core/modal_factory'
 ],
 function(
     $,
-    ajax,
-    notification,
-    str,
     ModalHelp,
-    ModalFactory,
-    ModalEvents,
-    LoadingIcon
+    ModalFactory
 ) {
 
     var SELECTORS = {
         RTL_BTN: '#rtl_trigger'
     };
 
-    var getRemtlHelp = function() {
-        var args = {
-            param: 'hi there'
-        };
-        var ajaxCall = {
-            methodname: 'theme_urcourses_default_get_remtl_help',
-            args: args
-        };
-        return ajax.call([ajaxCall]);
-    };
-
     var init = function() {
         ModalFactory.create({
             type: ModalHelp.TYPE,
             large: true
-        }, $(SELECTORS.RTL_BTN))
-        .done(function(modal) {
-            var modalRoot = modal.getRoot();
-            modalRoot.on(ModalEvents.shown, function() {
-               var requests = getRemtlHelp();
-               var loadingicon = LoadingIcon.addIconToContainerWithPromise($(modal.getBody()));
-               requests[0].then(function(response) {
-                   var json_output = JSON.parse(response.json_output);
-                   modal.setBody(json_output.content);
-                   loadingicon.resolve();
-               });
-            });
-        });
+        }, $(SELECTORS.RTL_BTN));
     };
 
     return {
