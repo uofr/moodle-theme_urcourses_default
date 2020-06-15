@@ -27,12 +27,16 @@ function(
         SEARCH: '#modal_help_search',
         SEARCH_BUTTON: '#modal_help_search_btn',
         SUGGESTIONS: '#modal_help_search_suggestions',
-        SUGGESTION_ITEM: '.suggestion-item',
+        SUGGESTION_ITEM: '.modal-help-suggestion-item',
         LOADING_OVERLAY: '[data-region="overlay-icon-container"]'
     };
 
     var TEMPLATES = {
         MODAL_HELP_CONTENT: 'theme_urcourses_default/modal_help_content'
+    };
+
+    var CSS = {
+        SUGGESTION_ACTIVE: 'suggestion-active'
     };
 
     /**
@@ -45,13 +49,31 @@ function(
         this.searchBox = this.root.find(SELECTORS.SEARCH);
         this.searchButton = this.root.find(SELECTORS.SEARCH_BUTTON);
         this.suggestionBox = this.root.find(SELECTORS.SUGGESTIONS);
-        this.suggestionItemIndex = 0;
+        this.suggestionItemIndex = -1;
         this.topicsList = null;
     };
 
     ModalHelp.prototype = Object.create(Modal.prototype);
     ModalHelp.prototype.constructor = ModalHelp;
     ModalHelp.TYPE = 'theme_urcourses_default-help';
+
+    ModalHelp.prototype.getNextSuggestion = function() {
+        this.getModal().find(SELECTORS.SUGGESTION_ITEM).removeClass(CSS.SUGGESTION_ACTIVE);
+        this.suggestionItemIndex++;
+        if (this.suggestionItemIndex > this.getModal().find(SELECTORS.SUGGESTION_ITEM).length - 1) {
+            this.suggestionItemIndex = 0;
+        }
+        this.getModal().find(SELECTORS.SUGGESTION_ITEM).eq(this.suggestionItemIndex).addClass(CSS.SUGGESTION_ACTIVE);
+    };
+
+    ModalHelp.prototype.getPrevSuggestion = function() {
+        this.getModal().find(SELECTORS.SUGGESTION_ITEM).removeClass(CSS.SUGGESTION_ACTIVE);
+        this.suggestionItemIndex--;
+        if (this.suggestionItemIndex < 0) {
+            this.suggestionItemIndex = this.getModal().find(SELECTORS.SUGGESTION_ITEM).length - 1;
+        }
+        this.getModal().find(SELECTORS.SUGGESTION_ITEM).eq(this.suggestionItemIndex).addClass(CSS.SUGGESTION_ACTIVE);
+    };
 
     /**
      * Set up event handling.
@@ -106,7 +128,7 @@ function(
                     });
                 }
             }
-            suggestions.sort(function(a, b) {
+            suggestions.sort((a, b) => {
                 if (a.length < b.length) {
                     return -1;
                 }
@@ -121,81 +143,46 @@ function(
                 }
             });
             for (var suggestion of suggestions) {
-                var html = `<a href="#" class="modal-help-suggestion-item" data-value="${suggestion.text}">${suggestion.text}</a>`;
+                var html = `<span class="modal-help-suggestion-item" data-value="${suggestion.text}">${suggestion.text}</span>`;
                 this.suggestionBox.append(html);
             }
         });
 
-        this.getModal().on('keydown', SELECTORS.SEARCH, function(e, data) {
-            switch (e.keyCode) {
-                case KeyCodes.arrowUp:
-                    e.preventDefault();
-                    this.suggestionItemIndex = this.getModal().find(SELECTORS.SUGGESTION_ITEM).length - 1;
-                    this.getModal().find(SELECTORS.SUGGESTION_ITEM).eq(this.suggestionItemIndex).focus();
-                    break;
-                case KeyCodes.arrowDown:
-                    e.preventDefault();
-                    this.suggestionItemIndex = 0;
-                    this.getModal().find(SELECTORS.SUGGESTION_ITEM).eq(this.suggestionItemIndex).focus();
-                    break;
-                case KeyCodes.arrowLeft:
-                     e.preventDefault();
-                    this.suggestionItemIndex = this.getModal().find(SELECTORS.SUGGESTION_ITEM).length - 1;
-                    this.getModal().find(SELECTORS.SUGGESTION_ITEM).eq(this.suggestionItemIndex).focus();
-                    break;
-                case KeyCodes.arrowRight:
-                    e.preventDefault();
-                    this.suggestionItemIndex = 0;
-                    this.getModal().find(SELECTORS.SUGGESTION_ITEM).eq(this.suggestionItemIndex).focus();
-                    break;
+        this.getModal().on('keydown', SELECTORS.SEARCH, (e, data) => {
+            if (e.keyCode === KeyCodes.arrowUp || e.keyCode === KeyCodes.arrowLeft) {
+                e.preventDefault();
+                this.getPrevSuggestion();
             }
-        }.bind(this));
+            else if (e.keyCode === KeyCodes.arrowDown || e.keyCode === KeyCodes.arrowRight) {
+                e.preventDefault();
+                this.getNextSuggestion();
+            }
+        });
 
-        this.getModal().on('keydown', SELECTORS.SUGGESTIONS, function(e, data) {
-            switch (e.keyCode) {
-                case KeyCodes.arrowUp:
-                    e.preventDefault();
-                    this.suggestionItemIndex--;
-                    if (this.suggestionItemIndex == -1) {
-                        this.suggestionItemIndex = this.getModal().find(SELECTORS.SUGGESTION_ITEM).length - 1;
-                    }
-                    this.getModal().find(SELECTORS.SUGGESTION_ITEM).eq(this.suggestionItemIndex).focus();
-                    break;
-                case KeyCodes.arrowDown:
-                    e.preventDefault();
-                    this.suggestionItemIndex++;
-                    if (this.suggestionItemIndex == this.getModal().find(SELECTORS.SUGGESTION_ITEM).length) {
-                        this.suggestionItemIndex = 0;
-                    }
-                    this.getModal().find(SELECTORS.SUGGESTION_ITEM).eq(this.suggestionItemIndex).focus();
-                    break;
-                case KeyCodes.arrowLeft:
-                    e.preventDefault();
-                    this.suggestionItemIndex--;
-                    if (this.suggestionItemIndex == -1) {
-                        this.suggestionItemIndex = this.getModal().find(SELECTORS.SUGGESTION_ITEM).length - 1;
-                    }
-                    this.getModal().find(SELECTORS.SUGGESTION_ITEM).eq(this.suggestionItemIndex).focus();
-                    break;
-                case KeyCodes.arrowRight:
-                    e.preventDefault();
-                    this.suggestionItemIndex++;
-                    if (this.suggestionItemIndex == this.getModal().find(SELECTORS.SUGGESTION_ITEM).length) {
-                        this.suggestionItemIndex = 0;
-                    }
-                    this.getModal().find(SELECTORS.SUGGESTION_ITEM).eq(this.suggestionItemIndex).focus();
-                    break;
-                case KeyCodes.escape:
-                    e.preventDefault();
-                    this.getModal().find(SELECTORS.SUGGESTIONS).html('');
-                    break;
+        this.getModal().on('keydown', SELECTORS.SUGGESTIONS, (e, data) => {
+            if (e.keyCode === KeyCodes.arrowUp || e.keyCode === KeyCodes.arrowLeft) {
+                e.preventDefault();
+                this.getPrevSuggestion();
             }
-        }.bind(this));
+            else if (e.keyCode === KeyCodes.arrowDown || e.keyCode === KeyCodes.arrowRight) {
+                e.preventDefault();
+                this.getNextSuggestion();
+            }
+            else if (e.keyCode === KeyCodes.escape) {
+                e.preventDefault();
+                this.getModal().find(SELECTORS.SUGGESTIONS).html('');
+            }
+        });
 
         CustomEvents.define(this.getModal().find(SELECTORS.SUGGESTION_ITEM, [CustomEvents.events.activate]));
         this.getModal().on(`${CustomEvents.events.activate} ${CustomEvents.events.keyboardActivate}`, SELECTORS.SUGGESTION_ITEM, function() {
             $(SELECTORS.SEARCH).val($(this).attr('data-value'));
             $(SELECTORS.SUGGESTIONS).html('');
+        });
+
+        this.getModal().on('mouseover', SELECTORS.SUGGESTIONS, () => {
+            this.suggestionItemIndex = -1;
+            this.getModal().find(SELECTORS.SUGGESTION_ITEM).removeClass(CSS.SUGGESTION_ACTIVE);
         });
     };
 
