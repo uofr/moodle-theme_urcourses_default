@@ -1,16 +1,16 @@
 {{< core/modal }}
     {{$header}}
-        <div class="w-100">
+        <div class="modal-help-header">
             <h5 id="{{uniqid}}-modal-title" class="modal-title" data-region="title">{{$title}}{{title}}{{/title}}</h5>
             <div class="form-group">
-                <div style="position: relative;">
+                <div class="modal-help-search-form">
                     <div class="input-group">
                         <input id="modal_help_search" type="text" class="form-control" aria-describedby="modal_help_search_desc" autocomplete="off">
                         <div class="input-group-append">
                             <button id="modal_help_search_btn" type="button" class="btn btn-primary">Search</button>
                         </div>
                     </div>
-                    <div id="modal_help_search_suggestions"></div>
+                    <div id="modal_help_search_suggestions" class="modal-help-suggestion-box"></div>
                 </div>
                 <small id="modal_help_search_desc" class="text-muted">Search the guides for help.</small>
             </div>
@@ -21,6 +21,5 @@
     {{/body}}
 
     {{$footer}}
-        Temp footer
     {{/footer}}
 {{/ core/modal }}
