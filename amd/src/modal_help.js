@@ -84,6 +84,10 @@ function(
         });
 
         this.getModal().on('input', SELECTORS.SEARCH, (e, data) => {
+            // this function should do nothing until the list is loaded
+            if (this.topicsList === null) {
+                return;
+            }
             var searchValue = this.searchBox.val();
             var regex = RegExp(searchValue.split('').join('.*'), 'i');
             var suggestions = [];
