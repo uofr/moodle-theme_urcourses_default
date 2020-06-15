@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Campus - Code for course header image uploader.
+ * Theme Boost Campus - Script to setup the help modal.
  *
  * @package    theme_urcourses_default
  * @author     John Lane
@@ -38,10 +38,12 @@ function(
     };
 
     var init = function() {
-        ModalFactory.create({
-            type: ModalHelp.TYPE,
-            large: true
-        }, $(SELECTORS.RTL_BTN));
+        $(SELECTORS.RTL_BTN).on('click', () => {
+            ModalFactory.create({
+                type: ModalHelp.TYPE,
+                large: true
+            }, $(SELECTORS.RTL_BTN));
+        });
     };
 
     return {
