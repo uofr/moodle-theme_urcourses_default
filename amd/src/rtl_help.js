@@ -38,12 +38,10 @@ function(
     };
 
     var init = function() {
-        $(SELECTORS.RTL_BTN).on('click', () => {
-            ModalFactory.create({
-                type: ModalHelp.TYPE,
-                large: true
-            }, $(SELECTORS.RTL_BTN));
-        });
+        ModalFactory.create({
+            type: ModalHelp.TYPE,
+            large: true
+        }, $(SELECTORS.RTL_BTN));
     };
 
     return {
