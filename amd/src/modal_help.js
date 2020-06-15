@@ -72,6 +72,8 @@ function(
 
         this.getRoot().on(ModalEvents.hidden, () => {
             this.setBody('');
+            this.searchBox.val('');
+            this.suggestionBox.html('');
         });
 
         this.getModal().on('input', SELECTORS.SEARCH, (e, data) => {
