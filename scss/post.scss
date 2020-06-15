@@ -2599,3 +2599,21 @@ body.format-topcoll.editing .section .activity .activityinstance {
 @media only screen and (max-device-width: 800px), only screen and (device-width: 1024px) and (device-height: 600px), only screen and (width: 1280px) and (orientation: landscape), only screen and (device-width: 800px), only screen and (max-width: 767px) {
   .flex-video { padding-top: 0; }
 }
+
+.modal-help-header {
+    width: 100%;
+}
+
+.modal-help-header .modal-help-search-form {
+    position: relative;
+}
+
+.modal-help-header .modal-help-suggestion-box {
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+    width: 100%;
+    border: 1px solid rgba(0,0,0,.15);
+    max-height: 20em;
+    overflow: auto;
+}

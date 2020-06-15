@@ -65,8 +65,9 @@ function(
             // get default content
             ModalHelpAjax.getRemtlHelp()
             .then((response) => {
-                this.setBody(response.html);
-            });
+                var renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: response.html});
+                this.setBody(renderPromise);
+            }).catch(Notification.exception);
             // if topic list is null, get the list
             // otherwise, it's been set already and we don't need to do an ajax request
             if (this.topicsList === null) {
