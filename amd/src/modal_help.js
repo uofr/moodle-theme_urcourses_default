@@ -27,7 +27,8 @@ function(
         SEARCH: '#modal_help_search',
         SEARCH_BUTTON: '#modal_help_search_btn',
         SUGGESTIONS: '#modal_help_search_suggestions',
-        SUGGESTION_ITEM: '.suggestion-item'
+        SUGGESTION_ITEM: '.suggestion-item',
+        LOADING_OVERLAY: '[data-region="overlay-icon-container"]'
     };
 
     var TEMPLATES = {
@@ -45,6 +46,7 @@ function(
         this.searchButton = this.root.find(SELECTORS.SEARCH_BUTTON);
         this.suggestionBox = this.root.find(SELECTORS.SUGGESTIONS);
         this.suggestionItemIndex = 0;
+        this.topicsList = null;
     };
 
     ModalHelp.prototype = Object.create(Modal.prototype);
@@ -60,14 +62,19 @@ function(
         Modal.prototype.registerEventListeners.call(this);
 
         this.getRoot().on(ModalEvents.shown, () => {
-			var promises = ModalHelpAjax.getModalContent();
-			promises[0].then((response) => {
-                var renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: response.html});
-                this.setBody(renderPromise);
-            }).catch(Notification.exception);
-            promises[1].then((response) => {
-                this.topicsList = response;
-            }).catch(Notification.exception);
+            // get default content
+            ModalHelpAjax.getRemtlHelp()
+            .then((response) => {
+                this.setBody(response.html);
+            });
+            // if topic list is null, get the list
+            // otherwise, it's been set already and we don't need to do an ajax request
+            if (this.topicsList === null) {
+                ModalHelpAjax.getTopicList()
+                .then((response) => {
+                    this.topicsList = response;
+                });
+            }
         });
 
         this.getRoot().on(ModalEvents.hidden, () => {
@@ -109,7 +116,7 @@ function(
                 }
             });
             for (var suggestion of suggestions) {
-                var html = `<a href="#" class="dropdown-item suggestion-item" data-value="${suggestion.text}">${suggestion.text}</a>`;
+                var html = `<a href="#" class="modal-help-suggestion-item" data-value="${suggestion.text}">${suggestion.text}</a>`;
                 this.suggestionBox.append(html);
             }
         });

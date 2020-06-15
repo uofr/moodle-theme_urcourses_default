@@ -38,10 +38,15 @@ function(
     };
 
     var init = function() {
-        ModalFactory.create({
-            type: ModalHelp.TYPE,
-            large: true
-        }, $(SELECTORS.RTL_BTN));
+        // only create the modal when the user clicks on the help button
+        // this stops the modal from loading on every single page
+        // once this handler is done, clicking the button will just open the modal
+        $(SELECTORS.RTL_BTN).one('click', () => {
+            ModalFactory.create({
+                type: ModalHelp.TYPE,
+                large: true
+            }, $(SELECTORS.RTL_BTN));
+        });
     };
 
     return {
