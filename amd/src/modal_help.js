@@ -60,17 +60,14 @@ function(
         Modal.prototype.registerEventListeners.call(this);
 
         this.getRoot().on(ModalEvents.shown, () => {
-            ModalHelpAjax.getRemtlHelp()
-            .then((response) => {
+			var promises = ModalHelpAjax.getModalContent();
+			promises[0].then((response) => {
                 var renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: response.html});
                 this.setBody(renderPromise);
-            })
-            .catch(Notification.exception);
-            ModalHelpAjax.getTopicList()
-            .then((response) => {
+            }).catch(Notification.exception);
+            promises[1].then((response) => {
                 this.topicsList = response;
-            })
-            .catch(Notification.exception);
+            }).catch(Notification.exception);
         });
 
         this.getRoot().on(ModalEvents.hidden, () => {
