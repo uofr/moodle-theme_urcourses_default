@@ -42,7 +42,26 @@ require_once($CFG->dirroot . '/course/renderer.php');
  * @category output
  */
 class course_renderer extends \theme_boost\output\core\course_renderer {
-
+	
+	
+	
+	
+	
+    /**
+     * Constructor.
+     */
+    function __construct() {
+        global $CFG;
+        require_once($CFG->libdir.'/adodb/adodb.inc.php');
+		
+		//comet.cc.uregina.ca
+		
+		// need object to hold settings
+        $this->config = get_config('clnotes');
+        $this->errorlogtag = '[clnotes] ';
+    }
+	
+	
     /**
      * Displays one course in the list of courses.
      *
@@ -94,6 +113,35 @@ class course_renderer extends \theme_boost\output\core\course_renderer {
 		// 	$key = array_search($check_course_category->name,$ur_categories);
 		// 	$classes .= (!empty($key)) ? ' '.$key : '';
 		// }
+		
+		
+        $classnotesdb = $this->ext_db_init();
+
+        $rs = $classnotesdb->Execute("SELECT *
+                                  FROM {$this->config->class_notes}");
+        if (!$rs) {
+            $classnotesdb->Close();
+            debugging(get_string('clnotes_cantconnect','theme/urcourses_default'));
+            return false;
+        }
+
+        if ($rs->EOF) {
+            $classnotesdb->Close();
+            return false;
+        }
+
+        $fields = array_change_key_case($rs->fields, CASE_LOWER);
+        //$fromdb = $fields[strtolower($this->config->fieldpass)];
+		
+		$classNotesData = array();
+		
+		foreach ($rs as $row) {
+			$classNotesData[$row->id] = $row; 
+		}
+		
+        $rs->Close();
+        $classnotesdb->Close();
+		
 		
         // .coursebox
         $content .= html_writer::start_tag('div', array(
@@ -160,6 +208,51 @@ class course_renderer extends \theme_boost\output\core\course_renderer {
         $modchooser = new \theme_urcourses_default\output\modchooser($course, $modules);
         return $this->render($modchooser);
     }
+	
+	
+	
+	
+	
+    /**
+     * Connect to external database.
+     *
+     * @return ADOConnection
+     * @throws moodle_exception
+     */
+    function ext_db_init() {
+        if ($this->is_configured() === false) {
+            throw new moodle_exception('clnotes_cantconnect', 'theme/urcourses_default');
+        }
+
+        // Connect to the external database (forcing new connection).
+        $extdb = ADONewConnection($this->config->type);
+        if (!empty($this->config->debugclnotes)) {
+            $extdb->debug = true;
+            ob_start(); //Start output buffer to allow later use of the page headers.
+        }
+        $extdb->Connect($this->config->host, $this->config->user, $this->config->pass, $this->config->name, true);
+        $extdb->SetFetchMode(ADODB_FETCH_ASSOC);
+        // we don't need any set up
+		/*
+		if (!empty($this->config->setupsql)) {
+            $extdb->Execute($this->config->setupsql);
+        }
+		*/
+        return $extdb;
+    }
+	
+    /**
+     * Returns false if this plugin is enabled but not configured.
+     *
+     * @return bool
+     */
+    public function is_configured() {
+        if (!empty($this->config->type)) {
+            return true;
+        }
+        return false;
+    }
+	
 }
 
 

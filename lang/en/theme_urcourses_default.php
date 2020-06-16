@@ -226,3 +226,9 @@ $string['success:courseavailabilitychanged'] = 'Course availability changed';
 
 //Modchooser
 $string['moremodchooser'] = 'More';
+
+
+
+
+
+$string['clnotes_cantconnect'] = 'Can\'t connect to Class Notes';
