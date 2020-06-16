@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'theme_urcourses_default';
-$plugin->version = 2020060501;
+$plugin->version = 2020061100;
 $plugin->release = 'v3.8-r2';
 $plugin->requires = 2018120300;
 $plugin->maturity = MATURITY_STABLE;

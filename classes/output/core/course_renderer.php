@@ -28,6 +28,7 @@ namespace theme_urcourses_default\output\core;
 defined('MOODLE_INTERNAL') || die;
 
 use moodle_url;
+use moodle_exception;
 use html_writer;
 global $CFG,$PAGE;
 
@@ -59,6 +60,39 @@ class course_renderer extends \theme_boost\output\core\course_renderer {
 		// need object to hold settings
         $this->config = get_config('clnotes');
         $this->errorlogtag = '[clnotes] ';
+		
+		$this->content = '';
+		
+        $classnotesdb = $this->ext_db_init();
+
+        $rs = $classnotesdb->Execute("SELECT *
+                                  FROM {$this->config->clnotes_dbclass}");
+        if (!$rs) {
+            $classnotesdb->Close();
+            debugging(get_string('clnotes_cantconnect','theme/urcourses_default'));
+            return false;
+        }
+
+        if ($rs->EOF) {
+            $classnotesdb->Close();
+            return false;
+        }
+
+        $fields = array_change_key_case($rs->fields, CASE_LOWER);
+        //$fromdb = $fields[strtolower($this->config->fieldpass)];
+		
+		$classNotesData = array();
+		
+		foreach ($rs as $row) {
+			$classNotesData[$row->id] = $row; 
+		}
+		
+        $rs->Close();
+        $classnotesdb->Close();
+		
+		$this->classNotesData = $classNotesData;
+		
+		$this->clcount = 0;
     }
 	
 	
@@ -115,32 +149,7 @@ class course_renderer extends \theme_boost\output\core\course_renderer {
 		// }
 		
 		
-        $classnotesdb = $this->ext_db_init();
-
-        $rs = $classnotesdb->Execute("SELECT *
-                                  FROM {$this->config->class_notes}");
-        if (!$rs) {
-            $classnotesdb->Close();
-            debugging(get_string('clnotes_cantconnect','theme/urcourses_default'));
-            return false;
-        }
-
-        if ($rs->EOF) {
-            $classnotesdb->Close();
-            return false;
-        }
-
-        $fields = array_change_key_case($rs->fields, CASE_LOWER);
-        //$fromdb = $fields[strtolower($this->config->fieldpass)];
-		
-		$classNotesData = array();
-		
-		foreach ($rs as $row) {
-			$classNotesData[$row->id] = $row; 
-		}
-		
-        $rs->Close();
-        $classnotesdb->Close();
+        
 		
 		
         // .coursebox
@@ -184,7 +193,11 @@ class course_renderer extends \theme_boost\output\core\course_renderer {
             }
             $content .= html_writer::end_tag('div'); // .enrolmenticons
         }
-
+		
+		$content .= '<div class="warn p2">'.print_r($this->classNotesData[$this->clcount],1).'</div>';
+		
+		$this->clcount++;
+		
         // MODIFICATION START:
         // Moved div from above to this place.
         $content .= html_writer::end_tag('div'); // .moreinfo
@@ -196,6 +209,12 @@ class course_renderer extends \theme_boost\output\core\course_renderer {
         $content .= html_writer::end_tag('div'); // .content
 
         $content .= html_writer::end_tag('div'); // .coursebox
+		
+		if ($this->content !='') {
+			$content = $this->content.$content;
+			$this->content = '';
+		}
+		
         return $content;
     }
 
@@ -221,7 +240,9 @@ class course_renderer extends \theme_boost\output\core\course_renderer {
      */
     function ext_db_init() {
         if ($this->is_configured() === false) {
-            throw new moodle_exception('clnotes_cantconnect', 'theme/urcourses_default');
+            throw new moodle_exception(get_string('clnotes_cantconnect', 'theme_urcourses_default'));
+        } else {
+        	$this->content .= '<p class="success p2">Conected to Class Notes</p>';
         }
 
         // Connect to the external database (forcing new connection).
