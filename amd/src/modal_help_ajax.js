@@ -23,8 +23,18 @@ function(
         ])[0];
     };
 
+	var getGuidePage = function(url) {
+		return Ajax.call([
+			{
+				methodname: 'theme_urcourses_default_get_guide_page',
+				args: {url: url}
+			}
+		])[0];
+	};
+
     return {
         getTopicList: getTopicList,
-        getRemtlHelp: getRemtlHelp
+        getRemtlHelp: getRemtlHelp,
+		getGuidePage: getGuidePage
     };
 });

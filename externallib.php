@@ -309,5 +309,37 @@ class theme_urcourses_default_external extends external_api {
         return $json_output->jsondata->page_data[0]->all_pages;
     }
 
+	public static function get_guide_page_parameters() {
+		return new external_function_parameters (
+			array(
+				'url' => new external_value(PARAM_TEXT)
+			)
+		);
+	}
+
+	public static function get_guide_page($url) {
+		$params = self::validate_parameters(self::get_guide_page_parameters(), array('url' => $url));
+		$original_url = $params['url'];
+		$full_url = "https://urcourses.uregina.ca$original_url.json";
+		$ch = curl_init();
+
+		curl_setopt($ch, CURLOPT_URL, $full_url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$output = curl_exec($ch);
+		curl_close($ch);
+
+		$json_output = json_decode($output);
+	
+		return array('html' => $json_output->modularcontent);	
+	}
+
+	public static function get_guide_page_returns() {
+		return new external_single_structure(
+			array(
+				'html' => new external_value(PARAM_RAW)
+			)
+		);
+	}
+
 }
 
