@@ -27,7 +27,7 @@ function(
         SEARCH: '#modal_help_search',
         SEARCH_BUTTON: '#modal_help_search_btn',
         SUGGESTIONS: '#modal_help_search_suggestions',
-        SUGGESTION_ITEM: '.modal-help-suggestion-item',
+        SUGGESTION_ITEM: '.modal-help-suggestion-item'
     };
 
     var TEMPLATES = {
@@ -35,11 +35,7 @@ function(
         MODAL_HELP_TOPICS: 'theme_urcourses_default/modal_help_topics'
     };
 
-    var CSS = {
-        SUGGESTION_ACTIVE: 'suggestion-active'
-    };
-
-    /**
+    /*
      * Modal constructor.
      *
      * @param {object} root The root jQuery element for the modal.
@@ -50,6 +46,7 @@ function(
         this.searchButton = this.root.find(SELECTORS.SEARCH_BUTTON);
         this.suggestionBox = this.root.find(SELECTORS.SUGGESTIONS);
         this.topicList = null;
+        this.suggestionIndex = 0;
     };
 
     ModalHelp.prototype = Object.create(Modal.prototype);
@@ -68,8 +65,9 @@ function(
             ModalHelpAjax.getRemtlHelp()
             .then((response) => {
                 var renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: response.html});
-                this.setBody(renderPromise);
+                return this.setBody(renderPromise);
             }).catch(Notification.exception);
+
             if (this.topicList === null) {
                 ModalHelpAjax.getTopicList()
                 .then((response) => {
@@ -77,7 +75,7 @@ function(
                     return Templates.render(TEMPLATES.MODAL_HELP_TOPICS, {topics: response});
                 })
                 .then((html, js) => {
-                    Templates.replaceNodeContents(SELECTORS.SUGGESTIONS, html, js);
+                    return Templates.replaceNodeContents(SELECTORS.SUGGESTIONS, html, js);
                 }).catch(Notification.exception);
             }
         });
@@ -85,19 +83,27 @@ function(
         this.getRoot().on(ModalEvents.hidden, () => {
             this.setBody('');
             this.searchBox.val('');
-            this.suggestionBox.html('');
+            this.suggestionBox.addClass('d-none');
         });
 
-        this.getModal().on('focus', SELECTORS.SEARCH, (e) => {
+        this.getModal().on('focus', SELECTORS.SEARCH, () => {
             this.suggestionBox.removeClass('d-none');
         });
 
-        this.getModal().on('input', SELECTORS.SEARCH, (e, data) => {
+        this.getModal().on('blur', SELECTORS.SEARCH, () => {
+            this.suggestionBox.addClass('d-none');
+        });
+
+        this.getModal().on('input', SELECTORS.SEARCH, () => {
             var searchValue = this.searchBox.val();
             var regex = RegExp(searchValue.split('').join('.*'), 'i');
+            var suggestionItems = $(SELECTORS.SUGGESTION_ITEM);
             var suggestions = [];
-            this.suggestionBox.html('');
+            suggestionItems.addClass('d-none');
+            suggestionItems.removeClass('selected');
             if (!searchValue.length) {
+                suggestionItems.eq(0).addClass('selected');
+                suggestionItems.removeClass('d-none');
                 return;
             }
             for (var topic of this.topicList) {
@@ -126,19 +132,29 @@ function(
                 }
             });
             for (var suggestion of suggestions) {
-                var html = `<span class="modal-help-suggestion-item" data-url="${suggestion.url}" data-value="${suggestion.text}">${suggestion.text}</span>`;
-                this.suggestionBox.append(html);
+                var matchingSuggestion = suggestionItems.filter(`[data-value="${suggestion.text}"]`);
+                matchingSuggestion.removeClass('d-none');
             }
+            suggestionItems.filter(':not(.d-none)').eq(0).addClass('selected');
         });
 
-        this.getModal().on(CustomEvents.events.activate, SELECTORS.SUGGESTION_ITEM, (e) => {
-            $(SELECTORS.SEARCH).val($(e.target).attr('data-value'));
-            $(SELECTORS.SUGGESTIONS).html('');
-            ModalHelpAjax.getGuidePage($(e.target).attr('data-url'))
-            .then((response) => {
-                var renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: response.html});
-                this.setBody(renderPromise);
-            }).catch(Notification.exception);
+        this.getModal().on('keydown', SELECTORS.SEARCH, (e) => {
+            var visibleSuggestions = $(SELECTORS.SUGGESTION_ITEM).filter(':not(.d-none)');
+            if (e.keyCode === KeyCodes.arrowDown || e.keyCode === KeyCodes.arrowRight) {
+                this.suggestionIndex++;
+                if (this.suggestionIndex >= visibleSuggestions.length) {
+                    this.suggestionIndex = 0;
+                }
+                visibleSuggestions.removeClass('selected');
+                visibleSuggestions.eq(this.suggestionIndex).addClass('selected');
+            } else if (e.keyCode === KeyCodes.arrowUp || e.keyCode === KeyCodes.arrowLeft) {
+                this.suggestionIndex--;
+                if (this.suggestionIndex < 0) {
+                    this.suggestionIndex = visibleSuggestions.length - 1;
+                }
+                visibleSuggestions.removeClass('selected');
+                visibleSuggestions.eq(this.suggestionIndex).addClass('selected');
+            }
         });
     };
 

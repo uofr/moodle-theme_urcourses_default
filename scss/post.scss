@@ -2600,45 +2600,45 @@ body.format-topcoll.editing .section .activity .activityinstance {
   .flex-video { padding-top: 0; }
 }
 
-.modal-help-header {
-    width: 100%;
-}
-
-.modal-help-header .modal-help-search-form {
-    position: relative;
-}
-
-.modal-help-header .modal-help-search-suggestions {
-    position: absolute;
-    z-index: 1000;
-    background-color: white;
-    width: 100%;
-    border: 1px solid rgba(0,0,0,.15);
-    max-height: 20em;
-    overflow: auto;
-}
-
 .rtl-button {
     cursor: pointer;
 }
 
-.modal-help-header .modal-help-suggestion-item {
-    display: block;
+.modal-help-header {
     width: 100%;
-    min-height: 10em;
-    padding: .25rem 1.5rem;
-    clear: both;
-    font-weight: 400;
-    color: #212529;
-    text-align: inherit;
-    white-space: nowrap;
-    background-color: transparent;
-    border: 0;
-}
 
-.modal-help-header .modal-help-suggestion-item:hover {
-    background-color: #f2f2f2;
-}
-.modal-help-header .modal-help-suggestion-item.suggestion-active {
-    background-color: #f2f2f2;
+    .modal-help-search-form {
+        position: relative;
+    }
+
+    .modal-help-search-suggestions {
+        position: absolute;
+        z-index: 1000;
+        background-color: white;
+        width: 100%;
+        border: 1px solid rgba(0,0,0,.15);
+        max-height: 20em;
+        overflow: auto;
+
+        .modal-help-suggestion-item {
+            display: block;
+            width: 100%;
+            padding: .25rem 1.5rem;
+            clear: both;
+            font-weight: 400;
+            color: #212529;
+            text-align: inherit;
+            white-space: nowrap;
+            background-color: transparent;
+            border: 0;
+        }
+        .modal-help-suggestion-item.selected {
+            background-color: #f8f9fa;
+        }
+
+        .loading-icon {
+            position: relative;
+            left: 50%;
+        }
+    }
 }
