@@ -156,6 +156,11 @@ function(
                 visibleSuggestions.eq(this.suggestionIndex).addClass('selected');
             }
         });
+
+        this.getModal().on('mouseover', SELECTORS.SUGGESTION_ITEM, (e) => {
+            $(SELECTORS.SUGGESTION_ITEM).removeClass('selected');
+            $(e.currentTarget).addClass('selected');
+        });
     };
 
     if (!registered) {
