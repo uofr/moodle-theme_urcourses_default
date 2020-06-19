@@ -47,7 +47,7 @@ class theme_urcourses_default_external extends external_api {
 
 
 
-	public static function choose_header_style_parameters() {
+    public static function choose_header_style_parameters() {
         return new external_function_parameters(
             array(
             'courseid' => new external_value(PARAM_INT),
@@ -58,7 +58,7 @@ class theme_urcourses_default_external extends external_api {
 
 
 
-	public static function toggle_course_availability_parameters() {
+    public static function toggle_course_availability_parameters() {
         return new external_function_parameters(
             array(
             'courseid' => new external_value(PARAM_INT),
@@ -160,7 +160,7 @@ class theme_urcourses_default_external extends external_api {
 
 
 
-	public static function choose_header_style($courseid, $headerstyle) {
+    public static function choose_header_style($courseid, $headerstyle) {
         global $CFG, $DB;
 
         // get params
@@ -177,31 +177,31 @@ class theme_urcourses_default_external extends external_api {
         self::validate_context($context);
         require_capability('moodle/course:changesummary', $context);
 
-		//update the db
-		$table = 'theme_urcourses_hdrstyle';
+        //update the db
+        $table = 'theme_urcourses_hdrstyle';
 
-	    $newrecord = new stdClass();
-	    $newrecord->courseid = $courseid;
-	    $newrecord->hdrstyle = $headerstyle;
+        $newrecord = new stdClass();
+        $newrecord->courseid = $courseid;
+        $newrecord->hdrstyle = $headerstyle;
 
-	    //database check if user has a record, insert if not
-	    if ($record = $DB->get_record($table, array('courseid'=>$courseid))) {
-	     	//if has a record, update record to $setdarkmode
+        //database check if user has a record, insert if not
+        if ($record = $DB->get_record($table, array('courseid'=>$courseid))) {
+            //if has a record, update record to $setdarkmode
 
-			$newrecord->id = $record->id;
-     	 	$success = $DB->update_record($table, $newrecord);
-	    } else {
-	        //create a record
-	        $success = $DB->insert_record($table, $newrecord);
-	    }
+            $newrecord->id = $record->id;
+            $success = $DB->update_record($table, $newrecord);
+        } else {
+            //create a record
+            $success = $DB->insert_record($table, $newrecord);
+        }
 
-		return array('success' => $success);
+        return array('success' => $success);
 
-	}
+    }
 
 
 
-	public static function toggle_course_availability($courseid, $availability) {
+    public static function toggle_course_availability($courseid, $availability) {
         global $CFG, $DB;
 
         // get params
@@ -218,67 +218,53 @@ class theme_urcourses_default_external extends external_api {
         self::validate_context($context);
         require_capability('moodle/course:changesummary', $context);
 
-		$table = 'course';
+        $table = 'course';
 
-	    $newrecord = new stdClass();
-	    $newrecord->courseid = $courseid;
-	    $newrecord->visible = $availability==1?0:1;
+        $newrecord = new stdClass();
+        $newrecord->courseid = $courseid;
+        $newrecord->visible = $availability==1?0:1;
 
-		if ($record = $DB->get_record($table, array('id'=>$courseid))) {
-			$newrecord->id = $record->id;
-     		$success = $DB->update_record($table, $newrecord);
+        if ($record = $DB->get_record($table, array('id'=>$courseid))) {
+            $newrecord->id = $record->id;
+            $success = $DB->update_record($table, $newrecord);
 
-			return array('success' => $success);
-		} else {
-			return array('error' => 'Record not found');
-		}
+            return array('success' => $success);
+        } else {
+            return array('error' => 'Record not found');
+        }
 
-	}
-
-    public static function get_remtl_help_parameters() {
-        return new external_function_parameters(
-            array()
-        );
     }
 
-    public static function get_remtl_help_returns() {
-        return new external_single_structure(
-            array(
-                'html' => new external_value(PARAM_RAW)
-            )
-        );
+    public static function get_remtl_help_parameters() {
+        return new external_function_parameters(array());
     }
 
     public static function get_remtl_help() {
         global $USER;
-
-        $params = self::validate_parameters(self::get_remtl_help_parameters(), array());
-
-        switch ($USER->username) {
-            case 'urteacher':
-                $url = 'https://urcourses.uregina.ca/test/guides/instructor/remote-teaching.json';
-                break;
-            default:
-                $url = 'https://urcourses.uregina.ca/test/guides/student/remote-learning.json';
-                break;
+        if ($USER->username === 'urteacher') {
+            $url = new moodle_url('/guides/instructor/remote-teaching.json');   
         }
-
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($ch);
-        curl_close($ch);
-
+        else {
+            $url = new moodle_url('/guides/student/remote-learning.json');
+        }
+        $output = file_get_contents($url);
         $json_output = json_decode($output);
-
         return array('html' => $json_output->content);
     }
 
+    public static function get_remtl_help_returns() {
+        return new external_single_structure(array('html' => new external_value(PARAM_RAW)));
+    }
+
     public static function get_topic_list_parameters() {
-        return new external_function_parameters(
-            array()
-        );
+        return new external_function_parameters(array());
+    }
+
+    public static function get_topic_list() {
+        $url = new moodle_url('/guides/social/sample-b.json');
+        $output = file_get_contents($url);
+        $json_output = json_decode($output);
+        return $json_output->jsondata->page_data[0]->all_pages;
     }
 
     public static function get_topic_list_returns() {
@@ -294,52 +280,20 @@ class theme_urcourses_default_external extends external_api {
         );
     }
 
-    public static function get_topic_list() {
-        $params = self::validate_parameters(self::get_topic_list_parameters(), array());
-        $url = 'https://urcourses.uregina.ca/test/guides/social/sample-b.json';
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($ch);
-        curl_close($ch);
-
-        $json_output = json_decode($output);
-
-        return $json_output->jsondata->page_data[0]->all_pages;
+    public static function get_guide_page_parameters() {
+        return new external_function_parameters (array('url' => new external_value(PARAM_TEXT)));
     }
 
-	public static function get_guide_page_parameters() {
-		return new external_function_parameters (
-			array(
-				'url' => new external_value(PARAM_TEXT)
-			)
-		);
-	}
+    public static function get_guide_page($url) {
+        $params = self::validate_parameters(self::get_guide_page_parameters(), array('url' => $url));
+        $url = new moodle_url($params['url']);
+        $output = file_get_contents($url);
+        return array('html' => $output->content);
+    }
 
-	public static function get_guide_page($url) {
-		$params = self::validate_parameters(self::get_guide_page_parameters(), array('url' => $url));
-		$original_url = $params['url'];
-		$full_url = "https://urcourses.uregina.ca$original_url.json";
-		$ch = curl_init();
-
-		curl_setopt($ch, CURLOPT_URL, $full_url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		$output = curl_exec($ch);
-		curl_close($ch);
-
-		$json_output = json_decode($output);
-	
-		return array('html' => $json_output->modularcontent);	
-	}
-
-	public static function get_guide_page_returns() {
-		return new external_single_structure(
-			array(
-				'html' => new external_value(PARAM_RAW)
-			)
-		);
-	}
+    public static function get_guide_page_returns() {
+        return new external_single_structure(array('html' => new external_value(PARAM_RAW)));
+    }
 
 }
 
