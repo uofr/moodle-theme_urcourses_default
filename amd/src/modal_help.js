@@ -55,11 +55,6 @@ function(
     ModalHelp.prototype.constructor = ModalHelp;
     ModalHelp.TYPE = 'theme_urcourses_default-help';
 
-    ModalHelp.prototype.getHelp = function() {
-        console.log('help');
-        console.log(this.getSelectedSuggestion());
-    };
-
     ModalHelp.prototype.selectSuggestion = function(suggestion) {
         this.suggestionBox.find(SELECTORS.SUGGESTION_ITEM).removeClass('selected');
         suggestion.addClass('selected');
@@ -67,6 +62,42 @@ function(
 
     ModalHelp.prototype.getSuggestions = function() {
         return this.suggestionBox.find(SELECTORS.SUGGESTION_ITEM);
+    };
+
+    ModalHelp.prototype.updateSuggestions = function() {
+        var searchValue = this.searchBox.val();
+        var regex = RegExp(searchValue.split('').join('.*'), 'i');
+        var suggestions = [];
+        for (var topic of this.topicList) {
+            var match = regex.exec(topic.title);
+            if (match) {
+                suggestions.push({
+                    title: topic.title,
+                    url: topic.url,
+                    length: match[0].length,
+                    start: match.index
+                });
+            }
+        }
+        suggestions.sort((a, b) => {
+            if (a.start < b.start) {
+                return -1;
+            }
+            if (a.start > b.start) {
+                return 1;
+            }
+            if (a.length < b.length) {
+                return -1;
+            }
+            if (a.length > b.length) {
+                return 1;
+            }
+        });
+        Templates.render(TEMPLATES.MODAL_HELP_TOPICS, {topics: suggestions})
+        .then((html, js) => {
+            Templates.replaceNodeContents(SELECTORS.SUGGESTIONS, html, js);
+            this.selectSuggestion(this.getSuggestions().eq(0));
+        }).catch(Notification.exception);
     };
 
     /**
@@ -115,43 +146,12 @@ function(
 
         this.getModal().on('focus', SELECTORS.SEARCH, () => {
             this.suggestionBox.removeClass('d-none');
+            this.updateSuggestions();
             this.selectSuggestion(this.getSuggestions().eq(0));
         });
 
         this.getModal().on('input', SELECTORS.SEARCH, () => {
-            var searchValue = this.searchBox.val();
-            var regex = RegExp(searchValue.split('').join('.*'), 'i');
-            var suggestions = [];
-            for (var topic of this.topicList) {
-                var match = regex.exec(topic.title);
-                if (match) {
-                    suggestions.push({
-                        title: topic.title,
-                        url: topic.url,
-                        length: match[0].length,
-                        start: match.index
-                    });
-                }
-            }
-            suggestions.sort((a, b) => {
-                if (a.start < b.start) {
-                    return -1;
-                }
-                if (a.start > b.start) {
-                    return 1;
-                }
-                if (a.length < b.length) {
-                    return -1;
-                }
-                if (a.length > b.length) {
-                    return 1;
-                }
-            });
-            Templates.render(TEMPLATES.MODAL_HELP_TOPICS, {topics: suggestions})
-            .then((html, js) => {
-                Templates.replaceNodeContents(SELECTORS.SUGGESTIONS, html, js);
-                this.selectSuggestion(this.getSuggestions().eq(0));
-            }).catch(Notification.exception);
+            this.updateSuggestions();
         });
 
         this.getModal().on('keydown', SELECTORS.SEARCH, (e) => {
