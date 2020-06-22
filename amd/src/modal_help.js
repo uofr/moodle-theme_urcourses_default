@@ -86,12 +86,17 @@ function(
             this.suggestionBox.addClass('d-none');
         });
 
-        this.getModal().on('focus', SELECTORS.SEARCH, () => {
-            this.suggestionBox.removeClass('d-none');
+        this.getRoot().on('click', (e) => {
+            var target = e.target;
+            var searchBox = this.searchBox[0];
+            var suggestionBox = this.suggestionBox[0];
+            if (!(target === searchBox) && !(target === suggestionBox)) {
+                this.suggestionBox.addClass('d-none');
+            }
         });
 
-        this.getModal().on('blur', SELECTORS.SEARCH, () => {
-            this.suggestionBox.addClass('d-none');
+        this.getModal().on('focus', SELECTORS.SEARCH, () => {
+            this.suggestionBox.removeClass('d-none');
         });
 
         this.getModal().on('input', SELECTORS.SEARCH, () => {
