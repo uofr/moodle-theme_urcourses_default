@@ -199,8 +199,6 @@ class theme_urcourses_default_external extends external_api {
 
     }
 
-
-
     public static function toggle_course_availability($courseid, $availability) {
         global $CFG, $DB;
 
@@ -235,18 +233,33 @@ class theme_urcourses_default_external extends external_api {
 
     }
 
+    public static function user_is_instructor() {
+        global $USER, $DB, $COURSE;
+        $teacher_role_id = $DB->get_field('role', 'id', array('shortname' => 'editingteacher'));
+        $editing_teacher_role_id = $DB->get_field('role', 'id', array('shortname' => 'teacher'));
+
+        if ($DB->record_exists('course', array('id' => $COURSE->id)) && $COURSE->id !== 1) {
+            $course_context = \context_course::instance($COURSE->id);
+            $is_teacher = $DB->record_exists('role_assignments',
+                array('roleid' => $teacher_role_id, 'userid' => $USER->id, 'contextid' => $course_context->id));
+            $is_editing_teacher = $DB->record_exists('role_assignments', 
+                array('roleid' => $editing_teacher_role_id, 'userid' => $USER->id, 'contextid' => $course_context->id));
+        } else {
+            $is_teacher = $DB->record_exists('role_assignments',
+                array('userid' => $USER->id, 'roleid' => $teacher_role_id));
+            $is_editing_teacher = $DB->record_exists('role_assignments',
+                array('userid' => $USER->id, 'roleid' => $editing_teacher_role_id));
+        }
+
+        return $is_teacher || $is_editing_teacher;
+    }
+
     public static function get_remtl_help_parameters() {
         return new external_function_parameters(array());
     }
 
     public static function get_remtl_help() {
-        global $USER;
-        if ($USER->username === 'urteacher') {
-            $url = new moodle_url('/guides/instructor/remote-teaching.json');   
-        }
-        else {
-            $url = new moodle_url('/guides/student/remote-learning.json');
-        }
+        $url = self::user_is_instructor() ? new moodle_url('/guides/instructor.json') : new moodle_url('/guides/student.json');
         $output = file_get_contents($url);
         $json_output = json_decode($output);
         return array('html' => $json_output->content);
@@ -261,10 +274,15 @@ class theme_urcourses_default_external extends external_api {
     }
 
     public static function get_topic_list() {
+        global $PAGE;
         $url = new moodle_url('/guides/social/sample-b.json');
         $output = file_get_contents($url);
         $json_output = json_decode($output);
-        return $json_output->jsondata->page_data[0]->all_pages;
+        $topic_list_full = $json_output->jsondata->page_data[0]->all_pages;
+        $topic_list = array_filter($topic_list_full, function($item) {
+            return self::user_is_instructor() ? $item->prefix === 'Instructor' : $item->prefix === 'Students';
+        });
+        return $topic_list;
     }
 
     public static function get_topic_list_returns() {
