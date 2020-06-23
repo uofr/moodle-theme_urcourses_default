@@ -64,6 +64,19 @@ function(
         return this.suggestionBox.find(SELECTORS.SUGGESTION_ITEM);
     };
 
+    ModalHelp.prototype.autocomplete = function(suggestion) {
+        var url = suggestion.attr('data-url');
+        url = url.substr(url.indexOf('/', 1));
+        this.getModal().focus();
+        this.suggestionBox.addClass('d-none');
+        this.searchBox.val(suggestion.attr('data-value'));
+        ModalHelpAjax.getGuidePage(url)
+        .then((response) => {
+            var renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: response.html});
+            this.setBody(renderPromise);
+        }).catch(Notification.exception);
+    };
+
     ModalHelp.prototype.updateSuggestions = function() {
         var searchValue = this.searchBox.val();
         var regex = RegExp(searchValue.split('').join('.*'), 'i');
@@ -165,8 +178,8 @@ function(
                 this.suggestionIndex = suggestions().length - 1;
                 suggestions.eq(this.suggestionIndex).focus();
             } else if (e.keyCode === KeyCodes.enter) {
-                this.searchBox.val(this.getSuggestions().eq(0).attr('data-value'));
-                this.suggestionBox.addClass('d-none');
+                var suggestion = this.getSuggestions().eq(0);
+                this.autocomplete(suggestion);
             }
         });
 
@@ -190,7 +203,8 @@ function(
         });
 
         this.getModal().on(CustomEvents.events.activate, SELECTORS.SUGGESTION_ITEM, (e) => {
-            this.searchBox.val($(e.target).attr('data-value'));
+            var suggestion = $(e.target);
+            this.autocomplete(suggestion);
         });
 
         this.getModal().on('mouseover focus', SELECTORS.SUGGESTION_ITEM, (e) => {

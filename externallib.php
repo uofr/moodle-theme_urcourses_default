@@ -286,9 +286,10 @@ class theme_urcourses_default_external extends external_api {
 
     public static function get_guide_page($url) {
         $params = self::validate_parameters(self::get_guide_page_parameters(), array('url' => $url));
-        $url = new moodle_url($params['url']);
+        $url = (new moodle_url($params['url'] . '.json'))->__toString();
         $output = file_get_contents($url);
-        return array('html' => $output->content);
+        $json_output = json_decode($output);
+        return array('html' => $json_output->jsondata->page_data[0]->content);
     }
 
     public static function get_guide_page_returns() {
