@@ -234,22 +234,14 @@ class theme_urcourses_default_external extends external_api {
     }
 
     public static function user_is_instructor() {
-        global $USER, $DB, $COURSE;
+        global $USER, $DB;
         $teacher_role_id = $DB->get_field('role', 'id', array('shortname' => 'editingteacher'));
         $editing_teacher_role_id = $DB->get_field('role', 'id', array('shortname' => 'teacher'));
 
-        if ($DB->record_exists('course', array('id' => $COURSE->id)) && $COURSE->id !== 1) {
-            $course_context = \context_course::instance($COURSE->id);
-            $is_teacher = $DB->record_exists('role_assignments',
-                array('roleid' => $teacher_role_id, 'userid' => $USER->id, 'contextid' => $course_context->id));
-            $is_editing_teacher = $DB->record_exists('role_assignments', 
-                array('roleid' => $editing_teacher_role_id, 'userid' => $USER->id, 'contextid' => $course_context->id));
-        } else {
-            $is_teacher = $DB->record_exists('role_assignments',
-                array('userid' => $USER->id, 'roleid' => $teacher_role_id));
-            $is_editing_teacher = $DB->record_exists('role_assignments',
-                array('userid' => $USER->id, 'roleid' => $editing_teacher_role_id));
-        }
+        $is_teacher = $DB->record_exists('role_assignments',
+            array('userid' => $USER->id, 'roleid' => $teacher_role_id));
+        $is_editing_teacher = $DB->record_exists('role_assignments',
+            array('userid' => $USER->id, 'roleid' => $editing_teacher_role_id));
 
         return $is_teacher || $is_editing_teacher;
     }
@@ -274,7 +266,6 @@ class theme_urcourses_default_external extends external_api {
     }
 
     public static function get_topic_list() {
-        global $PAGE;
         $url = new moodle_url('/guides/social/sample-b.json');
         $output = file_get_contents($url);
         $json_output = json_decode($output);
