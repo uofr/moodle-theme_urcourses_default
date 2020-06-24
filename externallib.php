@@ -233,25 +233,42 @@ class theme_urcourses_default_external extends external_api {
 
     }
 
-    public static function user_is_instructor() {
+    public static function user_is_instructor($course_id) {
         global $USER, $DB;
-        $teacher_role_id = $DB->get_field('role', 'id', array('shortname' => 'editingteacher'));
-        $editing_teacher_role_id = $DB->get_field('role', 'id', array('shortname' => 'teacher'));
-
-        $is_teacher = $DB->record_exists('role_assignments',
-            array('userid' => $USER->id, 'roleid' => $teacher_role_id));
-        $is_editing_teacher = $DB->record_exists('role_assignments',
-            array('userid' => $USER->id, 'roleid' => $editing_teacher_role_id));
-
-        return $is_teacher || $is_editing_teacher;
+        $instructor_roles = $DB->get_fieldset_select('role', 'id', 'shortname = :a OR shortname = :b', [
+            'a' => 'editingteacher',
+            'b' => 'teacher'
+        ]);
+        if ($course_id === 1) {
+            return $DB->record_exists_select('role_assignments', 'userid = :uid AND (roleid = :r0 OR roleid = :r1)', [
+                'uid' => $USER->id,
+                'r0'=> $instructor_roles[0],
+                'r1'=> $instructor_roles[1]
+            ]);
+        }
+        else {
+            return $DB->record_exists_select('role_assignments', 'userid = :uid AND contextid = :cid AND (roleid = :r0 OR roleid = :r1)', [
+                'uid' => $USER->id,
+                'cid' => \context_course::instance($course_id)->id,
+                'r0'=> $instructor_roles[0],
+                'r1'=> $instructor_roles[1]
+            ]);
+        }
     }
 
     public static function get_remtl_help_parameters() {
-        return new external_function_parameters(array());
+        return new external_function_parameters(
+            array(
+                'course_id' => new external_value(PARAM_INT)
+            )
+        );
     }
 
-    public static function get_remtl_help() {
-        $url = self::user_is_instructor() ? new moodle_url('/guides/instructor.json') : new moodle_url('/guides/student.json');
+    public static function get_remtl_help($course_id) {
+        $params = self::validate_parameters(self::get_remtl_help_parameters(), array(
+            'course_id' => $course_id
+        ));
+        $url = self::user_is_instructor($params['course_id']) ? new moodle_url('/guides/instructor.json') : new moodle_url('/guides/student.json');
         $output = file_get_contents($url);
         $json_output = json_decode($output);
         return array('html' => $json_output->content);
@@ -262,17 +279,32 @@ class theme_urcourses_default_external extends external_api {
     }
 
     public static function get_topic_list_parameters() {
-        return new external_function_parameters(array());
+        return new external_function_parameters(
+            array(
+                'course_id' => new external_value(PARAM_INT)
+            )
+        );
     }
 
-    public static function get_topic_list() {
+    public static function get_topic_list($course_id) {
+        $params = self::validate_parameters(self::get_topic_list_parameters(), array(
+            'course_id' => $course_id
+        ));
         $url = new moodle_url('/guides/social/sample-b.json');
         $output = file_get_contents($url);
         $json_output = json_decode($output);
         $topic_list_full = $json_output->jsondata->page_data[0]->all_pages;
-        $topic_list = array_filter($topic_list_full, function($item) {
-            return self::user_is_instructor() ? $item->prefix === 'Instructor' : $item->prefix === 'Students';
-        });
+
+        if (self::user_is_instructor($params['course_id'])) {
+            $topic_list = array_filter($topic_list_full, function($item) {
+                return $item->prefix === 'Instructor';
+            });
+        } else {
+            $topic_list = array_filter($topic_list_full, function($item) {
+                return $item->prefix === 'Students';
+            });
+        }
+
         return $topic_list;
     }
 

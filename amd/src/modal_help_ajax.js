@@ -4,21 +4,25 @@ define(
 ],
 function(
     Ajax
-){
-    var getTopicList = function() {
+) {
+    var getTopicList = function(courseId) {
         return Ajax.call([
             {
                 methodname: 'theme_urcourses_default_get_topic_list',
-                args: {}
+                args: {
+                    course_id: courseId
+                }
             }
         ])[0];
     };
 
-    var getRemtlHelp = function() {
+    var getRemtlHelp = function(courseId) {
         return Ajax.call([
             {
                 methodname: 'theme_urcourses_default_get_remtl_help',
-                args: {}
+                args: {
+                    course_id: courseId
+                }
             }
         ])[0];
     };

@@ -37,15 +37,16 @@ function(
         RTL_BTN: '#rtl_trigger'
     };
 
-    var init = function() {
-        // only create the modal when the user clicks on the help button
-        // this stops the modal from loading on every single page
-        // once this handler is done, clicking the button will just open the modal
+    var init = function(contextLevel, courseId) {
         $(SELECTORS.RTL_BTN).one('click', () => {
             ModalFactory.create({
                 type: ModalHelp.TYPE,
                 large: true
-            }, $(SELECTORS.RTL_BTN));
+            }, $(SELECTORS.RTL_BTN))
+            .then((helpModal) => {
+                helpModal.contextLevel = contextLevel;
+                helpModal.courseId = courseId;
+            }).catch(Notification.exception);
         });
     };
 

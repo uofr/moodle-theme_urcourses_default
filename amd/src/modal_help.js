@@ -49,6 +49,8 @@ function(
         this.suggestionBox = this.root.find(SELECTORS.SUGGESTIONS);
         this.topicList = null;
         this.suggestionIndex = 0;
+        this.contextLevel = null;
+        this.courseId = null;
     };
 
     ModalHelp.prototype = Object.create(Modal.prototype);
@@ -122,12 +124,12 @@ function(
         Modal.prototype.registerEventListeners.call(this);
 
         this.getRoot().on(ModalEvents.shown, () => {
-            ModalHelpAjax.getRemtlHelp()
+            ModalHelpAjax.getRemtlHelp(this.courseId)
             .then((response) => {
                 var renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: response.html});
                 return this.setBody(renderPromise);
             }).catch(Notification.exception);
-            ModalHelpAjax.getTopicList()
+            ModalHelpAjax.getTopicList(this.courseId)
             .then((response) => {
                 this.topicList = response;
                 this.topicList.sort((a, b) => a.title.localeCompare(b.title));
