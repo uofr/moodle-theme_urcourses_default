@@ -21,37 +21,20 @@
  *
  */
 
-define(
-[
-    'jquery',
-    'theme_urcourses_default/modal_help',
-    'core/modal_factory'
-],
-function(
-    $,
-    ModalHelp,
-    ModalFactory
-) {
+import $ from 'jquery';
+import ModalFactory from 'core/modal_factory';
+import ModalHelp from 'theme_urcourses_default/modal_help';
 
-    var SELECTORS = {
-        RTL_BTN: '#rtl_trigger'
+const SELECTORS = {
+    MODAL_HELP_TRIGGER: '#modal_help_trigger'
+};
+
+export const init = async (courseId, currentUrl) => {
+    const modalHelpConfig = {
+        type: ModalHelp.getType(),
+        large: true
     };
-
-    var init = function(contextLevel, courseId) {
-        $(SELECTORS.RTL_BTN).one('click', () => {
-            ModalFactory.create({
-                type: ModalHelp.TYPE,
-                large: true
-            }, $(SELECTORS.RTL_BTN))
-            .then((helpModal) => {
-                helpModal.contextLevel = contextLevel;
-                helpModal.courseId = courseId;
-            }).catch(Notification.exception);
-        });
-    };
-
-    return {
-        init: init
-    };
-
-});
+    const modalHelpTrigger = $(SELECTORS.MODAL_HELP_TRIGGER);
+    const helpModal = await ModalFactory.create(modalHelpConfig, modalHelpTrigger);
+    helpModal.init(courseId, currentUrl);
+};

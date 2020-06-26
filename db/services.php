@@ -46,11 +46,11 @@ $functions = array(
         'type'          => 'write',
         'ajax'          => 'true',
     ),
-    'theme_urcourses_default_get_remtl_help' => array(
+    'theme_urcourses_default_get_landing_page' => array(
         'classname'     => 'theme_urcourses_default_external',
-        'methodname'    => 'get_remtl_help',
+        'methodname'    => 'get_landing_page',
         'classpath'     => 'theme/urcourses_default/externallib.php',
-        'description'   => 'Gets help from guides.',
+        'description'   => 'Gets landing page data for help modal.',
         'type'          => 'read',
         'ajax'          => 'true'
     ),

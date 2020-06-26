@@ -256,46 +256,48 @@ class theme_urcourses_default_external extends external_api {
         }
     }
 
-    public static function get_remtl_help_parameters() {
+    public static function get_landing_page_parameters() {
         return new external_function_parameters(
             array(
-                'course_id' => new external_value(PARAM_INT)
+                'courseid' => new external_value(PARAM_INT),
+                'currenturl' => new external_value(PARAM_TEXT)
             )
         );
     }
 
-    public static function get_remtl_help($course_id) {
-        $params = self::validate_parameters(self::get_remtl_help_parameters(), array(
-            'course_id' => $course_id
+    public static function get_landing_page($courseid, $currenturl) {
+        $params = self::validate_parameters(self::get_landing_page_parameters(), array(
+            'courseid' => $courseid,
+            'currenturl' => $currenturl
         ));
-        $url = self::user_is_instructor($params['course_id']) ? new moodle_url('/guides/instructor.json') : new moodle_url('/guides/student.json');
+        $url = self::user_is_instructor($params['courseid']) ? new moodle_url('/guides/instructor.json') : new moodle_url('/guides/student.json');
         $output = file_get_contents($url);
         $json_output = json_decode($output);
         return array('html' => $json_output->content);
     }
 
-    public static function get_remtl_help_returns() {
+    public static function get_landing_page_returns() {
         return new external_single_structure(array('html' => new external_value(PARAM_RAW)));
     }
 
     public static function get_topic_list_parameters() {
         return new external_function_parameters(
             array(
-                'course_id' => new external_value(PARAM_INT)
+                'courseid' => new external_value(PARAM_INT)
             )
         );
     }
 
-    public static function get_topic_list($course_id) {
+    public static function get_topic_list($courseid) {
         $params = self::validate_parameters(self::get_topic_list_parameters(), array(
-            'course_id' => $course_id
+            'courseid' => $courseid
         ));
         $url = new moodle_url('/guides/social/sample-b.json');
         $output = file_get_contents($url);
         $json_output = json_decode($output);
         $topic_list_full = $json_output->jsondata->page_data[0]->all_pages;
 
-        if (self::user_is_instructor($params['course_id'])) {
+        if (self::user_is_instructor($params['courseid'])) {
             $topic_list = array_filter($topic_list_full, function($item) {
                 return $item->prefix === 'Instructor';
             });
@@ -304,6 +306,10 @@ class theme_urcourses_default_external extends external_api {
                 return $item->prefix === 'Students';
             });
         }
+
+        usort($topic_list, function($a, $b) {
+            return $a->title < $b->title ? -1 : 1;
+        });
 
         return $topic_list;
     }

@@ -1,44 +1,37 @@
-define(
-[
-    'core/ajax'
-],
-function(
-    Ajax
-) {
-    var getTopicList = function(courseId) {
-        return Ajax.call([
-            {
-                methodname: 'theme_urcourses_default_get_topic_list',
-                args: {
-                    course_id: courseId
-                }
-            }
-        ])[0];
-    };
+import Ajax from 'core/ajax';
+import Templates from 'core/templates';
 
-    var getRemtlHelp = function(courseId) {
-        return Ajax.call([
-            {
-                methodname: 'theme_urcourses_default_get_remtl_help',
-                args: {
-                    course_id: courseId
-                }
-            }
-        ])[0];
-    };
+export default class ModalHelpAjax {
 
-    var getGuidePage = function(url) {
-        return Ajax.call([
-            {
-                methodname: 'theme_urcourses_default_get_guide_page',
-                args: {url: url}
+    static async getLandingPage(courseid, currenturl) {
+        const ajaxConfig = {
+            methodname: 'theme_urcourses_default_get_landing_page',
+            args: {
+                courseid: courseid,
+                currenturl: currenturl
             }
-        ])[0];
-    };
+        };
+        return  Ajax.call([ajaxConfig])[0];
+    }
 
-    return {
-        getTopicList: getTopicList,
-        getRemtlHelp: getRemtlHelp,
-        getGuidePage: getGuidePage
-    };
-});
+    static getTopicList(courseid) {
+        const ajaxConfig = {
+            methodname: 'theme_urcourses_default_get_topic_list',
+            args: {
+                courseid: courseid
+            }
+        };
+        return Ajax.call([ajaxConfig])[0];
+    }
+
+    static getGuidePage(url) {
+        const ajaxConfig = {
+            methodname: 'theme_urcourses_default_get_guide_page',
+            args: {
+                url: url
+            }
+        };
+        return Ajax.call([ajaxConfig])[0];
+    }
+
+}

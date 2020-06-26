@@ -1,90 +1,199 @@
-define(
-[
-    'jquery',
-    'core/modal',
-    'core/modal_registry',
-    'core/modal_events',
-    'core/key_codes',
-    'core/custom_interaction_events',
-    'core/notification',
-    'core/templates',
-    'theme_urcourses_default/modal_help_ajax'
-],
-function(
-    $,
-    Modal,
-    ModalRegistry,
-    ModalEvents,
-    KeyCodes,
-    CustomEvents,
-    Notification,
-    Templates,
-    ModalHelpAjax
-) {
-    var registered = false;
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-    var SELECTORS = {
-        SEARCH: '#modal_help_search',
-        SEARCH_BUTTON: '#modal_help_search_btn',
-        SUGGESTIONS: '#modal_help_search_suggestions',
-        SUGGESTION_ITEM: '.modal-help-suggestion-item',
-        SUGGESTION_ITEM_SEL: '.modal-help-suggestion-item.selected'
-    };
+/**
+ * Theme Boost Campus - ModalHelp class
+ *
+ * @package    theme_urcourses_default
+ * @author     John Lane
+ *
+ */
 
-    var TEMPLATES = {
-        LOADING: 'core/loading',
-        MODAL_HELP_CONTENT: 'theme_urcourses_default/modal_help_content',
-        MODAL_HELP_TOPICS: 'theme_urcourses_default/modal_help_topics'
-    };
+import $ from 'jquery';
+import Notification from 'core/notification';
+import Templates from 'core/templates';
+import CustomEvents from 'core/custom_interaction_events';
+import KeyCodes from 'core/key_codes';
+import Modal from 'core/modal';
+import ModalEvents from 'core/modal_events';
+import ModalRegistry from 'core/modal_registry';
+import ModalHelpAjax from 'theme_urcourses_default/modal_help_ajax';
 
-    /*
-     * Modal constructor.
-     *
-     * @param {object} root The root jQuery element for the modal.
-     */
-    var ModalHelp = function(root) {
-        Modal.call(this, root);
-        this.searchBox = this.root.find(SELECTORS.SEARCH);
-        this.searchButton = this.root.find(SELECTORS.SEARCH_BUTTON);
-        this.suggestionBox = this.root.find(SELECTORS.SUGGESTIONS);
-        this.topicList = null;
-        this.suggestionIndex = 0;
-        this.contextLevel = null;
+const SELECTORS = {
+    SEARCH: '#modal_help_search',
+    SEARCH_BUTTON: '#modal_help_search_btn',
+    SUGGESTIONS: '#modal_help_search_suggestions',
+    SUGGESTION_ITEM: '.modal-help-suggestion-item',
+    SUGGESTION_ITEM_SEL: '.modal-help-suggestion-item.selected'
+};
+
+const TEMPLATES = {
+    LOADING: 'core/loading',
+    MODAL_HELP_CONTENT: 'theme_urcourses_default/modal_help_content',
+    MODAL_HELP_TOPICS: 'theme_urcourses_default/modal_help_topics'
+};
+
+export default class ModalHelp extends Modal {
+
+    constructor(root) {
+        super(root);
         this.courseId = null;
-    };
+        this.currentUrl = null;
+        this.topicList = null;
+        this.searchBox = this.modal.find(SELECTORS.SEARCH);
+        this.searchButton = this.modal.find(SELECTORS.SEARCH_BUTTON);
+        this.suggestionBox = this.modal.find(SELECTORS.SUGGESTIONS);
+    }
 
-    ModalHelp.prototype = Object.create(Modal.prototype);
-    ModalHelp.prototype.constructor = ModalHelp;
-    ModalHelp.TYPE = 'theme_urcourses_default-help';
+    init(courseId, currentUrl) {
+        this.setCourseId(courseId);
+        this.setCurrentUrl(currentUrl);
 
-    ModalHelp.prototype.selectSuggestion = function(suggestion) {
-        this.suggestionBox.find(SELECTORS.SUGGESTION_ITEM).removeClass('selected');
-        suggestion.addClass('selected');
-    };
+        this.getRoot().on(ModalEvents.shown, () => {
+            this.initContent();
+        });
+        this.getSearchBox().on('input', () => {
+            const searchValue = this.getSearchBox().val();
+            this.updateSuggestionBox(this.topicList, searchValue);
+        });
+        this.getSearchBox().on('focus', () => {
+            const searchValue = this.getSearchBox().val();
+            this.updateSuggestionBox(this.topicList, searchValue);
+            this.showSuggestionBox();
+        });
+        this.getRoot().on('click', (e) => {
+            if (e.target !== this.getSearchBox()[0] && e.target !== this.getSuggestionBox()[0]) {
+                this.hideSuggestionBox();
+            }
+        });
+        this.getSearchButton().on('click', () => {
+            this.doSearch();
+        });
+        this.getSearchBox().on('keydown', (e) => {
+            if (e.keyCode === KeyCodes.enter) {
+                this.getModal().focus();
+                this.hideSuggestionBox();
+                this.doSearch();
+            }
+        });
+        this.getSuggestionBox().on(CustomEvents.events.activate, SELECTORS.SUGGESTION_ITEM, (e) => {
+            const suggestionValue = $(e.target).attr('data-value');
+            this.getSearchBox().val(suggestionValue);
+            this.doSearch();
+        });
+    }
 
-    ModalHelp.prototype.getSuggestions = function() {
-        return this.suggestionBox.find(SELECTORS.SUGGESTION_ITEM);
-    };
+    async initContent() {
+        const courseid = this.getCourseId();
+        const currenturl = this.getCurrentUrl();
+        try {
+            const topicList = await ModalHelpAjax.getTopicList(courseid);
+            const landingPage = await ModalHelpAjax.getLandingPage(courseid, currenturl);
+            const renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: landingPage.html});
+            const searchBoxValue = this.getSearchBox().val();
 
-    ModalHelp.prototype.autocomplete = function(suggestion) {
-        var url = suggestion.attr('data-url');
-        url = url.substr(url.indexOf('/', 1));
-        this.getModal().focus();
-        this.suggestionBox.addClass('d-none');
-        this.searchBox.val(suggestion.attr('data-value'));
-        ModalHelpAjax.getGuidePage(url)
-        .then((response) => {
-            var renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: response.html});
+            this.setTopicList(topicList);
+            this.updateSuggestionBox(topicList, searchBoxValue);
             this.setBody(renderPromise);
-        }).catch(Notification.exception);
-    };
+        } catch (error) {
+            console.error('error', error);
+            Notification.exception(error);
+        }
+    }
 
-    ModalHelp.prototype.updateSuggestions = function() {
-        var searchValue = this.searchBox.val();
-        var regex = RegExp(searchValue.split('').join('.*'), 'i');
-        var suggestions = [];
-        for (var topic of this.topicList) {
-            var match = regex.exec(topic.title);
+    async doSearch() {
+        const searchValue = this.getSearchBox().val();
+        const topic = this.topicList.find(topic => topic.title.toLowerCase() === searchValue.toLowerCase());
+        const url = topic.url.substr(topic.url.indexOf('/', 1));
+
+        if (!topic) {
+            return;
+        }
+        try {
+            const guidePage = await ModalHelpAjax.getGuidePage(url);
+            const renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: guidePage.html});
+            this.setBody(renderPromise);
+        } catch (error) {
+            Notification.exception(error);
+        }
+    }
+
+    static getType() {
+        return 'theme_urcourses_default-help';
+    }
+
+    setCourseId(courseId) {
+        this.courseId = courseId;
+    }
+
+    getCourseId() {
+        return this.courseId;
+    }
+
+    setCurrentUrl(currentUrl) {
+        this.currentUrl = currentUrl;
+    }
+
+    getCurrentUrl() {
+        return this.currentUrl;
+    }
+
+    setTopicList(topicList) {
+        this.topicList = topicList;
+    }
+
+    getTopicList() {
+        return this.topicList;
+    }
+
+    getSearchBox() {
+        return this.searchBox;
+    }
+
+    getSearchButton() {
+        return this.searchButton;
+    }
+
+    getSuggestionBox() {
+        return this.suggestionBox;
+    }
+
+    setSuggestionBox(suggestions) {
+        const suggestionBox = this.getSuggestionBox();
+        suggestionBox.html('');
+        for (const suggestion of suggestions) {
+            const suggestionMarkup = `<a href="#"
+                                        class="modal-help-suggestion-item"
+                                        data-url="${suggestion.url}"
+                                        data-value="${suggestion.title}">
+                                            ${suggestion.title}
+                                      </a>`;
+            suggestionBox.append(suggestionMarkup);
+        }
+    }
+
+    updateSuggestionBox(topicList, filter) {
+        const suggestions = this.generateSuggestions(topicList, filter);
+        this.setSuggestionBox(suggestions);
+    }
+
+    generateSuggestions(topics, filter) {
+        const regex = RegExp(filter.split('').join('.*'), 'i');
+        const suggestions = [];
+        for (const topic of topics) {
+            const match = regex.exec(topic.title);
             if (match) {
                 suggestions.push({
                     title: topic.title,
@@ -108,116 +217,22 @@ function(
                 return 1;
             }
         });
-        Templates.render(TEMPLATES.MODAL_HELP_TOPICS, {topics: suggestions})
-        .then((html, js) => {
-            Templates.replaceNodeContents(SELECTORS.SUGGESTIONS, html, js);
-            this.selectSuggestion(this.getSuggestions().eq(0));
-        }).catch(Notification.exception);
-    };
-
-    /**
-     * Set up event handling.
-     *
-     * @method registerEventListeners
-     */
-    ModalHelp.prototype.registerEventListeners = function() {
-        Modal.prototype.registerEventListeners.call(this);
-
-        this.getRoot().on(ModalEvents.shown, () => {
-            ModalHelpAjax.getRemtlHelp(this.courseId)
-            .then((response) => {
-                var renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: response.html});
-                return this.setBody(renderPromise);
-            }).catch(Notification.exception);
-            ModalHelpAjax.getTopicList(this.courseId)
-            .then((response) => {
-                this.topicList = response;
-                this.topicList.sort((a, b) => a.title.localeCompare(b.title));
-                return Templates.render(TEMPLATES.MODAL_HELP_TOPICS, {topics: response});
-            })
-            .then((html, js) => {
-                return Templates.replaceNodeContents(SELECTORS.SUGGESTIONS, html, js);
-            }).catch(Notification.exception);
-        });
-
-        this.getRoot().on(ModalEvents.hidden, () => {
-            this.setBody('');
-            this.searchBox.val('');
-            this.suggestionBox.addClass('d-none');
-            Templates.render(TEMPLATES.LOADING, {})
-            .then((html, js) => {
-                return Templates.replaceNodeContents(SELECTORS.SUGGESTIONS, html, js);
-            }).catch(Notification.exception);
-        });
-
-        this.getRoot().on('click', (e) => {
-            var target = e.target;
-            var searchBox = this.searchBox[0];
-            var suggestionBox = this.suggestionBox[0];
-            if (!(target === searchBox) && !(target === suggestionBox)) {
-                this.suggestionBox.addClass('d-none');
-            }
-        });
-
-        this.getModal().on('focus', SELECTORS.SEARCH, () => {
-            this.suggestionBox.removeClass('d-none');
-            this.updateSuggestions();
-            this.selectSuggestion(this.getSuggestions().eq(0));
-        });
-
-        this.getModal().on('input', SELECTORS.SEARCH, () => {
-            this.updateSuggestions();
-        });
-
-        this.getModal().on('keydown', SELECTORS.SEARCH, (e) => {
-            var suggestions = this.getSuggestions();
-            if (e.keyCode === KeyCodes.arrowDown || e.keyCode === KeyCodes.arrowRight) {
-                e.preventDefault();
-                this.suggestionIndex = 1;
-                suggestions.eq(this.suggestionIndex).focus();
-            } else if (e.keyCode === KeyCodes.arrowUp || e.keyCode === KeyCodes.arrowLeft) {
-                e.preventDefault();
-                this.suggestionIndex = suggestions().length - 1;
-                suggestions.eq(this.suggestionIndex).focus();
-            } else if (e.keyCode === KeyCodes.enter) {
-                var suggestion = this.getSuggestions().eq(0);
-                this.autocomplete(suggestion);
-            }
-        });
-
-        this.getModal().on('keydown', SELECTORS.SUGGESTION_ITEM, (e) => {
-            var suggestions = this.getSuggestions();
-            if (e.keyCode === KeyCodes.arrowDown || e.keyCode === KeyCodes.arrowRight) {
-                e.preventDefault();
-                this.suggestionIndex++;
-                if (this.suggestionIndex > suggestions.length - 1) {
-                    this.suggestionIndex = 0;
-                }
-                suggestions.eq(this.suggestionIndex).focus();
-            } else if (e.keyCode === KeyCodes.arrowUp || e.keyCode === KeyCodes.arrowLeft) {
-                e.preventDefault();
-                this.suggestionIndex--;
-                if (this.suggestionIndex < 0) {
-                    this.suggestionIndex = suggestions.length - 1;
-                }
-                suggestions.eq(this.suggestionIndex).focus();
-            }
-        });
-
-        this.getModal().on(CustomEvents.events.activate, SELECTORS.SUGGESTION_ITEM, (e) => {
-            var suggestion = $(e.target);
-            this.autocomplete(suggestion);
-        });
-
-        this.getModal().on('mouseover focus', SELECTORS.SUGGESTION_ITEM, (e) => {
-            this.selectSuggestion($(e.target));
-        });
-    };
-
-    if (!registered) {
-        ModalRegistry.register(ModalHelp.TYPE, ModalHelp, 'theme_urcourses_default/modal_help');
-        registered = true;
+        return suggestions;
     }
 
-    return ModalHelp;
-});
+    showSuggestionBox() {
+        this.getSuggestionBox().removeClass('d-none');
+    }
+
+    hideSuggestionBox() {
+        this.getSuggestionBox().addClass('d-none');
+    }
+
+}
+
+// Setup code for adding ModalHelp to the modal factory.
+let registered = false;
+if (!registered) {
+    ModalRegistry.register(ModalHelp.getType(), ModalHelp, 'theme_urcourses_default/modal_help');
+    registered = true;
+}

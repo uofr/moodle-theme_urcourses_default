@@ -302,8 +302,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
 		$header->courseimage = $cobits->courseimage;
 		if ($COURSE->id == 1) $header->courseimage = $CFG->wwwroot.'/theme/urcourses_default/pix/siteheader.jpg';
         
-        $header->context_level = $PAGE->context->__get('contextlevel');
+        // variables for help system modal
         $header->course_id = $COURSE->id;
+        $header->current_url = $PAGE->url->get_path();
 		
         // MODIFICATION START:
         // Change this to add the result in the html variable to be able to add further features below the header.
