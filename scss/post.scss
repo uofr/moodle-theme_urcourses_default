@@ -2651,3 +2651,12 @@ body.format-topcoll.editing .section .activity .activityinstance {
         }
     }
 }
+.modal-help-header .modal-help-suggestion-box .modal-help-suggestion-item.suggestion-active {
+    background-color: #f2f2f2;
+}
+
+#avail_btn {
+	background-color: rgba(91, 192, 222, 0.22);
+	padding: 0.5rem;
+	border-radius: 0.25rem;
+}
