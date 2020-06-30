@@ -30,6 +30,7 @@ import Modal from 'core/modal';
 import ModalEvents from 'core/modal_events';
 import ModalRegistry from 'core/modal_registry';
 import ModalHelpAjax from 'theme_urcourses_default/modal_help_ajax';
+import {FuzzySet} from 'theme_urcourses_default/fuzzyset';
 
 const SELECTORS = {
     SEARCH: '#modal_help_search',
@@ -52,60 +53,62 @@ export default class ModalHelp extends Modal {
         this.courseId = null;
         this.currentUrl = null;
         this.topicList = null;
+        this.topicIndex = FuzzySet();
         this.searchBox = this.modal.find(SELECTORS.SEARCH);
         this.searchButton = this.modal.find(SELECTORS.SEARCH_BUTTON);
         this.suggestionBox = this.modal.find(SELECTORS.SUGGESTIONS);
     }
 
     init(courseId, currentUrl) {
-        this.setCourseId(courseId);
-        this.setCurrentUrl(currentUrl);
+        this.courseId = courseId;
+        this.currentUrl = currentUrl;
 
         this.getRoot().on(ModalEvents.shown, () => {
             this.initContent();
         });
-        this.getSearchBox().on('input', () => {
-            const searchValue = this.getSearchBox().val();
-            this.updateSuggestionBox(this.topicList, searchValue);
+        this.searchBox.on('input', () => {
+            const searchValue = this.searchBox.val();
+            this.updateSuggestionBox(searchValue);
         });
-        this.getSearchBox().on('focus', () => {
-            const searchValue = this.getSearchBox().val();
-            this.updateSuggestionBox(this.topicList, searchValue);
+        this.searchBox.on('focus', () => {
+            const searchValue = this.searchBox.val();
+            this.updateSuggestionBox(searchValue);
             this.showSuggestionBox();
         });
         this.getRoot().on('click', (e) => {
-            if (e.target !== this.getSearchBox()[0] && e.target !== this.getSuggestionBox()[0]) {
+            if (e.target !== this.searchBox[0] && e.target !== this.suggestionBox[0]) {
                 this.hideSuggestionBox();
             }
         });
-        this.getSearchButton().on('click', () => {
+        this.searchButton.on('click', () => {
             this.doSearch();
         });
-        this.getSearchBox().on('keydown', (e) => {
+        this.searchBox.on('keydown', (e) => {
             if (e.keyCode === KeyCodes.enter) {
                 this.getModal().focus();
                 this.hideSuggestionBox();
                 this.doSearch();
             }
         });
-        this.getSuggestionBox().on(CustomEvents.events.activate, SELECTORS.SUGGESTION_ITEM, (e) => {
+        this.suggestionBox.on(CustomEvents.events.activate, SELECTORS.SUGGESTION_ITEM, (e) => {
             const suggestionValue = $(e.target).attr('data-value');
-            this.getSearchBox().val(suggestionValue);
+            this.searchBox.val(suggestionValue);
             this.doSearch();
         });
     }
 
     async initContent() {
-        const courseid = this.getCourseId();
-        const currenturl = this.getCurrentUrl();
+        const courseid = this.courseId;
+        const currenturl = this.currentUrl;
         try {
             const topicList = await ModalHelpAjax.getTopicList(courseid);
             const landingPage = await ModalHelpAjax.getLandingPage(courseid, currenturl);
             const renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: landingPage.html});
-            const searchBoxValue = this.getSearchBox().val();
 
-            this.setTopicList(topicList);
-            this.updateSuggestionBox(topicList, searchBoxValue);
+            this.topicList = topicList;
+            for (const topic of topicList) {
+                this.topicIndex.add(topic.title);
+            }
             this.setBody(renderPromise);
         } catch (error) {
             console.error('error', error);
@@ -113,8 +116,28 @@ export default class ModalHelp extends Modal {
         }
     }
 
+    updateSuggestionBox(filter) {
+        const topicIndex = this.topicIndex;
+        const suggestionBox = this.suggestionBox;
+        let suggestions = topicIndex.get(filter, topicIndex.values(), 0);
+
+        if (Array.isArray(suggestions[0])) {
+            suggestions = suggestions.map(suggestion => suggestion[1]);
+        }
+
+        suggestionBox.html('');
+        for (const suggestion of suggestions) {
+            const suggestionMarkup = `<a href="#"
+                                        class="modal-help-suggestion-item"
+                                        data-value="${suggestion}">
+                                            ${suggestion}
+                                      </a>`;
+            suggestionBox.append(suggestionMarkup);
+        }
+    }
+
     async doSearch() {
-        const searchValue = this.getSearchBox().val();
+        const searchValue = this.searchBox.val();
         const topic = this.topicList.find(topic => topic.title.toLowerCase() === searchValue.toLowerCase());
         const url = topic.url.substr(topic.url.indexOf('/', 1));
 
@@ -134,98 +157,12 @@ export default class ModalHelp extends Modal {
         return 'theme_urcourses_default-help';
     }
 
-    setCourseId(courseId) {
-        this.courseId = courseId;
-    }
-
-    getCourseId() {
-        return this.courseId;
-    }
-
-    setCurrentUrl(currentUrl) {
-        this.currentUrl = currentUrl;
-    }
-
-    getCurrentUrl() {
-        return this.currentUrl;
-    }
-
-    setTopicList(topicList) {
-        this.topicList = topicList;
-    }
-
-    getTopicList() {
-        return this.topicList;
-    }
-
-    getSearchBox() {
-        return this.searchBox;
-    }
-
-    getSearchButton() {
-        return this.searchButton;
-    }
-
-    getSuggestionBox() {
-        return this.suggestionBox;
-    }
-
-    setSuggestionBox(suggestions) {
-        const suggestionBox = this.getSuggestionBox();
-        suggestionBox.html('');
-        for (const suggestion of suggestions) {
-            const suggestionMarkup = `<a href="#"
-                                        class="modal-help-suggestion-item"
-                                        data-url="${suggestion.url}"
-                                        data-value="${suggestion.title}">
-                                            ${suggestion.title}
-                                      </a>`;
-            suggestionBox.append(suggestionMarkup);
-        }
-    }
-
-    updateSuggestionBox(topicList, filter) {
-        const suggestions = this.generateSuggestions(topicList, filter);
-        this.setSuggestionBox(suggestions);
-    }
-
-    generateSuggestions(topics, filter) {
-        const regex = RegExp(filter.split('').join('.*'), 'i');
-        const suggestions = [];
-        for (const topic of topics) {
-            const match = regex.exec(topic.title);
-            if (match) {
-                suggestions.push({
-                    title: topic.title,
-                    url: topic.url,
-                    length: match[0].length,
-                    start: match.index
-                });
-            }
-        }
-        suggestions.sort((a, b) => {
-            if (a.start < b.start) {
-                return -1;
-            }
-            if (a.start > b.start) {
-                return 1;
-            }
-            if (a.length < b.length) {
-                return -1;
-            }
-            if (a.length > b.length) {
-                return 1;
-            }
-        });
-        return suggestions;
-    }
-
     showSuggestionBox() {
-        this.getSuggestionBox().removeClass('d-none');
+        this.suggestionBox.removeClass('d-none');
     }
 
     hideSuggestionBox() {
-        this.getSuggestionBox().addClass('d-none');
+        this.suggestionBox.addClass('d-none');
     }
 
 }
