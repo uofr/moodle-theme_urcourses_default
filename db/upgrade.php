@@ -85,18 +85,5 @@ function xmldb_theme_urcourses_default_upgrade($oldversion) {
 
         upgrade_plugin_savepoint(true, 2019073001, 'theme', 'urcourses_default');
     }
-	
-
-    if ($oldversion < 2020060501) {
-        set_config('clnotes_type', 'db', 'theme_urcourses_default');
-        //set_config('clnotes_host', 'localhost', 'theme_urcourses_default');
-        set_config('clnotes_host', '', 'theme_urcourses_default');
-        set_config('clnotes_user', '', 'theme_urcourses_default');
-        set_config('clnotes_pass', '', 'theme_urcourses_default');
-        set_config('clnotes_dbclass', 'class_notes', 'theme_urcourses_default');
-        set_config('clnotes_dbzoom', 'zoom_room', 'theme_urcourses_default');
-
-        upgrade_plugin_savepoint(true, 2020060501, 'theme', 'urcourses_default');
-    }
     return true;
 }
