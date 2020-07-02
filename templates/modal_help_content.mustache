@@ -1,6 +1,11 @@
-{{!
-    I swear this isn't as stupid as it looks...
-    I just need a dummy template for rendering purposes.
-}}
+<div class="d-flex flex-column mb-3">
+    <h5> Some Links That Might Help </h5>
+    {{#links}}
+         <a href="#">{{name}}</a>
+    {{/links}}
+</div>
 
-{{{html}}}
+<div>
+    <h5> Content </h5>
+    {{{html}}}
+</div>

@@ -226,3 +226,6 @@ $string['success:courseavailabilitychanged'] = 'Course availability changed';
 
 //Modchooser
 $string['moremodchooser'] = 'More';
+
+// Modal Help
+$string ['modal_help_search_desc'] = 'Search the guides for help.';

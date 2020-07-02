@@ -233,27 +233,38 @@ class theme_urcourses_default_external extends external_api {
 
     }
 
+    /**
+     * Checks if the current user is an instructor.
+     * If a course id other than 1 is passed, we check if the user is the instructor of that course.
+     * Otherwise we check if they are an instructor in any course.
+     * @param int $course_id
+     * @return bool
+     */
     public static function user_is_instructor($course_id) {
         global $USER, $DB;
-        $instructor_roles = $DB->get_fieldset_select('role', 'id', 'shortname = :a OR shortname = :b', [
-            'a' => 'editingteacher',
-            'b' => 'teacher'
-        ]);
-        if ($course_id === 1) {
-            return $DB->record_exists_select('role_assignments', 'userid = :uid AND (roleid = :r0 OR roleid = :r1)', [
-                'uid' => $USER->id,
-                'r0'=> $instructor_roles[0],
-                'r1'=> $instructor_roles[1]
-            ]);
+
+        // Get instructor role ids.
+        $role_query_cond = 'shortname = :a OR shortname = :b OR shortname = :c OR shortname = :d';
+        $role_query_arr = ['a' => 'editingteacher', 'b' => 'teacher', 'c' => 'manager', 'd' => 'coursecreator'];
+        $instructor_roles = $DB->get_fieldset_select('role', 'id', $role_query_cond, $role_query_arr);
+        
+        $roleassign_query_cond = 'userid = :uid AND (roleid = :r0 OR roleid = :r1 OR roleid = :r2 OR roleid = :r3)';
+        $roleassign_query_arr = [
+            'uid' => $USER->id,
+            'r0' => $instructor_roles[0],
+            'r1' => $instructor_roles[1],
+            'r2' => $instructor_roles[2],
+            'r3' => $instructor_roles[3]
+        ];
+
+        // If we are in a course, add a condition to check if the current user is the instructor of that course.
+        // Othewise, we will check to see if the user is an instructor in any course.
+        if ($course_id !== 1) {
+            $roleassign_query_cond .= 'AND contextid = :cid';
+            $roleassign_query_arr['cid'] = \context_course::instance($course_id)->id;
         }
-        else {
-            return $DB->record_exists_select('role_assignments', 'userid = :uid AND contextid = :cid AND (roleid = :r0 OR roleid = :r1)', [
-                'uid' => $USER->id,
-                'cid' => \context_course::instance($course_id)->id,
-                'r0'=> $instructor_roles[0],
-                'r1'=> $instructor_roles[1]
-            ]);
-        }
+
+        return $DB->record_exists_select('role_assignments', $roleassign_query_cond, $roleassign_query_arr);
     }
 
     public static function get_landing_page_parameters() {
@@ -270,14 +281,40 @@ class theme_urcourses_default_external extends external_api {
             'courseid' => $courseid,
             'currenturl' => $currenturl
         ));
-        $url = self::user_is_instructor($params['courseid']) ? new moodle_url('/guides/instructor.json') : new moodle_url('/guides/student.json');
-        $output = file_get_contents($url);
+        if (self::user_is_instructor($params['courseid'])) {
+            if (strpos($params['currenturl'], '/course/')) {
+                $content_url = new moodle_url('/guides/instructor/courseadministration/urcoursescollection.json');
+            }
+            else {
+                $content_url = new moodle_url('/guides/instructor.json');
+            }
+        }
+        else {
+            $content_url = new moodle_url('/guides/student.json');
+        }
+        $output = file_get_contents($content_url);
         $json_output = json_decode($output);
-        return array('html' => $json_output->content);
+        if ($json_output->content) {
+            $html = $json_output->content;
+            $links = [];
+        }
+        else {
+            $html = $json_output->jsondata->page_data[0]->content;
+            $links = $json_output->jsondata->page_data[0]->contenturls;
+        }
+        return array('html' => $html, 'links' => $links);
     }
 
     public static function get_landing_page_returns() {
-        return new external_single_structure(array('html' => new external_value(PARAM_RAW)));
+        return new external_single_structure(array(
+            'html' => new external_value(PARAM_RAW),
+            'links' => new external_multiple_structure(
+                new external_single_structure(array(
+                    'name' => new external_value(PARAM_TEXT),
+                    'url' => new external_value(PARAM_TEXT)
+                )), '', VALUE_OPTIONAL, null
+            )
+        ));
     }
 
     public static function get_topic_list_parameters() {

@@ -31,8 +31,7 @@ const SELECTORS = {
 
 export const init = async (courseId, currentUrl) => {
     const modalHelpConfig = {
-        type: ModalHelp.getType(),
-        large: true
+        type: ModalHelp.getType()
     };
     const modalHelpTrigger = $(SELECTORS.MODAL_HELP_TRIGGER);
     const helpModal = await ModalFactory.create(modalHelpConfig, modalHelpTrigger);

@@ -66,6 +66,11 @@ export default class ModalHelp extends Modal {
         this.getRoot().on(ModalEvents.shown, () => {
             this.initContent();
         });
+        this.getRoot().on(ModalEvents.hidden, () => {
+            this.setBody('');
+            this.suggestionBox.html('');
+            this.searchBox.val('');
+        });
         this.searchBox.on('input', () => {
             const searchValue = this.searchBox.val();
             this.updateSuggestionBox(searchValue);
@@ -103,7 +108,7 @@ export default class ModalHelp extends Modal {
         try {
             const topicList = await ModalHelpAjax.getTopicList(courseid);
             const landingPage = await ModalHelpAjax.getLandingPage(courseid, currenturl);
-            const renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: landingPage.html});
+            const renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: landingPage.html, links: landingPage.links});
 
             this.topicList = topicList;
             for (const topic of topicList) {
