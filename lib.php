@@ -212,3 +212,9 @@ function theme_urcourses_default_inplace_editable($itemtype, $itemid, $newvalue)
         return new \core\output\inplace_editable('theme_urcourses_default', 'coursename', $course->id, $can_edit_coursename, $course_link, format_string($course->fullname));
     }
 }
+
+function theme_urcourses_default_get_fontawesome_icon_map() {
+    return [
+        'theme_urcourses_default:i/times' => 'fa-times'
+    ];
+}

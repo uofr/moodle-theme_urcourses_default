@@ -2611,6 +2611,15 @@ body.format-topcoll.editing .section .activity .activityinstance {
         position: relative;
     }
 
+    .modal-help-search-clear {
+        position: absolute;
+        right: 3em;
+        top: 0.4em;
+        z-index: 1000;
+        cursor: pointer;
+        color: #848889;
+    }
+
     .modal-help-search-suggestions {
         position: absolute;
         z-index: 1000;
