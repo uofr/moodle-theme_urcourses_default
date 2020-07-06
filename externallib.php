@@ -237,13 +237,13 @@ class theme_urcourses_default_external extends external_api {
      * Checks if the current user is an instructor.
      * If a course id other than 1 is passed, we check if the user is the instructor of that course.
      * Otherwise we check if they are an instructor in any course.
+     *
      * @param int $course_id
      * @return bool
      */
     public static function user_is_instructor($course_id) {
         global $USER, $DB;
 
-        // Get instructor role ids.
         $role_query_cond = 'shortname = :a OR shortname = :b OR shortname = :c OR shortname = :d';
         $role_query_arr = ['a' => 'editingteacher', 'b' => 'teacher', 'c' => 'manager', 'd' => 'coursecreator'];
         $instructor_roles = $DB->get_fieldset_select('role', 'id', $role_query_cond, $role_query_arr);
@@ -257,8 +257,7 @@ class theme_urcourses_default_external extends external_api {
             'r3' => $instructor_roles[3]
         ];
 
-        // If we are in a course, add a condition to check if the current user is the instructor of that course.
-        // Othewise, we will check to see if the user is an instructor in any course.
+        // If we are not on a site page, check if $USER is an instructor of the current course.
         if ($course_id !== 1) {
             $roleassign_query_cond .= 'AND contextid = :cid';
             $roleassign_query_arr['cid'] = \context_course::instance($course_id)->id;
@@ -267,6 +266,11 @@ class theme_urcourses_default_external extends external_api {
         return $DB->record_exists_select('role_assignments', $roleassign_query_cond, $roleassign_query_arr);
     }
 
+    /**
+     * Describes parameters passed to get_landing_page.
+     *
+     * @return external_function_parameters
+     */
     public static function get_landing_page_parameters() {
         return new external_function_parameters(
             array(
@@ -276,77 +280,86 @@ class theme_urcourses_default_external extends external_api {
         );
     }
 
+    /**
+     * Returns landing page data for help modal.
+     *
+     * @param int $courseid
+     * @param int $currenturl
+     * @return array
+     */
     public static function get_landing_page($courseid, $currenturl) {
         $params = self::validate_parameters(self::get_landing_page_parameters(), array(
             'courseid' => $courseid,
             'currenturl' => $currenturl
         ));
+
         if (self::user_is_instructor($params['courseid'])) {
-            if (strpos($params['currenturl'], '/course/')) {
-                $content_url = new moodle_url('/guides/instructor/courseadministration/urcoursescollection.json');
-            }
-            else {
-                $content_url = new moodle_url('/guides/instructor.json');
-            }
+            $content_url = new moodle_url('/guides/instructor.json');
         }
         else {
             $content_url = new moodle_url('/guides/student.json');
         }
-        $output = file_get_contents($content_url);
-        $json_output = json_decode($output);
-        if ($json_output->content) {
-            $html = $json_output->content;
-            $links = [];
-        }
-        else {
-            $html = $json_output->jsondata->page_data[0]->content;
-            $links = $json_output->jsondata->page_data[0]->contenturls;
-        }
-        return array('html' => $html, 'links' => $links);
+
+        $json_output = json_decode(file_get_contents($content_url));
+
+        return array('html' => $json_output->content);
     }
 
+    /**
+     * Returns description of get_landing_page return value.
+     *
+     * @return external_single_structure
+    */
     public static function get_landing_page_returns() {
         return new external_single_structure(array(
-            'html' => new external_value(PARAM_RAW),
-            'links' => new external_multiple_structure(
-                new external_single_structure(array(
-                    'name' => new external_value(PARAM_TEXT),
-                    'url' => new external_value(PARAM_TEXT)
-                )), '', VALUE_OPTIONAL, null
-            )
+            'html' => new external_value(PARAM_RAW)
         ));
     }
 
+    /**
+     * Returns description of params passed to get_topic_list.
+     *
+     * @return external_function_parameters
+     */
     public static function get_topic_list_parameters() {
-        return new external_function_parameters(
-            array(
-                'courseid' => new external_value(PARAM_INT)
-            )
-        );
+        return new external_function_parameters(array(
+            'courseid' => new external_value(PARAM_INT)
+        ));
     }
-public static function get_topic_list($courseid) {
+
+    /**
+     * Gets list of help topics from the guides.
+     *
+     * @return array
+     */
+    public static function get_topic_list($courseid) {
         $params = self::validate_parameters(self::get_topic_list_parameters(), array(
             'courseid' => $courseid
         ));
-        $url = new moodle_url('/guides/social/sample-b.json');
-        $output = file_get_contents($url);
-        $json_output = json_decode($output);
+
+        $content_url = new moodle_url('/guides/social/sample-b.json');
+        $json_output = json_decode(file_get_contents($content_url));
         $topic_list_full = $json_output->jsondata->page_data[0]->all_pages;
 
+        // Get rid of html special characters (such as &amp;)
         foreach ($topic_list_full as $topic) {
             $topic->title = htmlspecialchars_decode($topic->title);
         }
 
+        // Filter topics for students/instructors.
+        // Remove Student/Instructor home pages.
         if (self::user_is_instructor($params['courseid'])) {
             $topic_list = array_filter($topic_list_full, function($item) {
                 return $item->prefix === 'Instructor' && $item->title !== 'Instructor';
             });
-        } else {
+        }
+        else {
             $topic_list = array_filter($topic_list_full, function($item) {
                 return $item->prefix === 'Students' && $item->title !== 'Student';
             });
         }
 
+        // Sort topic list alphabetically.
         usort($topic_list, function($a, $b) {
             return $a->title < $b->title ? -1 : 1;
         });
@@ -354,35 +367,62 @@ public static function get_topic_list($courseid) {
         return $topic_list;
     }
 
+    /**
+     * Returns description of get_topic_list return value.
+     *
+     * @return external_multiple_structure
+     */
     public static function get_topic_list_returns() {
-        return new external_multiple_structure(
-            new external_single_structure(
-                array(
-                    'prefix' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL),
-                    'title' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL),
-                    'url' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL),
-                    'excerpt' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL)
-                )
-            )
+        return new external_multiple_structure(new external_single_structure(array(
+            'prefix' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL),
+            'title' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL),
+            'url' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL),
+            'excerpt' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL)
+        )));
+    }
+
+    /**
+     * Returns description of params passed to get_guide_page.
+     *
+     * @return external_function_parameters
+     */
+    public static function get_guide_page_parameters() {
+        return new external_function_parameters(array(
+            'url' => new external_value(PARAM_TEXT)
+        ));
+    }
+
+    /**
+     * Returns guide page data.
+     *
+     * @param string $url 
+     */
+    public static function get_guide_page($url) {
+        $params = self::validate_parameters(self::get_guide_page_parameters(), array(
+            'url' => $url
+        ));
+
+        $content_url = (new moodle_url($params['url'] . '.json'))->__toString();
+        $json_output = json_decode(file_get_contents($content_url));
+        $html = ($json_output->content) ? $json_output->content : $json_output->jsondata->page_data[0]->content;
+        $title = ($json_output->title === '') ? $json_output->title : $json_output->jsondata->page_data[0]->title;
+
+        return array(
+            'html' => $html,
+            'title' => $title
         );
     }
 
-    public static function get_guide_page_parameters() {
-        return new external_function_parameters (array('url' => new external_value(PARAM_TEXT)));
-    }
-
-    public static function get_guide_page($url) {
-        $params = self::validate_parameters(self::get_guide_page_parameters(), array('url' => $url));
-        $url = (new moodle_url($params['url'] . '.json'))->__toString();
-        $output = file_get_contents($url);
-        $json_output = json_decode($output);
-        $html = $json_output->jsondata ? $json_output->jsondata->page_data[0]->content : $json_output->content;
-        $title = $json_output->jsondata ? $json_output->jsondata->page_data[0]->title : '';
-        return array('html' => $html, 'title' => $title);
-    }
-
+    /**
+     * Returns description of get_guide_page return value.
+     *
+     * @return external_single_structure
+     */
     public static function get_guide_page_returns() {
-        return new external_single_structure(array('html' => new external_value(PARAM_RAW), 'title' => new external_value(PARAM_TEXT)));
+        return new external_single_structure(array(
+            'html' => new external_value(PARAM_RAW),
+            'title' => new external_value(PARAM_TEXT)
+        ));
     }
 
 }

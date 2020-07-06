@@ -22,6 +22,7 @@
  */
 
 import $ from 'jquery';
+import Notification from 'core/notification';
 import ModalFactory from 'core/modal_factory';
 import ModalHelp from 'theme_urcourses_default/modal_help';
 
@@ -34,6 +35,11 @@ export const init = async (courseId, currentUrl) => {
         type: ModalHelp.getType()
     };
     const modalHelpTrigger = $(SELECTORS.MODAL_HELP_TRIGGER);
-    const helpModal = await ModalFactory.create(modalHelpConfig, modalHelpTrigger);
-    helpModal.init(courseId, currentUrl);
+    try {
+        const helpModal = await ModalFactory.create(modalHelpConfig, modalHelpTrigger);
+        helpModal.init(courseId, currentUrl);
+    }
+    catch(error) {
+        Notification.exception(error);
+    }
 };

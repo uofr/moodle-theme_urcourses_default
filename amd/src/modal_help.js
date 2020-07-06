@@ -44,10 +44,25 @@ const TEMPLATES = {
     MODAL_HELP_CONTENT: 'theme_urcourses_default/modal_help_content'
 };
 
+/**
+ * Help modal for UR Courses.
+ *
+ * @class ModalHelp
+ * @property {Number} courseId - ID of current course.
+ * @property {String} currentUrl - Path of current page.
+ * @property {Array} topicList - List of topcis for which there is help.
+ * @property {FuzzySet} topicIndex - FuzzySet to enable fuzzy searching of topics.
+ * @property {Number} minSearchScore - How similar a search has to be to attempt autocomplete.
+ * @property {JQuery} searchBox - Search field jQuery element.
+ * @property {JQuery} searchButton - Search button jQuery object.
+ * @property {JQuery} searchClear - Clear search jQuery object.
+ * @property {JQuery} suggestionBox - Suggestion box jQuery object.
+ */
 export default class ModalHelp extends Modal {
 
     constructor(root) {
         super(root);
+
         this.courseId = null;
         this.currentUrl = null;
         this.topicList = null;
@@ -59,6 +74,13 @@ export default class ModalHelp extends Modal {
         this.suggestionBox = this.modal.find(SELECTORS.SUGGESTIONS);
     }
 
+    /**
+     * Sets up courseId, currentUrl properties and registers events.
+     *
+     * @method init
+     * @param {Number} courseId The id of the current course.
+     * @param {String} currentUrl Current page's path.
+     */
     init(courseId, currentUrl) {
         this.courseId = courseId;
         this.currentUrl = currentUrl;
@@ -72,6 +94,13 @@ export default class ModalHelp extends Modal {
         });
 
         this.searchBox.on('input', () => {
+            if (this.searchBox.val()) {
+                this.showSearchClear();
+            }
+            else {
+                this.hideSearchClear();
+            }
+
             this.updateSearchBox();
         });
 
@@ -83,8 +112,8 @@ export default class ModalHelp extends Modal {
             this.clearSearch();
         });
 
+        // Hide suggestion box if user clicks elsewhere.
         this.getRoot().on('click', (e) => {
-            // Hides search suggestions if the user clicks outside the search box.
             if (e.target !== this.searchBox[0] && e.target !== this.suggestionBox[0]) {
                 this.hideSuggestionBox();
             }
@@ -94,8 +123,8 @@ export default class ModalHelp extends Modal {
             this.search();
         });
 
+        // If user presses enter, remove focus from search box and perform search.
         this.searchBox.on('keydown', (e) => {
-            // Executes search if the user presses enter. Also removes focus from search.
             if (e.keyCode === KeyCodes.enter) {
                 this.getModal().focus();
                 this.search();
@@ -114,11 +143,12 @@ export default class ModalHelp extends Modal {
         try {
             const topicList = await ModalHelpAjax.getTopicList(this.courseId);
             const landingPage = await ModalHelpAjax.getLandingPage(this.courseId, this.currentUrl);
-
             const renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: landingPage.html});
 
             this.topicList = topicList;
-            topicList.forEach(topic => this.topicIndex.add(topic.title));
+            for (const topic of topicList) {
+                this.topicIndex.add(topic.title);
+            }
 
             this.setBody(renderPromise);
         }
@@ -150,12 +180,6 @@ export default class ModalHelp extends Modal {
         });
         suggestionMarkup.forEach(markup => suggestionBox.append(markup));
 
-        if (searchValue) {
-            this.showSearchClear();
-        }
-        else {
-            this.hideSearchClear();
-        }
 
         this.showSuggestionBox();
     }
