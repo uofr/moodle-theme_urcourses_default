@@ -115,6 +115,7 @@ export default class ModalHelp extends Modal {
 
         this.searchBox.on('focus', () => {
             this.updateSearchBox();
+            this.suggestionBox[0].scrollTop = 0;
         });
 
         // If user presses enter, remove focus from search box and perform search.
