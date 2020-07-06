@@ -144,6 +144,7 @@ export default class ModalHelp extends Modal {
             suggestions = suggestions.map(suggestion => suggestion[1]);
         }
 
+        this.suggestionBox.html('');
         const suggestionMarkup = suggestions.map((suggestion) => {
             return `<a href="#" class="modal-help-suggestion-item" data-value="${suggestion}">${suggestion}</a>`;
         });
@@ -190,7 +191,7 @@ export default class ModalHelp extends Modal {
         const url = topic.url.substr(topic.url.indexOf('/', 1));
         try {
             const guidePage = await ModalHelpAjax.getGuidePage(url);
-            const renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: guidePage.html});
+            const renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: guidePage.html, title: guidePage.title});
             this.setBody(renderPromise);
         }
         catch (error) {

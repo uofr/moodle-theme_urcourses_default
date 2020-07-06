@@ -324,8 +324,7 @@ class theme_urcourses_default_external extends external_api {
             )
         );
     }
-
-    public static function get_topic_list($courseid) {
+public static function get_topic_list($courseid) {
         $params = self::validate_parameters(self::get_topic_list_parameters(), array(
             'courseid' => $courseid
         ));
@@ -334,13 +333,17 @@ class theme_urcourses_default_external extends external_api {
         $json_output = json_decode($output);
         $topic_list_full = $json_output->jsondata->page_data[0]->all_pages;
 
+        foreach ($topic_list_full as $topic) {
+            $topic->title = htmlspecialchars_decode($topic->title);
+        }
+
         if (self::user_is_instructor($params['courseid'])) {
             $topic_list = array_filter($topic_list_full, function($item) {
-                return $item->prefix === 'Instructor';
+                return $item->prefix === 'Instructor' && $item->title !== 'Instructor';
             });
         } else {
             $topic_list = array_filter($topic_list_full, function($item) {
-                return $item->prefix === 'Students';
+                return $item->prefix === 'Students' && $item->title !== 'Student';
             });
         }
 
@@ -373,11 +376,13 @@ class theme_urcourses_default_external extends external_api {
         $url = (new moodle_url($params['url'] . '.json'))->__toString();
         $output = file_get_contents($url);
         $json_output = json_decode($output);
-        return array('html' => $json_output->jsondata->page_data[0]->content);
+        $html = $json_output->jsondata ? $json_output->jsondata->page_data[0]->content : $json_output->content;
+        $title = $json_output->jsondata ? $json_output->jsondata->page_data[0]->title : '';
+        return array('html' => $html, 'title' => $title);
     }
 
     public static function get_guide_page_returns() {
-        return new external_single_structure(array('html' => new external_value(PARAM_RAW)));
+        return new external_single_structure(array('html' => new external_value(PARAM_RAW), 'title' => new external_value(PARAM_TEXT)));
     }
 
 }
