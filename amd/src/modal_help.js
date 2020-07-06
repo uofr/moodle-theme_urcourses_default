@@ -57,6 +57,7 @@ const TEMPLATES = {
  * @property {JQuery} searchButton - Search button jQuery object.
  * @property {JQuery} searchClear - Clear search jQuery object.
  * @property {JQuery} suggestionBox - Suggestion box jQuery object.
+ * @property {Number} suggestionItemIndex - Index of the suggestion currently selected by the keyboard.
  */
 export default class ModalHelp extends Modal {
 
@@ -72,6 +73,7 @@ export default class ModalHelp extends Modal {
         this.searchButton = this.modal.find(SELECTORS.SEARCH_BUTTON);
         this.searchClear = this.modal.find(SELECTORS.SEARCH_CLEAR);
         this.suggestionBox = this.modal.find(SELECTORS.SUGGESTIONS);
+        this.suggestionItemIndex = 0;
     }
 
     /**
@@ -93,6 +95,13 @@ export default class ModalHelp extends Modal {
             this.resetModal();
         });
 
+        // Hide suggestion box if user clicks elsewhere.
+        this.getRoot().on('click', (e) => {
+            if (e.target !== this.searchBox[0] && e.target !== this.suggestionBox[0]) {
+                this.hideSuggestionBox();
+            }
+        });
+
         this.searchBox.on('input', () => {
             if (this.searchBox.val()) {
                 this.showSearchClear();
@@ -108,21 +117,6 @@ export default class ModalHelp extends Modal {
             this.updateSearchBox();
         });
 
-        this.searchClear.on('click', () => {
-            this.clearSearch();
-        });
-
-        // Hide suggestion box if user clicks elsewhere.
-        this.getRoot().on('click', (e) => {
-            if (e.target !== this.searchBox[0] && e.target !== this.suggestionBox[0]) {
-                this.hideSuggestionBox();
-            }
-        });
-
-        this.searchButton.on('click', () => {
-            this.search();
-        });
-
         // If user presses enter, remove focus from search box and perform search.
         this.searchBox.on('keydown', (e) => {
             if (e.keyCode === KeyCodes.enter) {
@@ -131,12 +125,54 @@ export default class ModalHelp extends Modal {
             }
         });
 
+        this.searchClear.on('click', () => {
+            this.clearSearch();
+        });
+
+        this.searchButton.on('click', () => {
+            this.search();
+        });
+
         this.suggestionBox.on(CustomEvents.events.activate, SELECTORS.SUGGESTION_ITEM, (e) => {
             const suggestionValue = $(e.target).attr('data-value');
             this.searchBox.val(suggestionValue);
             this.showSearchClear();
             this.getPage(suggestionValue);
         });
+
+        // Keyboard controls.
+        this.searchBox.on('keydown', (e) => {
+            if (e.keyCode === KeyCodes.arrowUp || e.keyCode === KeyCodes.arrowLeft) {
+                e.preventDefault();
+                this.suggestionItemIndex = this.getSuggestionItems().length - 1;
+                this.getSuggestionItems().eq(this.suggestionItemIndex).focus();
+            }
+            else if (e.keyCode === KeyCodes.arrowDown || e.keyCode === KeyCodes.arrowRight) {
+                e.preventDefault();
+                this.suggestionItemIndex = 0;
+                this.getSuggestionItems().eq(this.suggestionItemIndex).focus();
+            }
+        });
+
+        this.suggestionBox.on('keydown', SELECTORS.SUGGESTION_ITEM, (e) => {
+            if (e.keyCode === KeyCodes.arrowUp || e.keyCode === KeyCodes.arrowLeft) {
+                e.preventDefault();
+                this.suggestionItemIndex--;
+                if (this.suggestionItemIndex < 0) {
+                    this.suggestionItemIndex = this.getSuggestionItems().length - 1;
+                }
+                this.getSuggestionItems().eq(this.suggestionItemIndex).focus();
+            }
+            else if (e.keyCode === KeyCodes.arrowDown || e.keyCode === KeyCodes.arrowRight) {
+                e.preventDefault();
+                this.suggestionItemIndex++;
+                if (this.suggestionItemIndex >= this.getSuggestionItems().length) {
+                    this.suggestionItemIndex = 0;
+                }
+                this.getSuggestionItems().eq(this.suggestionItemIndex).focus();
+            }
+        });
+
     }
 
     async initContent() {
@@ -224,9 +260,6 @@ export default class ModalHelp extends Modal {
         }
     }
 
-    static getType() {
-        return 'theme_urcourses_default-help';
-    }
 
     showSuggestionBox() {
         this.suggestionBox.removeClass('d-none');
@@ -242,6 +275,14 @@ export default class ModalHelp extends Modal {
 
     hideSearchClear() {
         this.searchClear.addClass('d-none');
+    }
+
+    static getType() {
+        return 'theme_urcourses_default-help';
+    }
+
+    getSuggestionItems() {
+        return this.suggestionBox.find(SELECTORS.SUGGESTION_ITEM);
     }
 
 }

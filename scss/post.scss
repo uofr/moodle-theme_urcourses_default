@@ -2641,7 +2641,7 @@ body.format-topcoll.editing .section .activity .activityinstance {
             background-color: transparent;
             border: 0;
         }
-        .modal-help-suggestion-item.selected {
+        .modal-help-suggestion-item:focus {
             background-color: #f8f9fa;
         }
 
