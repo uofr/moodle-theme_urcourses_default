@@ -465,7 +465,10 @@ class theme_urcourses_default_external extends external_api {
             $result->url = $url;
         }
         
-        return $search_results;
+        return array(
+            'results' => $search_results,
+            'query' => $params['query']
+        );
     }
 
     /**
@@ -474,14 +477,17 @@ class theme_urcourses_default_external extends external_api {
      * @return external_single_structure
      */
     public static function modal_help_search_returns() {
-        return new external_multiple_structure(new external_single_structure(array(
-            'page-date' => new external_value(PARAM_TEXT),
-            'page-modified-date' => new external_value(PARAM_TEXT),
-            'url' => new external_value(PARAM_URL),
-            'search-prefix' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL, ''),
-            'page-title' => new external_value(PARAM_TEXT),
-            'excerpt' => new external_value(PARAM_TEXT)
-        )));
+        return new external_single_structure(array(
+            'results' => new external_multiple_structure(new external_single_structure(array(
+                'page-date' => new external_value(PARAM_TEXT),
+                'page-modified-date' => new external_value(PARAM_TEXT),
+                'url' => new external_value(PARAM_URL),
+                'search-prefix' => new external_value(PARAM_TEXT),
+                'page-title' => new external_value(PARAM_TEXT),
+                'excerpt' => new external_value(PARAM_TEXT)
+            ))),
+            'query' => new external_value(PARAM_TEXT)
+        ));
     }
 
 }

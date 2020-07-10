@@ -246,7 +246,10 @@ export default class ModalHelp extends Modal {
         try {
             const searchResults = await ModalHelpAjax.searchGuides(this.contextId, query);
             console.log(searchResults);
-            const renderPromise = Templates.render(TEMPLATES.MODAL_HELP_SEARCH_RESULTS, {searchResults: searchResults});
+            const renderPromise = Templates.render(TEMPLATES.MODAL_HELP_SEARCH_RESULTS, {
+                searchResults: searchResults.results,
+                query: searchResults.query
+            });
             this.setBody(renderPromise);
         }
         catch (error) {
