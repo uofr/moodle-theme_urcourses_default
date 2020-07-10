@@ -1,0 +1,14 @@
+<div class="list-group-flush">
+    {{#searchResults}}
+        <div class="list-group-item">
+            <h3>
+                <a href="#" data-url="{{{url}}}" class='modal-help-search-result'>{{page-title}}</a>
+            </h3>
+            <div class="d-flex flex-column">
+                <small>{{page-date}}</small>
+                <small>Modified: {{page-modified-date}}</small>
+            </div>
+            <div>{{excerpt}}</div>
+        </div>
+    {{/searchResults}}
+</div>

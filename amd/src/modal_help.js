@@ -38,19 +38,19 @@ const SELECTORS = {
     SEARCH_CLEAR: '#modal_help_search_clear',
     SUGGESTIONS: '#modal_help_search_suggestions',
     SUGGESTION_ITEM: '.modal-help-suggestion-item',
+    SEARCH_RESULT: '.modal-help-search-result'
 };
 
 const TEMPLATES = {
-    MODAL_HELP_CONTENT: 'theme_urcourses_default/modal_help_content'
+    MODAL_HELP_CONTENT: 'theme_urcourses_default/modal_help_content',
+    MODAL_HELP_SEARCH_RESULTS: 'theme_urcourses_default/modal_help_search_results'
 };
 
 /**
  * Help modal for UR Courses.
  *
  * @class ModalHelp
- * @property {Number} courseId - ID of current course.
- * @property {String} currentUrl - Path of current page.
- * @property {Number} contextId - ID of the current page's context.
+ * @property {Number} contextId - ID of the current page's context. Null until it is set in init.
  * @property {Array} topicList - List of topcis for which there is help.
  * @property {FuzzySet} topicIndex - FuzzySet to enable fuzzy searching of topics.
  * @property {Number} minSearchScore - How similar a search has to be to attempt autocomplete.
@@ -93,7 +93,6 @@ export default class ModalHelp extends Modal {
             this.resetModal();
         });
 
-        // Hide suggestion box if user clicks elsewhere.
         this.getRoot().on('click', (e) => {
             if (e.target !== this.searchBox[0] && e.target !== this.suggestionBox[0]) {
                 this.hideSuggestionBox();
@@ -108,38 +107,47 @@ export default class ModalHelp extends Modal {
                 this.hideSearchClear();
             }
 
-            this.updateSearchBox();
-        });
-
-        this.searchBox.on('focus', () => {
-            this.updateSearchBox();
-            this.suggestionBox[0].scrollTop = 0;
-        });
-
-        // If user presses enter, remove focus from search box and perform search.
-        this.searchBox.on('keydown', (e) => {
-            if (e.keyCode === KeyCodes.enter) {
-                this.getModal().focus();
-                this.search();
-            }
+            this.updateSuggestions();
         });
 
         this.searchClear.on('click', () => {
             this.clearSearch();
         });
 
+        this.searchBox.on('focus', () => {
+            this.updateSuggestions();
+            this.suggestionBox[0].scrollTop = 0;
+        });
+
         this.searchButton.on('click', () => {
-            this.search();
+            const query = this.searchBox.val();
+            this.search(query);
+            this.hideSuggestionBox();
+        });
+
+        this.searchBox.on('keydown', (e) => {
+            if (e.keyCode === KeyCodes.enter) {
+                const query = this.searchBox.val();
+                this.getModal().focus();
+                this.search(query);
+                this.hideSuggestionBox();
+            }
         });
 
         this.suggestionBox.on(CustomEvents.events.activate, SELECTORS.SUGGESTION_ITEM, (e) => {
-            const suggestionValue = $(e.target).attr('data-value');
-            this.searchBox.val(suggestionValue);
+            const topicTitle = $(e.target).attr('data-value');
+            const topic = this.topicList.find(topic => topic.title.toLowerCase() === topicTitle.toLowerCase());
+            const url = topic.url.substr(topic.url.indexOf('/', 1));
+            this.searchBox.val(topicTitle);
             this.showSearchClear();
-            this.getPage(suggestionValue);
+            this.getPage(url);
         });
 
-        // Keyboard controls.
+        this.getModal().on(CustomEvents.events.activate, SELECTORS.SEARCH_RESULT, (e) => {
+            const url = $(e.target).attr('data-url');
+            this.getPage(url);
+        });
+
         this.searchBox.on('keydown', (e) => {
             if (e.keyCode === KeyCodes.arrowUp || e.keyCode === KeyCodes.arrowLeft) {
                 e.preventDefault();
@@ -174,6 +182,11 @@ export default class ModalHelp extends Modal {
 
     }
 
+    /**
+     * Gets modal landing page and topic list.
+     *
+     * @method initContent
+     */
     async initContent() {
         try {
             const topicList = await ModalHelpAjax.getTopicList(this.contextId);
@@ -191,13 +204,23 @@ export default class ModalHelp extends Modal {
         }
     }
 
+    /**
+     * Resets modal content.
+     *
+     * @method resetModal
+     */
     resetModal() {
         this.setBody('');
         this.searchBox.val('');
         this.suggestionBox.html('');
     }
 
-    updateSearchBox() {
+    /**
+     * Updates the suggestion list based on whatever's in the search box.
+     *
+     * @method updateSuggestions
+     */
+    updateSuggestions() {
         const searchValue = this.searchBox.val();
         const topicIndex = this.topicIndex;
         const suggestionBox = this.suggestionBox;
@@ -208,44 +231,36 @@ export default class ModalHelp extends Modal {
         }
 
         this.suggestionBox.html('');
-        const suggestionMarkup = suggestions.map((suggestion) => {
-            return `<a href="#" class="modal-help-suggestion-item" data-value="${suggestion}">${suggestion}</a>`;
-        });
-        suggestionMarkup.forEach(markup => suggestionBox.append(markup));
-
+        for (const suggestion of suggestions) {
+            suggestionBox.append(`<a href="#" class="modal-help-suggestion-item"
+                                    data-value="${suggestion}">${suggestion}</a>`);
+        }
 
         this.showSuggestionBox();
     }
 
-    clearSearch() {
-        this.searchBox.val('');
-        this.hideSearchClear();
-    }
-
-    async search() {
-        const searchValue = this.searchBox.val();
-        const topic = this.topicList.find(topic => topic.title.toLowerCase() === searchValue.toLowerCase());
-        const url = topic.url.substr(topic.url.indexOf('/', 1));
-
-        if (!searchValue) {
+    async search(query) {
+        if (!query) {
             return;
         }
-
         try {
-            const guidePage = await ModalHelpAjax.getGuidePage(url);
-            const renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: guidePage.html});
-            this.hideSuggestionBox();
+            const searchResults = await ModalHelpAjax.searchGuides(this.contextId, query);
+            console.log(searchResults);
+            const renderPromise = Templates.render(TEMPLATES.MODAL_HELP_SEARCH_RESULTS, {searchResults: searchResults});
             this.setBody(renderPromise);
         }
         catch (error) {
-            console.error('error', error);
             Notification.exception(error);
         }
     }
 
-    async getPage(topicName) {
-        const topic = this.topicList.find(topic => topic.title.toLowerCase() === topicName.toLowerCase());
-        const url = topic.url.substr(topic.url.indexOf('/', 1));
+    /**
+     * Gets and outputs the guide page specified by url.
+     *
+     * @method getPage
+     * @param url The url without the domain etc (ie /guides/instructor/...)
+     */
+    async getPage(url) {
         try {
             const guidePage = await ModalHelpAjax.getGuidePage(url);
             const renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: guidePage.html, title: guidePage.title});
@@ -257,6 +272,10 @@ export default class ModalHelp extends Modal {
         }
     }
 
+    clearSearch() {
+        this.searchBox.val('');
+        this.hideSearchClear();
+    }
 
     showSuggestionBox() {
         this.suggestionBox.removeClass('d-none');

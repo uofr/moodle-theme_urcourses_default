@@ -69,5 +69,13 @@ $functions = array(
         'description'   => 'Gets a page from the guides.',
         'type'          => 'read',
         'ajax'          => 'true'
-	)
+    ),
+    'theme_urcourses_default_modal_help_search' => array(
+        'classname'     => 'theme_urcourses_default_external',
+        'methodname'    => 'modal_help_search',
+        'classpath'     => 'theme/urcourses_default/externallib.php',
+        'description'   => 'Searches the guides.',
+        'type'          => 'read',
+        'ajax'          => 'true'
+    )
 );

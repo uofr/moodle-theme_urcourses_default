@@ -22,6 +22,17 @@ export default class ModalHelpAjax {
         return Ajax.call([ajaxConfig])[0];
     }
 
+    static searchGuides(contextid, query) {
+        const ajaxConfig = {
+            methodname: 'theme_urcourses_default_modal_help_search',
+            args: {
+                contextid: contextid,
+                query: query
+            }
+        };
+        return Ajax.call([ajaxConfig])[0];
+    }
+
     static getGuidePage(url) {
         const ajaxConfig = {
             methodname: 'theme_urcourses_default_get_guide_page',

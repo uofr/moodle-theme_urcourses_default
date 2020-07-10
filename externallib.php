@@ -427,5 +427,62 @@ class theme_urcourses_default_external extends external_api {
         ));
     }
 
+    /**
+     * Returns description of modal_help_search's parameters.
+     *
+     * @return external_function_parameters
+     */
+    public static function modal_help_search_parameters() {
+        return new external_function_parameters(array(
+            'contextid' => new external_value(PARAM_INT),
+            'query' => new external_value(PARAM_TEXT)
+        ));
+    }
+
+    /**
+     * Searches the guides.
+     *
+     * @param int $contextid
+     * @param string $query
+     * @return array
+     */
+    public static function modal_help_search($contextid, $query) {
+        $params = self::validate_parameters(self::modal_help_search_parameters(), array(
+            'contextid' => $contextid,
+            'query' => $query
+        ));
+
+        $context = context::instance_by_id($params['contextid']);
+        self::validate_context($context);
+
+        $query = urlencode($query);
+        $search_url = new moodle_url("/guides/search.json/query:$query");
+        $json_output = json_decode(file_get_contents($search_url));
+
+        $search_results = $json_output->jsondata;
+        foreach($search_results as $result) {
+            $url = substr($result->url, strpos($result->url, '/', 1));
+            $result->url = $url;
+        }
+        
+        return $search_results;
+    }
+
+    /**
+     * Returns description of modal_help_serach's return value.
+     *
+     * @return external_single_structure
+     */
+    public static function modal_help_search_returns() {
+        return new external_multiple_structure(new external_single_structure(array(
+            'page-date' => new external_value(PARAM_TEXT),
+            'page-modified-date' => new external_value(PARAM_TEXT),
+            'url' => new external_value(PARAM_URL),
+            'search-prefix' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL, ''),
+            'page-title' => new external_value(PARAM_TEXT),
+            'excerpt' => new external_value(PARAM_TEXT)
+        )));
+    }
+
 }
 
