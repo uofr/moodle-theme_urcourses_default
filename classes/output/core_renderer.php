@@ -460,7 +460,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $context = [
                 'courseid' => $COURSE->id,
 				'availability' => $COURSE->visible,
-				'enrolment' => ''
+				'coursetools' => $this->get_course_tools()
             ];
             return $this->render_from_template('theme_urcourses_default/header_toggle_course_availability', $context);
         }
@@ -469,6 +469,31 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
 	}
 	
+	function get_course_tools() {
+        $context = [
+            'courseid' => $COURSE->id,
+			'availability' => $COURSE->visible,
+			'enrolment_state' => $this->get_course_enrolment(),
+			'course_state' => $this->get_course_request()
+        ];
+        return $this->render_from_template('theme_urcourses_default/header_course_tools', $context);
+	}
+	
+	function get_course_request() {
+        $context = [
+            'courseid' => $COURSE->id,
+			'availability' => $COURSE->visible
+        ];
+		return $this->render_from_template('theme_urcourses_default/header_course_request', $context);
+	}
+	
+	function get_course_enrolment() {
+        $context = [
+            'courseid' => $COURSE->id,
+			'availability' => $COURSE->visible
+        ];
+		return $this->render_from_template('theme_urcourses_default/header_course_enrolment', $context);
+	}
     /**
      * Override to display course settings on every course site for permanent access
      *
