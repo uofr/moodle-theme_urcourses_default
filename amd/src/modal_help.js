@@ -50,6 +50,7 @@ const TEMPLATES = {
  * @class ModalHelp
  * @property {Number} courseId - ID of current course.
  * @property {String} currentUrl - Path of current page.
+ * @property {Number} contextId - ID of the current page's context.
  * @property {Array} topicList - List of topcis for which there is help.
  * @property {FuzzySet} topicIndex - FuzzySet to enable fuzzy searching of topics.
  * @property {Number} minSearchScore - How similar a search has to be to attempt autocomplete.
@@ -64,8 +65,7 @@ export default class ModalHelp extends Modal {
     constructor(root) {
         super(root);
 
-        this.courseId = null;
-        this.currentUrl = null;
+        this.contextId = null;
         this.topicList = null;
         this.topicIndex = FuzzySet();
         this.minSearchScore = 0;
@@ -77,15 +77,13 @@ export default class ModalHelp extends Modal {
     }
 
     /**
-     * Sets up courseId, currentUrl properties and registers events.
+     * Sets up properties and registers events.
      *
      * @method init
-     * @param {Number} courseId The id of the current course.
-     * @param {String} currentUrl Current page's path.
+     * @param {Number} contextId Id of the current page's context.
      */
-    init(courseId, currentUrl) {
-        this.courseId = courseId;
-        this.currentUrl = currentUrl;
+    init(contextId) {
+        this.contextId = contextId;
 
         this.getRoot().on(ModalEvents.shown, () => {
             this.initContent();
@@ -178,19 +176,17 @@ export default class ModalHelp extends Modal {
 
     async initContent() {
         try {
-            const topicList = await ModalHelpAjax.getTopicList(this.courseId);
-            const landingPage = await ModalHelpAjax.getLandingPage(this.courseId, this.currentUrl);
-            const renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: landingPage.html});
-
+            const topicList = await ModalHelpAjax.getTopicList(this.contextId);
             this.topicList = topicList;
             for (const topic of topicList) {
                 this.topicIndex.add(topic.title);
             }
 
+            const landingPage = await ModalHelpAjax.getLandingPage(this.contextId);
+            const renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: landingPage.html});
             this.setBody(renderPromise);
         }
         catch(error) {
-            console.error('error', error);
             Notification.exception(error);
         }
     }

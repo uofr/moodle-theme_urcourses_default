@@ -1,24 +1,22 @@
 import Ajax from 'core/ajax';
-import Templates from 'core/templates';
 
 export default class ModalHelpAjax {
 
-    static async getLandingPage(courseid, currenturl) {
+    static async getLandingPage(contextid) {
         const ajaxConfig = {
             methodname: 'theme_urcourses_default_get_landing_page',
             args: {
-                courseid: courseid,
-                currenturl: currenturl
+                contextid: contextid
             }
         };
-        return  Ajax.call([ajaxConfig])[0];
+        return Ajax.call([ajaxConfig])[0];
     }
 
-    static getTopicList(courseid) {
+    static getTopicList(contextid) {
         const ajaxConfig = {
             methodname: 'theme_urcourses_default_get_topic_list',
             args: {
-                courseid: courseid
+                contextid: contextid
             }
         };
         return Ajax.call([ajaxConfig])[0];

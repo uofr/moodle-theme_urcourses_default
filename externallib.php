@@ -22,6 +22,7 @@
  *
  */
 
+use block_recentlyaccesseditems\external;
 use Symfony\Component\Console\Descriptor\JsonDescriptor;
 
 defined('MOODLE_INTERNAL') || die();
@@ -235,13 +236,14 @@ class theme_urcourses_default_external extends external_api {
 
     /**
      * Checks if the current user is an instructor.
-     * If a course id other than 1 is passed, we check if the user is the instructor of that course.
-     * Otherwise we check if they are an instructor in any course.
+     * Users with the teacher, editingteacher, manager, and coursecreator roles are considered instructors.
+     * If we are in the site context, check if the user is an instructor anywhere.
+     * Otherwiser, check if the user is an instructor in the given context.
      *
-     * @param int $course_id
+     * @param context $context
      * @return bool
      */
-    public static function user_is_instructor($course_id) {
+    public static function user_is_instructor($context) {
         global $USER, $DB;
 
         $role_query_cond = 'shortname = :a OR shortname = :b OR shortname = :c OR shortname = :d';
@@ -257,27 +259,23 @@ class theme_urcourses_default_external extends external_api {
             'r3' => $instructor_roles[3]
         ];
 
-        // If we are not on a site page, check if $USER is an instructor of the current course.
-        if ($course_id !== 1) {
+        if ($context->contextlevel !== CONTEXT_SYSTEM) {
             $roleassign_query_cond .= 'AND contextid = :cid';
-            $roleassign_query_arr['cid'] = \context_course::instance($course_id)->id;
+            $roleassign_query_arr['cid'] = $context->id;
         }
 
         return $DB->record_exists_select('role_assignments', $roleassign_query_cond, $roleassign_query_arr);
     }
 
     /**
-     * Describes parameters passed to get_landing_page.
+     * Returns description of get_landing_page's parameters.
      *
      * @return external_function_parameters
      */
     public static function get_landing_page_parameters() {
-        return new external_function_parameters(
-            array(
-                'courseid' => new external_value(PARAM_INT),
-                'currenturl' => new external_value(PARAM_TEXT)
-            )
-        );
+        return new external_function_parameters(array(
+            'contextid' => new external_value(PARAM_INT)
+        ));
     }
 
     /**
@@ -287,22 +285,23 @@ class theme_urcourses_default_external extends external_api {
      * @param int $currenturl
      * @return array
      */
-    public static function get_landing_page($courseid, $currenturl) {
+    public static function get_landing_page($contextid) {
+        global $PAGE;
+
         $params = self::validate_parameters(self::get_landing_page_parameters(), array(
-            'courseid' => $courseid,
-            'currenturl' => $currenturl
+            'contextid' => $contextid
         ));
 
-        if (self::user_is_instructor($params['courseid'])) {
-            $content_url = new moodle_url('/guides/instructor.json');
-        }
-        else {
-            $content_url = new moodle_url('/guides/student.json');
-        }
+        $context = context::instance_by_id($params['contextid']);
+        self::validate_context($context);
 
-        $json_output = json_decode(file_get_contents($content_url));
+        $content_url = new moodle_url("/guides/urmodal.json/p:mod_$PAGE->activityname");
+        $json_output = json_decode(file_get_contents($content_url->out()));
 
-        return array('html' => $json_output->content);
+        return array(
+            'html' => $json_output->jsondata->param_p_data[0]->content,
+            'contenturls' => $json_output->jsondata->param_p_data[0]->contenturls
+        );
     }
 
     /**
@@ -312,18 +311,22 @@ class theme_urcourses_default_external extends external_api {
     */
     public static function get_landing_page_returns() {
         return new external_single_structure(array(
-            'html' => new external_value(PARAM_RAW)
+            'html' => new external_value(PARAM_RAW),
+            'contenturls' => new external_multiple_structure(new external_single_structure(array(
+                'name' => new external_value(PARAM_TEXT),
+                'url' => new external_value(PARAM_URL)
+            )))
         ));
     }
 
     /**
-     * Returns description of params passed to get_topic_list.
+     * Returns description of get_topic_list's parameters.
      *
      * @return external_function_parameters
      */
     public static function get_topic_list_parameters() {
         return new external_function_parameters(array(
-            'courseid' => new external_value(PARAM_INT)
+            'contextid' => new external_value(PARAM_INT)
         ));
     }
 
@@ -332,23 +335,23 @@ class theme_urcourses_default_external extends external_api {
      *
      * @return array
      */
-    public static function get_topic_list($courseid) {
+    public static function get_topic_list($contextid) {
         $params = self::validate_parameters(self::get_topic_list_parameters(), array(
-            'courseid' => $courseid
+            'contextid' => $contextid
         ));
+
+        $context = context::instance_by_id($params['contextid']);
+        self::validate_context($context);
 
         $content_url = new moodle_url('/guides/social/sample-b.json');
         $json_output = json_decode(file_get_contents($content_url));
         $topic_list_full = $json_output->jsondata->page_data[0]->all_pages;
 
-        // Get rid of html special characters (such as &amp;)
         foreach ($topic_list_full as $topic) {
             $topic->title = htmlspecialchars_decode($topic->title);
         }
 
-        // Filter topics for students/instructors.
-        // Remove Student/Instructor home pages.
-        if (self::user_is_instructor($params['courseid'])) {
+        if (self::user_is_instructor($context)) {
             $topic_list = array_filter($topic_list_full, function($item) {
                 return $item->prefix === 'Instructor' && $item->title !== 'Instructor';
             });
@@ -359,7 +362,6 @@ class theme_urcourses_default_external extends external_api {
             });
         }
 
-        // Sort topic list alphabetically.
         usort($topic_list, function($a, $b) {
             return $a->title < $b->title ? -1 : 1;
         });
