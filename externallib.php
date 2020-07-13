@@ -348,6 +348,8 @@ class theme_urcourses_default_external extends external_api {
         $topic_list_full = $json_output->jsondata->page_data[0]->all_pages;
 
         foreach ($topic_list_full as $topic) {
+            $url = substr($topic->url, strpos($topic->url, '/', 1));
+            $topic->url = $url;
             $topic->title = htmlspecialchars_decode($topic->title);
         }
 
@@ -404,7 +406,7 @@ class theme_urcourses_default_external extends external_api {
             'url' => $url
         ));
 
-        $content_url = (new moodle_url($params['url'] . '.json'))->__toString();
+        $content_url = new moodle_url($params['url'] . '.json');
         $json_output = json_decode(file_get_contents($content_url));
         $html = ($json_output->content) ? $json_output->content : $json_output->jsondata->page_data[0]->content;
         $title = ($json_output->title === '') ? $json_output->title : $json_output->jsondata->page_data[0]->title;
@@ -455,7 +457,7 @@ class theme_urcourses_default_external extends external_api {
         $context = context::instance_by_id($params['contextid']);
         self::validate_context($context);
 
-        $query = urlencode($query);
+        $query = urlencode($params['query']);
         $search_url = new moodle_url("/guides/search.json/query:$query");
         $json_output = json_decode(file_get_contents($search_url));
 
