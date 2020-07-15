@@ -409,7 +409,7 @@ class theme_urcourses_default_external extends external_api {
         $content_url = new moodle_url($params['url'] . '.json');
         $json_output = json_decode(file_get_contents($content_url));
         $html = ($json_output->content) ? $json_output->content : $json_output->jsondata->page_data[0]->content;
-        $title = ($json_output->title === '') ? $json_output->title : $json_output->jsondata->page_data[0]->title;
+        $title = $json_output->jsondata ? $json_output->jsondata->page_data[0]->title : '';
 
         return array(
             'html' => $html,

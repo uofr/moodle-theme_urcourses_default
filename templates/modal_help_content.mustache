@@ -1,10 +1,27 @@
-<div class="d-flex flex-column mb-3">
-    {{#links}}
-         <a href="#">{{name}}</a>
-    {{/links}}
+<div id="breadcrumbs"> 
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#" id="breadcrumb_home">Home</a>
+        </li>
+        {{#breadcrumbs}}
+            {{#search}}
+                <li class="breadcrumb-item">
+                    <a href="#" id="breadcrumb_search" data-query="{{{query}}}">
+                        Search Results
+                    </a>
+                </li>
+            {{/search}}
+            {{#page}}
+                <li class="breadcrumb-item">
+                    <a href="#" id="breadcrumb_page" data-url="{{{url}}}" data-title="{{title}}">
+                        {{title}}
+                    </a>
+                </li>
+            {{/page}}
+        {{/breadcrumbs}}
+    </ol>   
 </div>
 
-<div>
-    <h2>{{{title}}}</h2>
-    {{{html}}}
-</div>
+{{#data}}
+    {{$content}} {{/content}}
+{{/data}}

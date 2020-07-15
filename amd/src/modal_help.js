@@ -38,27 +38,33 @@ const SELECTORS = {
     SEARCH_CLEAR: '#modal_help_search_clear',
     SUGGESTIONS: '#modal_help_search_suggestions',
     SUGGESTION_ITEM: '.modal-help-suggestion-item',
-    SEARCH_RESULT: '.modal-help-search-result'
+    SEARCH_RESULT: '.modal-help-search-result',
+    BREADCRUMBS: '#breadcrumbs',
+    BREADCRUMB_SEARCH: '#breadcrumb_search',
+    BREADCRUMB_HOME: '#breadcrumb_home',
+    BREADCRUMB_PAGE: '#breadcrumb_page'
 };
 
 const TEMPLATES = {
-    MODAL_HELP_CONTENT: 'theme_urcourses_default/modal_help_content',
-    MODAL_HELP_SEARCH_RESULTS: 'theme_urcourses_default/modal_help_search_results'
+    MODAL_HELP_GUIDE_PAGE: 'theme_urcourses_default/modal_help_guide_page',
+    MODAL_HELP_SEARCH_RESULTS: 'theme_urcourses_default/modal_help_search_results',
+    MODAL_HELP_BREADCRUMBS: 'theme_urcourses_default/modal_help_breadcrumbs'
 };
 
 /**
  * Help modal for UR Courses.
  *
  * @class ModalHelp
- * @property {Number} contextId - ID of the current page's context. Null until it is set in init.
- * @property {Array} topicList - List of topcis for which there is help. Null until it is set in initContent.
+ * @property {Number} contextId - Current page context id. Null until it is set in init().
+ * @property {Array} topicList - List of topcis for which there is help. Null until it is set in initContent().
  * @property {FuzzySet} topicIndex - FuzzySet to enable autocomplete.
  * @property {Number} minSearchScore - How similar a search term has to be to attempt autocomplete.
  * @property {JQuery} searchBox - Search field jQuery element.
  * @property {JQuery} searchButton - Search button jQuery object.
  * @property {JQuery} searchClear - Clear search jQuery object.
  * @property {JQuery} suggestionBox - Suggestion box jQuery object.
- * @property {Number} suggestionItemIndex - Index of the autocomplete suggestion being selected.
+ * @property {Number} suggestionItemIndex - Index of the suggestion being highlighted.
+ * @property {Object} breadcrumbData - Used to render breadcrumb template.
  */
 export default class ModalHelp extends Modal {
 
@@ -74,10 +80,11 @@ export default class ModalHelp extends Modal {
         this.searchClear = this.modal.find(SELECTORS.SEARCH_CLEAR);
         this.suggestionBox = this.modal.find(SELECTORS.SUGGESTIONS);
         this.suggestionItemIndex = 0;
+        this.breadcrumbData = {};
     }
 
     /**
-     * Sets contextid and registers events.
+     * Sets context id and registers events.
      *
      * @method init
      * @param {Number} contextId Id of the current page's context.
@@ -86,7 +93,10 @@ export default class ModalHelp extends Modal {
         this.contextId = contextId;
 
         this.getRoot().on(ModalEvents.shown, () => {
-            this.initContent();
+            if (!this.topicList) {
+                this.initTopics();
+            }
+            this.showLandingPage();
         });
 
         this.getRoot().on(ModalEvents.hidden, () => {
@@ -106,13 +116,11 @@ export default class ModalHelp extends Modal {
             else {
                 this.hideSearchClear();
             }
-
             this.updateSuggestions();
         });
 
         this.searchBox.on('focus', () => {
             this.updateSuggestions();
-            this.suggestionBox[0].scrollTop = 0;
         });
 
         this.searchClear.on('click', () => {
@@ -121,14 +129,14 @@ export default class ModalHelp extends Modal {
 
         this.searchButton.on('click', () => {
             const query = this.searchBox.val();
-            this.search(query);
+            this.showSearchResults(query);
             this.hideSuggestionBox();
         });
 
         this.searchBox.on('keydown', (e) => {
             if (e.keyCode === KeyCodes.enter) {
                 const query = this.searchBox.val();
-                this.search(query);
+                this.showSearchResults(query);
                 this.getModal().focus();
                 this.hideSuggestionBox();
             }
@@ -140,12 +148,13 @@ export default class ModalHelp extends Modal {
             const url = topic.url;
             this.searchBox.val(topicTitle);
             this.showSearchClear();
-            this.getPage(url);
+            this.showSuggestionPage(url, topicTitle);
         });
 
         this.getModal().on(CustomEvents.events.activate, SELECTORS.SEARCH_RESULT, (e) => {
             const url = $(e.target).attr('data-url');
-            this.getPage(url);
+            const title = $(e.target).attr('data-title');
+            this.showSearchResult(url, title);
         });
 
         this.searchBox.on('keydown', (e) => {
@@ -180,26 +189,69 @@ export default class ModalHelp extends Modal {
             }
         });
 
+        this.getRoot().on(CustomEvents.events.activate, SELECTORS.BREADCRUMB_HOME, () => {
+            if (this.breadcrumbData.search || this.breadcrumbData.page) {
+                this.showLandingPage();
+            }
+        });
+
+        this.getRoot().on(CustomEvents.events.activate, SELECTORS.BREADCRUMB_SEARCH, (e) => {
+            if (this.breadcrumbData.page) {
+                const query = $(e.target).attr('data-query');
+                this.showSearchResults(query);
+            }
+        });
+
     }
 
     /**
-     * Sets up topic list and outputs landing page.
+     * Update the modal body using given template and data.
      *
-     * @method initContent
+     * @method render
+     * @param {String} template - The name of the template to render.
+     * @param {Object} data - Data for template.
+     * @param {Object} breadcrumbData - Data required for rending breadcrumbs.
      */
-    async initContent() {
+    async render(template, data, breadcrumbData) {
+        const renderData = {
+            data: data,
+            breadcrumbs: breadcrumbData
+        };
+        const renderPromise = Templates.render(template, renderData);
+        this.setBody(renderPromise);
+    }
+
+    /*
+     * Sets topicIndex and topicList.
+     *
+     * @method initTopics
+     */
+    async initTopics() {
         try {
             const topicList = await ModalHelpAjax.getTopicList(this.contextId);
             this.topicList = topicList;
             for (const topic of topicList) {
                 this.topicIndex.add(topic.title);
             }
-
-            const landingPage = await ModalHelpAjax.getLandingPage(this.contextId);
-            const renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: landingPage.html});
-            this.setBody(renderPromise);
         }
-        catch(error) {
+        catch (error) {
+            Notification.exception(error);
+        }
+    }
+
+    /**
+     * Outputs modal home page to modal.
+     *
+     * @method showLandingPage
+     */
+    async showLandingPage() {
+        try {
+            const landingPage = await ModalHelpAjax.getLandingPage(this.contextId);
+            this.breadcrumbData.search = false;
+            this.breadcrumbData.page = false;
+            this.render(TEMPLATES.MODAL_HELP_GUIDE_PAGE, landingPage, this.breadcrumbData);
+        }
+        catch (error) {
             Notification.exception(error);
         }
     }
@@ -216,46 +268,55 @@ export default class ModalHelp extends Modal {
     }
 
     /**
-     * Updates the suggestion list based on whatever's in the search box.
+     * Updates the suggestion list based on whatever is in the search box.
      *
      * @method updateSuggestions
      */
     updateSuggestions() {
-        const searchValue = this.searchBox.val();
-        const topicIndex = this.topicIndex;
-        const suggestionBox = this.suggestionBox;
+        const query = this.searchBox.val();
+        const defaultSuggestions = this.topicIndex.values();
+        const minScore = this.minSearchScore;
+        const suggestions = this.getSuggestions(query, defaultSuggestions, minScore);
+        this.suggestionBox.html('');
+        this.suggestionBox.append(suggestions);
+        this.showSuggestionBox();
+    }
 
-        let suggestions = topicIndex.get(searchValue, topicIndex.values(), this.minSearchScore);
+    /**
+     * Get a list of suggestions based on the query.
+     *
+     * @method getSuggestions
+     * @param {String} query - What to fuzzy search for in the topicList.
+     * @param {Array} defaultSuggestions - Default suggestions to show if there is no match.
+     * @param {Number} minScore - How similar the query has to be to a topic.
+     * @returns {Array} An array of html tags.
+     */
+    getSuggestions(query, defaultSuggestions, minScore) {
+        let suggestions = this.topicIndex.get(query, defaultSuggestions, minScore);
         if (Array.isArray(suggestions[0])) {
             suggestions = suggestions.map(suggestion => suggestion[1]);
         }
-
-        this.suggestionBox.html('');
-        for (const suggestion of suggestions) {
-            suggestionBox.append(`<a href="#" class="modal-help-suggestion-item"
-                                    data-value="${suggestion}">${suggestion}</a>`);
-        }
-
-        this.showSuggestionBox();
+        return suggestions.map(suggestion => `<a href="#" class="modal-help-suggestion-item"
+                                              data-value="${suggestion}">${suggestion}</a>`);
     }
 
     /**
      * Searches the guides and displays results.
      *
-     * @method search
+     * @method showSearchResults
      * @param {String} query
      */
-    async search(query) {
+    async showSearchResults(query) {
         if (!query) {
             return;
         }
         try {
             const searchResults = await ModalHelpAjax.searchGuides(this.contextId, query);
-            const renderPromise = Templates.render(TEMPLATES.MODAL_HELP_SEARCH_RESULTS, {
-                searchResults: searchResults.results,
-                query: searchResults.query
-            });
-            this.setBody(renderPromise);
+            this.breadcrumbData.search = {
+                query: query
+            };
+            this.breadcrumbData.page = false;
+            this.render(TEMPLATES.MODAL_HELP_SEARCH_RESULTS, searchResults, this.breadcrumbData);
         }
         catch (error) {
             Notification.exception(error);
@@ -263,21 +324,48 @@ export default class ModalHelp extends Modal {
     }
 
     /**
-     * Fetches and outputs the guide page specified by url.
+     * Render the page for the search result the user clicked on.
      *
-     * @method getPage
-     * @param {String} url The url without the domain (ie /guides/instructor/...)
+     * @method showPage
+     * @param {String} url  - The url without the domain (ie /guides/instructor/...)
+     * @param {String} title - Page title.
      */
-    async getPage(url) {
+    async showSearchResult(url, title) {
         try {
             const guidePage = await ModalHelpAjax.getGuidePage(url);
-            const renderPromise = Templates.render(TEMPLATES.MODAL_HELP_CONTENT, {html: guidePage.html, title: guidePage.title});
-            this.setBody(renderPromise);
+            this.breadcrumbData.page = {
+                url: url,
+                title: title
+            };
+            this.render(TEMPLATES.MODAL_HELP_GUIDE_PAGE, guidePage, this.breadcrumbData);
         }
         catch (error) {
             Notification.exception(error);
         }
     }
+
+    /**
+     * Render the page for the suggestion the user clicked on.
+     *
+     * @method showSuggestionPage
+     * @param {String} url - The url without the domain (ie: /guides/instructor/...)
+     * @param {String} title - Page title.
+     */
+    async showSuggestionPage(url, title) {
+        try {
+            const guidePage = await ModalHelpAjax.getGuidePage(url);
+            this.breadcrumbData.search = false;
+            this.breadcrumbData.page = {
+                url: url,
+                title: title
+            };
+            this.render(TEMPLATES.MODAL_HELP_GUIDE_PAGE, guidePage, this.breadcrumbData);
+        }
+        catch (error) {
+            Notification.exception(error);
+        }
+    }
+
 
     /**
      * Clears whatever is in the search box.
@@ -290,12 +378,13 @@ export default class ModalHelp extends Modal {
     }
 
     /**
-     * Removes d-none class from suggestion box.
+     * Removes d-none class from suggestion box and scrolls to the top of the list.
      *
      * @method showSuggestionBox
      */
     showSuggestionBox() {
         this.suggestionBox.removeClass('d-none');
+        this.suggestionBox[0].scrollTop = 0;
     }
 
     /**
@@ -329,6 +418,7 @@ export default class ModalHelp extends Modal {
      * Returns modal type. Used when creating the modal using ModalFactory.
      *
      * @method getType
+     * @returns {String}
      */
     static getType() {
         return 'theme_urcourses_default-help';
@@ -338,6 +428,7 @@ export default class ModalHelp extends Modal {
      * Returns an array of suggestions in the suggestion box.
      *
      * @method getSuggestionItems
+     * @returns {JQuery}
      */
     getSuggestionItems() {
         return this.suggestionBox.find(SELECTORS.SUGGESTION_ITEM);
