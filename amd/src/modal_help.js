@@ -80,7 +80,7 @@ export default class ModalHelp extends Modal {
         this.searchClear = this.modal.find(SELECTORS.SEARCH_CLEAR);
         this.suggestionBox = this.modal.find(SELECTORS.SUGGESTIONS);
         this.suggestionItemIndex = 0;
-        this.breadcrumbData = {};
+        this.breadcrumbData = {search: false, page: false, home: false};
     }
 
     /**
@@ -190,16 +190,12 @@ export default class ModalHelp extends Modal {
         });
 
         this.getRoot().on(CustomEvents.events.activate, SELECTORS.BREADCRUMB_HOME, () => {
-            if (this.breadcrumbData.search || this.breadcrumbData.page) {
-                this.showLandingPage();
-            }
+            this.showLandingPage();
         });
 
         this.getRoot().on(CustomEvents.events.activate, SELECTORS.BREADCRUMB_SEARCH, (e) => {
-            if (this.breadcrumbData.page) {
-                const query = $(e.target).attr('data-query');
-                this.showSearchResults(query);
-            }
+            const query = $(e.target).attr('data-query');
+            this.showSearchResults(query);
         });
 
     }
@@ -247,6 +243,7 @@ export default class ModalHelp extends Modal {
     async showLandingPage() {
         try {
             const landingPage = await ModalHelpAjax.getLandingPage(this.contextId);
+            this.breadcrumbData.home = true;
             this.breadcrumbData.search = false;
             this.breadcrumbData.page = false;
             this.render(TEMPLATES.MODAL_HELP_GUIDE_PAGE, landingPage, this.breadcrumbData);
@@ -312,8 +309,10 @@ export default class ModalHelp extends Modal {
         }
         try {
             const searchResults = await ModalHelpAjax.searchGuides(this.contextId, query);
+            this.breadcrumbData.home = false;
             this.breadcrumbData.search = {
-                query: query
+                query: query,
+                active: true
             };
             this.breadcrumbData.page = false;
             this.render(TEMPLATES.MODAL_HELP_SEARCH_RESULTS, searchResults, this.breadcrumbData);
@@ -333,6 +332,8 @@ export default class ModalHelp extends Modal {
     async showSearchResult(url, title) {
         try {
             const guidePage = await ModalHelpAjax.getGuidePage(url);
+            this.breadcrumbData.home = false;
+            this.breadcrumbData.search.active = false;
             this.breadcrumbData.page = {
                 url: url,
                 title: title
@@ -354,6 +355,7 @@ export default class ModalHelp extends Modal {
     async showSuggestionPage(url, title) {
         try {
             const guidePage = await ModalHelpAjax.getGuidePage(url);
+            this.breadcrumbData.home = false;
             this.breadcrumbData.search = false;
             this.breadcrumbData.page = {
                 url: url,

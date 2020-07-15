@@ -2650,8 +2650,14 @@ body.format-topcoll.editing .section .activity .activityinstance {
         }
     }
 }
+
 .modal-help-header .modal-help-suggestion-box .modal-help-suggestion-item.suggestion-active {
     background-color: #f2f2f2;
+}
+
+.modal-help-breadcrumbs {
+    padding: .75rem 1rem;
+    font-weight: bold;
 }
 
 #avail_btn {
