@@ -209,8 +209,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
         /* ORIGINAL START
         $header->settingsmenu = $this->context_header_settings_menu();
         ORIGINAL END. */
-		
-		$sitecontextheader = '<div class="page-context-header"><div class="page-header-headings"><h1>'.$COURSE->fullname.'</h1></div></div>';
+        
+        $sitecontextheader = '<div class="page-context-header"><div class="page-header-headings"><h1>'.$COURSE->fullname.'</h1></div></div>';
         $headertext = (!empty($this->context_header())) ? $this->context_header() : $sitecontextheader;
         $header->contextheader = '<a href="'.$CFG->wwwroot.'/course/view.php?id='.$COURSE->id.'">'.$headertext.'</a>';  
 
@@ -225,12 +225,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         $header->hasnavbar = empty($PAGE->layout_options['nonavbar']);
         $header->navbar = $this->navbar();
-		
-		// TODO: Show notice if course is hidden AND editing is turned on
-		$header->toggle_course_availability = $this->get_course_toggle_availability();
-		
-		
-		
+        
+        // TODO: Show notice if course is hidden AND editing is turned on
+        $header->toggle_course_availability = $this->get_course_toggle_availability();
+        
+        
+        
         // MODIFICATION START.
         // Show the page heading button on all pages except for the profile page.
         // There we replace it with an edit profile button.
@@ -259,7 +259,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $header->pageheadingbutton = $this->page_heading_button();
         ORIGINAL END. */
         $header->courseheader = $this->course_header();
-		
+        
         $header->instructors = $this->course_authornames();
         $instnum = substr_count($this->course_authornames(), 'href');
         if ($instnum > 2) {
@@ -267,9 +267,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
         else  $header->instructnum = "smalllist"; 
         
-		$hascoursecat = $this->ur_check_course_cat();
-		
-		$coursecat = (!empty($hascoursecat)) ? $hascoursecat['name'] : '';
+        $hascoursecat = $this->ur_check_course_cat();
+        
+        $coursecat = (!empty($hascoursecat)) ? $hascoursecat['name'] : '';
         $header->facultydep = $coursecat;
         
         // JL EDIT - Add course image uploader button.
@@ -279,32 +279,32 @@ class core_renderer extends \theme_boost\output\core_renderer {
             if (strpos($this->page->url, '/course/view.php')) {
                 $header->course_image_uploader = $this->get_course_image_uploader();
                 $header->course_header_style = $this->get_course_header_style();
-	        }
-			
-			//check if course has alternate header style in database
-			if($record = $DB->get_record('theme_urcourses_hdrstyle', array('courseid'=>$COURSE->id, 'hdrstyle'=>1))){
-				$headerstyle = 1;
-			} else {
-				$headerstyle = 0;	
-			}
-			
-			
+            }
+            
+            //check if course has alternate header style in database
+            if($record = $DB->get_record('theme_urcourses_hdrstyle', array('courseid'=>$COURSE->id, 'hdrstyle'=>1))){
+                $headerstyle = 1;
+            } else {
+                $headerstyle = 0;   
+            }
+            
+            
         } else $headerstyle = 1;
-		
-		$header->headerstyle = $headerstyle;
-		
+        
+        $header->headerstyle = $headerstyle;
+        
         $context = \context_course::instance($COURSE->id);
-		
-		$urenderer = $PAGE->get_renderer('core');
-		$exporter = new course_summary_exporter($COURSE, ['context' => $context]);
-		$cobits = $exporter->export($urenderer);
-		
-		$header->courseimage = $cobits->courseimage;
-		if ($COURSE->id == 1) $header->courseimage = $CFG->wwwroot.'/theme/urcourses_default/pix/siteheader.jpg';
+        
+        $urenderer = $PAGE->get_renderer('core');
+        $exporter = new course_summary_exporter($COURSE, ['context' => $context]);
+        $cobits = $exporter->export($urenderer);
+        
+        $header->courseimage = $cobits->courseimage;
+        if ($COURSE->id == 1) $header->courseimage = $CFG->wwwroot.'/theme/urcourses_default/pix/siteheader.jpg';
         
         // modal_help edit
         $header->context_id = $PAGE->context->id;
-		
+        
         // MODIFICATION START:
         // Change this to add the result in the html variable to be able to add further features below the header.
         // Render from the own header template.
@@ -403,97 +403,107 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
     }
 
-	
-	public function get_course_header_style() {
+    
+    public function get_course_header_style() {
         global $CFG, $DB, $COURSE;
         
-		
-		//check if course has alternate style in database
-		if($record = $DB->get_record('theme_urcourses_hdrstyle', array('courseid'=>$COURSE->id, 'hdrstyle'=>1))){
-		    $headerstyle = 1;
-		} else {
-			$headerstyle = 0;
-		}
-		
+        
+        //check if course has alternate style in database
+        if($record = $DB->get_record('theme_urcourses_hdrstyle', array('courseid'=>$COURSE->id, 'hdrstyle'=>1))){
+            $headerstyle = 1;
+        } else {
+            $headerstyle = 0;
+        }
+        
         if ($this->page->user_is_editing()) {
             $context = [
                 'courseid' => $COURSE->id,
-				'headerstyle' => $headerstyle
+                'headerstyle' => $headerstyle
             ];
             return $this->render_from_template('theme_urcourses_default/header_course_style_chooser', $context);
         }
         else {
             return false;
         }
-	}
-	
-	
-	public function get_course_toggle_availability() {
+    }
+    
+    
+    public function get_course_toggle_availability() {
         global $CFG, $DB, $COURSE, $USER, $PAGE;
         
-		/*
-		$sql = <<<EOD
-		            select crn, subject, course, section, title from ur_course_info
-		            where semester='{$CFG->ur_current_semester}' and crn in (
-		                select crn from ur_instructors where
-		                    semester='{$CFG->ur_current_semester}' and
-		                    username='{$USER->username}'
-		            ) and crn in (
-		                select crn from ur_crn_map where semester='{$CFG->ur_current_semester}'
-		            ) order by subject, course, section
-		EOD;
-		
-		$enrol_output = array();
-		
+        /*
+        $sql = <<<EOD
+                    select crn, subject, course, section, title from ur_course_info
+                    where semester='{$CFG->ur_current_semester}' and crn in (
+                        select crn from ur_instructors where
+                            semester='{$CFG->ur_current_semester}' and
+                            username='{$USER->username}'
+                    ) and crn in (
+                        select crn from ur_crn_map where semester='{$CFG->ur_current_semester}'
+                    ) order by subject, course, section
+        EOD;
+        
+        $enrol_output = array();
+        
         $rs = $DB->get_recordset_sql($sql);
         foreach($rs as $course) {
-			$enrol_output[$course->crn] = 'CRN: '.$course->crn.' '.$course->subject.' '.$course->section;
-		}
-		*/
-		
-		//only show availability bar when on course main page, but not site home
-		$allowurl = $CFG->wwwroot.'/course/view.php?id='.$COURSE->id;
-		
-		if ($COURSE->id==1||$PAGE->url!=$allowurl) return false; 
-		
+            $enrol_output[$course->crn] = 'CRN: '.$course->crn.' '.$course->subject.' '.$course->section;
+        }
+        */
+        
+        //only show availability bar when on course main page, but not site home
+        $allowurl = $CFG->wwwroot.'/course/view.php?id='.$COURSE->id;
+        
+        if ($COURSE->id==1||$PAGE->url!=$allowurl) return false; 
+        
         if ($this->page->user_is_editing()||(has_capability('moodle/course:update', context_course::instance($COURSE->id))&&$COURSE->visible==0)) {
             $context = [
                 'courseid' => $COURSE->id,
-				'availability' => $COURSE->visible,
-				'coursetools' => $this->get_course_tools()
+                'availability' => $COURSE->visible,
+                'visibility' => $this->get_course_visibility(),
+                'coursetools' => $this->get_course_tools()
             ];
             return $this->render_from_template('theme_urcourses_default/header_toggle_course_availability', $context);
         }
         else {
             return false;
         }
-	}
-	
-	function get_course_tools() {
+    }
+    
+    
+    public function get_course_visibility() {
+        global $CFG, $DB, $COURSE, $USER, $PAGE;
+
+        // check if date is past, current, active
+		
+		return false;
+    }
+    
+    function get_course_tools() {
         $context = [
             'courseid' => $COURSE->id,
-			'availability' => $COURSE->visible,
-			'enrolment_state' => $this->get_course_enrolment(),
-			'course_state' => $this->get_course_request()
+            'availability' => $COURSE->visible,
+            'enrolment_state' => $this->get_course_enrolment(),
+            'course_state' => $this->get_course_request()
         ];
         return $this->render_from_template('theme_urcourses_default/header_course_tools', $context);
-	}
-	
-	function get_course_request() {
+    }
+    
+    function get_course_request() {
         $context = [
             'courseid' => $COURSE->id,
-			'availability' => $COURSE->visible
+            'availability' => $COURSE->visible
         ];
-		return $this->render_from_template('theme_urcourses_default/header_course_request', $context);
-	}
-	
-	function get_course_enrolment() {
+        return $this->render_from_template('theme_urcourses_default/header_course_request', $context);
+    }
+    
+    function get_course_enrolment() {
         $context = [
             'courseid' => $COURSE->id,
-			'availability' => $COURSE->visible
+            'availability' => $COURSE->visible
         ];
-		return $this->render_from_template('theme_urcourses_default/header_course_enrolment', $context);
-	}
+        return $this->render_from_template('theme_urcourses_default/header_course_enrolment', $context);
+    }
     /**
      * Override to display course settings on every course site for permanent access
      *
@@ -631,9 +641,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $url = $url->out(false);
         }
         $context->logourl = $url;
-		
-		$context->loginlogourl = $OUTPUT->image_url('uofr_logo_primary_blk', 'theme');
-		
+        
+        $context->loginlogourl = $OUTPUT->image_url('uofr_logo_primary_blk', 'theme');
+        
         $context->sitename = format_string($SITE->fullname, true,
             ['context' => context_course::instance(SITEID), "escape" => false]);
         // MODIFICATION START.
@@ -669,16 +679,16 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
         // MODIFICATION END.
     }
-	
-	public function activity_navigation() {
-	        return '';
-	    }
-	
-	public function course_authornames() {
+    
+    public function activity_navigation() {
+            return '';
+        }
+    
+    public function course_authornames() {
 
     global $CFG, $USER, $DB, $OUTPUT, $COURSE;
 
-	// expecting $course
+    // expecting $course
 
     //$context = get_context_instance(CONTEXT_COURSE, $COURSE->id);
     $context = context_course::instance($COURSE->id);
@@ -693,7 +703,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         if (!isset($COURSE->managers)) {
             $rusers = get_role_users($managerroles, $context, true,
                 'ra.id AS raid, u.id, u.username, u.firstname, u.lastname,
-				 u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename,
+                 u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename,
                  r.name AS rolename, r.sortorder, r.id AS roleid',
                 'r.sortorder ASC, u.lastname ASC');
         } else {
@@ -735,8 +745,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $course_authornames = html_writer::start_tag('div', array('class'=>'teacherlist'));
             $course_authornames .= implode('', $namesarray);
             $course_authornames .= html_writer::end_tag('div');
-			
-			return $course_authornames;
+            
+            return $course_authornames;
         } else return '';
     }
 
@@ -804,41 +814,41 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
 
 function ur_check_course_cat() {
-	global $CFG,$DB,$COURSE;
+    global $CFG,$DB,$COURSE;
 
-	$ur_categories = array('','default'=>'',
-							'arts'=>'Faculty of Arts',
-							'business'=>'Faculty of Business Administration',
-							'campion'=>'Campion College',
-							'cnpp'=>'Collaborative Nurse Practitioner Program',
-							'education'=>'Faculty of Education',
-							'engineering'=>'Faculty of Engineering and Applied Science',
-							'fnuniv'=>'First Nations University of Canada',
-							'gbus'=>'Kenneth Levene Graduate School of Business',
-							'jsgspp'=>'Johnson Shoyama Graduate School of Public Policy',
-							'khs'=>'Faculty of Kinesiology and Health Studies',
-							'lacite'=>'La Cit&eacute;',
-							'luther'=>'Luther College',
-							'luthervssn'=>'Luther College VSSN',
-							'map'=>'Faculty of Media, Art, and Performance',
-							'nursing'=>'Faculty of Nursing',
-							'scbscn'=>'',
-							'science'=>'Faculty of Science',
-							'socialwork'=>'Faculty of Social Work');
+    $ur_categories = array('','default'=>'',
+                            'arts'=>'Faculty of Arts',
+                            'business'=>'Faculty of Business Administration',
+                            'campion'=>'Campion College',
+                            'cnpp'=>'Collaborative Nurse Practitioner Program',
+                            'education'=>'Faculty of Education',
+                            'engineering'=>'Faculty of Engineering and Applied Science',
+                            'fnuniv'=>'First Nations University of Canada',
+                            'gbus'=>'Kenneth Levene Graduate School of Business',
+                            'jsgspp'=>'Johnson Shoyama Graduate School of Public Policy',
+                            'khs'=>'Faculty of Kinesiology and Health Studies',
+                            'lacite'=>'La Cit&eacute;',
+                            'luther'=>'Luther College',
+                            'luthervssn'=>'Luther College VSSN',
+                            'map'=>'Faculty of Media, Art, and Performance',
+                            'nursing'=>'Faculty of Nursing',
+                            'scbscn'=>'',
+                            'science'=>'Faculty of Science',
+                            'socialwork'=>'Faculty of Social Work');
     //error_log("theme: " . $COURSE->theme);
-	if ($COURSE->theme != 'urcourses_default' && $COURSE->theme !== NULL && !empty($COURSE->theme)) {
-		$currthemeelms = explode('_',$COURSE->theme);
-		return array('css'=>'','name'=>$ur_categories[$currthemeelms[1]]);
-	}
-	
-	$sql = "SELECT a.name FROM {$CFG->prefix}course_categories a, {$CFG->prefix}course b WHERE a.id = b.category AND b.id = {$COURSE->id}";
-	$check_course_category = $DB->get_record_sql($sql);
-	if ($check_course_category) {
-		$key = array_search($check_course_category->name,$ur_categories);
-		return array('css'=>$key,'name'=>$check_course_category->name);
-	} else {
-		return array('css'=>'','name'=>'');
-	}
+    if ($COURSE->theme != 'urcourses_default' && $COURSE->theme !== NULL && !empty($COURSE->theme)) {
+        $currthemeelms = explode('_',$COURSE->theme);
+        return array('css'=>'','name'=>$ur_categories[$currthemeelms[1]]);
+    }
+    
+    $sql = "SELECT a.name FROM {$CFG->prefix}course_categories a, {$CFG->prefix}course b WHERE a.id = b.category AND b.id = {$COURSE->id}";
+    $check_course_category = $DB->get_record_sql($sql);
+    if ($check_course_category) {
+        $key = array_search($check_course_category->name,$ur_categories);
+        return array('css'=>$key,'name'=>$check_course_category->name);
+    } else {
+        return array('css'=>'','name'=>'');
+    }
 }
 
 public function user_menu($user = null, $withlinks = null) {
@@ -907,10 +917,10 @@ public function user_menu($user = null, $withlinks = null) {
     $opts = user_get_user_navigation_info($user, $this->page);
 
     if ($usedarkmode = $DB->get_record('theme_urcourses_darkmode', array('userid'=>$USER->id, 'darkmode'=>1))) {
-    	//changes url to opposite of whatever the toggle currently is to set dark mode in db under columns2.php
-    	$darkchk = $usedarkmode->darkmode;
+        //changes url to opposite of whatever the toggle currently is to set dark mode in db under columns2.php
+        $darkchk = $usedarkmode->darkmode;
     } else {
-    	$darkchk = 0;
+        $darkchk = 0;
     }
     $usedarkmodeurl = ($darkchk == 1) ? 0 : 1;
     //dark mode variable for if on/off to swap icon

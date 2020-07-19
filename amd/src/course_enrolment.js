@@ -49,8 +49,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     var _setGlobals = function(root, courseid) {
        _root = $(root);
        _courseid = courseid;
-	   
-	   console.log('set globals for course_enrolment');
+       
+       console.log('set globals for course_enrolment');
     };
 
     /**
@@ -59,7 +59,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      */
     var _registerEventListeners = function() {
         _root.on('click', SELECTORS.BTN_ENROLTERM, _courseenrolAction);
-		console.log('course enrolment event listeners registered');
+        console.log('course enrolment event listeners registered');
     };
 
     /**
@@ -67,8 +67,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      */
     var _courseenrolAction = function() {
         _element = $(this);
-		
-		console.log('triggered course enrol: '+_element.attr('id'));
+        
+        console.log('triggered course enrol: '+_element.attr('id'));
 
         //if current style is clicked, do nothing...
         //console.log('_headerstyle:'+_headerstyle);
@@ -79,13 +79,23 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             return;
         }
         */
-		
+        my_crns = {'ss2020': [12897,12874,23332],'f2020': [12345,32443],'w2021': [12764]};
+        
+        crnlist = '<ul>';
+        
+        for (m in my_crns['ss2020']) {
+            crnlist += '<li>'+my_crns['ss2020'][m]+'</li>';
+        }
+        
+        crnlist += '</ul>';
+        
         //adding in confirmation modal in case buttons accidentally clicked
         ModalFactory.create({
             type: ModalFactory.types.SAVE_CANCEL,
             title: 'Modify enrolment',
             body: "<p><b>Are you sure you want to modify enrolment for this course?</b><br />"
-			      + "<small>The following CRNs are available for the selected term:</small>"
+                  + "<small>The following CRNs are available for the selected term:</small>"
+                  + crnlist
                   + "</p>"
         })
         .then(function(modal) {
@@ -102,9 +112,9 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
 
     var _styleChange = function() {
         
-		
-		alert('#'+_element.attr('id'));
-		
+        
+        alert('#'+_element.attr('id'));
+        
 /*
         // return if required values aren't set
         if (!_courseid) {
@@ -127,9 +137,9 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
 
         // initiate ajax call
         ajax.call([ajaxCall]);
-		
-	*/
-		
+        
+    */
+        
     };
     /**
      * Handles theme_urcourses_default_upload_course_image response data.
