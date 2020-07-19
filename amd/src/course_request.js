@@ -84,13 +84,22 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         */
 		var modaltitle = (_element.attr('id') == 'btn_new') ? 'Create new course' : 'Duplicate this course';
 		var modalaction = (_element.attr('id') == 'btn_new') ? 'create a new' : 'duplicate this';
+		
+		templatelist = '<ul>';
+		templatelist += '<li><div class="icon"></div><div class="tmpl-label"><h6>LIVE</h6><p><small>The default LIVE template</small></p></div></li>';
+		templatelist += '<li><div class="icon"></div><div class="tmpl-label"><h6>Online</h6><p><small>The default online template</small></p></div></li>';
+		templatelist += '<li><div class="icon"></div><div class="tmpl-label"><h6>Faculty</h6><p><small>The default faculty template</small></p></div></li>';
+		templatelist += '<li><div class="icon"></div><div class="tmpl-label"><h6>Default</h6><p><small>The default template</small></p></div></li>';
+		templatelist += '</ul>';
+		
         //adding in confirmation modal in case buttons accidentally clicked
         ModalFactory.create({
             type: ModalFactory.types.SAVE_CANCEL,
             title: modaltitle,
             body: "<p><b>Are you sure you want to "+ modalaction +" course?</b><br />"
 			      + ((_element.attr('id') == 'btn_new') ? "<small>Select from the templates below:</small>" : "<small>Student data will not be included in the duplicated course.</small>")
-                  + "</p><p><small>Confirmation is required to minimize accidental course creation.</small></p>"
+				  + ((_element.attr('id') == 'btn_new') ? templatelist : '' )
+                  + "</p>"
         })
         .then(function(modal) {
             modal.setSaveButtonText((_element.attr('id') == 'btn_new') ? 'Create new course' : 'Duplicate this course');

@@ -157,11 +157,37 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
 
         // add to header's course image area
         $(SELECTORS.HEADER_TOP).append(popup);
+		
+		relotext = "Loading";
+		
+        // create bootstrap 4 dismissable
+        var relopopup = $('<div></div>');
+        relopopup.text(relotext);
+        relopopup.prop('id','cstyle_success_popup');
+        relopopup.css({'position' : 'absolute'});
+        relopopup.css({'right' : '5px'});
+        relopopup.css({'bottom' : '30px'});
+        relopopup.css({'z-index' : '1200'});
+        relopopup.addClass('alert alert-success alert-dismissable fade show');
+
+        // create dismiss button
+        var relodismissBtn = $('<button></button>');
+        relodismissBtn.html('&times;');
+        relodismissBtn.addClass('close');
+        relodismissBtn.attr('type', 'button');
+        relodismissBtn.attr('data-dismiss', 'alert');
+
+        // append dismiss button to popup
+        relopopup.append(relodismissBtn);
+
 
         // makes the alert disapear after a set amout of time.
         setTimeout(function() {
             $('#cstyle_success_popup').fadeTo(500, 0).slideUp(500, function(){
                 $(this).remove();
+		        // add to header's course image area
+		        $(SELECTORS.HEADER_TOP).append(relopopup);
+				
 				location.reload(true);
             });
         },1800);
