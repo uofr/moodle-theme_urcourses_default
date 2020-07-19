@@ -28,6 +28,7 @@ namespace theme_urcourses_default\output\core;
 defined('MOODLE_INTERNAL') || die;
 
 use moodle_url;
+use moodle_exception;
 use html_writer;
 global $CFG,$PAGE;
 
@@ -42,7 +43,58 @@ require_once($CFG->dirroot . '/course/renderer.php');
  * @category output
  */
 class course_renderer extends \theme_boost\output\core\course_renderer {
+	
+	
+    /**
+     * Constructor.
+     */
+    function __construct() {
+        global $CFG;
+        require_once($CFG->libdir.'/adodb/adodb.inc.php');
 
+		//comet.cc.uregina.ca
+
+		// need object to hold settings
+        $this->config = get_config('clnotes');
+        $this->errorlogtag = '[clnotes] ';
+
+		$this->clcontent = '';
+
+        $classnotesdb = $this->ext_db_init();
+
+        $rs = $classnotesdb->Execute("SELECT *
+                                  FROM {$this->config->clnotes_dbclass}");
+        if (!$rs) {
+            $classnotesdb->Close();
+            debugging(get_string('clnotes_cantconnect','theme/urcourses_default'));
+            return false;
+        }
+
+        if ($rs->EOF) {
+            $classnotesdb->Close();
+            return false;
+        }
+
+        $fields = array_change_key_case($rs->fields, CASE_LOWER);
+        //$fromdb = $fields[strtolower($this->config->fieldpass)];
+
+		$classNotesData = array();
+
+		foreach ($rs as $row) {
+			$classNotesData[$row->id] = $row; 
+		}
+
+        $rs->Close();
+        $classnotesdb->Close();
+
+		$this->classNotesData = $classNotesData;
+
+		$this->clcount = 0;
+    }
+
+	
+	
+	
     /**
      * Displays one course in the list of courses.
      *
@@ -152,7 +204,11 @@ class course_renderer extends \theme_boost\output\core\course_renderer {
             }
             $content .= html_writer::end_tag('div'); // .enrolmenticons
         }
+		
+		$content .= '<div class="warn p2">CLNOTES:'.print_r($this->classNotesData[$this->clcount],1).'</div>';
 
+		$this->clcount++;
+		
         // MODIFICATION START:
         // Moved div from above to this place.
         $content .= html_writer::end_tag('div'); // .moreinfo
@@ -164,7 +220,55 @@ class course_renderer extends \theme_boost\output\core\course_renderer {
         $content .= html_writer::end_tag('div'); // .content
 
         $content .= html_writer::end_tag('div'); // .coursebox
+		
+		if ($this->clcontent !='') {
+			$content = $this->clcontent.$content;
+			$this->clcontent = '';
+		}
+		
         return $content;
+    }
+	
+    /**
+     * Connect to external database.
+     *
+     * @return ADOConnection
+     * @throws moodle_exception
+     */
+    function ext_db_init() {
+        if ($this->is_configured() === false) {
+            throw new moodle_exception(get_string('clnotes_cantconnect', 'theme_urcourses_default'));
+        } else {
+        	$this->content .= '<p class="success p2">Conected to Class Notes</p>';
+        }
+
+        // Connect to the external database (forcing new connection).
+        $extdb = ADONewConnection($this->config->type);
+        if (!empty($this->config->debugclnotes)) {
+            $extdb->debug = true;
+            ob_start(); //Start output buffer to allow later use of the page headers.
+        }
+        $extdb->Connect($this->config->host, $this->config->user, $this->config->pass, $this->config->name, true);
+        $extdb->SetFetchMode(ADODB_FETCH_ASSOC);
+        // we don't need any set up
+		/*
+		if (!empty($this->config->setupsql)) {
+            $extdb->Execute($this->config->setupsql);
+        }
+		*/
+        return $extdb;
+    }
+
+    /**
+     * Returns false if this plugin is enabled but not configured.
+     *
+     * @return bool
+     */
+    public function is_configured() {
+        if (!empty($this->config->type)) {
+            return true;
+        }
+        return false;
     }
 
     public function course_modchooser($modules, $course) {
