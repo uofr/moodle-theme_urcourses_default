@@ -95,9 +95,18 @@ class course_renderer extends \theme_boost\output\core\course_renderer {
 		// 	$classes .= (!empty($key)) ? ' '.$key : '';
 		// }
 		
+		$styles = '';
+		
+		if (isset($_GET["id"])&&$_GET["id"]==$course->id) {
+			$classes .= ' urinfo urcihi';
+			$styles .= 'border: solid 1em orange;';
+		}
+		
         // .coursebox
         $content .= html_writer::start_tag('div', array(
+			'id'			=> 'course-'.$course->id,
             'class'         => $classes,
+			'style' 		=> $styles,
             'data-courseid' => $course->id,
             'data-type'     => self::COURSECAT_TYPE_COURSE,
         ));
@@ -106,7 +115,12 @@ class course_renderer extends \theme_boost\output\core\course_renderer {
 
         // course name
         $coursename = $chelper->get_course_formatted_name($course);
-        $coursenamelink = html_writer::link(new moodle_url('/course/view.php', array('id' => $course->id)),
+		
+		$courselinktarget = $course->visible ? '/course/view.php' : '/index.php#course-'.$course->id;
+		
+		$courselinkparams = $course->visible ? array('id' => $course->id) : array('redirect' => 0);
+		
+        $coursenamelink = html_writer::link(new moodle_url($courselinktarget, $courselinkparams),
             $coursename, array('class' => $course->visible ? '' : 'dimmed'));
         $content .= html_writer::tag($nametag, $coursenamelink, array('class' => 'coursename'));
         // If we display course in collapsed form but the course has summary or course contacts, display the link to the info page.
@@ -120,7 +134,9 @@ class course_renderer extends \theme_boost\output\core\course_renderer {
                 $this->coursecat_include_js();
             }
         }
-
+		
+		if (!$course->visible) $content .= '<div class="alert-info p-2 px-1"><p class="m-0"><small>This course is unavailable to students.</small></p></div>';
+		
         // MODIFICATION START:
         // Move the closing div for moreinfo behind the enrolmenticons to group them together in one div.
         // MODIFICATION END.
