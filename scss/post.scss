@@ -2668,3 +2668,32 @@ body.format-topcoll.editing .section .activity .activityinstance {
 div.no-overflow ul {
 padding-left: 1.1rem!important;
 }
+
+.urhiddendash div.dashboard-card-img {
+	opacity: 55%;
+}
+div.dashboard-card.urhiddendash div.course-info-container {
+	border-top: 5px solid #fec82e50 !important;
+}
+
+div.card.dashboard-card.urhiddendash div.card-body {
+	border-style: dashed;
+}
+
+div.card.dashboard-card.urhiddendash {
+	border-style: none;
+	//fancy border
+	/*
+	background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23CCCCCCFF' stroke-width='4' stroke-dasharray='2%2c 8' stroke-dashoffset='0' stroke-linecap='butt'/%3e%3c/svg%3e");
+	*/
+}
+
+div.card.dashboard-card.urhiddendash div.card-body span.name-of-course,
+div.card.dashboard-card.urhiddendash .course-fav-icon.text-primary {
+	color: #aaa !important;
+}
+
+.urmodalsummary {
+	padding: 1em 2em;
+	margin: 1em 0;
+}
