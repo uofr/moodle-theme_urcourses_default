@@ -1,0 +1,44 @@
+<div class="coursesummaryanchor mt-4" id="summary-{{{data-courseid}}}">
+	<div class="course-summaryitem m-b-1 p-2 {{{classes}}}" role="listitem" data-region="course-content" data-course-id="{{{data-courseid}}}">
+        <div class="d-flex mt-3">
+            <div class="d-flex">
+            			<a href="http://localhost/moodle/dev38/course/view.php?id=957" tabindex="-1">
+                            <div class="summaryimage rounded-circle mr-1" style="background-image: url('{{{courseimage}}}');">
+                                <span class="sr-only">Course image</span>
+                            </div>
+                        </a>
+            
+                        <div class="align-self-stretch d-flex flex-column w-100">
+                            <div class="text-muted muted mb-1 pl-3 d-flex flex-wrap">
+                                <span class="sr-only">
+                                    Course category
+                                </span>
+                                        <span class="categoryname">
+                                                {{{coursecategory}}}
+                                        </span>
+                            </div>
+                            <div class="d-flex mb-1 pl-3">
+                                <a href="{{#ishidden}}{{{viewurl}}}{{/ishidden}}{{^ishidden}}{{{infourl}}}{{/ishidden}}" class="coursename">
+                                    <span class="sr-only">
+                                        Course name
+                                    </span>
+                                    <h3 class="d-inline name-of-course">{{{coursename}}}</h3>
+                                </a>
+                            </div>
+                            <div class="summary p-1 mt-1">
+                                <div class="summary-wrapper" style="padding: 1em;">
+									<!--<h5>visible: {{{visible}}}</h5>-->
+            					<span class="sr-only">Course summary text:</span>
+            					{{#summary}}
+            					<div class="content">{{{summary}}}</div>
+            					{{/summary}}
+            				</div>
+                            </div>
+            <div class="d-flex">
+            </div>                <div class="ml-auto mt-auto w-50 p-t-1">
+                            </div>
+                        </div>
+						
+					</div>
+        </div>
+    </div></div>
