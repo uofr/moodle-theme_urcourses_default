@@ -1865,39 +1865,39 @@ ul.ctopics .content .section ul {
     border-top: 5px solid #fec82e!important;
 }
     
-.coursebox.arts, .course-summaryitem.arts, .dashboard-card .course-info-container.arts, .course-listitem.arts {
+.coursebox.arts, .coursebox.arts .ccbox, .course-summaryitem.arts, .dashboard-card .course-info-container.arts, .course-listitem.arts {
     border-top-color: #c9282d!important; }
-.coursebox.khs, .course-summaryitem.khs, .dashboard-card .course-info-container.khs, .course-listitem.khs {
+.coursebox.khs, .coursebox.khs .ccbox, .course-summaryitem.khs, .dashboard-card .course-info-container.khs, .course-listitem.khs {
     border-top-color: #bfb9a7!important; }
-.coursebox.sw, .course-summaryitem.sw, .dashboard-card .course-info-container.sw, .course-listitem.sw {
+.coursebox.sw, .coursebox.sw .ccbox, .course-summaryitem.sw, .dashboard-card .course-info-container.sw, .course-listitem.sw {
     border-top-color: #00a0df!important; }
-.coursebox.edu, .course-summaryitem.edu, .dashboard-card .course-info-container.edu, .course-listitem.edu {
+.coursebox.edu, .coursebox.edu .ccbox, .course-summaryitem.edu, .dashboard-card .course-info-container.edu, .course-listitem.edu {
     border-top-color: #ff5a00!important; }
-.coursebox.sci, .course-summaryitem.sci, .dashboard-card .course-info-container.sci, .course-listitem.sci {
+.coursebox.sci, .coursebox.sci .ccbox, .course-summaryitem.sci, .dashboard-card .course-info-container.sci, .course-listitem.sci {
     border-top-color: #007836!important; }
-.coursebox.map, .course-summaryitem.map, .dashboard-card .course-info-container.map, .course-listitem.map {
+.coursebox.map, .coursebox.map .ccbox, .course-summaryitem.map, .dashboard-card .course-info-container.map, .course-listitem.map {
     border-top-color: #00A9CE!important; }
-.coursebox.engg, .course-summaryitem.engg, .dashboard-card .course-info-container.engg, .course-listitem.engg {
+.coursebox.engg, .coursebox.engg .ccbox, .course-summaryitem.engg, .dashboard-card .course-info-container.engg, .course-listitem.engg {
     border-top-color: #5bb4e5!important; }
-.coursebox.bus, .course-summaryitem.bus, .dashboard-card .course-info-container.bus, .course-listitem.bus {
+.coursebox.bus, .coursebox.bus .ccbox, .course-summaryitem.bus, .dashboard-card .course-info-container.bus, .course-listitem.bus {
     border-top-color: #2a6ebb!important; }
-.coursebox.nur, .course-summaryitem.nur, .dashboard-card .course-info-container.nur, .course-listitem.nur {
+.coursebox.nur, .coursebox.nur .ccbox, .course-summaryitem.nur, .dashboard-card .course-info-container.nur, .course-listitem.nur {
     border-top-color: #fbceb1!important; }
-.coursebox.cnpp, .course-summaryitem.cnpp, .dashboard-card .course-info-container.cnpp, .course-listitem.cnpp {
+.coursebox.cnpp, .coursebox.cnpp .ccbox, .course-summaryitem.cnpp, .dashboard-card .course-info-container.cnpp, .course-listitem.cnpp {
 	border-top-color: #662d91!important; }
-.coursebox.scbscn, .course-summaryitem.scbscn, .dashboard-card .course-info-container.scbscn, .course-listitem.scbscn {
+.coursebox.scbscn, .coursebox.scbscn .ccbox, .course-summaryitem.scbscn, .dashboard-card .course-info-container.scbscn, .course-listitem.scbscn {
 	border-top-color: #6c9d41!important; }
-.coursebox.gbus, .course-summaryitem.gbus, .dashboard-card .course-info-container.gbus, .course-listitem.gbus {
+.coursebox.gbus, .coursebox.gbus .ccbox, .course-summaryitem.gbus, .dashboard-card .course-info-container.gbus, .course-listitem.gbus {
 	border-top-color: #89022d!important; }
-.coursebox.jsgspp, .course-summaryitem.jsgspp, .dashboard-card .course-info-container.jsgspp, .course-listitem.jsgspp {
+.coursebox.jsgspp, .coursebox.jsgspp .ccbox, .course-summaryitem.jsgspp, .dashboard-card .course-info-container.jsgspp, .course-listitem.jsgspp {
 	border-top-color: #8b9b3c!important; }
-.coursebox.lacite, .course-summaryitem.lacite, .dashboard-card .course-info-container.lacite, .course-listitem.lacite {
+.coursebox.lacite, .coursebox.lacite .ccbox, .course-summaryitem.lacite, .dashboard-card .course-info-container.lacite, .course-listitem.lacite {
 	border-top-color: #CCDB2A!important; }
-.coursebox.luther, .course-summaryitem.luther, .dashboard-card .course-info-container.luther, .course-listitem.luther {
+.coursebox.luther, .coursebox.luther .ccbox, .course-summaryitem.luther, .dashboard-card .course-info-container.luther, .course-listitem.luther {
 	border-top-color: #3155a5!important; }
-.coursebox.luthervssn, .course-summaryitem.luthervssn, .dashboard-card .course-info-container.luthernssn, .course-listitem.luthervssn {
+.coursebox.luthervssn, .coursebox.luthervssn .ccbox, .course-summaryitem.luthervssn, .dashboard-card .course-info-container.luthernssn, .course-listitem.luthervssn {
 	border-top-color: #3155a5!important; }
-.coursebox.fnuniv, .course-summaryitem.fnuniv, .dashboard-card .course-info-container.fnuniv, .course-listitem.fnuniv {
+.coursebox.fnuniv, .coursebox.fnuniv .ccbox, .course-summaryitem.fnuniv, .dashboard-card .course-info-container.fnuniv, .course-listitem.fnuniv {
 	border-top-color: #0086D4!important; }
   
 #nav-drawer .list-group-item[data-parent-key="mycourses"] .media-left .fa-home {
@@ -2693,7 +2693,31 @@ div.card.dashboard-card.urhiddendash .course-fav-icon.text-primary {
 	color: #aaa !important;
 }
 
+.coursebox .content .summary {
+	float: none;
+	width: auto;
+}
+
+.coursebox .content .teacherlist .instr-avatar {
+    border-radius: 50%;
+}
+
+.coursebox .content .teacherlist .instr-label {
+	display: inline-block;
+	margin-right: 1em;
+}
+
 .urmodalsummary {
 	padding: 1em 2em;
 	margin: 1em 0;
+}
+
+div.course-summaryitem.coursebox .ccbox {
+	border-top: solid 5px #fec82e;
+}
+
+
+div.course-summaryitem.coursebox .categoryname,
+div.course-summaryitem.coursebox .coursename {
+
 }

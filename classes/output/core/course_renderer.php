@@ -58,9 +58,9 @@ class course_renderer extends \theme_boost\output\core\course_renderer {
      *
      * @return string
      */
-    protected function coursecat_coursebox(\coursecat_helper $chelper, $course, $additionalclasses = '') {
-		
-		global $CFG,$DB;
+	
+	protected function coursecat_coursebox(\coursecat_helper $chelper, $course, $additionalclasses = '') {
+		global $CFG, $DB, $PAGE;
 		
         if (!isset($this->strings->summary)) {
             $this->strings->summary = get_string('summary');
@@ -87,69 +87,41 @@ class course_renderer extends \theme_boost\output\core\course_renderer {
 		
 		$ur_categories = array('','misc'=>'','khs'=>'Faculty of Kinesiology and Health Studies','edu'=>'Faculty of Education','sci'=>'Faculty of Science','grad'=>'Grad Studies','fa'=>'Faculty of Fine Arts','map'=>'Faculty of Media, Art, and Performance','engg'=>'Faculty of Engineering','bus'=>'Business Administration','arts'=>'Faculty of Arts','sw'=>'Faculty of Social Work','nur'=>'Faculty of Nursing','misc'=>'Custom Themes');
 		
-		
-		// $sql = "SELECT a.name FROM {$CFG->prefix}course_categories a, {$CFG->prefix}course b WHERE a.id = b.category AND b.id = {$course->id}";
-		// $check_course_category = $DB->get_record_sql($sql);
-		// if ($check_course_category) {
-		// 	$key = array_search($check_course_category->name,$ur_categories);
-		// 	$classes .= (!empty($key)) ? ' '.$key : '';
-		// }
-		
-        // .coursebox
-        $content .= html_writer::start_tag('div', array(
-            'class'         => $classes,
-            'data-courseid' => $course->id,
-            'data-type'     => self::COURSECAT_TYPE_COURSE,
-        ));
-
-        $content .= html_writer::start_tag('div', array('class' => 'info'));
-
-        // course name
         $coursename = $chelper->get_course_formatted_name($course);
         $coursenamelink = html_writer::link(new moodle_url('/course/view.php', array('id' => $course->id)),
             $coursename, array('class' => $course->visible ? '' : 'dimmed'));
-        $content .= html_writer::tag($nametag, $coursenamelink, array('class' => 'coursename'));
-        // If we display course in collapsed form but the course has summary or course contacts, display the link to the info page.
-        $content .= html_writer::start_tag('div', array('class' => 'moreinfo'));
-        if ($chelper->get_show_courses() < self::COURSECAT_SHOW_COURSES_EXPANDED) {
-            if ($course->has_summary() || $course->has_course_contacts() || $course->has_course_overviewfiles()) {
-                $url = new moodle_url('/course/info.php', array('id' => $course->id));
-                $image = $this->output->pix_icon('i/info', $this->strings->summary);
-                $content .= html_writer::link($url, $image, array('title' => $this->strings->summary));
-                // Make sure JS file to expand course content is included.
-                $this->coursecat_include_js();
-            }
-        }
-
-        // MODIFICATION START:
-        // Move the closing div for moreinfo behind the enrolmenticons to group them together in one div.
-        // MODIFICATION END.
-        /* ORIGINAL START.
-        $content .= html_writer::end_tag('div'); // .moreinfo
-        ORIGINAL END. */
-
-        // print enrolmenticons
+		
         if ($icons = enrol_get_course_info_icons($course)) {
             $content .= html_writer::start_tag('div', array('class' => 'enrolmenticons'));
             foreach ($icons as $pixicon) {
                 $content .= $this->render($pixicon);
             }
             $content .= html_writer::end_tag('div'); // .enrolmenticons
-        }
-
-        // MODIFICATION START:
-        // Moved div from above to this place.
-        $content .= html_writer::end_tag('div'); // .moreinfo
-        // MODIFICATION END.
-        $content .= html_writer::end_tag('div'); // .info
-
-        $content .= html_writer::start_tag('div', array('class' => 'content'));
-        $content .= $this->coursecat_coursebox_content($chelper, $course);
-        $content .= html_writer::end_tag('div'); // .content
-
-        $content .= html_writer::end_tag('div'); // .coursebox
-        return $content;
-    }
+        }	
+		
+        $context = \context_system::instance();
+        
+		$courseboj = $DB->get_record('course', array('id' => $course->id)); 
+        $urenderer = $PAGE->get_renderer('core');
+        $exporter = new course_summary_exporter($courseboj, ['context' => $context]);
+        $cobits = $exporter->export($urenderer);
+		
+	        $context = [
+	            'classes'         => $classes,
+	            'data-courseid' => $course->id,
+	            'data-type'     => self::COURSECAT_TYPE_COURSE,
+				'coursename'    => $coursename,
+				'coursenamelink'    => $coursenamelink,
+				'summary'           => $this->coursecat_coursebox_content($chelper, $course),
+				'courseimage'       => $cobits->courseimage,
+				'viewurl'       => $cobits->viewurl,
+				'infourl'       => $cobits->infourl,
+				'ishidden'       => $cobits->ishidden,
+				'visible'       => $cobits->visible,
+				'coursecategory'       => $cobits->coursecategory,
+	        ];
+	        return $this->render_from_template('theme_urcourses_default/core/site_summary', $context);
+	}
 
     public function course_modchooser($modules, $course) {
         // This HILLBROOK function is overridden here to refer to the local theme's copy of modchooser to render a modified.
