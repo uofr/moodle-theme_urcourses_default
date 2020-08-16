@@ -2,7 +2,7 @@
 	<div class="course-summaryitem m-b-1 p-2 {{{classes}}}" role="listitem" data-region="course-content" data-course-id="{{{data-courseid}}}">
         <div class="d-flex mt-3">
             <div class="d-flex">
-            			<a href="http://localhost/moodle/dev38/course/view.php?id=957" tabindex="-1">
+            			<a href="{{#ishidden}}{{{viewurl}}}{{/ishidden}}{{^ishidden}}{{{infourl}}}{{/ishidden}}" tabindex="-1">
                             <div class="summaryimage rounded-circle mr-1" style="background-image: url('{{{courseimage}}}');">
                                 <span class="sr-only">Course image</span>
                             </div>
