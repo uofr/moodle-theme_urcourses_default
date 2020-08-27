@@ -97,23 +97,29 @@
     * Removed justify content center for row to be able to place the login in another position than centered.
 }}
 
+
+
+
 <div class="my-1 my-sm-5"></div>
 <div class="row">
     <div class="col-sm-12 col-md-6 col-lg-4">
         <div class="card">
             <div class="card-block">
                 <h2 class="card-header text-center" >
-					<p><img src="{{loginlogourl}}" title="{{sitename}}" alt="{{sitename}}" style="width: 4em" /></p>
+					<p><img src="{{loginlogourl}}" title="{{sitename}}" alt="{{sitename}}" /></p>
+
+
 					<div class="row">
 						<div class="col-sm-1"></div>
-						<div class="col-sm-1 align-right"><img src="../theme/uofr_conservatory/pix/conservatory_logo.jpg" height="65" class="rounded-circle align-middle mr-0" /></div>
-						<div class="col-sm-9 align-left"><h2>Conservatory of Performing Arts</h2></div>
+						{{!<div class="col-sm-1 align-right"><img src="../theme/uofr_conservatory/pix/conservatory_logo.jpg" height="65" class="rounded-circle align-middle mr-0" /></div>}}
+						<div class="col-lg-10 text-center"><h2>Welcome to CCE Community Courses</h2></div>
+                        
 						<div class="col-sm-1"></div>
 					</div></h2>
                 <div class="card-body">
 					{{#maintenance}}
                     <div class="alert alert-info">
-                        <h5>The <b>U of R Conservatory</b> is currently in maintenance mode.</h5>
+                        <h5>The <b>Centre for Continuing Education</b> is currently in maintenance mode.</h5>
 						<p><small>{{#str}}sitemaintenance, core_admin{{/str}}</small></p>
                     </div>
 					{{/maintenance}}
@@ -124,7 +130,6 @@
                             <a href="{{signupurl}}">{{#str}} tocreatenewaccount {{/str}}</a>
                         </div>
                     {{/cansignup}}
-					
 					
 					
 					
@@ -224,16 +229,30 @@
         </div>
     </div>
 	<div class="col-sm-12 col-md-4 offset-md-2 col-lg-4 offset-lg-4 mt-5">
-        <div class="card p-3 mt-2">
-			<h4>Learn More Than Music! 😀</h4>
+        <div class="card p-3 mt-2 text-center">
+			<h4>Our Mission</h4>
 			<p class="small" title="">
-			From voice to violin, music lessons teach more than just tunes! Numerous studies have shown that participation in music programs from a young age has an extremely positive impact on children's cognitive and social skills.</p>
+            To meet lifelong learning needs by offering high quality, accessible, innovative and responsive education and training programs to learners of all ages by building on the strengths of and collaborating with the resources of the University and the community.</p>
+    
 
-		<p class="small">Music facilitates learning, instills respect and pride and increases self-esteem and social interaction.</p>
+           <h5> Career & Professional Development </h5>
+            <p class="small" title="">Career & Professional Development courses are designed to give you a variety of ways to develop your skills and knowledge. Our expert instructors have extensive experience in their fields and use experiential hands-onlearning, small group 
+            discussions, case studies, praccticums, lectures and more to help you develop practical strategies and techniques for use in your workplace. </p>
+
+            <h5>Conservatory of Performing Arts</h5>
+
+            <p class="small" title="">At the Conservatory we are passionate about the arts and believe they are an essential part of human life. To nurture a foundational love and appreciation for the arts in our community we offer private music lessons and group classes in
+             music, drama, and visual art to students of all ages. </p>
+
+
+            <h5>Lifelong Learning Centre</h5>
+            <p class="small" title="">Courses at the Lifelong Learning Centre are creative, intellectual an physical in nature with no formal education required. They are designed to be taken for personal interest and to realize the joy of learning. Without the pressure of homework or exams.</p>
+
+            
 		
-					<div class="embed-responsive embed-responsive-16by9">
+				{{!	<div class="embed-responsive embed-responsive-16by9">
 					  <iframe class="embed-responsive-item" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="allowfullscreen" src="https://www.youtube.com/embed/vYAMXuXJmuA" width="365" height="197" frameborder="0"></iframe>
-					</div>
+					</div>}}
 		</div>
 	</div>	
 </div>
@@ -284,4 +303,5 @@ var campusImg = document.createElement('img');campusImg.setAttribute('src','//'+
             });
         {{/autofocusform}}
     {{/error}}
+
 {{/js}}
