@@ -49,7 +49,7 @@ body.loginbackgroundimage, body .loginbackgroundimage {
         /* Make background of login panel slightly transparent */
         #page-login-index #region-main-box {
             div.card {
-                background-color: rgba(255, 255, 255, 0.8);
+                background-color: rgba(255, 255, 255, 0.95);
                 border-radius: 3px;
             }
             .card-header > img {
@@ -2010,7 +2010,8 @@ body .loginbackgroundimage {
 	-webkit-background-size: cover;
 	background-size: cover;
 	background-position: 60% bottom;
-	background-repeat: repeat-x;
+    background-repeat: repeat-x;
+    height:auto;
 }
 
 /*Default link colour override. Would be the brand colour otherwise*/ 
