@@ -60,7 +60,7 @@ if(in_array($PAGE->bodyid, $noblockpg) || (strpos($PAGE->bodyid, 'page-mod') !==
     $PAGE->theme->addblockposition = BLOCK_ADDBLOCK_POSITION_FLATNAV;
 }
 // get the UR Cateogry class, if one exists
-$extraclasses[] = theme_uofr_conservatory_get_ur_category_class($COURSE->id);
+//$extraclasses[] = theme_uofr_conservatory_get_ur_category_class($COURSE->id);
 
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $blockshtml = $OUTPUT->blocks('side-pre');
