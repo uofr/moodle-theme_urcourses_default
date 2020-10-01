@@ -480,24 +480,32 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
     
     function get_course_tools() {
+        global $COURSE;
         $context = [
             'courseid' => $COURSE->id,
             'availability' => $COURSE->visible,
             'enrolment_state' => $this->get_course_enrolment(),
-            'course_state' => $this->get_course_request()
+            'course_state' => $this->get_course_request(),
         ];
         return $this->render_from_template('theme_urcourses_default/header_course_tools', $context);
     }
     
     function get_course_request() {
+        global $USER,$COURSE;
+
         $context = [
             'courseid' => $COURSE->id,
-            'availability' => $COURSE->visible
+            'availability' => $COURSE->visible,
+            'username'=> $USER->username,
+            'templatelist'=> json_encode(theme_urcourses_default_get_course_templates()),
+            'categories'=> json_encode(theme_urcourses_default_get_catergories())
         ];
+        error_log(print_r($context,TRUE));
         return $this->render_from_template('theme_urcourses_default/header_course_request', $context);
     }
     
     function get_course_enrolment() {
+        global $COURSE;
         $context = [
             'courseid' => $COURSE->id,
             'availability' => $COURSE->visible

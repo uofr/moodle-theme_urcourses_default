@@ -29,6 +29,9 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . "/externallib.php");
 require_once($CFG->dirroot . "/course/lib.php");
+require_once($CFG->dirroot . "/course/externallib.php");
+require_once($CFG->dirroot . "/user/lib.php");
+
 
 class theme_urcourses_default_external extends external_api {
 
@@ -492,5 +495,531 @@ class theme_urcourses_default_external extends external_api {
         ));
     }
 
+    /**
+     * Returns description of modal_help_search's parameters.
+     *
+     * @return external_function_parameters
+     */
+    public static function create_test_account_parameters() {
+        return new external_function_parameters(array(
+            'courseid' => new external_value(PARAM_INT),
+            'username' => new external_value(PARAM_TEXT)
+        ));
+    }
+     /**
+     * Creates test student account and enrols in current course
+     *
+     * @param int $courseid
+     * @param int $username of current user
+     * @return array
+     */
+    public static function create_test_account($courseid,$username) {
+        global $USER, $DB, $CFG;
+
+        // get params
+        $params = self::validate_parameters(
+            self::create_test_account_parameters(),
+            array(
+            'courseid' => $courseid,
+            'username' => $username,
+            )
+        );
+
+        // ensure user has permissions to change image
+        $context = \context_course::instance($params['courseid']);
+        self::validate_context($context);
+
+        //get username to create email
+        $email = $USER->username."+student@uregina.ca";
+        //check if test user account has already been created
+        $select = 'SELECT * FROM mdl_user WHERE email ='.$email.';';
+
+        $sql = "SELECT * FROM mdl_user as u WHERE u.email ='{$email}'";
+	
+        $user = $DB->get_record_sql($sql);
+
+        //if created
+        if($user){
+
+            //check if user is enrolled already
+            $isenrolled =is_enrolled($context, $user, 'mod/assignment:submit');
+
+            if($isenrolled){
+                $return=array("userid"=>$user->id,"username"=>$user->username,"enrolled"=>false,"created"=>false );
+            }else{
+                //get enroll id for manual enrollment for current course
+                $sql = "SELECT * FROM mdl_enrol WHERE courseid =".$courseid." AND enrol = 'manual';";
+                $enroll = $DB->get_record_sql($sql, null, MUST_EXIST);
+
+                $sql = "SELECT * FROM mdl_role WHERE shortname = 'student';";
+                $role = $DB->get_record_sql($sql, null, MUST_EXIST);
+                //enroll user in course as student
+                $dataobject = array(
+                    "status"=>0,
+                    "enrolid"=>$enroll->id,
+                    "userid"=>$user->id,
+                    "timestart"=>time(),
+                    "timeend"=>0,
+                    "modififerid"=>$USER->id,
+                    "timecreated"=>time(),
+                    "timemodified"=>time()
+                );
+                $isenrolled =$DB->insert_record("user_enrolments", $dataobject, true, false);
+
+                $dataobject = array(
+                    "roleid"=>$role->id,
+                    "contextid"=>$context->id,
+                    "userid"=>$user->id,
+                    "timemodified"=>time(),
+                    "modififerid"=>$USER->id,
+                    "itemid"=>0,
+                    "sortorder"=>0
+                );
+                $roleassigned =$DB->insert_record("role_assignments", $dataobject, true, false);
+
+                $return=array("userid"=>$user->id,"username"=>$user->username,"enrolled"=>$isenrolled,"created"=>false );
+            }
+        }else{
+            //if not created
+            //get User password & other info
+            $sql = "SELECT * FROM mdl_user as u WHERE u.id ={$USER->id}";
+            $user = $DB->get_record_sql($sql);
+
+            //replace User email with new email same for username
+            $user->email = $email;
+            $user->username= $user->username."student";
+        
+            //call external create user function
+            $userid = user_create_user($user, false, true);
+            //enroll user in course
+            //get enroll id for manual enrollment for current course
+            $sql = "SELECT * FROM mdl_enrol WHERE courseid =".$courseid." AND enrol = 'manual';";
+            $enroll = $DB->get_record_sql($sql, null, MUST_EXIST);
+
+            $sql = "SELECT * FROM mdl_role WHERE shortname = 'student';";
+            $role = $DB->get_record_sql($sql, null, MUST_EXIST);
+
+            //enroll user in course as student
+            $dataobject = array(
+                "status"=>0,
+                "enrolid"=>$enroll->id,
+                "userid"=>$userid,
+                "timestart"=>time(),
+                "timeend"=>0,
+                "modififerid"=>$USER->id,
+                "timecreated"=>time(),
+                "timemodified"=>time()
+            );
+            $isenrolled =$DB->insert_record("user_enrolments", $dataobject, true, false);
+
+            $dataobject = array(
+                "roleid"=>$role->id,
+                "contextid"=>$context->id,
+                "userid"=>$userid,
+                "timemodified"=>time(),
+                "modififerid"=>$USER->id,
+                "itemid"=>0,
+                "sortorder"=>0
+            );
+            $roleassigned = $DB->insert_record("role_assignments", $dataobject, true, false);
+
+            //return userid, username, created true, and enrolled true
+            $return=array("userid"=>$userid,"username"=>$user->username,"enrolled"=>$isenrolled,"created"=>true );
+            
+        }
+        return $return;
+    }
+
+      /**
+     * Returns description of get_guide_page return value.
+     *
+     * @return external_single_structure
+     */
+    public static function create_test_account_returns() {
+        return new external_single_structure(array(
+            'userid' => new external_value(PARAM_INT),
+            'username' => new external_value(PARAM_TEXT),
+            'enrolled' => new external_value(PARAM_TEXT),
+            'created' => new external_value(PARAM_TEXT)
+        ));
+    }
+
+      /**
+     * Returns description of modal_help_search's parameters.
+     *
+     * @return external_function_parameters
+     */
+    public static function duplicate_course_parameters() {
+        return new external_function_parameters(array(
+            'courseid' => new external_value(PARAM_INT),
+            'coursename' => new external_value(PARAM_TEXT),
+            'shortname' => new external_value(PARAM_TEXT),
+            'categoryid' => new external_value(PARAM_INT),
+        ));
+    }
+     /**
+     * Creates test student account and enrols in current course
+     *
+     * @param int $courseid
+     * @param int $username of current user
+     * @return array
+     */
+    public static function duplicate_course($courseid,$coursename,$shortname,$categoryid) {
+        global $USER, $DB, $CFG;
+
+        // get params
+        $params = self::validate_parameters(
+            self::duplicate_course_parameters(),
+            array(
+            'courseid' => $courseid,
+            'coursename' => $coursename,
+            'shortname' => $shortname,
+            'categoryid'=> $categoryid
+            )
+        );
+
+        // ensure user has permissions to change image
+        $context = \context_course::instance($params['courseid']);
+        self::validate_context($context);
+        //get course from DB
+        $sql = "SELECT * FROM mdl_course as c WHERE c.id ='{$courseid}'";
+        $course = $DB->get_record_sql($sql);
+        error_log(print_r($course,TRUE));
+
+        //add in new variables, clear id
+        $course->id = "";
+        //sanitize
+        $course->shortname = $shortname;
+        $course->fullname = $coursename;
+        $course->category = $categoryid;
+        //send to external function
+        $newcourse = create_course($course);
+        error_log(print_r($newcourse,TRUE));
+
+        //check if instructor is enrolled in the template
+        $newcontext = \context_course::instance($newcourse->id);
+        //self::validate_context($templatecontext);
+
+        $admins = get_admins(); 
+        $isadmin = false; 
+        foreach ($admins as $admin) { 
+            if ($USER->id == $admin->id) 
+            { $isadmin = true; break; } } 
+        
+        if(!$isadmin){
+            $ogisenrolled =is_enrolled($newcontext, $USER->id);
+            //if not enroll the instructor in template
+            if(!$ogisenrolled){
+                $isenrolled = self:: enroll_user($courseid, $newcourse->id,$USER->id);
+                if(!$isenrolled)
+                {
+                    return array('courseid'=>0, 'url'=>"","error"=>"Was unable to enroll user in course");
+                }
+            }
+        }
+        
+        //use old id and new id to tranfer data to new course
+        $importer = new core_course_external();
+        $importer->import_course($courseid, $newcourse->id);
+
+         //return new course id & url
+         $url = $CFG->wwwroot.'/course/view.php?id=' . $newcourse->id;
+
+         error_log(print_r($url,TRUE));
+ 
+         return array('courseid'=>$newcourse->id, 'url'=>$url, 'error'=>"");
+    }
+      /**
+     * Returns description of get_guide_page return value.
+     *
+     * @return external_single_structure
+     */
+    public static function duplicate_course_returns() {
+        return new external_single_structure(array(
+            'courseid' => new external_value(PARAM_INT),
+            'url' => new external_value(PARAM_TEXT),
+            'error' => new external_value(PARAM_TEXT),
+        ));
+    }
+        /**
+     * Returns description of modal_help_search's parameters.
+     *
+     * @return external_function_parameters
+     */
+    public static function create_course_parameters() {
+        return new external_function_parameters(array(
+            'courseid' => new external_value(PARAM_INT),
+            'templateid' => new external_value(PARAM_INT),
+            'coursename' => new external_value(PARAM_TEXT),
+            'shortname' => new external_value(PARAM_TEXT),
+            'categoryid' => new external_value(PARAM_INT),
+        ));
+    }
+     /**
+     * Creates test student account and enrols in current course
+     *
+     * @param int $courseid
+     * @param int $username of current user
+     * @return array
+     */
+    public static function create_course($courseid,$templateid,$coursename,$shortname,$categoryid) {
+
+        global $DB, $CFG, $USER;
+
+        // get params
+        $params = self::validate_parameters(
+            self::create_course_parameters(),
+            array(
+            'courseid' => $courseid,
+            'templateid' => $templateid,
+            'coursename' => $coursename,
+            'shortname' => $shortname,
+            'categoryid' => $categoryid,
+            )
+        );
+
+        error_log(print_r("categroyid",TRUE));
+        error_log(print_r($categoryid,TRUE));
+
+        // ensure user has permissions to change image
+        $context = \context_course::instance($params['courseid']);
+        self::validate_context($context);
+
+        //CHECK IF DEFAULT TEMPLATE
+        if($templateid == 0){
+
+            //create brand new course not from template
+            $course = new stdClass();
+            $course->id="";
+            $course->category =$categoryid;
+            $course->sortorder = 1;
+            $course->shortname = $shortname;
+            $course->fullname = $coursename;
+            $course->summary ="";
+            $course->summaryformat =1;
+            $course->format ="topics";
+            $course->showgrades =1;
+            $course->newsitems =1;
+            $course->newsitems =1;
+            $course->startdate =time();
+            $course->enddate =0;
+            $course->relativedatesmode =0;
+            $course->marker =0;
+            $course->maxbytes =0;
+            $course->legacyfiles =0;
+            $course->showreports =0;
+            $course->visible =1;
+            $course->visibleold =1;
+            $course->groupmode =0;
+            $course->groupmodeforce =0;
+            $course->defaultgroupingid =0;
+            $course->timecreated =time();
+            $course->timemodified =time();
+            $course->requested =0;
+            $course->enablecompletion =0;
+            $course->completionnotify =0;
+        
+
+            $newcourse = create_course($course);
+            error_log(print_r($course,TRUE));
+             //ENROLL CURRENT INSTRUCTOR INTO COURSE
+            $isenrolled = self:: enroll_user($courseid, $newcourse->id,$USER->id);
+            if(!$isenrolled)
+            {
+                return array("error"=>"Was unable to enroll user in course");
+            }
+
+        }else{
+
+            //check if instructor is enrolled in the template
+            $templatecontext = \context_course::instance($params['templateid']);
+            //self::validate_context($templatecontext);
+
+            $admins = get_admins(); 
+            $isadmin = false; 
+            foreach ($admins as $admin) { 
+                if ($USER->id == $admin->id) 
+                { $isadmin = true; break; } } 
+            
+            if(!$isadmin){
+                $ogisenrolled =is_enrolled($templatecontext, $USER->id);
+                //if not enroll the instructor in template
+                if(!$ogisenrolled){
+                    $isenrolled = self:: enroll_user($courseid, $params['templateid'],$USER->id);
+                    if(!$isenrolled)
+                    {
+                        return array('courseid'=>0, 'url'=>"","error"=>"Was unable to enroll user in course");
+                    }
+                }
+            }
+
+            //get template course from DB
+            $sql = "SELECT * FROM mdl_course as c WHERE c.id ='{$templateid}'";
+            $course = $DB->get_record_sql($sql);
+
+            //add in new variables, clear id
+            $course->id = "";
+            //sanitize
+            $course->shortname = $shortname;
+            $course->fullname = $coursename;
+            $course->category = $categoryid;
+            //send to external function
+            $newcourse = create_course($course);
+
+             //ENROLL CURRENT INSTRUCTOR INTO COURSE
+             if(!$isadmin){
+                $isenrolled = self:: enroll_user($courseid, $newcourse->id,$USER->id);
+                if(!$isenrolled)
+                {
+                    return array("error"=>"Was unable to enroll user in course");
+                }
+             }
+
+            //use old id and new id to tranfer data to new course
+            $importer = new core_course_external();
+            $options = array(array('name'=>'activities','value'=>1),array('name'=>'blocks', 'value'=>1),array('name'=>'filters','value'=>1));
+            $importer->import_course($templateid, $newcourse->id,0,$options);
+
+            //UNENROLL INSTRUCTOR FROM TEMPLATE
+            if(!$ogisenrolled && !$isadmin){
+                error_log(print_r("IN UNENROLL ",TRUE));
+                //get instance that can unenrol
+                $instances = $DB->get_records('enrol', array('courseid' => $params['templateid']));
+                error_log(print_r($instances,TRUE));
+                foreach ($instances as $instance) {
+                    $plugin = enrol_get_plugin($instance->enrol);
+                    $plugin->unenrol_user($instance, $USER->id);
+                   
+                }
+            }
+        }
+
+       
+        //return new course id & url
+        $url = $CFG->wwwroot.'/course/view.php?id=' . $newcourse->id;
+     
+        return array('courseid'=>$newcourse->id, 'url'=>$url, 'error'=>"");
+    }
+
+      /**
+     * Returns description of get_guide_page return value.
+     *
+     * @return external_single_structure
+     */
+    public static function create_course_returns() {
+        return new external_single_structure(array(
+            'courseid' => new external_value(PARAM_INT),
+            'url' => new external_value(PARAM_TEXT),
+            'error' => new external_value(PARAM_TEXT),
+        ));
+    }
+
+     /**
+     * Returns description of get_guide_page return value.
+     *
+     * @return external_single_structure
+     */
+    public static function enroll_user($ogcourseid,$newcourseid, $userid) {
+
+        global $DB, $CFG;
+
+        $isenrolled = false;
+        $ogcontext = \context_course::instance($ogcourseid);
+        $newcontext = \context_course::instance($newcourseid);
+
+        error_log(print_r("in enroller",TRUE));
+        error_log(print_r($ogcourseid,TRUE));
+        error_log(print_r($userid,TRUE));
+
+
+        //get enroll id for manual enrollment for current course
+        $sql = "SELECT * FROM mdl_enrol WHERE courseid =".$newcourseid." AND enrol = 'manual';";
+        $enroll = $DB->get_record_sql($sql, null, MUST_EXIST);
+
+        error_log(print_r("in enroller0",TRUE));
+        error_log(print_r($newcourseid,TRUE));
+
+
+        //GET CURRENT ROLE OF USER IN COURSE
+        if ($roles = get_user_roles($ogcontext, $userid)) {
+            foreach ($roles as $role) {
+
+                error_log(print_r("THE ROLE ",TRUE));
+                error_log(print_r($role->roleid,TRUE));
+                error_log(print_r($role->shortname,TRUE));
+                error_log(print_r($role,TRUE));
+
+                //enroll user in course with same role in current course
+                /*$dataobject = array(
+                    "status"=>0,
+                    "enrolid"=>$enroll->id,
+                    "userid"=>$userid,
+                    "timestart"=>time(),
+                    "timeend"=>0,
+                    "modififerid"=>$userid,
+                    "timecreated"=>time(),
+                    "timemodified"=>time()
+                );
+                $isenrolled =$DB->insert_record("user_enrolments", $dataobject, true, false);
+
+                error_log(print_r("in roller2",TRUE));
+                error_log(print_r($isenrolled,TRUE));
+
+                $dataobject = array(
+                    "roleid"=>$role->roleid,
+                    "contextid"=>$newcontext->id,
+                    "userid"=>$userid,
+                    "timemodified"=>time(),
+                    "modififerid"=>$userid,
+                    "itemid"=>0,
+                    "sortorder"=>0
+                );
+                $roleassigned = $DB->insert_record("role_assignments", $dataobject, true, false);
+
+                error_log(print_r("in roller2b",TRUE));
+                error_log(print_r($roleassigned,TRUE));*/
+                $isenrolled = self::check_enrolment($newcourseid, $userid, $role->roleid, 'manual');
+
+            }
+        }
+        error_log(print_r("in roller 3 ",TRUE));
+        error_log(print_r($isenrolled,TRUE));
+        return $isenrolled;
+    }
+
+    public static function check_enrolment($courseid, $userid, $roleid, $enrolmethod = 'manual'){
+   
+        global $DB;
+        $user = $DB->get_record('user', array('id' => $userid, 'deleted' => 0), '*', MUST_EXIST);
+        $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
+        $context = context_course::instance($course->id);
+        if (!is_enrolled($context, $user)) {
+          $enrol = enrol_get_plugin($enrolmethod);
+          if ($enrol === null) {
+             return false;
+          }
+         $instances = enrol_get_instances($course->id, true);
+         $manualinstance = null;
+         foreach ($instances as $instance) {
+             if ($instance->name == $enrolmethod) {
+                 $manualinstance = $instance;
+                 break;
+             }
+         }
+         if ($manualinstance !== null) {
+             $instanceid = $enrol->add_default_instance($course);
+             if ($instanceid === null) {
+                 $instanceid = $enrol->add_instance($course);
+             }
+             $instance = $DB->get_record('enrol', array('id' => $instanceid));
+         }
+
+
+
+
+         $enrol->enrol_user($instance, $userid, $roleid);
+     }
+     return true;
+ }
 }
 

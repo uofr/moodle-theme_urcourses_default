@@ -21,21 +21,28 @@
 
 }}
 <div class="col-md-6" id="theme_urcourses_default_header_course_request_{{uniqid}}">
-<div class="btn-group">
-  <button type="button" class="btn btn-secondary dropdown-toggle" id="btn_courserequest" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	<i class="fa fa-wrench" aria-hidden="true"></i>
-     Course Tools
-  </button>
-  <div class="dropdown-menu dropdown-menu-right">
-    <button class="dropdown-item ml-1" id="btn_duplicate" type="button"><i class="fa fa-files-o" aria-hidden="true"></i> Duplicate this course</button>
-  <div class="dropdown-divider"></div>
-  <button class="dropdown-item ml-1" id="btn_new" type="button"><i class="fa fa-plus" aria-hidden="true"></i> Create blank course</button>
-   </div>
-</div>
+  <div class="btn-group">
+    <button type="button" class="btn btn-secondary dropdown-toggle" id="btn_courserequest" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fa fa-wrench" aria-hidden="true"></i>
+      Course Tools
+    </button>
+    <div class="dropdown-menu dropdown-menu-right">
+      <button class="dropdown-item ml-1" id="btn_duplicate" type="button"><i class="fa fa-files-o" aria-hidden="true"></i> Duplicate this course</button>
+      <div class="dropdown-divider"></div>
+      <button class="dropdown-item ml-1" id="btn_new" type="button"><i class="fa fa-plus" aria-hidden="true"></i> Create blank course</button>
+      <div class="dropdown-divider"></div>
+      <button class="dropdown-item ml-1" id="btn_student" type="button" aria-username = "{{username}}"><i class="fa fa-user"  aria-hidden="true"></i> Create test student</button>
+    </div>
+  </div>
+
+
+
+
 </div>
 
 {{#js}}
     require(['theme_urcourses_default/course_request'], function(main) {
-        main.init('#theme_urcourses_default_header_course_request_{{uniqid}}', {{courseid}});
+        main.init('#theme_urcourses_default_header_course_request_{{uniqid}}', {{courseid}}, {{{templatelist}}},{{{categories}}});
     });
+  
 {{/js}}

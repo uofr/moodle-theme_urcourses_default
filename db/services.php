@@ -77,5 +77,29 @@ $functions = array(
         'description'   => 'Searches the guides.',
         'type'          => 'read',
         'ajax'          => 'true'
+    ),
+     'theme_urcourses_default_header_create_test_account' => array(
+        'classname'     => 'theme_urcourses_default_external',
+        'methodname'    => 'create_test_account',
+        'classpath'     => 'theme/urcourses_default/externallib.php',
+        'description'   => 'Creates and enrolls a test student account based on username.',
+        'type'          => 'write',
+        'ajax'          => 'true'
+     ),
+     'theme_urcourses_default_header_duplicate_course' => array(
+        'classname'     => 'theme_urcourses_default_external',
+        'methodname'    => 'duplicate_course',
+        'classpath'     => 'theme/urcourses_default/externallib.php',
+        'description'   => 'Creates a duplicated course',
+        'type'          => 'write',
+        'ajax'          => 'true'
+     ),
+    'theme_urcourses_default_header_create_course' => array(
+        'classname'     => 'theme_urcourses_default_external',
+        'methodname'    => 'create_course',
+        'classpath'     => 'theme/urcourses_default/externallib.php',
+        'description'   => 'Creates a duplicated course',
+        'type'          => 'write',
+        'ajax'          => 'true'
     )
 );

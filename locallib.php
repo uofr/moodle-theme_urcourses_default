@@ -359,7 +359,6 @@ function theme_urcourses_default_get_ur_category_class($courseid) {
 	
 		
 	//if default theme, then check category
-	
 	$sql = "SELECT a.name FROM {$CFG->prefix}course_categories a, {$CFG->prefix}course b WHERE a.id = b.category AND b.id = {$courseid}";
 	
 	$check_course_category = $DB->get_record_sql($sql);
@@ -369,4 +368,69 @@ function theme_urcourses_default_get_ur_category_class($courseid) {
 	}
 	
 	return $ur_css_class;
+}
+
+/**
+ * Return the UR Category class for a given course id.
+ * @param int $courseid
+ * @return string
+ */
+
+function theme_urcourses_default_get_course_templates() {
+
+    global $CFG, $DB;
+
+    //get category for Template Course
+    $sql = "SELECT * FROM mdl_course_categories WHERE name = 'TEMPLATES' OR name = 'Template';";
+    //$category = $DB->get_records_sql($sql);
+    $category = $DB->get_record_sql($sql, null, IGNORE_MISSING);
+
+    error_log(print_r("Category Test",TRUE));
+    error_log(print_r($category,TRUE));
+    //if no Template category
+    if (!(array)$category) {
+        return 0;
+    }
+    //else use category id to find all courses in the templates category
+
+    $sql = "SELECT * FROM mdl_course WHERE category = {$category->id};";
+    $courses = $DB->get_records_sql($sql);
+
+    if (!(array)$courses) {
+        return 0;
+    }
+
+    error_log(print_r("Courses Test",TRUE));
+    error_log(print_r($courses,TRUE));
+    $rendercourse = array();
+    foreach($courses as $course){
+        $temp= array();
+        $temp["id"]= $course->id;
+        $temp["fullname"]= $course->fullname;
+        $temp["summary"]= $course->summary;
+
+        $rendercourse[]=$temp;
+    }
+error_log(print_r($rendercourse,TRUE));  
+    return $rendercourse;
+
+}
+
+/**
+ * Return the UR Category class for a given course id.
+ * @param int $courseid
+ * @return string
+ */
+
+function theme_urcourses_default_get_catergories(){
+    global $CFG, $DB;
+
+    //get category for Template Course
+    $sql = "SELECT * FROM mdl_course_categories;";
+    //$category = $DB->get_records_sql($sql);
+    $categories = $DB->get_records_sql($sql, null, IGNORE_MISSING);
+
+    return $categories;
+
+
 }
