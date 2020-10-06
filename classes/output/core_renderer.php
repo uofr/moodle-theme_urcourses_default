@@ -500,7 +500,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
             'templatelist'=> json_encode(theme_urcourses_default_get_course_templates()),
             'categories'=> json_encode(theme_urcourses_default_get_catergories())
         ];
-        error_log(print_r($context,TRUE));
+      
         return $this->render_from_template('theme_urcourses_default/header_course_request', $context);
     }
     

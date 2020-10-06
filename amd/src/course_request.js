@@ -71,14 +71,14 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      * @return void
      */
     var _registerSelectorEventListeners = function(_element) {
-        if(_element.attr('id') == 'btn_new'){
+        if(_element.attr('id') == 'btn_new' && _templatelist.length<=6){
             //set event listners for template options
             $('.tmpl-label').bind('click', function() { _setActiveTemplate($(this)) } );
         }
     }
 
     /**
-     * Initiate ajax call to upload and set new image.
+     * Used for new course and duplicate course creation on button clicks
      */
     var _coursereqAction = function() {
 
@@ -89,18 +89,42 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             
         templatenew = '<div data-role="templateholder" class = "list-group" >';
         if(_templatelist !=0){
-            $.each( _templatelist, function( key, value ) {
-                templatenew += '<div data-role = "templateselect" class="tmpl-label list-group-item list-group-item-action " id = '+value.id+'>'+
-                                '<h6>'+value.fullname +'</h6>'+
-                                '<p><small>'+value.summary+'</small></p>'+
-                                '</div>';
-            });
-        }
-        //add default template option even if there is no template category
-        templatenew += '<div data-role = "templateselect" class="tmpl-label list-group-item list-group-item-action active" id = "0" >'+
+
+            if(_templatelist.length>6){
+
+                templatenew += '<label  class="col-form-label d-inline " for="templateselect">Template Select:</label><br> ';
+                templatenew += '<div class="form-control-feedback invalid-feedback" id="error_templateselect"></div> ';
+                templatenew += '<select class="custom-select" id="templateselect" ';
+           
+                templatenew += '<option value = 0 > Default Blank Course</option>';
+                templatenew += '<option value = 0 > Default Blank Course</option>';
+                $.each( _templatelist, function( key, value ) {
+                    templatenew += '<option value = '+value.id+'>'+value.fullname +'</option>';
+                });
+                templatenew += '</select>';
+
+            }else{
+                $.each( _templatelist, function( key, value ) {
+                    templatenew += '<div data-role = "templateselect" class="tmpl-label list-group-item list-group-item-action " id = '+value.id+'>'+
+                                    '<h6>'+value.fullname +'</h6>'+
+                                    '<p><small>'+value.summary+'</small></p>'+
+                                    '</div>';
+                });
+
+                //add default template option even if there is no template category
+                templatenew += '<div data-role = "templateselect" class="tmpl-label list-group-item list-group-item-action active" id = "0" >'+
                 '<h6>Default Course</h6>'+
                 '<p><small>Basic course template. No activites included </small></p>'+
                 '</div>';
+            }
+        }else{
+
+            //add default template option even if there is no template category
+            templatenew += '<div data-role = "templateselect" class="tmpl-label list-group-item list-group-item-action active" id = "0" >'+
+            '<h6>Default Course</h6>'+
+            '<p><small>Basic course template. No activites included </small></p>'+
+            '</div>';
+        }
 
         templatebase = '</div>';
         templatebase += '<br><br>'
@@ -173,6 +197,9 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         });
     };
 
+    /**
+     * Switch choosen template based on click in template list
+     */
     var _setActiveTemplate = function(e) {
 
         templateHolder = $('div[data-role="templateholder"');
@@ -180,7 +207,10 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         e.addClass("active");
     };
 
-
+    /**
+     * For Duplicate and Create course.
+     * Validate if course name and shortname have been entered
+     */
     var _validate = function() {
 
         coursename = $('#coursename').val();
@@ -212,6 +242,9 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         return true;
     };
 
+    /**
+     * After modal info has been entered call ajax request
+     */
     var _createCourse = function(elementid) {
         
         // return if required values aren't set
@@ -219,9 +252,13 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             return;
         }
         
-        templateHolder = $('div[data-role="templateholder"');
-        selectedTemplate = $(templateHolder).find('.active')
-        templateid = $(selectedTemplate).attr('id');
+        if(_templatelist.length>6){
+            templateid = $('#templateselect').val();
+        }else{
+            templateHolder = $('div[data-role="templateholder"');
+            selectedTemplate = $(templateHolder).find('.active')
+            templateid = $(selectedTemplate).attr('id');
+        }
 
         coursename = $('#coursename').val();
         shortname = $('#shortname').val();
@@ -241,7 +278,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         var ajaxCall = {
             methodname: 'theme_urcourses_default_header_create_course',
             args: args,
-            done: _choiceDone,
             fail: notification.exception
         };
 
@@ -250,27 +286,29 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         promise[0].done(function(response) {
             if(response.error!=""){
 
-                var trigger = $('#create-modal');
+                title = "ERROR:"
+                info = response.error;
+
                 ModalFactory.create({
-                  title: 'Error:',
-                  body: response.error,
-                  
-                }, trigger)
+                    title: title,
+                    body: '<p><b>'+info+'</b><br></p>',
+                })
                 .done(function(modal) {
-                  // Do what you want with your new modal.
+                    modal.show();
                 });
             }
             //ADD REDIRECT TO NEW COURSE USING NEW ID
             if(response.url !=""){
                 window.location.href = response.url;
             }
-
-
         }).fail(function(ex) {
             notification.exception;
         });  
     };
 
+     /**
+     * After modal info has been entered call ajax request
+     */
     var _duplicateCourse = function(elementid) {
         
         // return if required values aren't set
@@ -294,7 +332,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         var ajaxCall = {
             methodname: 'theme_urcourses_default_header_duplicate_course',
             args: args,
-            done: _choiceDone,
             fail: notification.exception
         };
 
@@ -302,14 +339,16 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         var promise = ajax.call([ajaxCall]);
         promise[0].done(function(response) {
             if(response.error!=""){
-                var trigger = $('#create-modal');
+
+                title = "ERROR:"
+                info = response.error;
+
                 ModalFactory.create({
-                  title: 'Error:',
-                  body: response.error,
-                  
-                }, trigger)
+                    title: title,
+                    body: '<p><b>'+info+'</b><br></p>',
+                })
                 .done(function(modal) {
-                  // Do what you want with your new modal.
+                    modal.show();
                 });
             }
             //ADD REDIRECT TO NEW COURSE USING NEW ID
@@ -321,6 +360,9 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         });  
     };
 
+     /**
+     * Modal after button click to create student account
+     */
     var _createStudentAction = function() {
 
         var username =this.getAttribute("aria-username");
@@ -349,6 +391,9 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         });
     };
 
+     /**
+     * After modal info has been entered call ajax request
+     */
     var _createStudentAccount = function(username) {
 
         // return if required values aren't set
@@ -381,7 +426,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         });	
     };
     /**
-     * Handles theme_urcourses_default_upload_course_image response data.
+     * Handles ajax return and response to return data
      * @param {Object} response 
      */
     var _createdAccount = function(data) {
@@ -434,52 +479,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             });
             modal.show();
         });
-    };
-
-    /**
-     * Handles theme_urcourses_default_upload_course_image response data.
-     * @param {Object} response 
-     */
-    var _choiceDone = function() {
-        str.get_string('success:coursestylechosen', 'theme_urcourses_default')
-            .done(_createSuccessPopup);
-    };
-
-    /**
-     * Creates a bootstrap dismissable containing success text.
-     * Dismissable should appear in header and should cover upload button.
-     * @param {string} text Success text.
-     */
-    var _createSuccessPopup = function(text) {
-        // create bootstrap 4 dismissable
-        var popup = $('<div></div>');
-        popup.text(text);
-        popup.prop('id','cstyle_success_popup');
-        popup.css({'position' : 'absolute'});
-        popup.css({'right' : '5px'});
-        popup.css({'bottom' : '30px'});
-        popup.css({'z-index' : '1200'});
-        popup.addClass('alert alert-success alert-dismissable fade show');
-
-        // create dismiss button
-        var dismissBtn = $('<button></button>');
-        dismissBtn.html('&times;');
-        dismissBtn.addClass('close');
-        dismissBtn.attr('type', 'button');
-        dismissBtn.attr('data-dismiss', 'alert');
-
-        // append dismiss button to popup
-        popup.append(dismissBtn);
-
-        // add to header's course image area
-        $(SELECTORS.HEADER_TOP).append(popup);
-
-        // makes the alert disapear after a set amout of time.
-        setTimeout(function() {
-            $('#cstyle_success_popup').fadeTo(500, 0).slideUp(500, function(){
-                $(this).remove();
-            });
-        },1800);
     };
 
     /**

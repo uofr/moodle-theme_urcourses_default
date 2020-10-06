@@ -371,9 +371,8 @@ function theme_urcourses_default_get_ur_category_class($courseid) {
 }
 
 /**
- * Return the UR Category class for a given course id.
- * @param int $courseid
- * @return string
+ * Return array of template courses for creation
+ * @return array
  */
 
 function theme_urcourses_default_get_course_templates() {
@@ -385,8 +384,6 @@ function theme_urcourses_default_get_course_templates() {
     //$category = $DB->get_records_sql($sql);
     $category = $DB->get_record_sql($sql, null, IGNORE_MISSING);
 
-    error_log(print_r("Category Test",TRUE));
-    error_log(print_r($category,TRUE));
     //if no Template category
     if (!(array)$category) {
         return 0;
@@ -400,8 +397,6 @@ function theme_urcourses_default_get_course_templates() {
         return 0;
     }
 
-    error_log(print_r("Courses Test",TRUE));
-    error_log(print_r($courses,TRUE));
     $rendercourse = array();
     foreach($courses as $course){
         $temp= array();
@@ -411,15 +406,14 @@ function theme_urcourses_default_get_course_templates() {
 
         $rendercourse[]=$temp;
     }
-error_log(print_r($rendercourse,TRUE));  
+  
     return $rendercourse;
 
 }
 
 /**
- * Return the UR Category class for a given course id.
- * @param int $courseid
- * @return string
+ * Return a list of course categories for the site
+ * @return array
  */
 
 function theme_urcourses_default_get_catergories(){
