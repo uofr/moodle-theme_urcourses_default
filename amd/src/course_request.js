@@ -17,7 +17,7 @@
  * Theme Boost Campus - Code for course header image uploader.
  *
  * @package    theme_urcourses_default
- * @author     John Lane
+ * @author     Brooke Clary
  * 
  */
 
@@ -81,6 +81,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      * Used for new course and duplicate course creation on button clicks
      */
     var _coursereqAction = function() {
+
+        console.log("MADE IT");
 
         _element = $(this);
 

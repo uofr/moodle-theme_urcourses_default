@@ -406,9 +406,7 @@ function theme_urcourses_default_get_course_templates() {
 
         $rendercourse[]=$temp;
     }
-  
     return $rendercourse;
-
 }
 
 /**
@@ -425,6 +423,77 @@ function theme_urcourses_default_get_catergories(){
     $categories = $DB->get_records_sql($sql, null, IGNORE_MISSING);
 
     return $categories;
+}
 
+/**
+ * Return an array of semesters
+ * @return array
+ */
+
+function theme_urcourses_default_get_semesters(){
+
+    $year = date("Y");
+    $month = date("m");
+
+    if($month >= 1 && $month <=4 ){
+        $term = 10;
+    }elseif($month >= 5 && $month <=8 ){
+        $term = 20;
+    }elseif($month >= 9 && $month <=12){
+        $term = 30;
+    }
+
+    $semesters=array();
+
+    for($i=0; $i<4; $i++){
+       
+        if ($term > 30) {
+            $year += 1;
+            $term = 10;
+        }
+
+         //CHANGE STRING NAMES!!!!!
+        $semstring = $year;
+        if ($term == 10) {
+            $semstring .= " " . get_string('winter', 'block_urcourserequest');
+        }elseif ($term == 20) {
+            $semstring .= " " . get_string('spring', 'block_urcourserequest');
+        }elseif ($term == 30) {
+            $semstring .= " " . get_string('fall', 'block_urcourserequest');
+        }else {
+            $semstring = $semester;
+        }
+
+        $temp=array("id"=> $year.$term, "title"=>$semstring);
+        $semesters[]=$temp;
+        $term += 10;
+    }
+
+    return $semesters;
+}
+
+/**
+ * Return an array of semesters
+ * @return array
+ */
+
+function theme_urcourses_default_get_course_state($courseid){
+
+    global $DB;
+    //get course idnumber 
+
+    //use idnumber to sort through map table
+    $sql = "SELECT *
+            FROM mdl_course 
+            WHERE id='$courseid';";
+
+    $course = $DB->get_record_sql($sql,null);
+
+    if(!$course){
+        return false;
+    }
+    
+    //return false, or the semester string if found
+    return block_urcourserequest_get_course_state($course->idnumber);
 
 }

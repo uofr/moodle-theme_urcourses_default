@@ -24,6 +24,15 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+//ADDED FOR urcourserequest for banner enrollment
+if (is_file($CFG->dirroot.'/blocks/urcourserequest/lib.php')){
+    require_once($CFG->dirroot.'/blocks/urcourserequest/lib.php');
+    define('URCOURSEREQUEST', TRUE);  
+}else{
+    define('URCOURSEREQUEST', FALSE);  
+}
+//END OF ADDED
+
 /**
  * Get compiled css.
  *

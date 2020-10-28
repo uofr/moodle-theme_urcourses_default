@@ -17,7 +17,7 @@
  * Theme Boost Campus - Code for course header image uploader.
  *
  * @package    theme_urcourses_default
- * @author     John Lane
+ * @author     Brooke Clary
  * 
  */
 
@@ -28,8 +28,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     var _root;
     /** Course ID */
     var _courseid;
-    
     var _element;
+    var _semester;
 
     /** Jquery selector strings. */
     var SELECTORS = {
@@ -49,8 +49,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     var _setGlobals = function(root, courseid) {
        _root = $(root);
        _courseid = courseid;
-       
-       console.log('set globals for course_enrolment');
     };
 
     /**
@@ -58,133 +56,567 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      * @return void
      */
     var _registerEventListeners = function() {
-        _root.on('click', SELECTORS.BTN_ENROLTERM, _courseenrolAction);
-        console.log('course enrolment event listeners registered');
+        _root.on('click', SELECTORS.BTN_ENROLTERM, _getEnrolInfo);
     };
-
-    /**
-     * Initiate ajax call to upload and set new image.
+     /**
+     * Sets up event listeners.
+     * @return void
      */
-    var _courseenrolAction = function() {
+    var _registerSelectorEventListeners = function(_element) {
+        //set event listners for template options
+        $('.tmpl-label').bind('click', function() { _setActiveTemplate($(this)) } );   
+    } 
+    /**
+     * Sets up event listeners.
+     * @return void
+     */
+    var _registerModalButtons = function() {
+        //set event listners for template options
+        $('#btn_duplicatemodal').bind('click', function() { _coursereqAction($(this)) } );   
+        $('#btn_newmodal').bind('click', function() { _coursereqAction($(this)) } );   
+    }
+
+     /**
+     * Initiate ajax call to get enrollment info 
+     * to create modal with choices
+     */
+    var _getEnrolInfo = function() {
+
         _element = $(this);
-        
-        console.log('triggered course enrol: '+_element.attr('id'));
+        _semester = _element.attr('id');
 
-        //if current style is clicked, do nothing...
-        //console.log('_headerstyle:'+_headerstyle);
-        /*
-        if ('#'+_element.attr('id') == SELECTORS.HDRSTYLEA_BTN && _headerstyle == 0) {
-            return;
-        } else if ('#'+_element.attr('id') == SELECTORS.HDRSTYLEB_BTN && _headerstyle == 1) {
-            return;
-        }
-        */
-        my_crns = {'ss2020': [12897,12874,23332],'f2020': [12345,32443],'w2021': [12764]};
-        
-        crnlist = '<ul>';
-        
-        for (m in my_crns['ss2020']) {
-            crnlist += '<li>'+my_crns['ss2020'][m]+'</li>';
-        }
-        
-        crnlist += '</ul>';
-        
-        //adding in confirmation modal in case buttons accidentally clicked
-        ModalFactory.create({
-            type: ModalFactory.types.SAVE_CANCEL,
-            title: 'Modify enrolment',
-            body: "<p><b>Are you sure you want to modify enrolment for this course?</b><br />"
-                  + "<small>The following CRNs are available for the selected term:</small>"
-                  + crnlist
-                  + "</p>"
-        })
-        .then(function(modal) {
-            modal.setSaveButtonText('Save');
-            var root = modal.getRoot();
-            root.on(ModalEvents.cancel, function(){
-                return;
-            });
-            root.on(ModalEvents.save, _styleChange);
-            modal.show();
-        });
-    };
-
-
-    var _styleChange = function() {
-        
-        
-        alert('#'+_element.attr('id'));
-        
-/*
         // return if required values aren't set
         if (!_courseid) {
             return;
         }
-
         // set args
         var args = {
             courseid: _courseid,
-            headerstyle: _headerstyle,
+            semester: _semester
         };
 
         // set ajax call
         var ajaxCall = {
-            methodname: 'theme_urcourses_default_header_choose_style',
+            methodname: 'theme_urcourses_default_header_enrollment_info',
+            args: args
+        };
+
+        // initiate ajax call
+        var promise = ajax.call([ajaxCall]);
+        promise[0].done(function(response) {
+            _populateModal(response);
+        }).fail(function(ex) {
+            notification.exception;
+        });	
+    }
+
+    /**
+    * Switch choosen template based on click in template list
+    */
+    var _setActiveTemplate = function(e) {
+
+        templateHolder = $('div[data-role="templateholder"');
+        $(templateHolder).find('.active').removeClass("active");
+        e.addClass("active");
+    };
+    
+    /**
+     * Handles ajax return and response to create modal with options
+     * @param {Object} response 
+     */
+    var _populateModal = function(data) {
+
+        // create modal with current selection as header
+        var modaltitle = 'Modify enrolment for '+data.semester;
+            
+        activatedlist = "";
+        activatedtitle = "";
+        isavailable = data.isavaliable
+
+        if(isavailable ==false){
+
+            //spinner incase one is clicked
+            output = '<div class="d-flex justify-content-center">'
+                    +'<div id= "mainspinner" class="spinner-border " role="status"style="display: none;" >'
+                    +'<span class="sr-only">Loading...</span>'
+                    +'</div>'
+                    +'</div>'
+                    +'<div id="infoholder" class="">';
+
+            //We want an alert saying this course was activate in semester ...
+            output += '<div class="alert alert-warning" role="alert">'
+                    +'This course was used in a different semester. Please choose one of the '
+                    +'following options:'
+                    +'</div>';
+
+            //Duplicate this course? 
+            output +=//'<div data-role="templateholder" '
+                    '<button class="btn btn-secondary" id="btn_duplicatemodal" type="button">'
+                    +'<i class="fa fa-files-o" aria-hidden="true"></i>'
+                    +'Duplicate this course'
+                    +'</button>';
+            //or
+            //create new course?
+            output += '<button class="btn btn-secondary" id="btn_newmodal"style="float: right;" type="button">'
+                    +'<i class="fa fa-plus" aria-hidden="true"></i> '
+                    +'Create blank course'  
+                    + '</button> </div></div>';
+
+        }else{
+
+            if(data.activated.length !=0){
+                activatedtitle = "<small>The following Banner sections are already enrolled for the selected term:</small>";
+                activatedlist += '<div class="list-group">';
+                $.each( data.activated, function( key, value ) {
+                    activatedlist += '<div class="list-group-item list-group-item-secondary">'+
+                                    '<h6>'+value.subject + ' ' +value.course + '-' + value.section +'</h6>'+
+                                    '</div>';
+                });
+    
+                activatedlist += '</div><br>';
+            }
+    
+            templatelist = '<div data-role="templateholder" class = "list-group" >';
+            //check if any data exists
+            if(data.courseinfo.length !=0){
+
+                if(data.courseinfo.length>6){
+    
+                    templatelist += '<label  class="col-form-label d-inline " for="bannerselect">Select Banner Section:</label><br> ';
+                    templatelist += '<div class="form-control-feedback invalid-feedback" id="error_bannerselect"></div> ';
+                    templatelist += '<select class="custom-select" id="bannerselect" ';
+               
+                    $.each( data.courseinfo, function( key, value ) {
+                        
+                        templatelist+= '<option value = ' +value.subject + ' ' +value.course + '-' + value.section +'</option>';
+                       
+                    });
+                    templatelist += '</select>';
+    
+                }else{
+                    //special clicking list
+                    count=1;
+                    $.each( data.courseinfo, function( key, value ) {
+                        if(count==1){
+                        templatelist += '<div data-role = "bannerselect" class="tmpl-label list-group-item list-group-item-action active" id = '+value.crn+'>'+
+                                        '<h6>'+value.subject + ' ' +value.course + '-' + value.section +'</h6>'+
+                                        '</div>';
+                        }else{
+                            templatelist += '<div data-role = "bannerselect" class="tmpl-label list-group-item list-group-item-action " id = '+value.crn+'>'+
+                                        '<h6>'+value.subject + ' ' +value.course + '-' + value.section +'</h6>'+
+                                        '</div>';
+                        }
+                        count++;
+                    });
+                }
+            }else{
+                // else not error message
+                //add default template option even if there is no template category
+                templatelist += '<div data-role = "templateselect" class="tmpl-label list-group-item list-group-item-action active" id = "0" >'+
+                '<p>There are no available Banner Sections for this course </p>'+
+                '</div>';
+            }
+            templatelist += '</div>';
+        }
+      
+        //adding in confirmation modal in case buttons accidentally clicked
+        ModalFactory.create({
+            type: ModalFactory.types.SAVE_CANCEL,
+            title: modaltitle,
+            body: ((isavailable) ? "<p><b>Are you sure you want to modify enrolment for this course?</b><br />"
+                    + activatedtitle 
+                    + activatedlist 
+                    + "<small>The following CRNs are available for the selected term:</small>"
+                   + templatelist
+                   + "</p>" : output )
+
+        }).then(function(modal) {
+
+            if(isavailable){
+                modal.setSaveButtonText('Save');
+                var root = modal.getRoot();
+                root.on(ModalEvents.cancel, function(){
+                    return;
+                });
+                    
+                root.on(ModalEvents.save, function(e){
+                    _addEnrolment(data.courseinfo);    
+                });
+            }else{
+                var root = modal.getRoot();
+                root.on(ModalEvents.cancel, function(){
+                    return;
+                });
+            }
+           
+            //remove modal on hide
+            root.on(ModalEvents.hidden, function(e){
+                //remove inputs otherwise duplicates are made causing id problems
+                $( "div[data-role='templateholder']" ).remove();
+            });
+            modal.show();
+        }).done(function(modal) {
+            if(isavailable){
+                if(data.courseinfo.length<6 && data.courseinfo.length>0 ){
+                    _registerSelectorEventListeners(_element);
+                }
+            }else{
+                _registerModalButtons();
+            }
+        });
+    };
+    
+    /**
+     * After modal info has been entered call ajax request
+     */
+    var _addEnrolment = function(courseinfo) {
+        
+        // return if required values aren't set
+        if (!_courseid) {
+            return;
+        }
+        
+        if(courseinfo.length>6){
+            templateid = $('#bannerselect').val();
+        }else{
+            templateHolder = $('div[data-role="templateholder"');
+            selectedTemplate = $(templateHolder).find('.active')
+            templateid = $(selectedTemplate).attr('id');
+        }
+
+        if(templateid !=0){
+            //duplicate course option selected
+            // set args
+            var args = {
+                courseid: _courseid,
+                semester: _semester,
+                crn: templateid,    
+            };
+
+            // set ajax call
+            var ajaxCall = {
+                methodname: 'theme_urcourses_default_header_activate_course',
+                args: args,
+                fail: notification.exception
+            };
+
+            // initiate ajax call
+            var promise = ajax.call([ajaxCall]);
+            promise[0].done(function(response) {
+                
+                if(response.result!=""){
+                    title = "Response:"
+                    info = response.result;
+                }
+                //enrollment was a success
+                if(response.value){
+                    messageHolder = $('#enrollment_span');
+                    messageHolder.text("Enrolment: "+response.semester);
+                }
+                    
+                ModalFactory.create({
+                        title: title,
+                        body: '<p><b>'+info+'</b><br></p>',
+                }).done(function(modal) {
+                    modal.show();
+                });
+
+            }).fail(function(ex) {
+                notification.exception;
+            });  
+        }
+    };
+
+     /**
+     * Used for new course and duplicate course creation on button clicks
+     */
+    var _coursereqAction = function() {
+
+        _element = $(this);
+
+        var modaltitle = (_element.attr('id') == 'btn_newmodal') ? 'Create new course' : 'Duplicate this course';
+        var modalaction = (_element.attr('id') == 'btn_newmodal') ? 'create a new' : 'duplicate this';
+            
+        templatenew = '<div data-role="templateholder" class = "list-group" >';
+        if(_templatelist !=0){
+
+            if(_templatelist.length>6){
+
+                templatenew += '<label  class="col-form-label d-inline " for="templateselect">Template Select:</label><br> ';
+                templatenew += '<div class="form-control-feedback invalid-feedback" id="error_templateselect"></div> ';
+                templatenew += '<select class="custom-select" id="templateselect" ';
+           
+                templatenew += '<option value = 0 > Default Blank Course</option>';
+                templatenew += '<option value = 0 > Default Blank Course</option>';
+                $.each( _templatelist, function( key, value ) {
+                    templatenew += '<option value = '+value.id+'>'+value.fullname +'</option>';
+                });
+                templatenew += '</select>';
+
+            }else{
+                $.each( _templatelist, function( key, value ) {
+                    templatenew += '<div data-role = "templateselect" class="tmpl-label list-group-item list-group-item-action " id = '+value.id+'>'+
+                                    '<h6>'+value.fullname +'</h6>'+
+                                    '<p><small>'+value.summary+'</small></p>'+
+                                    '</div>';
+                });
+
+                //add default template option even if there is no template category
+                templatenew += '<div data-role = "templateselect" class="tmpl-label list-group-item list-group-item-action active" id = "0" >'+
+                '<h6>Default Course</h6>'+
+                '<p><small>Basic course template. No activites included </small></p>'+
+                '</div>';
+            }
+        }else{
+
+            //add default template option even if there is no template category
+            templatenew += '<div data-role = "templateselect" class="tmpl-label list-group-item list-group-item-action active" id = "0" >'+
+            '<h6>Default Course</h6>'+
+            '<p><small>Basic course template. No activites included </small></p>'+
+            '</div>';
+        }
+
+        templatebase = '</div>';
+        templatebase += '<br><br>'
+        templatebase += '<div class="form-control-feedback invalid-feedback" id="error_coursename"></div> ';
+        templatebase += '<label  class="col-form-label d-inline " for="coursename">Course Full Name:</label><input maxlength="254" class="form-control " type="text" id="coursename" name="coursename"><br> ';
+        templatebase += '<div class="form-control-feedback invalid-feedback" id="error_shortname"></div> ';
+        templatebase += '<label class="col-form-label d-inline " for="shortname">Course Short Name:</label><input maxlength="254" class="form-control " type="text" id="shortname" name="shortname"><br> ';
+
+
+        templatebase += '<label  class="col-form-label d-inline " for="category">Course Category:</label><br> ';
+        templatebase += '<div class="form-control-feedback invalid-feedback" id="error_category"></div> ';
+        templatebase += '<select class="custom-select" id="category" ';
+        if(_categories !=0){
+            $.each( _categories, function( key, value ) {
+                templatebase += '<option value = '+value.id+'>'+value.name +'</option>';
+            });
+        }
+        templatebase += '</select';
+
+        templatenew += templatebase;  
+        templateduplicate = templatebase;
+        
+        //adding in confirmation modal in case buttons accidentally clicked
+        ModalFactory.create({
+            type: ModalFactory.types.SAVE_CANCEL,
+            title: modaltitle,
+            body: "<p><b>Are you sure you want to "+ modalaction +" course?</b><br />"
+                + ((_element.attr('id') == 'btn_newmodal') ? "<small>Select from the templates below:</small>" : "<small>Student data will not be included in the duplicated course.</small>")
+                + ((_element.attr('id') == 'btn_newmodal') ? templatenew : '' )
+                + (!(_element.attr('id') == 'btn_newmodal') ? templateduplicate : '' )
+                + "</p>"
+        }).then(function(modal) {
+
+            modal.setSaveButtonText((_element.attr('id') == 'btn_newmodal') ? 'Create new course' : 'Duplicate this course');
+            var root = modal.getRoot();
+            root.on(ModalEvents.cancel, function(){
+                return;
+            });
+                
+            if((_element.attr('id') == 'btn_newmodal')){
+                root.on(ModalEvents.save, function(e){
+                    if(!_validate()){
+                        e.preventDefault();   
+                    }else{
+                        _createCourse(_element.attr('id') );
+                    }    
+                });
+            }else{
+                root.on(ModalEvents.save, function(e){
+                    if(!_validate()){
+                        e.preventDefault();   
+                    }else{
+                        _duplicateCourse(_element.attr('id') );
+                    }
+                });
+            }
+            //remove modal on hide
+            root.on(ModalEvents.hidden, function(e){
+                //remove inputs otherwise duplicates are made causing id problems
+                $( "#coursename" ).remove();
+                $( "#shortname" ).remove();
+                $( "#category" ).remove();
+            });
+
+            modal.show();
+        }).done(function(modal) {
+            if((_element.attr('id') == 'btn_newmodal')){
+                _registerSelectorEventListeners(_element);
+            }
+        });
+    };
+
+    /**
+     * Switch choosen template based on click in template list
+     */
+    var _setActiveTemplate = function(e) {
+
+        templateHolder = $('div[data-role="templateholder"');
+        $(templateHolder).find('.active').removeClass("active");
+        e.addClass("active");
+    };
+
+    /**
+     * For Duplicate and Create course.
+     * Validate if course name and shortname have been entered
+     */
+    var _validate = function() {
+
+        coursename = $('#coursename').val();
+        shortname = $('#shortname').val();
+
+        error_coursename = $('#error_coursename');
+        error_shortname = $('#error_shortname');
+
+        var test =true; 
+        if(coursename.length ==0){
+            $(error_coursename).text("Please enter a name for the course");
+            $(error_coursename).attr("display", "block");
+            $(error_coursename).show();
+            test = false;
+        }
+
+        if(shortname.length ==0){
+            $(error_shortname).text("Please enter a short name for the course");
+            $(error_shortname).attr("display", "block");
+            $(error_shortname).show();
+            test = false;
+        }
+
+        if(!test){
+            return false;
+        }
+        $(error_coursename).text("");
+        $(error_shortname).text("");
+        return true;
+    };
+
+    /**
+     * After modal info has been entered call ajax request
+     */
+    var _createCourse = function(elementid) {
+        
+        // return if required values aren't set
+        if (!_courseid) {
+            return;
+        }
+        
+        if(_templatelist.length>6){
+            templateid = $('#templateselect').val();
+        }else{
+            templateHolder = $('div[data-role="templateholder"');
+            selectedTemplate = $(templateHolder).find('.active')
+            templateid = $(selectedTemplate).attr('id');
+        }
+
+        coursename = $('#coursename').val();
+        shortname = $('#shortname').val();
+        categoryid = $('#category').val();
+        $('#mainspinner') .show();
+        $('#infoholder').addClass("block_urcourserequest_overlay");
+
+        //duplicate course option selected
+        // set args
+        var args = {
+            courseid: _courseid,
+            templateid: templateid,    
+            coursename: coursename,
+            shortname: shortname,
+            categoryid: categoryid,
+        };
+
+        // set ajax call
+        var ajaxCall = {
+            methodname: 'theme_urcourses_default_header_create_course',
             args: args,
-            done: _choiceDone,
             fail: notification.exception
         };
 
         // initiate ajax call
-        ajax.call([ajaxCall]);
-        
-    */
-        
+        var promise = ajax.call([ajaxCall]);
+        promise[0].done(function(response) {
+            $('#mainspinner') .hide();
+            $('#infoholder').removeClass("block_urcourserequest_overlay");
+            if(response.error!=""){
+
+                title = "ERROR:"
+                info = response.error;
+
+                ModalFactory.create({
+                    title: title,
+                    body: '<p><b>'+info+'</b><br></p>',
+                })
+                .done(function(modal) {
+                    modal.show();
+                });
+            }
+            //ADD REDIRECT TO NEW COURSE USING NEW ID
+            if(response.url !=""){
+                window.location.href = response.url;
+            }
+        }).fail(function(ex) {
+            notification.exception;
+        });  
     };
-    /**
-     * Handles theme_urcourses_default_upload_course_image response data.
-     * @param {Object} response 
+
+     /**
+     * After modal info has been entered call ajax request
      */
-    var _choiceDone = function() {
-        str.get_string('success:coursestylechosen', 'theme_urcourses_default')
-            .done(_createSuccessPopup);
-    };
+    var _duplicateCourse = function(elementid) {
+        
+        // return if required values aren't set
+        if (!_courseid) {
+            return;
+        }
+        coursename = $('#coursename').val();
+        shortname = $('#shortname').val();
+        categoryid = $('#category').val();
 
-    /**
-     * Creates a bootstrap dismissable containing success text.
-     * Dismissable should appear in header and should cover upload button.
-     * @param {string} text Success text.
-     */
-    var _createSuccessPopup = function(text) {
-        // create bootstrap 4 dismissable
-        var popup = $('<div></div>');
-        popup.text(text);
-        popup.prop('id','cstyle_success_popup');
-        popup.css({'position' : 'absolute'});
-        popup.css({'right' : '5px'});
-        popup.css({'bottom' : '30px'});
-        popup.css({'z-index' : '1200'});
-        popup.addClass('alert alert-success alert-dismissable fade show');
+        $('#mainspinner') .show();
+        $('#infoholder').addClass("block_urcourserequest_overlay");
 
-        // create dismiss button
-        var dismissBtn = $('<button></button>');
-        dismissBtn.html('&times;');
-        dismissBtn.addClass('close');
-        dismissBtn.attr('type', 'button');
-        dismissBtn.attr('data-dismiss', 'alert');
+        //duplicate course option selected
+        // set args
+        var args = {
+            courseid: _courseid,
+            coursename: coursename,
+            shortname: shortname,
+            categoryid: categoryid,
+        };
 
-        // append dismiss button to popup
-        popup.append(dismissBtn);
+        // set ajax call
+        var ajaxCall = {
+            methodname: 'theme_urcourses_default_header_duplicate_course',
+            args: args,
+            fail: notification.exception
+        };
 
-        // add to header's course image area
-        $(SELECTORS.HEADER_TOP).append(popup);
+        // initiate ajax call
+        var promise = ajax.call([ajaxCall]);
+        promise[0].done(function(response) {
+            $('#mainspinner') .hide();
+            $('#infoholder').removeClass("block_urcourserequest_overlay");
+            if(response.error!=""){
 
-        // makes the alert disapear after a set amout of time.
-        setTimeout(function() {
-            $('#cstyle_success_popup').fadeTo(500, 0).slideUp(500, function(){
-                $(this).remove();
-            });
-        },1800);
+                title = "ERROR:"
+                info = response.error;
+
+                ModalFactory.create({
+                    title: title,
+                    body: '<p><b>'+info+'</b><br></p>',
+                })
+                .done(function(modal) {
+                    modal.show();
+                });
+            }
+            //ADD REDIRECT TO NEW COURSE USING NEW ID
+            if(response.url !=""){
+                window.location.href = response.url;
+            }
+        }).fail(function(ex) {
+            notification.exception;
+        });  
     };
 
     /**
