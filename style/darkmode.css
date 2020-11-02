@@ -23,8 +23,14 @@ a, #boost-campus-course-settings .card-body a, .ui-widget-content a, .btn-link,
  }
 
  body, .custom-select {
-    background-color: #f5eff9;
+    background-color: #3a3a38;
  }
+
+ .custom-select {
+    color: #efede7!important;
+    border: 1px solid #333 !important;
+    background-color: #3a3a38;
+}
 
  ol.checklist .itemblack, .block_writinghelp .card-text a h4, .popover-body,
  .dropdown-menu.show .dropdown-item a, #page-header .course-head a .page-context-header .page-header-headings h1,
@@ -296,8 +302,11 @@ div.editor_atto_toolbar div.atto_group button:only-child {
 }
 
 .editor_atto_content_wrap, .editor_atto + textarea {
-	border: solid 1px #333;
+    border: solid 1px #333;
+    background-color: #3a3a38;
 }
+
+
 
 .CodeMirror {
 	color: #efefef;
@@ -481,15 +490,141 @@ table.dataTable tr.odd td.sorting_1 {
     background-color: #f2eff3;  
 }
 
+#categoryquestions > tbody > tr:nth-of-type(even) {
+    background: #585856;
+}
+
 .path-mod-quiz #mod_quiz_navblock .qnbutton.notyetanswered .trafficlight, 
 .path-mod-quiz #mod_quiz_navblock .qnbutton {
     background-color: #dad8ce;
 }
-
 .path-mod-quiz #mod_quiz_navblock .qnbutton.answersaved .trafficlight {
     background-color: #938696;
 }
+#page-question-type-multichoice{
+    background-color: #4f4f4d !important;
+}
+#page-question-type-multichoice div[id^=fitem_id_][id*=fraction_]{
+    background-color: #4f4f4d !important;
+}
+body#page-question-type-multichoice div[id^=fitem_id_][id*=answer_]{
+    background-color: #4f4f4d !important;
+}
+body#page-question-type-multichoice div[id^=fitem_id_][id*=feedback_]{
+    background-color: #4f4f4d !important;
+}
+body#page-question-type-calculated div[id^=fgroup_id_][id*=answeroptions_], body#page-question-type-calculatedmulti div[id^=fgroup_id_][id*=answeroptions_] {
+    background-color: #4f4f4d;
+}
+body#page-question-type-calculated div[id^=fgroup_id_][id*=answertolerance_], body#page-question-type-calculated div[id^=fgroup_id_][id*=answerdisplay_], body#page-question-type-calculatedmulti div[id^=fgroup_id_][id*=answertolerance_], body#page-question-type-calculatedmulti div[id^=fgroup_id_][id*=answerdisplay_] {
+    background-color: #4f4f4d;
+}
+body#page-question-type-calculated div[id^=fitem_id_][id*=feedback_], body#page-question-type-calculatedmulti div[id^=fitem_id_][id*=feedback_] {
+    background-color: #4f4f4d;
+}
+body#page-question-type-calculated div[id^=fgroup_id_][id*=answertolerance_], body#page-question-type-calculated div[id^=fgroup_id_][id*=answerdisplay_], body#page-question-type-calculatedmulti div[id^=fgroup_id_][id*=answertolerance_], body#page-question-type-calculatedmulti div[id^=fgroup_id_][id*=answerdisplay_] {
+    background-color: #4f4f4d;
+}
+body#page-question-type-calculatedsimple div[id^=fgroup_id_][id*=answeroptions_] {
+    background-color: #4f4f4d;
+}
+body#page-question-type-calculatedsimple div[id^=fgroup_id_][id*=answertolerance_], body#page-question-type-calculatedsimple div[id^=fgroup_id_][id*=answerdisplay_] {
+    background-color: #4f4f4d;
+}
+body#page-question-type-calculatedsimple div[id^=fitem_id_][id*=feedback_] {
+    background-color: #4f4f4d;
+}
+body#page-question-type-ddmarker div[id^=fitem_id_][id*=hint_] {
+    background-color: #4f4f4d;
+}
+body#page-question-type-numerical div[id^=fgroup_id_][id*=answeroptions_] {
+    background-color: #4f4f4d;
+}
+body#page-question-type-numerical div[id^=fitem_id_][id*=feedback_] {
+    background-color: #4f4f4d;
+}
+body#page-question-type-shortanswer div[id^=fgroup_id_][id*=answeroptions_] {
+    background-color: #4f4f4d;
+}
+body#page-question-type-shortanswer div[id^=fitem_id_][id*=feedback_] {
+    background-color: #4f4f4d;
+}
+body#page-question-type-match div[id^=fitem_id_][id*=subquestions_] {
+    background-color: #4f4f4d;
+}
+body#page-question-type-match div[id^=fitem_id_][id*=subanswers_] {
+    background-color: #4f4f4d;
+}
+body#page-question-type-multichoiceset div[id^=fitem_id_][id*=answer_] {
+    background-color: #4f4f4d;
+}
+body#page-question-type-multichoiceset div[id^=fitem_id_][id*=feedback_]{
+    background-color: #4f4f4d;
+}
+body#page-question-type-ddimageortext div[id^=fgroup_id_][id*=drags_]{
+    background-color: #4f4f4d;
+}
+body#page-question-type-ddimageortext div[id^=fitem_id_][id*=dragitem_]{
+    background-color: #4f4f4d;
+}
+body#page-question-type-ddimageortext div[id^=fitem_id_][id*=draglabel_]{
+    background-color: #4f4f4d;
+}
 
+body#page-question-type-jme div[id^=fitem_id_][id*=fraction_], body#page-question-type-jme #fitem_id_addanswers + .fitem + .fitem, body#page-question-type-jme div[id^=fitem_id_][id*=feedback_], body#page-question-type-jme div[id^=fitem_id_][id*=otherfeedback]{
+    background-color: #4f4f4d;
+}
+
+.form-autocomplete-suggestions {
+    background-color: #4f4f4d;
+    border: 2px solid #dee2e6;
+}
+
+#page-mod-quiz-edit ul.slots li.section .content {
+    background-color: #4f4f4d !important;
+}
+
+#page-mod-quiz-edit ul.slots li.section li.activity .instancemaxmarkcontainer {
+    background: #6f6e6b;
+}
+
+#page-mod-quiz-edit ul.slots li.section li.activity{
+    background-color: #6f6e6b;
+}
+
+table.quizreviewsummary td.cell {
+    background: #3a3a38;
+}
+
+table.quizreviewsummary th.cell {
+    background: #3a3a38;
+}
+
+.que.essay .qtype_essay_response.readonly {
+    background-color: #3a3a38;
+    color: #efede7!important;
+}
+
+#page-mod-quiz-edit #categoryquestions .questionname, #page-mod-quiz-edit ul.slots li.activity div.activityinstance .questionname {
+    color: #e2d2a2;
+}
+#page-mod-quiz-edit ul.slots li.activity div.activityinstance .questiontext {
+    color: #e2d2a2;
+}
+#page-mod-quiz-edit .section .activity .actions {
+    background-color: transparent;
+}
+
+#page-mod-quiz-edit .slotnumber {
+    background: #3a3a38;
+}
+
+
+.searchoptions{
+    color: #efede7!important;
+    border: 1px solid #333 !important;
+    background-color: #3a3a38
+}
 .pagination .page-link,
 #boost-campus-activity-settings .tab-content .card, 
 #boost-campus-course-settings .tab-content .card  {
@@ -517,6 +652,13 @@ table.dataTable tr.odd td.sorting_1 {
     color: #e5e3e8!important;
 }
 
+.table, table.collection, table.flexible, .generaltable{
+    color: #e5e3e8!important;
+}
+
+.table:hover, table.collection:hover, table.flexible:hover, .generaltable:hover{
+    color: #e5e3e8!important;
+}
 .tag-info {
     background-color: #bd8a00;
     color: black;
@@ -696,6 +838,11 @@ a:hover {
     border-color: #dee2e6;
 }
 
+tr:hover{
+    background-color: #2f2d29;
+    color: #e6e5de;
+}
+
 /*decorated text spacing for easier readability*/
 i, b, .teachers {
     letter-spacing: .5px;
@@ -747,6 +894,7 @@ background: #EFEFEF!important;
 
  .generaltable tbody tr:hover, table.flexible tbody tr:hover {
     background-color:#32312e;
+    color: #e5e3e8!important;
 }
 
 .hcol-hov {
