@@ -31,9 +31,6 @@ require_once($CFG->libdir . "/externallib.php");
 require_once($CFG->dirroot . "/course/lib.php");
 require_once($CFG->dirroot . "/course/externallib.php");
 require_once($CFG->dirroot . "/user/lib.php");
-if (is_file($CFG->dirroot.'/blocks/urcourserequest/lib.php')){
-    require_once($CFG->dirroot.'/blocks/urcourserequest/lib.php');
-}
 
 
 class theme_urcourses_default_external extends external_api {
@@ -696,7 +693,6 @@ class theme_urcourses_default_external extends external_api {
         $course->shortname = $params['shortname'];
         $course->fullname = $params['coursename'];
         $course->category = $params['categoryid'];
-        $course->idnumber = "";
         //send to external function
         $newcourse = create_course($course);
 
@@ -878,7 +874,6 @@ class theme_urcourses_default_external extends external_api {
             $course->shortname = $params['shortname'];
             $course->fullname = $params['coursename'];
             $course->category = $params['categoryid'];
-            
             //send to external function
             $newcourse = create_course($course);
 
@@ -998,192 +993,5 @@ class theme_urcourses_default_external extends external_api {
      }
      return true;
  }
-
-  /**
-     * Returns description of enrollment_info's parameters.
-     *
-     * @return external_function_parameters
-     */
-    public static function enrollment_info_parameters() {
-        return new external_function_parameters(array(
-            'courseid' => new external_value(PARAM_INT),
-            'semester' => new external_value(PARAM_INT),
-        ));
-    }
-
-    /**
-     * Grabs all info needed for user to enrol students in course from banner. Grabs available crn banner course, based on 
-     * semester and user name. Checks if course was already activated somewhere else. Also grabs used crn banner courses for that
-     * semester
-     *
-     * @param int $courseid
-     * @param int $semester
-     * @return arrays
-     */
-    public static function enrollment_info($courseid, $semester) {
-
-        global $USER, $DB;
-
-        // get params
-        $params = self::validate_parameters(
-            self::enrollment_info_parameters(),
-            array(
-            'courseid' => $courseid,
-            'semester' => $semester,
-            )
-        );
-
-        // ensure user has permissions to change image
-        $context = \context_course::instance($params['courseid']);
-        self::validate_context($context);
-
-        //get course
-        $course = $DB->get_record('course', array('id' => $params['courseid']));
-
-        $admins = get_admins(); 
-        $isadmin = false; 
-        foreach ($admins as $admin) { 
-            if ($USER->id == $admin->id) 
-            { $isadmin = true; break; } } 
-        
-        //if user is admin get instructor info for course
-        if($isadmin){
-
-            $role = $DB->get_record('role', array('shortname' => 'editingteacher'));
-            $context = get_context_instance(CONTEXT_COURSE, $courseid);
-            $teachers = get_role_users($role->id, $context);
-            $courseinfo = block_urcourserequest_crn_info($params['semester'], reset($teachers)->username);
-
-            $activated=array();
-            if(empty($courseinfo)){
-                
-                for($i=1; $i<count($teachers); $i++){
-                    $courseinfo = block_urcourserequest_crn_info($params['semester'], $teachers[$i]->username);
-
-                    if(!empty($courseinfo)){
-                        $activated= block_urcourserequest_activated_courses($params['semester'], $teachers[$i]->username);
-                        break 1;
-                    }
-                }
-            }
-            $activated= block_urcourserequest_activated_courses($params['semester'], reset($teachers)->username);
-            
-            $isavailable = true;
-
-            if ($courseinfo) {
-               //check if course is already activated in a different semester
-                $activecourse = "select * from ur_crn_map where courseid='$course->idnumber'";
-                $active = $DB->get_record_sql($activecourse);
-    
-                if (!empty($active) && $active->semester != $semester) {
-                    $isavailable = false;
-                }
-            }
-        }else{
-            $courseinfo = block_urcourserequest_crn_info($params['semester'], $USER->username);
-            $activated= block_urcourserequest_activated_courses($params['semester'], $USER->username);
-            $isavailable = true;
-
-            if ($courseinfo) {
-               //check if course is already activated in a different semester
-                $activecourse = "select * from ur_crn_map where  courseid='$course->idnumber'";
-                $active = $DB->get_record_sql($activecourse);
-    
-                if (!empty($active) && $active->semester != $semester) {
-                    $isavailable = false;
-                }
-            }
-        }
-        return array("courseinfo"=>$courseinfo, "activated"=>$activated, "semester"=>block_urcourserequest_semester_string($semester),"isavaliable"=>$isavailable);
-    }
-    /**
-     * Returns description of enrollment_info return value.
-     *
-     * @return external_single_structure
-     */
-    public static function enrollment_info_returns() {
-        return new external_single_structure(array(
-            'courseinfo' => new external_multiple_structure(new external_single_structure(array(
-                'crn' => new external_value(PARAM_INT),
-                'subject' => new external_value(PARAM_TEXT),
-                'course' => new external_value(PARAM_TEXT),
-                'section' => new external_value(PARAM_TEXT),
-                'title' => new external_value(PARAM_TEXT)
-            )))  ,
-            'activated' => new external_multiple_structure(new external_single_structure(array(
-                'crn' => new external_value(PARAM_INT),
-                'subject' => new external_value(PARAM_TEXT),
-                'course' => new external_value(PARAM_TEXT),
-                'section' => new external_value(PARAM_TEXT),
-                'title' => new external_value(PARAM_TEXT)
-            ))),
-            'semester' =>new external_value(PARAM_TEXT),
-            'isavaliable' =>new external_value(PARAM_BOOL),
-
-        ));
-    }
-
-     /**
-     * Returns description of activate_course's parameters.
-     *
-     * @return external_function_parameters
-     */
-    public static function activate_course_parameters() {
-        return new external_function_parameters(array(
-            'courseid' => new external_value(PARAM_INT),
-            'semester' => new external_value(PARAM_INT),
-            'crn' => new external_value(PARAM_INT),
-        ));
-    }
-
-    /**
-     * Enrolls students from select banner section into course
-     * Activates the course by adding it to the crn_map table
-     *
-     * @param int $courseid
-     * @param int $semester of term to activate course in
-     * @param string $crn code of banner section
-     * @return array
-     */
-    public static function activate_course($courseid, $semester, $crn) {
-
-        global $USER, $DB;
-
-        // get params
-        $params = self::validate_parameters(
-            self::activate_course_parameters(),
-            array(
-            'courseid' => $courseid,
-            'semester' => $semester,
-            'crn' => $crn,
-            )
-        );
-
-        // ensure user has permissions to change image
-        $context = \context_course::instance($params['courseid']);
-        self::validate_context($context);
-        $result="";
-        $result = block_urcourserequest_activate_urcourse($params['courseid'], $params['crn'], $params['semester']);
-
-        $value = false;
-        if(stripos($result, 'success') !== false){
-            $value = true;
-        }
-
-        return array("result"=>$result, "value"=>$value, "semester"=>block_urcourserequest_semester_string($semester));
-    }
-    /**
-     * Returns description of activate_course return value.
-     *
-     * @return external_single_structure
-     */
-    public static function activate_course_returns() {
-        return new external_single_structure(array(
-            'result' => new external_value(PARAM_TEXT),  
-            'value' => new external_value(PARAM_BOOL),  
-            'semester' => new external_value(PARAM_TEXT),  
-        ));
-    }
 }
-
 

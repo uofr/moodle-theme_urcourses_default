@@ -506,20 +506,11 @@ class core_renderer extends \theme_boost\output\core_renderer {
     
     function get_course_enrolment() {
         global $COURSE;
-
-        if(URCOURSEREQUEST){
-            //NEED TO ADD ACTIVE TO THIS AND A FUNCTION CALL
-            $context = [
-                'courseid' => $COURSE->id,
-                'availability' => $COURSE->visible,
-                'semesters' => theme_urcourses_default_get_semesters(),
-                'active' => theme_urcourses_default_get_course_state($COURSE->id),
-                
-            ];
-            return $this->render_from_template('theme_urcourses_default/header_course_enrolment', $context);
-        }
-
-        return ""; 
+        $context = [
+            'courseid' => $COURSE->id,
+            'availability' => $COURSE->visible
+        ];
+        return $this->render_from_template('theme_urcourses_default/header_course_enrolment', $context);
     }
     /**
      * Override to display course settings on every course site for permanent access

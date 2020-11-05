@@ -25,25 +25,17 @@
 <div class="btn-group">
   <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
      <i class="fa fa-plug" aria-hidden="true"></i>
-	 	<span id="enrollment_span">
-			Enrolment: 
-			{{#active}}
-				{{active}}
-			{{/active}}
-			{{^active}}
-				TBD
-			{{/active}}
-		</span>
+      Enrolment: TBD
     </button>
     <div class="dropdown-menu dropdown-menu-right">
     <h6 class="dropdown-header">Select a Term</h6>
     
     <div class="dropdown-divider"></div>
     
-	{{#semesters}}
-		<button class="dropdown-item btn_enrolterm ml-1" type="button" id="{{id}}">{{title}}</button>
-	{{/semesters}}
-		
+    <button class="dropdown-item btn_enrolterm ml-1" type="button" id="ss2020">Spring/Summer 2020</button>
+    <button class="dropdown-item btn_enrolterm ml-1" type="button" id="f2020">Fall 2020</button>
+    <button class="dropdown-item btn_enrolterm ml-1" type="button" id="w2021">Winter 2021</button>
+	
 	<!--
 	      <button class="dropdown-item ml-1" type="button">XMPL 100 (All)</button>
 	  

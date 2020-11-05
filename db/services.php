@@ -101,21 +101,5 @@ $functions = array(
         'description'   => 'Creates a duplicated course',
         'type'          => 'write',
         'ajax'          => 'true'
-    ), 
-    'theme_urcourses_default_header_enrollment_info' => array(
-        'classname'     => 'theme_urcourses_default_external',
-        'methodname'    => 'enrollment_info',
-        'classpath'     => 'theme/urcourses_default/externallib.php',
-        'description'   => 'Fetches course crn and info for user and semester choosen',
-        'type'          => 'read',
-        'ajax'          => 'true'
-    ),
-    'theme_urcourses_default_header_activate_course' => array(
-        'classname'     => 'theme_urcourses_default_external',
-        'methodname'    => 'activate_course',
-        'classpath'     => 'theme/urcourses_default/externallib.php',
-        'description'   => 'Activates and enrolls students from banner',
-        'type'          => 'read',
-        'ajax'          => 'true'
     )
 );
