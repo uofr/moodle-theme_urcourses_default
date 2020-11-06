@@ -457,12 +457,22 @@ class core_renderer extends \theme_boost\output\core_renderer {
         if ($COURSE->id==1||$PAGE->url!=$allowurl) return false; 
         
         if ($this->page->user_is_editing()||(has_capability('moodle/course:update', context_course::instance($COURSE->id))&&$COURSE->visible==0)) {
-            $context = [
-                'courseid' => $COURSE->id,
-                'availability' => $COURSE->visible,
-                'visibility' => $this->get_course_visibility(),
-                'coursetools' => $this->get_course_tools()
-            ];
+
+            if($this->page->user_is_editing()){
+                $context = [
+                    'courseid' => $COURSE->id,
+                    'availability' => $COURSE->visible,
+                    'visibility' => $this->get_course_visibility(),
+                    'coursetools' => $this->get_course_tools()
+                ];
+            }else{
+                $context = [
+                    'courseid' => $COURSE->id,
+                    'availability' => $COURSE->visible,
+                    'visibility' => $this->get_course_visibility(),
+                    'coursetools' => ""
+                ];
+            }
             return $this->render_from_template('theme_urcourses_default/header_toggle_course_availability', $context);
         }
         else {
@@ -493,12 +503,15 @@ class core_renderer extends \theme_boost\output\core_renderer {
     function get_course_request() {
         global $USER,$COURSE;
 
+        error_log(print_r($COURSE, TRUE));
         $context = [
             'courseid' => $COURSE->id,
             'availability' => $COURSE->visible,
             'username'=> $USER->username,
             'templatelist'=> json_encode(theme_urcourses_default_get_course_templates()),
-            'categories'=> json_encode(theme_urcourses_default_get_catergories())
+            'categories'=> json_encode(theme_urcourses_default_get_catergories()),
+            'shortname' => $COURSE->shortname,
+            'coursename' => $COURSE->fullname,
         ];
       
         return $this->render_from_template('theme_urcourses_default/header_course_request', $context);

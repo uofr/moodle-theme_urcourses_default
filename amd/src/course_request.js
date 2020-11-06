@@ -28,7 +28,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     var _root;
     /** Course ID */
     var _courseid;
-    
+    var _coursename;
+    var _shortname;
     var _element;
 
     /** Jquery selector strings. */
@@ -48,11 +49,13 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      * @param {int} courseid - ID of current course.
      * @return void
      */
-    var _setGlobals = function(root, courseid,templatelist, categories) {
+    var _setGlobals = function(root, courseid,coursename,shortname,templatelist, categories) {
        _root = $(root);
        _courseid = courseid;
        _templatelist = templatelist;
        _categories = categories;
+       _coursename = coursename;
+       _shortname = shortname;
     };
 
     /**
@@ -60,6 +63,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      * @return void
      */
     var _registerEventListeners = function() {
+
+       
         _root.on('click', SELECTORS.BTN_COURSETOOLS, _coursereqAction);
         _root.on('click', SELECTORS.BTN_DUPLICATE, _coursereqAction);
         _root.on('click', SELECTORS.BTN_NEW, _coursereqAction);
@@ -73,9 +78,9 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     var _registerSelectorEventListeners = function(_element) {
         if(_element.attr('id') == 'btn_new' && _templatelist.length<=6){
             //set event listners for template options
-            $('.tmpl-label').bind('click', function() { _setActiveTemplate($(this)) } );
+            $('.tmpl-label').bind('click', function() { _setActiveTemplate($(this)); } );
         }
-    }
+    };
 
     /**
      * Used for new course and duplicate course creation on button clicks
@@ -125,13 +130,14 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             '<p><small>Basic course template. No activites included </small></p>'+
             '</div>';
         }
-
         templatebase = '</div>';
-        templatebase += '<br><br>'
+        templatebase += '<br><br>';
         templatebase += '<div class="form-control-feedback invalid-feedback" id="error_coursename"></div> ';
-        templatebase += '<label  class="col-form-label d-inline " for="coursename">Course Full Name:</label><input maxlength="254" class="form-control " type="text" id="coursename" name="coursename"><br> ';
+        templatebase += '<label  class="col-form-label d-inline " for="coursename">Course Full Name:</label>'+
+            '<input maxlength="254" class="form-control " type="text" id="coursename" name="coursename"><br> ';
         templatebase += '<div class="form-control-feedback invalid-feedback" id="error_shortname"></div> ';
-        templatebase += '<label class="col-form-label d-inline " for="shortname">Course Short Name:</label><input maxlength="254" class="form-control " type="text" id="shortname" name="shortname"><br> ';
+        templatebase += '<label class="col-form-label d-inline " for="shortname">Course Short Name:</label>'+
+            '<input maxlength="254" class="form-control " type="text" id="shortname" name="shortname"><br> ';
 
 
         templatebase += '<label  class="col-form-label d-inline " for="category">Course Category:</label><br> ';
@@ -182,7 +188,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                 });
             }
             //remove modal on hide
-            root.on(ModalEvents.hidden, function(e){
+            root.on(ModalEvents.hidden, function(){
                 //remove inputs otherwise duplicates are made causing id problems
                 $( "#coursename" ).remove();
                 $( "#shortname" ).remove();
@@ -190,9 +196,12 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             });
 
             modal.show();
-        }).done(function(modal) {
+        }).done(function() {
             if((_element.attr('id') == 'btn_new')){
                 _registerSelectorEventListeners(_element);
+            }else{
+                 $('#coursename').val(_coursename);
+                 $('#shortname').val(_shortname);
             }
         });
     };
@@ -245,7 +254,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     /**
      * After modal info has been entered call ajax request
      */
-    var _createCourse = function(elementid) {
+    var _createCourse = function() {
         
         // return if required values aren't set
         if (!_courseid) {
@@ -309,7 +318,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      /**
      * After modal info has been entered call ajax request
      */
-    var _duplicateCourse = function(elementid) {
+    var _duplicateCourse = function() {
         
         // return if required values aren't set
         if (!_courseid) {
@@ -355,7 +364,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             if(response.url !=""){
                 window.location.href = response.url;
             }
-        }).fail(function(ex) {
+        }).fail(function() {
             notification.exception;
         });  
     };
@@ -432,9 +441,9 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     var _createdAccount = function(data) {
     
         //create new modal
-        title = "Success: "
+        title = "Success: ";
         info="";
-        action=" Would you like to logout, inorder to login to new account?"
+        action=" Would you like to logout, inorder to login to new account?";
 
         //if both actions were done
         if(data.created != false && data.enrolled !=false){
@@ -486,8 +495,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      * @param {String} root Jquery selector for container.
      * @return void
      */
-    var init = function(root, courseid, templatelist, categories) {
-        _setGlobals(root, courseid,templatelist,categories);
+    var init = function(root, courseid, templatelist, categories,coursename,shortname) {
+        _setGlobals(root, courseid,coursename, shortname, templatelist,categories);
         _registerEventListeners();
     };
 
