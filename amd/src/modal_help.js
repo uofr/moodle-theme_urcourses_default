@@ -242,10 +242,13 @@ export default class ModalHelp extends Modal {
      */
     async showLandingPage() {
         try {
-            const landingPage = await ModalHelpAjax.getLandingPage(this.contextId);
+            var landingPage = await ModalHelpAjax.getLandingPage(this.contextId);
             this.breadcrumbData.home = true;
             this.breadcrumbData.search = false;
             this.breadcrumbData.page = false;
+            var stringified = landingPage.html;
+            var reg = /\.\.\//g;
+            landingPage.html = stringified.replace(reg, '../guides/');
             this.render(TEMPLATES.MODAL_HELP_GUIDE_PAGE, landingPage, this.breadcrumbData);
         }
         catch (error) {

@@ -62,7 +62,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      * Sets up event listeners.
      * @return void
      */
-    var _registerSelectorEventListeners = function(_element) {
+    var _registerSelectorEventListeners = function() {
         //set event listners for template options
         $('.tmpl-label').bind('click', function() { _setActiveTemplate($(this)) } );   
     } 
@@ -105,7 +105,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         var promise = ajax.call([ajaxCall]);
         promise[0].done(function(response) {
             _populateModal(response);
-        }).fail(function(ex) {
+        }).fail(function() {
             notification.exception;
         });	
     }
@@ -239,7 +239,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                     return;
                 });
                     
-                root.on(ModalEvents.save, function(e){
+                root.on(ModalEvents.save, function(){
                     _addEnrolment(data.courseinfo);    
                 });
             }else{
@@ -250,12 +250,12 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             }
            
             //remove modal on hide
-            root.on(ModalEvents.hidden, function(e){
+            root.on(ModalEvents.hidden, function(){
                 //remove inputs otherwise duplicates are made causing id problems
                 $( "div[data-role='templateholder']" ).remove();
             });
             modal.show();
-        }).done(function(modal) {
+        }).done(function() {
             if(isavailable){
                 if(data.courseinfo.length<6 && data.courseinfo.length>0 ){
                     _registerSelectorEventListeners(_element);
@@ -321,7 +321,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                     modal.show();
                 });
 
-            }).fail(function(ex) {
+            }).fail(function() {
                 notification.exception;
             });  
         }
@@ -440,7 +440,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             });
 
             modal.show();
-        }).done(function(modal) {
+        }).done(function() {
             if((_element.attr('id') == 'btn_newmodal')){
                 _registerSelectorEventListeners(_element);
             }
@@ -495,7 +495,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     /**
      * After modal info has been entered call ajax request
      */
-    var _createCourse = function(elementid) {
+    var _createCourse = function() {
         
         // return if required values aren't set
         if (!_courseid) {
@@ -555,7 +555,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             if(response.url !=""){
                 window.location.href = response.url;
             }
-        }).fail(function(ex) {
+        }).fail(function() {
             notification.exception;
         });  
     };
@@ -563,7 +563,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      /**
      * After modal info has been entered call ajax request
      */
-    var _duplicateCourse = function(elementid) {
+    var _duplicateCourse = function() {
         
         // return if required values aren't set
         if (!_courseid) {
@@ -614,7 +614,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             if(response.url !=""){
                 window.location.href = response.url;
             }
-        }).fail(function(ex) {
+        }).fail(function() {
             notification.exception;
         });  
     };

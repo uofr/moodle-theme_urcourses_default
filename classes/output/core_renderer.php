@@ -457,12 +457,22 @@ class core_renderer extends \theme_boost\output\core_renderer {
         if ($COURSE->id==1||$PAGE->url!=$allowurl) return false; 
         
         if ($this->page->user_is_editing()||(has_capability('moodle/course:update', context_course::instance($COURSE->id))&&$COURSE->visible==0)) {
-            $context = [
-                'courseid' => $COURSE->id,
-                'availability' => $COURSE->visible,
-                'visibility' => $this->get_course_visibility(),
-                'coursetools' => $this->get_course_tools()
-            ];
+
+            if($this->page->user_is_editing()){
+                $context = [
+                    'courseid' => $COURSE->id,
+                    'availability' => $COURSE->visible,
+                    'visibility' => $this->get_course_visibility(),
+                    'coursetools' => $this->get_course_tools()
+                ];
+            }else{
+                $context = [
+                    'courseid' => $COURSE->id,
+                    'availability' => $COURSE->visible,
+                    'visibility' => $this->get_course_visibility(),
+                    'coursetools' => ""
+                ];
+            }
             return $this->render_from_template('theme_urcourses_default/header_toggle_course_availability', $context);
         }
         else {
@@ -498,7 +508,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
             'availability' => $COURSE->visible,
             'username'=> $USER->username,
             'templatelist'=> json_encode(theme_urcourses_default_get_course_templates()),
-            'categories'=> json_encode(theme_urcourses_default_get_catergories())
+            'categories'=> json_encode(theme_urcourses_default_get_catergories()),
+            'shortname' => $COURSE->shortname,
+            'coursename' => $COURSE->fullname,
         ];
       
         return $this->render_from_template('theme_urcourses_default/header_course_request', $context);
@@ -506,20 +518,11 @@ class core_renderer extends \theme_boost\output\core_renderer {
     
     function get_course_enrolment() {
         global $COURSE;
-
-        if(URCOURSEREQUEST){
-            //NEED TO ADD ACTIVE TO THIS AND A FUNCTION CALL
-            $context = [
-                'courseid' => $COURSE->id,
-                'availability' => $COURSE->visible,
-                'semesters' => theme_urcourses_default_get_semesters(),
-                'active' => theme_urcourses_default_get_course_state($COURSE->id),
-                
-            ];
-            return $this->render_from_template('theme_urcourses_default/header_course_enrolment', $context);
-        }
-
-        return ""; 
+        $context = [
+            'courseid' => $COURSE->id,
+            'availability' => $COURSE->visible
+        ];
+        return $this->render_from_template('theme_urcourses_default/header_course_enrolment', $context);
     }
     /**
      * Override to display course settings on every course site for permanent access
@@ -852,7 +855,6 @@ function ur_check_course_cat() {
                             'scbscn'=>'',
                             'science'=>'Faculty of Science',
                             'socialwork'=>'Faculty of Social Work');
-    //error_log("theme: " . $COURSE->theme);
     if ($COURSE->theme != 'urcourses_default' && $COURSE->theme !== NULL && !empty($COURSE->theme)) {
         $currthemeelms = explode('_',$COURSE->theme);
         return array('css'=>'','name'=>$ur_categories[$currthemeelms[1]]);

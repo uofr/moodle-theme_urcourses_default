@@ -388,6 +388,7 @@ function theme_urcourses_default_get_course_templates() {
     if (!(array)$category) {
         return 0;
     }
+    
     //else use category id to find all courses in the templates category
 
     $sql = "SELECT * FROM mdl_course WHERE category = {$category->id};";

@@ -301,12 +301,77 @@ class theme_urcourses_default_external extends external_api {
         $context = context::instance_by_id($params['contextid']);
         self::validate_context($context);
 
-        $content_url = new moodle_url("/guides/urmodal.json/p:mod_$PAGE->activityname");
-        $json_output = json_decode(file_get_contents($content_url->out()));
+        $endurl ="";
+        $isbasic=false;
+        $isinstructor = self::user_is_instructor($context);
 
+        switch ($context->contextlevel) {
+            case CONTEXT_SYSTEM:
+                //return basic landing page
+                $isbasic=true;
+                break;
+            case CONTEXT_USER:
+                $endurl = ($isinstructor) ? "instructor" : "student";
+                break;
+            case CONTEXT_COURSECAT:
+                $endurl = ($isinstructor) ? "student/remote-teaching" : "instructor/remote-teaching";
+                break;
+            case CONTEXT_COURSE:
+                $endurl = ($isinstructor) ? "student/remote-teaching" : "instructor/remote-teaching";
+                break;
+            case CONTEXT_MODULE:
+                //check if any modules are ones in guides
+                ///use get topics list to compare
+                //return page closest to 
+                $content_url = new moodle_url('/guides/social/sample-b.json');
+                $json_output = json_decode(file_get_contents($content_url));
+                $topic_list_full = $json_output->jsondata->page_data[0]->all_pages;
+                $mod = $PAGE->activityname;
+                $url ="";
+
+                foreach ($topic_list_full as $topic) {
+                    
+                    $title = htmlspecialchars_decode($topic->title);
+                    $pos = stripos($title, $mod);
+                    if ($pos !== false){
+                        $url = substr($topic->url, (strrpos($topic->url, '/')+1));
+                        break;
+                    }
+                }
+
+                if($url==""){
+                    $endurl = ($isinstructor) ? "student/remote-teaching" : "instructor/remote-teaching";
+                }else{
+                    $endurl = "student/$url";
+                }
+
+                break;
+            case CONTEXT_BLOCK:
+                $isbasic=true;
+                break;
+        }
+
+        if($isbasic){
+            $content_url = new moodle_url("/guides/urmodal.json/p:mod_$PAGE->activityname");
+            $json_output = json_decode(file_get_contents($content_url->out()));
+            $html = $json_output->jsondata->param_p_data[0]->content;
+            $contenturls = $json_output->jsondata->param_p_data[0]->contenturls;
+
+        }else{
+            //WILL NEED TO MODIFY THIS MORE
+            $content_url = new moodle_url("/guides/$endurl.json");
+            $json_output = json_decode(file_get_contents($content_url));
+            $html = ($json_output->content) ? $json_output->content : $json_output->jsondata->page_data[0]->content;
+            $title = $json_output->jsondata ? $json_output->jsondata->page_data[0]->title : '';
+            $contenturls = $json_output->jsondata ? $json_output->jsondata->page_data[0]->contenturls : array();
+        }
+
+        if($contenturls == ""){
+            $contenturls = array();
+        }
         return array(
-            'html' => $json_output->jsondata->param_p_data[0]->content,
-            'contenturls' => $json_output->jsondata->param_p_data[0]->contenturls
+            'html' => $html,
+            'contenturls' => $contenturls
         );
     }
 
