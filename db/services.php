@@ -101,7 +101,7 @@ $functions = array(
         'description'   => 'Creates a duplicated course',
         'type'          => 'write',
         'ajax'          => 'true'
-    ), 
+    ),
     'theme_urcourses_default_header_enrollment_info' => array(
         'classname'     => 'theme_urcourses_default_external',
         'methodname'    => 'enrollment_info',

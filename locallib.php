@@ -385,12 +385,11 @@ function theme_urcourses_default_get_course_templates() {
     $category = $DB->get_record_sql($sql, null, IGNORE_MISSING);
 
     //if no Template category
-    if (!(array)$category) {
+    if (!(array)$category || !$category) {
         return 0;
     }
     
     //else use category id to find all courses in the templates category
-
     $sql = "SELECT * FROM mdl_course WHERE category = {$category->id};";
     $courses = $DB->get_records_sql($sql);
 
@@ -407,7 +406,9 @@ function theme_urcourses_default_get_course_templates() {
 
         $rendercourse[]=$temp;
     }
+  
     return $rendercourse;
+
 }
 
 /**
@@ -424,6 +425,8 @@ function theme_urcourses_default_get_catergories(){
     $categories = $DB->get_records_sql($sql, null, IGNORE_MISSING);
 
     return $categories;
+
+
 }
 
 /**

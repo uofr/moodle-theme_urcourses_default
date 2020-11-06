@@ -943,7 +943,6 @@ class theme_urcourses_default_external extends external_api {
             $course->shortname = $params['shortname'];
             $course->fullname = $params['coursename'];
             $course->category = $params['categoryid'];
-            
             //send to external function
             $newcourse = create_course($course);
 
@@ -1064,7 +1063,7 @@ class theme_urcourses_default_external extends external_api {
      return true;
  }
 
-  /**
+   /**
      * Returns description of enrollment_info's parameters.
      *
      * @return external_function_parameters
@@ -1250,5 +1249,6 @@ class theme_urcourses_default_external extends external_api {
         ));
     }
 }
+ 
 
 

@@ -31,7 +31,6 @@ if (is_file($CFG->dirroot.'/blocks/urcourserequest/lib.php')){
 }else{
     define('URCOURSEREQUEST', FALSE);  
 }
-//END OF ADDED
 
 /**
  * Get compiled css.

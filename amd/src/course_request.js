@@ -200,8 +200,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             if((_element.attr('id') == 'btn_new')){
                 _registerSelectorEventListeners(_element);
             }else{
-                 $('#coursename').val(_coursename);
-                 $('#shortname').val(_shortname);
+                 $('#coursename').val(_coursename+" (Copy)");
+                 $('#shortname').val(_shortname+" (Copy)");
             }
         });
     };

@@ -28,6 +28,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     var _root;
     /** Course ID */
     var _courseid;
+    var _coursename;
+    var _shortname;
     var _element;
     var _semester;
 
@@ -46,9 +48,11 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      * @param {int} courseid - ID of current course.
      * @return void
      */
-    var _setGlobals = function(root, courseid) {
+    var _setGlobals = function(root, courseid, coursename, shortname) {
        _root = $(root);
        _courseid = courseid;
+       _coursename = coursename;
+       _shortname = shortname;
     };
 
     /**
@@ -62,7 +66,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      * Sets up event listeners.
      * @return void
      */
-    var _registerSelectorEventListeners = function() {
+    var _registerSelectorEventListeners = function(_element) {
         //set event listners for template options
         $('.tmpl-label').bind('click', function() { _setActiveTemplate($(this)) } );   
     } 
@@ -105,7 +109,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         var promise = ajax.call([ajaxCall]);
         promise[0].done(function(response) {
             _populateModal(response);
-        }).fail(function() {
+        }).fail(function(ex) {
             notification.exception;
         });	
     }
@@ -239,7 +243,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                     return;
                 });
                     
-                root.on(ModalEvents.save, function(){
+                root.on(ModalEvents.save, function(e){
                     _addEnrolment(data.courseinfo);    
                 });
             }else{
@@ -250,12 +254,12 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             }
            
             //remove modal on hide
-            root.on(ModalEvents.hidden, function(){
+            root.on(ModalEvents.hidden, function(e){
                 //remove inputs otherwise duplicates are made causing id problems
                 $( "div[data-role='templateholder']" ).remove();
             });
             modal.show();
-        }).done(function() {
+        }).done(function(modal) {
             if(isavailable){
                 if(data.courseinfo.length<6 && data.courseinfo.length>0 ){
                     _registerSelectorEventListeners(_element);
@@ -321,7 +325,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                     modal.show();
                 });
 
-            }).fail(function() {
+            }).fail(function(ex) {
                 notification.exception;
             });  
         }
@@ -330,9 +334,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      /**
      * Used for new course and duplicate course creation on button clicks
      */
-    var _coursereqAction = function() {
-
-        _element = $(this);
+    var _coursereqAction = function(_element) {
 
         var modaltitle = (_element.attr('id') == 'btn_newmodal') ? 'Create new course' : 'Duplicate this course';
         var modalaction = (_element.attr('id') == 'btn_newmodal') ? 'create a new' : 'duplicate this';
@@ -440,9 +442,12 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             });
 
             modal.show();
-        }).done(function() {
+        }).done(function(modal) {
             if((_element.attr('id') == 'btn_newmodal')){
                 _registerSelectorEventListeners(_element);
+            }else{
+                $('#coursename').val(_coursename+" (Copy)");
+                $('#shortname').val(_shortname+" (Copy)");
             }
         });
     };
@@ -495,7 +500,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     /**
      * After modal info has been entered call ajax request
      */
-    var _createCourse = function() {
+    var _createCourse = function(elementid) {
         
         // return if required values aren't set
         if (!_courseid) {
@@ -555,7 +560,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             if(response.url !=""){
                 window.location.href = response.url;
             }
-        }).fail(function() {
+        }).fail(function(ex) {
             notification.exception;
         });  
     };
@@ -563,7 +568,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      /**
      * After modal info has been entered call ajax request
      */
-    var _duplicateCourse = function() {
+    var _duplicateCourse = function(elementid) {
         
         // return if required values aren't set
         if (!_courseid) {
@@ -614,7 +619,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             if(response.url !=""){
                 window.location.href = response.url;
             }
-        }).fail(function() {
+        }).fail(function(ex) {
             notification.exception;
         });  
     };
@@ -624,8 +629,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      * @param {String} root Jquery selector for container.
      * @return void
      */
-    var init = function(root, courseid) {
-        _setGlobals(root, courseid);
+    var init = function(root, courseid,coursename,shortname) {
+        _setGlobals(root, courseid,coursename,shortname);
         _registerEventListeners();
     };
 
