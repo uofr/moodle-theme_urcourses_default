@@ -226,7 +226,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $header->hasnavbar = empty($PAGE->layout_options['nonavbar']);
         $header->navbar = $this->navbar();
         
-        // TODO: Show notice if course is hidden AND editing is turned on
+        // TODO: Show notice if course is hidden AND editing is turned on OR on course edit page
         $header->toggle_course_availability = $this->get_course_toggle_availability();
         
         
@@ -453,10 +453,17 @@ class core_renderer extends \theme_boost\output\core_renderer {
         
         //only show availability bar when on course main page, but not site home
         $allowurl = $CFG->wwwroot.'/course/view.php?id='.$COURSE->id;
+        $allowurl2 = $CFG->wwwroot.'/course/edit.php?id='.$COURSE->id;
         
-        if ($COURSE->id==1||$PAGE->url!=$allowurl) return false; 
+        $page = basename($_SERVER['PHP_SELF']);
+
+        if ($COURSE->id==1||($PAGE->url!=$allowurl && $PAGE->url!=$allowurl2 )) return false; 
+
+        $isedit == false;
+        if($page == "edit.php")
+            $isedit = true;
         
-        if ($this->page->user_is_editing()||(has_capability('moodle/course:update', context_course::instance($COURSE->id))&&$COURSE->visible==0)) {
+        if ($this->page->user_is_editing()||(has_capability('moodle/course:update', context_course::instance($COURSE->id))&&$COURSE->visible==0)||$isedit) {
 
             if($this->page->user_is_editing()){
                 $context = [

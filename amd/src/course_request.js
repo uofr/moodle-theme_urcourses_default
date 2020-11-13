@@ -40,6 +40,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         BTN_DUPLICATE: '#btn_duplicate',
         BTN_NEW: '#btn_new',
         BTN_STUDENT: '#btn_student',
+        BTN_DESCRIPTION: '#btn_editdescription',
     };
 
     /**
@@ -69,6 +70,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         _root.on('click', SELECTORS.BTN_DUPLICATE, _coursereqAction);
         _root.on('click', SELECTORS.BTN_NEW, _coursereqAction);
         _root.on('click', SELECTORS.BTN_STUDENT, _createStudentAction);
+        _root.on('click', SELECTORS.BTN_DESCRIPTION, _editCourseDescription);
     };
 
      /**
@@ -490,6 +492,39 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         });
     };
 
+     /**
+     * Link to course edit page to edit course description
+     */
+    var _editCourseDescription = function() {
+
+        var origin   = window.location.href;    
+         
+        origin =origin.substring(0,origin.lastIndexOf('/'));
+
+        var target = origin + "/edit.php?id="+_courseid+"#id_descriptionhdr";
+
+        window.location.href = target;
+    };
+
+     /**
+     * Check if on course edit page and if hash has been added to url
+     */
+    var _checkCourseEdit = function() {
+
+        var origin   = window.location.href;     
+
+        if (origin.indexOf("course/edit.php") >= 0){
+         
+            if(window.location.hash != ""){
+                var navHeight = $('.navbar').outerHeight();
+                $('html, body').animate({
+                    scrollTop: $(window.location.hash).offset().top - navHeight
+                }, 2000);
+            }
+        }
+    };
+
+
     /**
      * Entry point to module. Sets globals and registers event listeners.
      * @param {String} root Jquery selector for container.
@@ -498,6 +533,9 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     var init = function(root, courseid, templatelist, categories,coursename,shortname) {
         _setGlobals(root, courseid,coursename, shortname, templatelist,categories);
         _registerEventListeners();
+
+        //little hacky way to use a scroll jump on course edit page without editing course edit
+        _checkCourseEdit();
     };
 
     return {
