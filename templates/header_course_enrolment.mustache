@@ -17,95 +17,34 @@
 }}
 
 <div class="col-md-6" id="theme_urcourses_default_header_course_enrolment_{{uniqid}}">
-<div class="btn-group">
-  <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-     <i class="fa fa-plug" aria-hidden="true"></i>
-	 	<span id="enrollment_span">
-			Enrolment: 
-			{{#active}}
-				{{active}}
-			{{/active}}
-			{{^active}}
-				TBD
-			{{/active}}
-		</span>
-    </button>
-    <div class="dropdown-menu dropdown-menu-right">
-    <h6 class="dropdown-header">Select a Term</h6>
-    
-    <div class="dropdown-divider"></div>
-    
-	{{#semesters}}
-		<button class="dropdown-item btn_enrolterm ml-1" type="button" id="{{id}}">{{title}}</button>
-	{{/semesters}}
+	<div class="btn-group">
+	<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		<i class="fa fa-plug" aria-hidden="true"></i>
+			<span id="enrollment_span">
+				Enrolment: 
+				{{#active}}
+					{{active}}
+				{{/active}}
+				{{^active}}
+					TBD
+				{{/active}}
+			</span>
+		</button>
+		<div class="dropdown-menu dropdown-menu-right">
+		<h6 class="dropdown-header">Select a Term</h6>
 		
-	<!--
-	      <button class="dropdown-item ml-1" type="button">XMPL 100 (All)</button>
-	  
-	      <h6 class="dropdown-header ml-1">By Section</h6>
-	      <button class="dropdown-item ml-3" type="button">XMPL 100-001</button>
-	      <button class="dropdown-item ml-3" type="button">XMPL 100-002</button>
-	      <button class="dropdown-item ml-3" type="button">XMPL 100-003</button>
-	  	<div class="dropdown-divider"></div>
-	  
-	        <button class="dropdown-item ml-1" type="button">XMPL 110 (All)</button>
-	  
-	        <h6 class="dropdown-header ml-1">By Section</h6>
-	        <button class="dropdown-item ml-3" type="button">XMPL 110-001</button>
-	        <button class="dropdown-item ml-3" type="button">XMPL 110-002</button>
-	  	  <div class="dropdown-divider"></div>
-	  
-	          <button class="dropdown-item ml-1" type="button">XMPL 200-001</button>
-		-->
-    </div>
-  <!--<div class="btn-group ml-1">
-  	  <button type="button" class="btn btn-info"><i class="fa fa-plug" aria-hidden="true"></i> Archived</button>
-    </div>-->
+		<div class="dropdown-divider"></div>
+		
+		{{#semesters}}
+			<button class="dropdown-item btn_enrolterm ml-1" type="button" id="{{id}}">{{title}}</button>
+		{{/semesters}}
+			
+		</div>
+	</div>
 </div>
-<!--<select class="custom-select section-dropdown" id="course_enrol">
-                    <option selected="selected">
-                        Enrolment: TBD
-                    </option>
-					<optgroup label="Attach CRN">
-                    	<optgroup label="XMPL 100">
-						<option>
-	                        XMPL 100 (All)
-	                    </option>
-						<optgroup label="     By Section">
-							<option>
-		                        XMPL 100-001
-		                    </option>
-		                    <option>
-		                        XMPL 100-002
-		                    </option>
-		                    <option>
-		                        XMPL 100-003
-		                    </option>
-						</optgroup>
-						</optgroup>
-						<optgroup label="XMPL 110">
-							<option>
-		                        XMPL 110 (All)
-		                    </option>
-							<optgroup label="     By Section">
-								<option>
-			                        XMPL 110-001
-			                    </option>
-			                    <option>
-			                        XMPL 110-002
-			                    </option>
-							</optgroup>
-						</optgroup>
-	                	<optgroup label="XMPL 200">
-	                    <option>
-	                        XMPL 200-001
-	                    </option>
-					</optgroup>
-				</optgroup>
-		        </select>--></div>
 
 {{#js}}
     require(['theme_urcourses_default/course_enrolment'], function(main) {
-        main.init('#theme_urcourses_default_header_course_enrolment_{{uniqid}}', {{courseid}},"{{shortname}}","{{coursename}}");
+        main.init('#theme_urcourses_default_header_course_enrolment_{{uniqid}}', {{{course}}},{{{semesterdates}}},{{{categories}}}, {{{templatelist}}});
     });
 {{/js}}

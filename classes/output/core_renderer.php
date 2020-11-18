@@ -459,7 +459,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         if ($COURSE->id==1||($PAGE->url!=$allowurl && $PAGE->url!=$allowurl2 )) return false; 
 
-        $isedit == false;
+        $isedit = false;
         if($page == "edit.php")
             $isedit = true;
         
@@ -509,13 +509,17 @@ class core_renderer extends \theme_boost\output\core_renderer {
     function get_course_request() {
         global $USER,$COURSE;
         $context = [
-            'courseid' => $COURSE->id,
             'availability' => $COURSE->visible,
             'username'=> $USER->username,
             'templatelist'=> json_encode(theme_urcourses_default_get_course_templates()),
             'categories'=> json_encode(theme_urcourses_default_get_catergories()),
-            'shortname' => $COURSE->shortname,
-            'coursename' => $COURSE->fullname,
+            'course'=> json_encode(array("id"=>$COURSE->id,
+                                "coursename"=>$COURSE->fullname,
+                                "shortname"=>$COURSE->shortname,
+                                "category"=>$COURSE->category,
+                                "startdate"=>usergetdate($COURSE->startdate),
+                                "enddate"=>usergetdate($COURSE->enddate),
+            )),
         ];
       
         return $this->render_from_template('theme_urcourses_default/header_course_request', $context);
@@ -527,12 +531,19 @@ class core_renderer extends \theme_boost\output\core_renderer {
         if(URCOURSEREQUEST){
             //NEED TO ADD ACTIVE TO THIS AND A FUNCTION CALL
             $context = [
-                'courseid' => $COURSE->id,
                 'availability' => $COURSE->visible,
                 'semesters' => theme_urcourses_default_get_semesters(),
                 'active' => theme_urcourses_default_get_course_state($COURSE->id),
-                'shortname' => $COURSE->shortname,
-                'coursename' => $COURSE->fullname,
+                'course'=> json_encode(array("id"=>$COURSE->id,
+                                "coursename"=>$COURSE->fullname,
+                                "shortname"=>$COURSE->shortname,
+                                "category"=>$COURSE->category,
+                                "startdate"=>usergetdate($COURSE->startdate),
+                                "enddate"=>usergetdate($COURSE->enddate),
+                )),
+                'semesterdates' => json_encode(theme_urcourses_default_get_semesterdates()),
+                'categories'=> json_encode(theme_urcourses_default_get_catergories()),
+                'templatelist'=> json_encode(theme_urcourses_default_get_course_templates()),
                 
             ];
             return $this->render_from_template('theme_urcourses_default/header_course_enrolment', $context);

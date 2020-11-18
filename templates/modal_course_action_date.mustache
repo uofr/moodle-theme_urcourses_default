@@ -1,0 +1,86 @@
+
+
+    <label class="col-form-label d-inline " for="id_startdate">
+        Course start date:
+    </label>
+    <div class="form-control-feedback invalid-feedback" id="error_course_tools_start"></div>
+    <div class="form-inline felement" data-fieldtype="date_time_selector">
+        <div class="fdate_time_selector d-flex flex-wrap align-items-center" id="course_tools_startholder">   
+            <div class="form-group  fitem  ">
+                <label class="col-form-label sr-only" for="course_tools_start_day">Day </label>
+                <span data-fieldtype="select">
+                    <select class="custom-select" name="startdate[day]" id="course_tools_start_day"></select>
+                </span>
+                <div class="form-control-feedback invalid-feedback" id="id_error_startdate[day]"></div>
+            </div>
+            <div class="form-group  fitem  ">
+                <label class="col-form-label sr-only" for="course_tools_start_month">Month </label>
+                <span data-fieldtype="select">
+                    <select class="custom-select" name="startdate[month]" id="course_tools_start_month"></select>
+                </span>
+            </div>
+            <div class="form-group  fitem  ">
+                <label class="col-form-label sr-only" for="course_tools_start_year">Year </label>
+                <span data-fieldtype="select">
+                    <select class="custom-select" name="startdate[year]" id="course_tools_start_year"> </select>
+                </span>
+            </div>
+            <div class="form-group  fitem  ">
+                <label class="col-form-label sr-only" for="course_tools_start_hour">Hour </label>
+                <span data-fieldtype="select">
+                    <select class="custom-select" name="startdate[hour]" id="course_tools_start_hour"></select>
+                </span>
+            </div>
+            <div class="form-group  fitem  ">
+                <label class="col-form-label sr-only" for="course_tools_start_minute">Minute </label>
+                <span data-fieldtype="select">
+                    <select class="custom-select" name="startdate[minute]" id="course_tools_start_minute"></select>
+                </span>
+            </div>    
+        </div>
+    </div>
+
+    <br>
+        
+    <label class="col-form-label d-inline " for="id_enddate">Course end date:</label>
+    <span class="form-control-feedback invalid-feedback" id="error_course_tools_end"></span>
+    <div class=" form-inline felement" data-fieldtype="date_time_selector" id="course_tools_endholder">
+        <div class="fdate_time_selector d-flex flex-wrap align-items-center" id="">
+            <div class="form-group  fitem  " id="">
+                <label class="col-form-label sr-only" for="course_tools_end_day">Day</label>
+                <span data-fieldtype="select" id="">
+                    <select class="custom-select" name="enddate[day]" id="course_tools_end_day" disabled="disabled"></select>
+                </span>
+            </div>
+            <div class="form-group  fitem  " id="">
+                <label class="col-form-label sr-only" for="course_tools_end_month">Month </label>
+                <span data-fieldtype="select" id="">
+                    <select class="custom-select" name="enddate[month]" id="course_tools_end_month" disabled="disabled"></select>
+                </span>
+            </div>
+            <div class="form-group  fitem  " id="">
+                <label class="col-form-label sr-only" for="course_tools_end_year">Year</label>
+                <span data-fieldtype="select" id="">
+                    <select class="custom-select" name="enddate[year]" id="course_tools_end_year" disabled="disabled"></select>
+                </span>
+            </div>
+            <div class="form-group  fitem  " id="">
+                <label class="col-form-label sr-only" for="course_tools_end_hour">Hour </label>
+                <span data-fieldtype="select" id="">
+                    <select class="custom-select" name="enddate[hour]" id="course_tools_end_hour" disabled="disabled"></select>
+                </span>
+            </div>
+            <div class="form-group  fitem  " id="">
+                <label class="col-form-label sr-only" for="course_tools_end_minute">Minute </label>
+                <span data-fieldtype="select" id="">
+                    <select class="custom-select" name="enddate[minute]" id="course_tools_end_minute" disabled="disabled"></select>
+                </span>
+            </div>
+                
+                
+            <label class="form-check  fitem  " id="">
+                <input type="checkbox" name="enddate[enabled]" class="form-check-input " id="course_tools_enddate_enabled" value="1" size="">
+                    Enable
+            </label>
+        </div>
+    </div>

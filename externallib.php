@@ -723,6 +723,8 @@ class theme_urcourses_default_external extends external_api {
             'coursename' => new external_value(PARAM_TEXT),
             'shortname' => new external_value(PARAM_TEXT),
             'categoryid' => new external_value(PARAM_INT),
+            'startdate' => new external_value(PARAM_TEXT),
+            'enddate' => new external_value(PARAM_TEXT),
         ));
     }
      /**
@@ -734,7 +736,7 @@ class theme_urcourses_default_external extends external_api {
      * @param int $categoryid of new course
      * @return array
      */
-    public static function duplicate_course($courseid,$coursename,$shortname,$categoryid) {
+    public static function duplicate_course($courseid,$coursename,$shortname,$categoryid,$startdate,$enddate) {
         global $USER, $DB, $CFG;
 
         // get params
@@ -744,13 +746,26 @@ class theme_urcourses_default_external extends external_api {
             'courseid' => $courseid,
             'coursename' => $coursename,
             'shortname' => $shortname,
-            'categoryid'=> $categoryid
+            'categoryid'=> $categoryid,
+            'startdate' => $startdate,
+            'enddate' => $enddate,
             )
         );
 
         // ensure user has permissions to change image
         $context = \context_course::instance($params['courseid']);
         self::validate_context($context);
+
+        //split dates and get appropriate timestamp
+        $start =  explode("-", $params['startdate']);
+        
+        $starttimestamp = make_timestamp($start[2],$start[1],$start[0],$start[3],$start[4]);
+        $endtimestamp=0;
+        if($params['enddate'] != "0"){
+            $end =  explode("-", $params['enddate']);
+            $endtimestamp = make_timestamp($end[2],$end[1],$end[0],$end[3],$end[4]);
+        }
+
         //get course from DB
         $sql = "SELECT * FROM mdl_course as c WHERE c.id ='{$params['courseid']}'";
         $course = $DB->get_record_sql($sql);
@@ -761,6 +776,8 @@ class theme_urcourses_default_external extends external_api {
         $course->shortname = $params['shortname'];
         $course->fullname = $params['coursename'];
         $course->category = $params['categoryid'];
+        $course->startdate =$starttimestamp;
+        $course->enddate =$endtimestamp;
         $course->idnumber = "";
         //send to external function
         $newcourse = create_course($course);
@@ -782,6 +799,7 @@ class theme_urcourses_default_external extends external_api {
             if ($USER->id == $admin->id) 
             { $isadmin = true; break; } } 
         
+        $ogisenrolled =true; 
         if(!$isadmin){
             $ogisenrolled =is_enrolled($newcontext, $USER->id);
             //if not enroll the instructor in template
@@ -827,6 +845,8 @@ class theme_urcourses_default_external extends external_api {
             'coursename' => new external_value(PARAM_TEXT),
             'shortname' => new external_value(PARAM_TEXT),
             'categoryid' => new external_value(PARAM_INT),
+            'startdate' => new external_value(PARAM_TEXT),
+            'enddate' => new external_value(PARAM_TEXT),
         ));
     }
      /**
@@ -837,9 +857,11 @@ class theme_urcourses_default_external extends external_api {
      * @param string $coursename  name of new course
      * @param string $shortname shortname of new course
      * @param int $categoryid of new course
+     * @param string start date of course eg. dd-mm-yyyy-hh-mm
+     * @param string end date of course eg. dd-mm-yyyy-hh-mm
      * @return array
      */
-    public static function create_course($courseid,$templateid,$coursename,$shortname,$categoryid) {
+    public static function create_course($courseid,$templateid,$coursename,$shortname,$categoryid,$startdate,$enddate) {
 
         global $DB, $CFG, $USER;
 
@@ -852,6 +874,8 @@ class theme_urcourses_default_external extends external_api {
             'coursename' => $coursename,
             'shortname' => $shortname,
             'categoryid' => $categoryid,
+            'startdate' => $startdate,
+            'enddate' => $enddate,
             )
         );
 
@@ -864,6 +888,17 @@ class theme_urcourses_default_external extends external_api {
         foreach ($admins as $admin) { 
             if ($USER->id == $admin->id) 
             { $isadmin = true; break; } } 
+
+
+        //split dates and get appropriate timestamp
+        $start =  explode("-", $params['startdate']);
+
+        $starttimestamp = make_timestamp($start[2],$start[1],$start[0],$start[3],$start[4]);
+        $endtimestamp=0;
+        if($params['enddate'] != "0"){
+            $end =  explode("-", $params['enddate']);
+            $endtimestamp = make_timestamp($end[2],$end[1],$end[0],$end[3],$end[4]);
+        }
 
         //CHECK IF DEFAULT TEMPLATE
         if($templateid == 0){
@@ -881,8 +916,8 @@ class theme_urcourses_default_external extends external_api {
             $course->showgrades =1;
             $course->newsitems =1;
             $course->newsitems =1;
-            $course->startdate =time();
-            $course->enddate =0;
+            $course->startdate =$starttimestamp;
+            $course->enddate =$endtimestamp;
             $course->relativedatesmode =0;
             $course->marker =0;
             $course->maxbytes =0;
@@ -921,6 +956,7 @@ class theme_urcourses_default_external extends external_api {
                 if ($USER->id == $admin->id) 
                 { $isadmin = true; break; } } 
             
+            $ogisenrolled =true;
             if(!$isadmin){
                 $ogisenrolled =is_enrolled($templatecontext, $USER->id);
                 //if not enroll the instructor in template
@@ -943,6 +979,8 @@ class theme_urcourses_default_external extends external_api {
             $course->shortname = $params['shortname'];
             $course->fullname = $params['coursename'];
             $course->category = $params['categoryid'];
+            $course->startdate =$starttimestamp;
+            $course->enddate =$endtimestamp;
             //send to external function
             $newcourse = create_course($course);
 
@@ -1197,6 +1235,8 @@ class theme_urcourses_default_external extends external_api {
             'courseid' => new external_value(PARAM_INT),
             'semester' => new external_value(PARAM_INT),
             'crn' => new external_value(PARAM_INT),
+            'startdate' => new external_value(PARAM_TEXT),
+            'enddate' => new external_value(PARAM_TEXT),
         ));
     }
 
@@ -1209,7 +1249,7 @@ class theme_urcourses_default_external extends external_api {
      * @param string $crn code of banner section
      * @return array
      */
-    public static function activate_course($courseid, $semester, $crn) {
+    public static function activate_course($courseid, $semester, $crn, $startdate, $enddate) {
 
         global $USER, $DB;
 
@@ -1220,14 +1260,27 @@ class theme_urcourses_default_external extends external_api {
             'courseid' => $courseid,
             'semester' => $semester,
             'crn' => $crn,
+            'startdate' => $startdate,
+            'enddate' => $enddate,
             )
         );
 
         // ensure user has permissions to change image
         $context = \context_course::instance($params['courseid']);
         self::validate_context($context);
+
+        //split dates and get appropriate timestamp
+        $start =  explode("-", $params['startdate']);
+
+        $starttimestamp = make_timestamp($start[2],$start[1],$start[0],$start[3],$start[4]);
+        $endtimestamp=0;
+        if($params['enddate'] != "0"){
+            $end =  explode("-", $params['enddate']);
+            $endtimestamp = make_timestamp($end[2],$end[1],$end[0],$end[3],$end[4]);
+        }
+
         $result="";
-        $result = block_urcourserequest_activate_urcourse($params['courseid'], $params['crn'], $params['semester']);
+        $result = block_urcourserequest_activate_urcourse($params['courseid'], $params['crn'], $params['semester'], $starttimestamp,$endtimestamp);
 
         $value = false;
         if(stripos($result, 'success') !== false){

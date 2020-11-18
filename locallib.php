@@ -475,6 +475,18 @@ function theme_urcourses_default_get_semesters(){
 
     return $semesters;
 }
+/**
+ * Return an array of semesters with start and end dates
+ * @return array
+ */
+
+function theme_urcourses_default_get_semesterdates(){
+
+    if(URCOURSEREQUEST){
+        return SEMESTERDATES;
+    }
+    return array();
+}
 
 /**
  * Return an array of semesters

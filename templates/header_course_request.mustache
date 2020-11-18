@@ -36,15 +36,11 @@
       <button class="dropdown-item ml-1" id="btn_editdescription" type="button"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Course Description</button>
     </div>
   </div>
-
-
-
-
 </div>
 
 {{#js}}
     require(['theme_urcourses_default/course_request'], function(main) {
-        main.init('#theme_urcourses_default_header_course_request_{{uniqid}}', {{courseid}}, {{{templatelist}}},{{{categories}}},"{{shortname}}","{{coursename}}");
+        main.init('#theme_urcourses_default_header_course_request_{{uniqid}}', {{{course}}}, {{{templatelist}}},{{{categories}}});
     });
   
 {{/js}}
