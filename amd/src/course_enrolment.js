@@ -213,10 +213,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                     templatelist += '<div class="form-control-feedback invalid-feedback" id="error_bannerselect"></div> ';
                     templatelist += '<select class="custom-select" id="bannerselect" ';
                
-                    $.each( data.courseinfo, function( key, value ) {
-                        
-                        templatelist+= '<option value = ' +value.subject + ' ' +value.course + '-' + value.section +'>' +value.subject + ' ' +value.course + '-' + value.section +' </option>';
-                       
+                    $.each( data.courseinfo, function( key, value ) {  
+                        templatelist+= '<option value = ' +value.subject + ' ' +value.course + '-' + value.section +'>' +value.subject + ' ' +value.course + '-' + value.section +' </option>';  
                     });
                     templatelist += '</select>';
     
@@ -292,7 +290,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             modal.show();
         }).done(function(modal) {
             if(isavailable){
-                if(data.courseinfo.length<6 && data.courseinfo.length>0 ){
+                if(data.courseinfo.length<=6 && data.courseinfo.length>0 ){
                     _registerSelectorEventListeners(_element);
                 }
                 
