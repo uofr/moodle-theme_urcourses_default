@@ -248,7 +248,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
       
         //adding in confirmation modal in case buttons accidentally clicked
         ModalFactory.create({
-            type: ModalFactory.types.SAVE_CANCEL,
+            type: (data.courseinfo.length != 0) ? ModalFactory.types.SAVE_CANCEL :ModalFactory.types.CANCEL ,
             title: modaltitle,
             body: ((isavailable) ? "<p><b>Are you sure you want to modify enrolment for this course?</b><br />"
                     + activatedtitle 
@@ -259,7 +259,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
 
         }).then(function(modal) {
 
-            if(isavailable){
+            if(isavailable && data.courseinfo.length != 0){
                 modal.setSaveButtonText('Save');
                 var root = modal.getRoot();
                 root.on(ModalEvents.cancel, function(){
@@ -296,6 +296,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                 if(data.courseinfo.length<6 && data.courseinfo.length>0 ){
                     _registerSelectorEventListeners(_element);
                 }
+                
             }else{
                 _registerModalButtons();
             }
@@ -321,7 +322,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
 
         }).then(function(modal) {
 
-            if(isavailable){
+          
                 modal.setSaveButtonText('Save');
                 var root = modal.getRoot();
                 root.on(ModalEvents.cancel, function(){
@@ -338,12 +339,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
 
                       
                 });
-            }else{
-                var root = modal.getRoot();
-                root.on(ModalEvents.cancel, function(){
-                    return;
-                });
-            }
+            
            
             //remove modal on hide
             root.on(ModalEvents.hidden, function(e){
@@ -430,13 +426,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             enddate = endday+"-"+endmonth+"-"+endyear+"-"+endhour+"-"+endminute;
         }
 
-        
-
-
-        console.log(courseinfo);
-        console.log(templateid );
-
-
         if(templateid !=0){
             //duplicate course option selected
             // set args
@@ -447,8 +436,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                 startdate: startdate,
                 enddate: enddate
             };
-
-            console.log(args);
 
             // set ajax call
             var ajaxCall = {
