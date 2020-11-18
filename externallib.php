@@ -655,7 +655,8 @@ class theme_urcourses_default_external extends external_api {
 
             //replace User email with new email same for username
             $user->email = $email;
-            $user->username= $user->username."student";
+            $user->username= $user->username."-student";
+            $user->lastname= $user->lastname." (student)";
         
             //call external create user function
             $userid = user_create_user($user, false, true);
