@@ -215,7 +215,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                
                     $.each( data.courseinfo, function( key, value ) {
                         
-                        templatelist+= '<option value = ' +value.subject + ' ' +value.course + '-' + value.section +'</option>';
+                        templatelist+= '<option value = ' +value.subject + ' ' +value.course + '-' + value.section +'>' +value.subject + ' ' +value.course + '-' + value.section +' </option>';
                        
                     });
                     templatelist += '</select>';
@@ -284,7 +284,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                     return;
                 });
             }
-           
             //remove modal on hide
             root.on(ModalEvents.hidden, function(e){
                 //remove inputs otherwise duplicates are made causing id problems
@@ -322,7 +321,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
 
         }).then(function(modal) {
 
-          
                 modal.setSaveButtonText('Save');
                 var root = modal.getRoot();
                 root.on(ModalEvents.cancel, function(){
@@ -335,12 +333,9 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                         e.preventDefault();   
                     }else{
                         _addEnrolment(data, templateid); 
-                    }  
-
-                      
+                    }     
                 });
             
-           
             //remove modal on hide
             root.on(ModalEvents.hidden, function(e){
                 //remove inputs otherwise duplicates are made causing id problems
