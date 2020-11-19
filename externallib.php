@@ -1159,7 +1159,6 @@ class theme_urcourses_default_external extends external_api {
 
             $activated=array();
             if(empty($courseinfo)){
-                
                 for($i=1; $i<count($teachers); $i++){
                     $courseinfo = block_urcourserequest_crn_info($params['semester'], $teachers[$i]->username);
 
@@ -1235,7 +1234,12 @@ class theme_urcourses_default_external extends external_api {
         return new external_function_parameters(array(
             'courseid' => new external_value(PARAM_INT),
             'semester' => new external_value(PARAM_INT),
-            'crn' => new external_value(PARAM_INT),
+            'crns' => new external_multiple_structure(
+                        new external_single_structure(
+                             array(
+                                'crn'=>  new external_value(PARAM_INT),
+            ))),
+            'groupcheck' => new external_value(PARAM_BOOL),
             'startdate' => new external_value(PARAM_TEXT),
             'enddate' => new external_value(PARAM_TEXT),
         ));
@@ -1250,17 +1254,18 @@ class theme_urcourses_default_external extends external_api {
      * @param string $crn code of banner section
      * @return array
      */
-    public static function activate_course($courseid, $semester, $crn, $startdate, $enddate) {
+    public static function activate_course($courseid, $semester, $crns,$groupcheck, $startdate, $enddate) {
 
         global $USER, $DB;
-
+        
         // get params
         $params = self::validate_parameters(
             self::activate_course_parameters(),
             array(
             'courseid' => $courseid,
             'semester' => $semester,
-            'crn' => $crn,
+            'crns' => $crns,
+            'groupcheck' => $groupcheck,
             'startdate' => $startdate,
             'enddate' => $enddate,
             )
@@ -1280,12 +1285,18 @@ class theme_urcourses_default_external extends external_api {
             $endtimestamp = make_timestamp($end[2],$end[1],$end[0],$end[3],$end[4]);
         }
 
+        $value = true;
         $result="";
-        $result = block_urcourserequest_activate_urcourse($params['courseid'], $params['crn'], $params['semester'], $starttimestamp,$endtimestamp);
+        for($i=0; $i<count($params['crns']); $i++){
+            foreach ($params['crns'][$i] as $crn) {
+                $result .= " ";
+                $result .= block_urcourserequest_activate_urcourse($params['courseid'], $crn, $params['semester'], $starttimestamp,$endtimestamp);
 
-        $value = false;
-        if(stripos($result, 'success') !== false){
-            $value = true;
+                if(stripos($result, 'success') === false){
+                    $value = false;
+                    break 2;
+                }
+            }
         }
 
         return array("result"=>$result, "value"=>$value, "semester"=>block_urcourserequest_semester_string($semester));
