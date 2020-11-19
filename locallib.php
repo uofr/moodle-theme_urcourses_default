@@ -21,6 +21,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+ use \core_course\external\course_summary_exporter;
  defined('MOODLE_INTERNAL') || die();
  
 /**
@@ -377,7 +378,8 @@ function theme_urcourses_default_get_ur_category_class($courseid) {
 
 function theme_urcourses_default_get_course_templates() {
 
-    global $CFG, $DB;
+    global $CFG, $DB, $PAGE;
+    
 
     //get category for Template Course
     $sql = "SELECT * FROM mdl_course_categories WHERE name = 'TEMPLATES' OR name = 'Template';";
@@ -399,16 +401,22 @@ function theme_urcourses_default_get_course_templates() {
 
     $rendercourse = array();
     foreach($courses as $course){
+
+        $urenderer = $PAGE->get_renderer('core');
+        $context = \context_course::instance($course->id);
+        $exporter = new course_summary_exporter($course, ['context' => $context]);
+        $cobits = $exporter->export($urenderer);
+        
         $temp= array();
         $temp["id"]= $course->id;
         $temp["fullname"]= $course->fullname;
         $temp["summary"]= $course->summary;
+        $temp["courseimage"]= $cobits->courseimage;
 
         $rendercourse[]=$temp;
     }
-  
-    return $rendercourse;
 
+    return $rendercourse;
 }
 
 /**

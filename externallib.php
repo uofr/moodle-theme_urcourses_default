@@ -166,7 +166,6 @@ class theme_urcourses_default_external extends external_api {
     }
 
 
-
     public static function choose_header_style($courseid, $headerstyle) {
         global $CFG, $DB;
 
@@ -237,7 +236,6 @@ class theme_urcourses_default_external extends external_api {
         } else {
             return array('error' => 'Record not found');
         }
-
     }
 
     /**
@@ -1257,7 +1255,7 @@ class theme_urcourses_default_external extends external_api {
     public static function activate_course($courseid, $semester, $crns,$groupcheck, $startdate, $enddate) {
 
         global $USER, $DB;
-        
+
         // get params
         $params = self::validate_parameters(
             self::activate_course_parameters(),

@@ -73,7 +73,7 @@ export default class courseActionsLib {
             type: ModalFactory.types.SAVE_CANCEL,
             title: modaltitle,
             body: "<p><b>Are you sure you want to "+ modalaction +" course?</b><br />"
-                + ((_element.attr('id') == button) ? "<small>Select from the templates below:</small>" : "<small>Student data will not be included in the duplicated course.</small>")
+                + ((_element.attr('id') == button) ? "<small>Select from the templates below. (Scroll for more options)</small>" : "<small>Student data will not be included in the duplicated course.</small>")
                 + template
                 + "</p>"
         }).then(function(modal) {
@@ -221,8 +221,9 @@ export default class courseActionsLib {
 
         var templatelist = [];
         $.each(self._templatelist, function(key,val) {
-            templatelist.push({"id":val.id,"fullname":val.fullname,"summary":val.summary});
+            templatelist.push({"id":val.id,"fullname":val.fullname,"summary":val.summary, "courseimage": val.courseimage});
         });
+
 
         var categories = [];
         $.each(self._categories, function(key,val) {

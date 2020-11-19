@@ -1,10 +1,8 @@
 <div id="course_tools_modal_content">
     {{#templatenew}}   
-        <div data-role="templateholder" class = "list-group" >
+        <div data-role="templateholder" class = "list-group overflow-auto" style = "height:148px" >
             {{#istemplatelist}}
-
                 {{^templateshort}}
-
                     <label  class="col-form-label d-inline " for="templateselect">Template Select:</label><br> 
                     <div class="form-control-feedback invalid-feedback" id="error_templateselect"></div>
                     <select class="custom-select" id="templateselect">
@@ -17,8 +15,11 @@
                 {{#templateshort}}
                     {{#templatelist}}
                         <div data-role = "templateselect" class="tmpl-label list-group-item list-group-item-action " id = '{{{id}}}'>
-                            <h6>{{{fullname}}}</h6>
-                                <span><small>{{{summary}}}</small></span>
+                            <h6>
+                                <img class="img-thumbnail" style="background-image:url({{{courseimage}}}); background-size:cover; background-position:center; width: 40px; height: 40px">
+                                {{{fullname}}}
+                            </h6>
+                            <span><small>{{{summary}}}</small></span>
                         </div>
                     {{/templatelist}}
                     <div data-role = "templateselect" class="tmpl-label list-group-item list-group-item-action active" id = "0" >
