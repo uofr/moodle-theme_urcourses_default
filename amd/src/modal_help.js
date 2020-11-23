@@ -247,8 +247,14 @@ export default class ModalHelp extends Modal {
             this.breadcrumbData.search = false;
             this.breadcrumbData.page = false;
             var stringified = landingPage.html;
-            var reg = /\.\.\//g;
-            landingPage.html = stringified.replace(reg, '../guides/');
+            var base = landingPage.base;
+            var reg1 = /\.\/|\.\.\//g;
+            var reg2 = /href="\b(?!https\b)/g;
+            var reg3 = /src="\b(?!https\b)/g;
+            
+            stringified = stringified.replace(reg1, base);
+            stringified = stringified.replace(reg2, 'href="'+base);
+            landingPage.html = stringified.replace(reg3, 'src="'+base);
             this.render(TEMPLATES.MODAL_HELP_GUIDE_PAGE, landingPage, this.breadcrumbData);
         }
         catch (error) {

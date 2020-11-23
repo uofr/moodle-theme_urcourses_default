@@ -263,10 +263,11 @@ class theme_urcourses_default_external extends external_api {
             'r3' => $instructor_roles[3]
         ];
 
-        if ($context->contextlevel !== CONTEXT_SYSTEM) {
+        //Prevents main dashboard from loading correct role
+       /* if ($context->contextlevel !== CONTEXT_SYSTEM) {
             $roleassign_query_cond .= 'AND contextid = :cid';
             $roleassign_query_arr['cid'] = $context->id;
-        }
+        }*/
 
         return $DB->record_exists_select('role_assignments', $roleassign_query_cond, $roleassign_query_arr);
     }
@@ -300,22 +301,27 @@ class theme_urcourses_default_external extends external_api {
         self::validate_context($context);
 
         $endurl ="";
+        $base = "";
         $isbasic=false;
         $isinstructor = self::user_is_instructor($context);
 
         switch ($context->contextlevel) {
             case CONTEXT_SYSTEM:
                 //return basic landing page
+                $base= "../guides/";
                 $isbasic=true;
                 break;
             case CONTEXT_USER:
                 $endurl = ($isinstructor) ? "instructor" : "student";
+                $base= "../guides/";
                 break;
             case CONTEXT_COURSECAT:
-                $endurl = ($isinstructor) ? "student/remote-teaching" : "instructor/remote-teaching";
+                $endurl = ($isinstructor) ? "instructor/remote-teaching":"student/remote-learning";
+                $base= "../guides/";
                 break;
             case CONTEXT_COURSE:
-                $endurl = ($isinstructor) ? "student/remote-teaching" : "instructor/remote-teaching";
+                $endurl = ($isinstructor) ? "instructor/remote-teaching":"student/remote-learning" ;
+                $base= "../guides/";
                 break;
             case CONTEXT_MODULE:
                 //check if any modules are ones in guides
@@ -326,6 +332,7 @@ class theme_urcourses_default_external extends external_api {
                 $topic_list_full = $json_output->jsondata->page_data[0]->all_pages;
                 $mod = $PAGE->activityname;
                 $url ="";
+                $base= "../../guides/";
 
                 foreach ($topic_list_full as $topic) {
                     
@@ -338,14 +345,18 @@ class theme_urcourses_default_external extends external_api {
                 }
 
                 if($url==""){
-                    $endurl = ($isinstructor) ? "student/remote-teaching" : "instructor/remote-teaching";
+                    $endurl = ($isinstructor) ?   "instructor/remote-teaching":"student/remote-leaching";
                 }else{
+                    if($url == "quizzes")
+                        $url="quizzesexams";
+
                     $endurl = "student/$url";
                 }
 
                 break;
             case CONTEXT_BLOCK:
                 $isbasic=true;
+                $base= "../guides/";
                 break;
         }
 
@@ -367,9 +378,11 @@ class theme_urcourses_default_external extends external_api {
         if($contenturls == ""){
             $contenturls = array();
         }
+
         return array(
             'html' => $html,
-            'contenturls' => $contenturls
+            'contenturls' => $contenturls,
+            'base' => $base
         );
     }
 
@@ -384,7 +397,8 @@ class theme_urcourses_default_external extends external_api {
             'contenturls' => new external_multiple_structure(new external_single_structure(array(
                 'name' => new external_value(PARAM_TEXT),
                 'url' => new external_value(PARAM_URL)
-            )))
+            ))),
+            'base'=> new external_value(PARAM_RAW),
         ));
     }
 
