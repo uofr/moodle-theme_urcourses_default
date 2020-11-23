@@ -246,10 +246,12 @@ export default class courseActionsLib {
      */
      registerSelectorEventListeners (_element, button) {
 
-        if(_element.attr('id') == button && self._templatelist.length<=6){
+        if(_element.attr('id') == button){
             //set event listners for template options
             $('.tmpl-label').bind('click', function() { self.setActiveTemplate($(this)); } );
+            $('button[data-role="info_button"').bind('click', function() { self.showMoreInfo($(this)); } );
         }
+
     }
     /**
      * Sets up event listeners.
@@ -310,8 +312,38 @@ export default class courseActionsLib {
             $(SELECTORS.ERR_START).text("");
             $(SELECTORS.ERR_END).text("");
         }
-
         return test;
+    }
+
+        /**
+     * After modal info has been entered call ajax request
+     */
+    showMoreInfo(e) {
+
+        console.log("MAde it");
+        var course ="";
+        $.each(self._templatelist, function(key,val) {
+
+            console.log(e.attr('id'));
+            var id = e.attr('id').split("_");
+            
+            console.log(id);
+            console.log(id[1]);
+            if(id[1] == val.id){
+                console.log("made it 2");
+               course = {"id":val.id,"fullname":val.fullname,"summary":val.summary, "courseimage": val.courseimage};
+            }
+        });
+
+        console.log(course);
+        //adding in confirmation modal in case buttons accidentally clicked
+        ModalFactory.create({
+            type: ModalFactory.types.DEFAULT,
+            title: course.fullname,
+            body: course.summary
+        }).then(function(modal) {
+            modal.show();
+        });
     }
 
     /**
@@ -323,14 +355,10 @@ export default class courseActionsLib {
             return;
         }
         
-        if(self._templatelist.length>6){
-            var templateid = $('#templateselect').val();
-        }else{
-            var templateHolder = $('div[data-role="templateholder"');
-            var selectedTemplate = $(templateHolder).find('.active')
-            var templateid = $(selectedTemplate).attr('id');
-        }
-
+        var templateHolder = $('div[data-role="templateholder"');
+        var selectedTemplate = $(templateHolder).find('.active')
+        var templateid = $(selectedTemplate).attr('id');
+        
         var coursename = $(SELECTORS.COURSENAME).val();
         var shortname = $(SELECTORS.SHORTNAME).val();
         var category = $(SELECTORS.CATEGORY).val();

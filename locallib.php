@@ -380,7 +380,6 @@ function theme_urcourses_default_get_course_templates() {
 
     global $CFG, $DB, $PAGE;
     
-
     //get category for Template Course
     $sql = "SELECT * FROM mdl_course_categories WHERE name = 'TEMPLATES' OR name = 'Template';";
     //$category = $DB->get_records_sql($sql);
@@ -402,15 +401,18 @@ function theme_urcourses_default_get_course_templates() {
     $rendercourse = array();
     foreach($courses as $course){
 
+        $temp= array();
+        $temp["id"]= $course->id;
+        $temp["fullname"]= $course->fullname;
+
         $urenderer = $PAGE->get_renderer('core');
         $context = \context_course::instance($course->id);
         $exporter = new course_summary_exporter($course, ['context' => $context]);
         $cobits = $exporter->export($urenderer);
         
-        $temp= array();
-        $temp["id"]= $course->id;
-        $temp["fullname"]= $course->fullname;
-        $temp["summary"]= $course->summary;
+        
+        
+        $temp["summary"]= $cobits->summary;
         $temp["courseimage"]= $cobits->courseimage;
 
         $rendercourse[]=$temp;
@@ -429,12 +431,8 @@ function theme_urcourses_default_get_catergories(){
 
     //get category for Template Course
     $sql = "SELECT * FROM mdl_course_categories;";
-    //$category = $DB->get_records_sql($sql);
     $categories = $DB->get_records_sql($sql, null, IGNORE_MISSING);
-
     return $categories;
-
-
 }
 
 /**
