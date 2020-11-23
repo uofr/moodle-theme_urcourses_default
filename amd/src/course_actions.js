@@ -315,27 +315,18 @@ export default class courseActionsLib {
         return test;
     }
 
-        /**
+    /**
      * After modal info has been entered call ajax request
      */
     showMoreInfo(e) {
-
-        console.log("MAde it");
+        
         var course ="";
         $.each(self._templatelist, function(key,val) {
-
-            console.log(e.attr('id'));
             var id = e.attr('id').split("_");
-            
-            console.log(id);
-            console.log(id[1]);
             if(id[1] == val.id){
-                console.log("made it 2");
                course = {"id":val.id,"fullname":val.fullname,"summary":val.summary, "courseimage": val.courseimage};
             }
         });
-
-        console.log(course);
         //adding in confirmation modal in case buttons accidentally clicked
         ModalFactory.create({
             type: ModalFactory.types.DEFAULT,
