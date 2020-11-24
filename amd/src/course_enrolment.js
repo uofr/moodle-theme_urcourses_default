@@ -101,6 +101,15 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         //set event listners for template options
         $('#btn_duplicatemodal').bind('click', function() { _courseAction($(this)) } );   
         $('#btn_newmodal').bind('click', function() { _courseAction($(this)) } );   
+    }  
+    
+    /**
+     * Sets up event listeners.
+     * @return void
+     */
+    var _registerDeleteButtons = function() {
+        //set event listners for template options
+        $('button[data-role="delete_button"').bind('click', function() { _deleteEnrollment($(this)); } );
     }
 
      /**
@@ -235,18 +244,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                                     +' </label>'
                                     +' </div>';
                 //}
-
-                if(data.activated.length !=0){
-                    activatedtitle = "<small>The following Banner sections are already enrolled for the selected term:</small>";
-                    activatedlist += '<div class="list-group">';
-                    $.each( data.activated, function( key, value ) {
-                        activatedlist +='<div class="list-group-item list-group-item-secondary">'+
-                                        '<h6>'+value.subject + ' ' +value.course + '-' + value.section +'</h6>'+
-                                        '</div>';
-                    });
-        
-                    activatedlist += '</div><br>';
-                }
             }else{
                 // else not error message
                 //add default template option even if there is no template category
@@ -254,6 +251,21 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                 '<p>There are no available Banner Sections for this course </p>'+
                 '</div>';
             }
+
+            if(data.activated.length !=0){
+                activatedtitle = "<small>The following Banner sections are already enrolled for the selected term:</small>";
+                activatedlist += '<div class="list-group">';
+                $.each( data.activated, function( key, value ) {
+                    activatedlist +='<div class="list-group-item list-group-item-secondary">'+
+                    '<button data-role="delete_button" type="button" class="btn btn-primary float-right" id="delete_'+value.crn+'_'+value.urid+'">Delete Enrolment</button>'+
+                                    '<h6>'+value.subject + ' ' +value.course + '-' + value.section + '<br>'+
+                                    'enrolled into '+ value.fullname+'</h6>'+
+                                    '</div>';
+                });
+    
+                activatedlist += '</div><br>';
+            }
+
             templatelist += '</div>';
         }
       
@@ -300,6 +312,9 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                             }
                             
                             var groupcheck = $("#course_tools_groups").prop("checked") 
+
+                            console.log("groupcheck 1");
+                            console.log(groupcheck);
                             _addEnrolmentDateConfirm(data.courseinfo, templateids, groupcheck,data.semester); 
                         }
                     //}
@@ -325,6 +340,10 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                 
             }else{
                 _registerModalButtons();
+            }
+            if(data.activated.length !=0){
+                _registerDeleteButtons();
+
             }
         });
     };
@@ -447,6 +466,13 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             enddate = endday+"-"+endmonth+"-"+endyear+"-"+endhour+"-"+endminute;
         }
 
+        if(groupcheck == "" || groupcheck == false){
+            groupcheck = 0;
+
+        }else{
+            groupcheck = 1;
+        }
+
         // set args
         var args = {
             courseid: _course.id,
@@ -490,6 +516,73 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         });  
         
     };
+    
+    /**
+     * After modal info has been entered call ajax request
+     */
+    var _deleteEnrollment = function(e) {
+        
+        var crn = e.attr('id').split("_");
+
+        console.log("made it");
+        console.log(crn);
+        console.log(_semester);
+
+        // set args
+        var args = {
+            courseid:crn[2],
+            semester: _semester,
+            crn: crn[1], 
+        };
+
+        // set ajax call
+        var ajaxCall = {
+            methodname: 'theme_urcourses_default_header_delete_enrollment',
+            args: args,
+            fail: notification.exception
+        };
+
+        // initiate ajax call
+        var promise = ajax.call([ajaxCall]);
+        promise[0].done(function(response) {
+
+            //2nd popup saying enrolment removed with filled in names from element
+
+            //remove from activated list
+            //add to available list
+
+
+
+
+
+
+
+
+
+
+                
+            if(response.result!=""){
+                title = "Response:"
+                info = response.result;
+            }
+            //enrollment was a success
+            if(response.value){
+                messageHolder = $('#enrollment_span');
+                messageHolder.text("Enrolment: "+response.semester);
+            }
+                    
+            ModalFactory.create({
+                title: title,
+                    body: '<p><b>'+info+'</b><br></p>',
+            }).done(function(modal) {
+                modal.show();
+            });
+
+        }).fail(function(ex) {
+            notification.exception;
+        });  
+        
+    };
 
     var _courseAction = function(e) {
 
@@ -509,6 +602,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
 
         courseActionsLib.coursereqAction(e, button, _course.category, startdate, enddate);
     }
+
+
 
     /**
      * Entry point to module. Sets globals and registers event listeners.

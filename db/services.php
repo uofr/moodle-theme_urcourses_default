@@ -115,7 +115,15 @@ $functions = array(
         'methodname'    => 'activate_course',
         'classpath'     => 'theme/urcourses_default/externallib.php',
         'description'   => 'Activates and enrolls students from banner',
-        'type'          => 'read',
+        'type'          => 'write',
+        'ajax'          => 'true'
+    ),
+    'theme_urcourses_default_header_delete_enrollment' => array(
+        'classname'     => 'theme_urcourses_default_external',
+        'methodname'    => 'delete_enrollment',
+        'classpath'     => 'theme/urcourses_default/externallib.php',
+        'description'   => 'Removes enrolled students from course',
+        'type'          => 'write',
         'ajax'          => 'true'
     )
 );

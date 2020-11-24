@@ -344,11 +344,15 @@ class theme_urcourses_default_external extends external_api {
                     }
                 }
 
+
+                error_log(print_r($url,TRUE));
                 if($url==""){
-                    $endurl = ($isinstructor) ?   "instructor/remote-teaching":"student/remote-leaching";
+                    $endurl = ($isinstructor) ?   "instructor/remote-teaching":"student/remote-learning";
                 }else{
                     if($url == "quizzes")
                         $url="quizzesexams";
+                    else if($url == "gradebook")
+                        $url = "bookshelf";
 
                     $endurl = "student/$url";
                 }
@@ -1229,7 +1233,9 @@ class theme_urcourses_default_external extends external_api {
                 'subject' => new external_value(PARAM_TEXT),
                 'course' => new external_value(PARAM_TEXT),
                 'section' => new external_value(PARAM_TEXT),
-                'title' => new external_value(PARAM_TEXT)
+                'title' => new external_value(PARAM_TEXT),
+                'fullname'=> new external_value(PARAM_TEXT),
+                'urid'=> new external_value(PARAM_INT),
             ))),
             'semester' =>new external_value(PARAM_TEXT),
             'isavaliable' =>new external_value(PARAM_BOOL),
@@ -1251,7 +1257,7 @@ class theme_urcourses_default_external extends external_api {
                              array(
                                 'crn'=>  new external_value(PARAM_INT),
             ))),
-            'groupcheck' => new external_value(PARAM_BOOL),
+            'groupcheck' => new external_value(PARAM_INT),
             'startdate' => new external_value(PARAM_TEXT),
             'enddate' => new external_value(PARAM_TEXT),
         ));
@@ -1283,6 +1289,9 @@ class theme_urcourses_default_external extends external_api {
             )
         );
 
+
+        error_log(print_r("groupchecj",TRUE));
+        error_log(print_r($params['groupcheck'],TRUE));
         // ensure user has permissions to change image
         $context = \context_course::instance($params['courseid']);
         self::validate_context($context);
@@ -1323,6 +1332,62 @@ class theme_urcourses_default_external extends external_api {
             'result' => new external_value(PARAM_TEXT),  
             'value' => new external_value(PARAM_BOOL),  
             'semester' => new external_value(PARAM_TEXT),  
+        ));
+    }
+
+       /**
+     * Returns description of activate_course's parameters.
+     *
+     * @return external_function_parameters
+     */
+    public static function delete_enrollment_parameters() {
+        return new external_function_parameters(array(
+            'courseid' => new external_value(PARAM_INT),
+            'semester' => new external_value(PARAM_INT),
+            'crn'=>  new external_value(PARAM_INT),
+        ));
+    }
+
+    /**
+     * Enrolls students from select banner section into course
+     * Activates the course by adding it to the crn_map table
+     *
+     * @param int $courseid
+     * @param int $semester of term to activate course in
+     * @param string $crn code of banner section
+     * @return array
+     */
+    public static function delete_enrollment($courseid, $semester, $crn) {
+
+        global $USER, $DB;
+
+        error_log(print_r("MADE It",TRUE));
+        // get params
+        $params = self::validate_parameters(
+            self::delete_enrollment_parameters(),
+            array(
+            'courseid' => $courseid,
+            'semester' => $semester,
+            'crn' => $crn,
+            )
+        );
+
+        // ensure user has permissions to change image
+        $context = \context_course::instance($params['courseid']);
+        self::validate_context($context);
+       
+        $result .= block_urcourserequest_delete_enrollment($params['courseid'],$params['semester'],$params['crn']);
+
+        return array("result"=>$result);
+    }
+    /**
+     * Returns description of activate_course return value.
+     *
+     * @return external_single_structure
+     */
+    public static function delete_enrollment_returns() {
+        return new external_single_structure(array(
+            'result' => new external_value(PARAM_TEXT),  
         ));
     }
 }
