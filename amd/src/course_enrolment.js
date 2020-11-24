@@ -109,7 +109,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      */
     var _registerDeleteButtons = function() {
         //set event listners for template options
-        $('button[data-role="delete_button"').bind('click', function() { _deleteEnrollment($(this)); } );
+        $('button[data-role="delete_button"]').bind('click', function() { _deleteEnrollment($(this)); } );
     }
 
      /**
@@ -313,8 +313,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                             
                             var groupcheck = $("#course_tools_groups").prop("checked") 
 
-                            console.log("groupcheck 1");
-                            console.log(groupcheck);
                             _addEnrolmentDateConfirm(data.courseinfo, templateids, groupcheck,data.semester); 
                         }
                     //}
@@ -524,10 +522,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         
         var crn = e.attr('id').split("_");
 
-        console.log("made it");
-        console.log(crn);
-        console.log(_semester);
-
         // set args
         var args = {
             courseid:crn[2],
@@ -545,22 +539,10 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         // initiate ajax call
         var promise = ajax.call([ajaxCall]);
         promise[0].done(function(response) {
-
-            //2nd popup saying enrolment removed with filled in names from element
-
-            //remove from activated list
-            //add to available list
-
-
-
-
-
-
-
-
-
-
-                
+            //close previous modal
+            $( 'button[data-action="cancel"] ').trigger( "click" );
+            
+            //2nd popup saying enrolment removed with filled in names from element    
             if(response.result!=""){
                 title = "Response:"
                 info = response.result;
@@ -568,9 +550,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             //enrollment was a success
             if(response.value){
                 messageHolder = $('#enrollment_span');
-                messageHolder.text("Enrolment: "+response.semester);
+                messageHolder.text("Enrolment Removal: ");
             }
-                    
             ModalFactory.create({
                 title: title,
                     body: '<p><b>'+info+'</b><br></p>',
@@ -581,7 +562,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         }).fail(function(ex) {
             notification.exception;
         });  
-        
     };
 
     var _courseAction = function(e) {

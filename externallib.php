@@ -344,8 +344,6 @@ class theme_urcourses_default_external extends external_api {
                     }
                 }
 
-
-                error_log(print_r($url,TRUE));
                 if($url==""){
                     $endurl = ($isinstructor) ?   "instructor/remote-teaching":"student/remote-learning";
                 }else{
@@ -1289,9 +1287,6 @@ class theme_urcourses_default_external extends external_api {
             )
         );
 
-
-        error_log(print_r("groupchecj",TRUE));
-        error_log(print_r($params['groupcheck'],TRUE));
         // ensure user has permissions to change image
         $context = \context_course::instance($params['courseid']);
         self::validate_context($context);
@@ -1361,7 +1356,6 @@ class theme_urcourses_default_external extends external_api {
 
         global $USER, $DB;
 
-        error_log(print_r("MADE It",TRUE));
         // get params
         $params = self::validate_parameters(
             self::delete_enrollment_parameters(),
