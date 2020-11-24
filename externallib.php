@@ -1302,7 +1302,7 @@ class theme_urcourses_default_external extends external_api {
         for($i=0; $i<count($params['crns']); $i++){
             foreach ($params['crns'][$i] as $crn) {
                 $result .= " ";
-                $result .= block_urcourserequest_activate_urcourse($params['courseid'], $crn, $params['semester'], $starttimestamp,$endtimestamp);
+                $result .= block_urcourserequest_activate_urcourse($params['courseid'], $crn, $params['semester'], $starttimestamp,$endtimestamp,$params['groupcheck']);
 
                 if(stripos($result, 'success') === false){
                     $value = false;
