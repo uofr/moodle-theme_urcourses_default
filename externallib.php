@@ -1234,6 +1234,7 @@ class theme_urcourses_default_external extends external_api {
                 'title' => new external_value(PARAM_TEXT),
                 'fullname'=> new external_value(PARAM_TEXT),
                 'urid'=> new external_value(PARAM_INT),
+                'linked'=> new external_value(PARAM_INT),
             ))),
             'semester' =>new external_value(PARAM_TEXT),
             'isavaliable' =>new external_value(PARAM_BOOL),

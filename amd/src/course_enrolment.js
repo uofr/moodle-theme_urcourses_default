@@ -256,7 +256,13 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                 activatedtitle = "<small>The following Banner sections are already enrolled for the selected term:</small>";
                 activatedlist += '<div class="list-group">';
                 $.each( data.activated, function( key, value ) {
-                    activatedlist +='<div class="list-group-item list-group-item-secondary">'+
+
+                    var linkedClass = "alert-warning";
+                    if(value.linked){
+                        linkedClass = "alert-success";
+                    }
+
+                    activatedlist +='<div class="list-group-item list-group-item-secondary '+linkedClass+'">'+
                     '<button data-role="delete_button" type="button" class="btn btn-primary float-right" id="delete_'+value.crn+'_'+value.urid+'">Delete Enrolment</button>'+
                                     '<h6>'+value.subject + ' ' +value.course + '-' + value.section + '<br>'+
                                     'enrolled into '+ value.fullname+'</h6>'+
