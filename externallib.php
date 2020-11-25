@@ -793,7 +793,35 @@ class theme_urcourses_default_external extends external_api {
         $course->category = $params['categoryid'];
         $course->startdate =$starttimestamp;
         $course->enddate =$endtimestamp;
-        $course->idnumber = "";
+        
+        //grab and split id to get last $version number
+        $idnumber = $course->idnumber;
+        $idpieces = explode("_", $idnumber);
+        $subject = $idpieces[0];
+        $name = $idpieces[1];
+        $version = $idpieces[2];
+
+        //check the format 
+        if(count($idpieces)> 3){
+            $subject = $idpieces[0];
+            $name = $idpieces[2];
+            $version = $idpieces[3];
+        }
+
+        //check format, if not ### replace with 001
+        $pattern = "/^[0-9]{3}$/";
+        if(!preg_match($pattern, $version)){
+            $version = 001;
+        }else{
+            $version = $version +1;
+        }
+        //begin loop to check if record exits with that id number
+        while ($DB->record_exists("course", array("idnumber"=>$subject."_".$name."_".str_pad($version,3,"0",STR_PAD_LEFT)))) {
+            //increment until id not found
+            $version = $version +1;
+        }
+
+        $course->idnumber = $subject."_".$name."_".str_pad($version,3,"0",STR_PAD_LEFT);;
         //send to external function
         $newcourse = create_course($course);
 
@@ -915,6 +943,8 @@ class theme_urcourses_default_external extends external_api {
             $endtimestamp = make_timestamp($end[2],$end[1],$end[0],$end[3],$end[4]);
         }
 
+        $username = $USER->username;
+
         //CHECK IF DEFAULT TEMPLATE
         if($templateid == 0){
 
@@ -926,6 +956,7 @@ class theme_urcourses_default_external extends external_api {
             $course->shortname = $params['shortname'];
             $course->fullname = $params['coursename'];
             $course->summary ="";
+            $course->idnumber = self:: create_course_idnumber($params['shortname'],$username, 001);
             $course->summaryformat =1;
             $course->format ="topics";
             $course->showgrades =1;
@@ -996,6 +1027,7 @@ class theme_urcourses_default_external extends external_api {
             $course->category = $params['categoryid'];
             $course->startdate =$starttimestamp;
             $course->enddate =$endtimestamp;
+            $course->idnumber = self:: create_course_idnumber($params['shortname'],$username, 001);
             //send to external function
             $newcourse = create_course($course);
 
@@ -1241,6 +1273,37 @@ class theme_urcourses_default_external extends external_api {
 
         ));
     }
+
+     /**
+     * Internal function to enroll user into course based on previous course enrollment.
+     *
+     * @return external_single_structure
+     */
+    private static function create_course_idnumber($shortname,$instructorname,$version) {
+
+        global $DB;
+
+         $strings = explode(" ",$shortname);
+ 
+         if(count($strings)>1)
+             $first = $strings[0].$strings[1];
+         else    
+             $first = $strings[0];
+ 
+         $cleaned = preg_replace('/[^a-zA-Z0-9]+/','',$first);
+         $final = preg_replace("/\s+/", "", $cleaned);
+ 
+         if(strlen($final)>80){
+             $final = substr($string,0,80);
+         }
+ 
+         while ($DB->record_exists("course", array("idnumber"=>$final."_".$instructorname."_".str_pad($version,3,"0",STR_PAD_LEFT)))) {
+            //increment until id not found
+            $version = $version +1;
+        }
+ 
+         return $final."_".$instructorname."_".str_pad($version,3,"0",STR_PAD_LEFT);
+     }
 
      /**
      * Returns description of activate_course's parameters.
