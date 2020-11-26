@@ -390,6 +390,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                 //remove inputs otherwise duplicates are made causing id problems
                 $( SELECTORS.ENDHOLDER).remove();
                 $( SELECTORS.STARTHOLDER).remove();
+                $( SELECTORS.ERR_START).remove();
+                $( SELECTORS.ERR_END).remove();
             });
             modal.show();
         }).done(function(modal) {
