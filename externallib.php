@@ -771,6 +771,12 @@ class theme_urcourses_default_external extends external_api {
         $context = \context_course::instance($params['courseid']);
         self::validate_context($context);
 
+        $admins = get_admins(); 
+        $isadmin = false; 
+        foreach ($admins as $admin) { 
+            if ($USER->id == $admin->id) 
+            { $isadmin = true; break; } } 
+
         //split dates and get appropriate timestamp
         $start =  explode("-", $params['startdate']);
         
@@ -785,14 +791,12 @@ class theme_urcourses_default_external extends external_api {
         $sql = "SELECT * FROM mdl_course as c WHERE c.id ='{$params['courseid']}'";
         $course = $DB->get_record_sql($sql);
 
+        $newcourse =  new stdClass();
+
         //add in new variables, clear id
-        $course->id = "";
-        //sanitize
-        $course->shortname = $params['shortname'];
-        $course->fullname = $params['coursename'];
-        $course->category = $params['categoryid'];
-        $course->startdate =$starttimestamp;
-        $course->enddate =$endtimestamp;
+        $newcourse->id = "";
+        $newcourse->startdate =$starttimestamp;
+        $newcourse->enddate =$endtimestamp;
         
         //grab and split id to get last $version number
         $idnumber = $course->idnumber;
@@ -821,17 +825,15 @@ class theme_urcourses_default_external extends external_api {
             $version = $version +1;
         }
 
-        $course->idnumber = $subject."_".$name."_".str_pad($version,3,"0",STR_PAD_LEFT);;
-        //send to external function
-        $newcourse = create_course($course);
+        $newcourse->idnumber = $subject."_".$name."_".str_pad($version,3,"0",STR_PAD_LEFT);
 
-         //remove site announcments if template course has it already
-         $sql = "SELECT * FROM mdl_forum WHERE course = '{$params['courseid']}' AND type ='news'";
-         $test = $DB->record_exists_sql($sql, null);
-        
-         if($test){
-             $DB->delete_records("forum", array("course"=>$newcourse->id));
-         }
+        $importer = new core_course_external();
+        $newcoursetemp = $importer->duplicate_course($params['courseid'], $params['coursename'], $params['shortname'], $params['categoryid'], 0, array());
+
+        $newcourse->id = $newcoursetemp["id"];
+
+        //update id number and date of course
+        $DB->update_record("course", $newcourse, false);
 
         //check if instructor is enrolled in the template
         $newcontext = \context_course::instance($newcourse->id);
@@ -855,10 +857,6 @@ class theme_urcourses_default_external extends external_api {
             }
         }
         
-        //use old id and new id to tranfer data to new course
-        $importer = new core_course_external();
-        $importer->import_course($params['courseid'], $newcourse->id);
-
          //return new course id & url
          $url = $CFG->wwwroot.'/course/view.php?id=' . $newcourse->id;
  
@@ -1027,6 +1025,7 @@ class theme_urcourses_default_external extends external_api {
             $course->category = $params['categoryid'];
             $course->startdate =$starttimestamp;
             $course->enddate =$endtimestamp;
+            $course->summary="";
             $course->idnumber = self:: create_course_idnumber($params['shortname'],$username, 001);
             //send to external function
             $newcourse = create_course($course);

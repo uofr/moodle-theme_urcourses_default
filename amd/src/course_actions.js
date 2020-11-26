@@ -63,10 +63,10 @@ export default class courseActionsLib {
         var modalaction = (_element.attr('id') == button) ? 'create a new' : 'duplicate this';
 
         var templatenew = (_element.attr('id') == button) ? true : "";
-        var templateshort = (self._templatelist.length>6) ? "" : true;
+        //var templateshort = (self._templatelist.length>6) ? "" : true;
         var istemplatelist = (self._templatelist.length>0) ? true : "";
 
-        var template =  await self.render(TEMPLATES.MODAL_COURSE_ACTION_CONTENT, templatenew,templateshort,istemplatelist);
+        var template =  await self.render(TEMPLATES.MODAL_COURSE_ACTION_CONTENT, templatenew,true,istemplatelist);
 
         //adding in confirmation modal in case buttons accidentally clicked
         ModalFactory.create({
