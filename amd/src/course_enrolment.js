@@ -511,14 +511,20 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             ModalFactory.create({
                 title: title,
                     body: '<p><b>'+info+'</b><br></p>',
-            }).done(function(modal) {
+            }).then(function(modal) {
                 modal.show();
-            });
-
+                var root = modal.getRoot();
+                 //remove modal on hide
+                 root.on(ModalEvents.hidden, function(){
+                    //if on settings page reload for proper dates
+                    if($("#fitem_id_startdate").length){
+                        location.reload();
+                    }
+                 });
+            })
         }).fail(function(ex) {
             notification.exception;
         });  
-        
     };
     
     /**

@@ -421,6 +421,10 @@ export default class courseActionsLib {
                 window.location.href = response.url;
             }
         }).fail(function(ex) {
+            if($('#mainspinner').length){
+                $('#mainspinner') .hide();
+                $('#infoholder').removeClass("block_urcourserequest_overlay");
+            }
             notification.exception;
         });  
     }
@@ -503,6 +507,10 @@ export default class courseActionsLib {
                  window.location.href = response.url;
             }
         }).fail(function() {
+            if($('#mainspinner').length){
+                $('#mainspinner') .hide();
+                $('#infoholder').removeClass("block_urcourserequest_overlay");
+            }
             notification.exception;
         });  
     }
