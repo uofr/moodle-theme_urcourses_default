@@ -433,7 +433,7 @@ class theme_urcourses_default_external extends external_api {
         $topic_list_full = $json_output->jsondata->page_data[0]->all_pages;
 
         foreach ($topic_list_full as $topic) {
-            $url = substr($topic->url, strpos($topic->url, '/', 1));
+            $url = substr($topic->url, strpos($topic->url, '/guides/', 0));
             $topic->url = $url;
             $topic->title = htmlspecialchars_decode($topic->title);
         }
