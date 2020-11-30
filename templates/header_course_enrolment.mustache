@@ -12,39 +12,40 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template urcourses_default/header_course_style_chooser
+    @template urcourses_default/header_course_enrolment
     This template renders the course header style chooser buttons.
 }}
 
 <div class="col-md-6" id="theme_urcourses_default_header_course_enrolment_{{uniqid}}">
 	<div class="btn-group">
-	<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		<i class="fa fa-plug" aria-hidden="true"></i>
+	{{#active}}
+		<button type="button"  id="{{{id}}}" class="btn btn-secondary btn_enrolterm text-nowrap">
+			<i class="fa fa-plug" aria-hidden="true"></i>
 			<span id="enrollment_span">
-				Enrolment: 
-				{{#active}}
-					{{active}}
-				{{/active}}
-				{{^active}}
-					TBD
-				{{/active}}
+				Modify Enrolment
+			</span>
+		</button>
+	{{/active}}
+	{{^active}}
+		<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<i class="fa fa-plug" aria-hidden="true"></i>
+			<span id="enrollment_span">
+				Enrolment: TBD
 			</span>
 		</button>
 		<div class="dropdown-menu dropdown-menu-right">
-		<h6 class="dropdown-header">Select a Term</h6>
-		
-		<div class="dropdown-divider"></div>
-		
-		{{#semesters}}
-			<button class="dropdown-item btn_enrolterm ml-1" type="button" id="{{id}}">{{title}}</button>
-		{{/semesters}}
-			
+			<h6 class="dropdown-header">Select a Term</h6>
+			<div class="dropdown-divider"></div>
+			{{#semesters}}
+				<button class="dropdown-item btn_enrolterm ml-1" type="button" id="{{id}}">{{title}}</button>
+			{{/semesters}}
 		</div>
+	{{/active}}
 	</div>
 </div>
 
 {{#js}}
     require(['theme_urcourses_default/course_enrolment'], function(main) {
-        main.init('#theme_urcourses_default_header_course_enrolment_{{uniqid}}', {{{course}}},{{{semesterdates}}},{{{categories}}}, {{{templatelist}}});
+        main.init('#theme_urcourses_default_header_course_enrolment_{{uniqid}}', {{{course}}},{{{semesterdates}}},{{{categories}}}, {{{templatelist}}},'{{homeurl}}');
     });
 {{/js}}

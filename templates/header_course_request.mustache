@@ -27,13 +27,13 @@
       Course Tools  
     </button>
     <div class="dropdown-menu dropdown-menu-right">
+      <button class="dropdown-item ml-1" id="btn_editdescription" type="button"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Course Description</button>
+      <div class="dropdown-divider"></div>
       <button class="dropdown-item ml-1" id="btn_duplicate" type="button"><i class="fa fa-files-o" aria-hidden="true"></i> Duplicate this course</button>
       <div class="dropdown-divider"></div>
       <button class="dropdown-item ml-1" id="btn_new" type="button"><i class="fa fa-plus" aria-hidden="true"></i> Create blank course</button>
       <div class="dropdown-divider"></div>
       <button class="dropdown-item ml-1" id="btn_student" type="button" aria-username = "{{username}}"><i class="fa fa-user"  aria-hidden="true"></i> Create test student</button>
-       <div class="dropdown-divider"></div>
-      <button class="dropdown-item ml-1" id="btn_editdescription" type="button"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Course Description</button>
     </div>
   </div>
 </div>
@@ -42,5 +42,4 @@
     require(['theme_urcourses_default/course_request'], function(main) {
         main.init('#theme_urcourses_default_header_course_request_{{uniqid}}', {{{course}}}, {{{templatelist}}},{{{categories}}});
     });
-  
 {{/js}}

@@ -14,14 +14,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Campus - Code for course header image uploader.
+ * Responsible for registering all events for Course Tools including:
+ * Course Creation-> calls Course Action Library to handle modals and ajax request
+ * Course Duplication-> calls Course Action Library to handle modals and ajax request
+ * Create Student Account-> performs ajax request to create a student account for instructor
+ * Course Description Edit-> Reroutes to Course Edit page, and add marker to go right to Course Summary Section
  *
  * @package    theme_urcourses_default
- * @author     John Lane
+ * @author     Brooke Clary
  * 
  */
-
-
 
 define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     'core/modal_factory', 'core/modal_events','theme_urcourses_default/course_actions'], function($, ajax, notification, str, ModalFactory, ModalEvents,courseActionsLib) {
@@ -32,9 +34,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     var _course;
     var _categories;
     var _templatelist;
-    var _element;
-
-   
 
     /** Jquery selector strings. */
     var SELECTORS = {
@@ -60,6 +59,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
        _templatelist = templatelist;
        _categories = categories;
 
+       //course constructor, incase any create or duplicate course
        courseActionsLib = new courseActionsLib(_course.id,_course.coursename, _course.shortname, _course.startdate, _course.enddate, _templatelist, _categories);
     };
 
@@ -76,6 +76,13 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         _root.on('click', SELECTORS.BTN_DESCRIPTION, _editCourseDescription);
     };
 
+    /**
+     * If course has been used in previous term, options to
+     * duplicate or create are given. If either duplicate or create are 
+     * clicked they are passed to this function, which calls on the 
+     * Course Action Library to provide the correct modals, and perform 
+     * any ajax requests
+     */
     var _courseAction = function() {
 
         var button = "btn_new";
@@ -83,7 +90,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
 
         courseActionsLib.coursereqAction(_element,button, _course.category, _course.startdate, _course.enddate);
     }
-
 
      /**
      * Modal after button click to create student account
@@ -212,11 +218,9 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     var _editCourseDescription = function() {
 
         var origin   = window.location.href;    
-         
         origin =origin.substring(0,origin.lastIndexOf('/'));
 
         var target = origin + "/edit.php?id="+_course.id+"#id_descriptionhdr";
-
         window.location.href = target;
     };
 
@@ -228,7 +232,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         var origin   = window.location.href;     
 
         if (origin.indexOf("course/edit.php") >= 0){
-         
             if(window.location.hash != ""){
                 var navHeight = $('.navbar').outerHeight();
                 $('html, body').animate({
@@ -237,7 +240,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             }
         }
     };
-
 
     /**
      * Entry point to module. Sets globals and registers event listeners.

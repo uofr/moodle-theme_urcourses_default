@@ -357,7 +357,6 @@ function theme_urcourses_default_get_ur_category_class($courseid) {
 		
         return $theme_val;
 	}
-	
 		
 	//if default theme, then check category
 	$sql = "SELECT a.name FROM {$CFG->prefix}course_categories a, {$CFG->prefix}course b WHERE a.id = b.category AND b.id = {$courseid}";
@@ -382,22 +381,17 @@ function theme_urcourses_default_get_course_templates() {
     
     //get category for Template Course
     $sql = "SELECT * FROM mdl_course_categories WHERE name = 'TEMPLATES' OR name = 'Template';";
-    //$category = $DB->get_records_sql($sql);
     $category = $DB->get_record_sql($sql, null, IGNORE_MISSING);
 
-    //if no Template category
-    if (!(array)$category || !$category) {
-        return 0;
-    }
-    
     //else use category id to find all courses in the templates category
     $sql = "SELECT * FROM mdl_course WHERE category = {$category->id};";
     $courses = $DB->get_records_sql($sql);
-
-    if (!(array)$courses) {
+  
+    //if no Template category
+    if (!(array)$category || !$category || !(array)$courses) {
         return 0;
     }
-
+    
     $rendercourse = array();
     foreach($courses as $course){
 
@@ -405,12 +399,11 @@ function theme_urcourses_default_get_course_templates() {
         $temp["id"]= $course->id;
         $temp["fullname"]= $course->fullname;
 
+        //used to get images within course summary, and course image
         $urenderer = $PAGE->get_renderer('core');
         $context = \context_course::instance($course->id);
         $exporter = new course_summary_exporter($course, ['context' => $context]);
         $cobits = $exporter->export($urenderer);
-        
-        
         
         $temp["summary"]= $cobits->summary;
         $temp["courseimage"]= $cobits->courseimage;
@@ -461,15 +454,13 @@ function theme_urcourses_default_get_semesters(){
             $year += 1;
             $term = 10;
         }
-
-         //CHANGE STRING NAMES!!!!!
         $semstring = $year;
         if ($term == 10) {
-            $semstring .= " " . get_string('winter', 'block_urcourserequest');
+            $semstring .= " " . get_string('winter', 'theme_urcourses_default');
         }elseif ($term == 20) {
-            $semstring .= " " . get_string('spring', 'block_urcourserequest');
+            $semstring .= " " . get_string('spring', 'theme_urcourses_default');
         }elseif ($term == 30) {
-            $semstring .= " " . get_string('fall', 'block_urcourserequest');
+            $semstring .= " " . get_string('fall', 'theme_urcourses_default');
         }else {
             $semstring = $semester;
         }
@@ -495,7 +486,7 @@ function theme_urcourses_default_get_semesterdates(){
 }
 
 /**
- * Return an array of semesters
+ * Return current semester course is enrolled in
  * @return array
  */
 

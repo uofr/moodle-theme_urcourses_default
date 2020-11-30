@@ -52,8 +52,6 @@ class theme_urcourses_default_external extends external_api {
         );
     }
 
-
-
     public static function choose_header_style_parameters() {
         return new external_function_parameters(
             array(
@@ -62,8 +60,6 @@ class theme_urcourses_default_external extends external_api {
             )
         );
     }
-
-
 
     public static function toggle_course_availability_parameters() {
         return new external_function_parameters(
@@ -74,7 +70,6 @@ class theme_urcourses_default_external extends external_api {
         );
     }
 
-
     /**
      * Describes upload_couse_image return value.
      * @return external_single_structure
@@ -83,7 +78,6 @@ class theme_urcourses_default_external extends external_api {
         return new external_single_structure(array('success' => new external_value(PARAM_BOOL)));
     }
 
-
     /**
      * Describes choose_header_style return value.
      * @return external_single_structure
@@ -91,7 +85,6 @@ class theme_urcourses_default_external extends external_api {
     public static function choose_header_style_returns() {
         return new external_single_structure(array('success' => new external_value(PARAM_BOOL)));
     }
-
 
     /**
      * Describes choose_header_style return value.
@@ -347,6 +340,7 @@ class theme_urcourses_default_external extends external_api {
                 if($url==""){
                     $endurl = ($isinstructor) ?   "instructor/remote-teaching":"student/remote-learning";
                 }else{
+                    //Little catch cases, would be better to rewrite the grav links to match
                     if($url == "quizzes")
                         $url="quizzesexams";
                     else if($url == "gradebook")
@@ -792,40 +786,42 @@ class theme_urcourses_default_external extends external_api {
         $course = $DB->get_record_sql($sql);
 
         $newcourse =  new stdClass();
-
         //add in new variables, clear id
         $newcourse->id = "";
         $newcourse->startdate =$starttimestamp;
         $newcourse->enddate =$endtimestamp;
-        
-        //grab and split id to get last $version number
-        $idnumber = $course->idnumber;
-        $idpieces = explode("_", $idnumber);
-        $subject = $idpieces[0];
-        $name = $idpieces[1];
-        $version = $idpieces[2];
 
-        //check the format 
-        if(count($idpieces)> 3){
-            $subject = $idpieces[0];
-            $name = $idpieces[2];
-            $version = $idpieces[3];
-        }
-
-        //check format, if not ### replace with 001
-        $pattern = "/^[0-9]{3}$/";
-        if(!preg_match($pattern, $version)){
-            $version = 001;
+        if($course->idnumber = "" || $course->idnumber = 0){
+            $newcourse->idnumber = self:: create_course_idnumber($params['shortname'],$username, 001);
         }else{
-            $version = $version +1;
-        }
-        //begin loop to check if record exits with that id number
-        while ($DB->record_exists("course", array("idnumber"=>$subject."_".$name."_".str_pad($version,3,"0",STR_PAD_LEFT)))) {
-            //increment until id not found
-            $version = $version +1;
-        }
+            //grab and split id to get last $version number
+            $idnumber = $course->idnumber;
+            $idpieces = explode("_", $idnumber);
+            $subject = $idpieces[0];
+            $name = $idpieces[1];
+            $version = $idpieces[2];
 
-        $newcourse->idnumber = $subject."_".$name."_".str_pad($version,3,"0",STR_PAD_LEFT);
+            //check the format 
+            if(count($idpieces)> 3){
+                $subject = $idpieces[0];
+                $name = $idpieces[2];
+                $version = $idpieces[3];
+            }
+
+            //check format, if not ### replace with 001
+            $pattern = "/^[0-9]{3}$/";
+            if(!preg_match($pattern, $version)){
+                $version = 001;
+            }else{
+                $version = $version +1;
+            }
+            //begin loop to check if record exits with that id number
+            while ($DB->record_exists("course", array("idnumber"=>$subject."_".$name."_".str_pad($version,3,"0",STR_PAD_LEFT)))) {
+                //increment until id not found
+                $version = $version +1;
+            }
+            $newcourse->idnumber = $subject."_".$name."_".str_pad($version,3,"0",STR_PAD_LEFT);
+        }
 
         $importer = new core_course_external();
         $newcoursetemp = $importer->duplicate_course($params['courseid'], $params['coursename'], $params['shortname'], $params['categoryid'], 0, array());
@@ -1208,12 +1204,12 @@ class theme_urcourses_default_external extends external_api {
                     $courseinfo = block_urcourserequest_crn_info($params['semester'], $teachers[$i]->username);
 
                     if(!empty($courseinfo)){
-                        $activated= block_urcourserequest_activated_courses($params['semester'], $teachers[$i]->username);
+                        $activated= block_urcourserequest_activated_courses_id($params['courseid']);
                         break 1;
                     }
                 }
             }
-            $activated= block_urcourserequest_activated_courses($params['semester'], reset($teachers)->username);
+            $activated= block_urcourserequest_activated_courses_id($params['courseid']);
             
             $isavailable = true;
 
@@ -1228,7 +1224,7 @@ class theme_urcourses_default_external extends external_api {
             }
         }else{
             $courseinfo = block_urcourserequest_crn_info($params['semester'], $USER->username);
-            $activated= block_urcourserequest_activated_courses($params['semester'], $USER->username);
+            $activated= block_urcourserequest_activated_courses_id($params['courseid']);
             $isavailable = true;
 
             if ($courseinfo) {
@@ -1393,11 +1389,11 @@ class theme_urcourses_default_external extends external_api {
         ));
     }
 
-       /**
-     * Returns description of activate_course's parameters.
-     *
-     * @return external_function_parameters
-     */
+    /**
+    * Returns description of delete_enrollment's parameters.
+    *
+    * @return external_function_parameters
+    */
     public static function delete_enrollment_parameters() {
         return new external_function_parameters(array(
             'courseid' => new external_value(PARAM_INT),
@@ -1406,8 +1402,8 @@ class theme_urcourses_default_external extends external_api {
         ));
     }
 
-    /**
-     * Enrolls students from select banner section into course
+    /*
+     * Deletes enrollment from course by removing banner section
      * Activates the course by adding it to the crn_map table
      *
      * @param int $courseid
@@ -1438,7 +1434,7 @@ class theme_urcourses_default_external extends external_api {
         return array("result"=>$result);
     }
     /**
-     * Returns description of activate_course return value.
+     * Returns description of delete_enrollment return value.
      *
      * @return external_single_structure
      */

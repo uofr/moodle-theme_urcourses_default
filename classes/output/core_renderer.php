@@ -526,14 +526,14 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
     
     function get_course_enrolment() {
-        global $COURSE;
+        global $COURSE, $CFG;
 
         if(URCOURSEREQUEST){
             //NEED TO ADD ACTIVE TO THIS AND A FUNCTION CALL
             $context = [
                 'availability' => $COURSE->visible,
                 'semesters' => theme_urcourses_default_get_semesters(),
-                'active' => theme_urcourses_default_get_course_state($COURSE->id),
+                'active' =>  theme_urcourses_default_get_course_state($COURSE->id),
                 'course'=> json_encode(array("id"=>$COURSE->id,
                                 "coursename"=>$COURSE->fullname,
                                 "shortname"=>$COURSE->shortname,
@@ -544,9 +544,11 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 'semesterdates' => json_encode(theme_urcourses_default_get_semesterdates()),
                 'categories'=> json_encode(theme_urcourses_default_get_catergories()),
                 'templatelist'=> json_encode(theme_urcourses_default_get_course_templates()),
+                "homeurl"=>$CFG->wwwroot,
                 
             ];
             return $this->render_from_template('theme_urcourses_default/header_course_enrolment', $context);
+            
         }
 
         return ""; 

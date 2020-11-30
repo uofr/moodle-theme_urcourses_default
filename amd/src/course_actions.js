@@ -1,3 +1,29 @@
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * This Library is responsilble for 
+ * Course Creation-> creates and displays modal and handles ajax request 
+ * Course Duplication-> creates and displays modal and handles ajax request 
+ * Date Selectors-> create and displays date selectors form
+ *
+ * @package    theme_urcourses_default
+ * @author     Brooke Clary
+ * 
+ */
+
 import $ from 'jquery';
 import ajax from 'core/ajax';
 import ModalFactory from 'core/modal_factory';
@@ -45,7 +71,6 @@ export default class courseActionsLib {
     constructor(courseid,coursename, shortname, startdate, enddate, templatelist, categories){
         
         self = this;
-
         self._courseid = courseid;
         self._coursename = coursename;
         self._shortname = shortname;
@@ -54,19 +79,19 @@ export default class courseActionsLib {
         self._templatelist = templatelist;
         self._categories = categories;
     }
+
     /**
-     * Used for new course and duplicate course creation on button clicks
-     */
+    * Used for new course and duplicate course creation on button clicks
+    */
     async coursereqAction(_element,button,selectcatergory, selectstart, selectend) {
                                                                                                                                          
         var modaltitle = (_element.attr('id') == button) ? 'Create new course' : 'Duplicate this course';
         var modalaction = (_element.attr('id') == button) ? 'create a new' : 'duplicate this';
 
         var templatenew = (_element.attr('id') == button) ? true : "";
-        //var templateshort = (self._templatelist.length>6) ? "" : true;
         var istemplatelist = (self._templatelist.length>0) ? true : "";
 
-        var template =  await self.render(TEMPLATES.MODAL_COURSE_ACTION_CONTENT, templatenew,true,istemplatelist);
+        var template =  await self.render(TEMPLATES.MODAL_COURSE_ACTION_CONTENT, templatenew,istemplatelist);
 
         //adding in confirmation modal in case buttons accidentally clicked
         ModalFactory.create({
@@ -84,23 +109,19 @@ export default class courseActionsLib {
                 return;
             });
                 
-            if((_element.attr('id') == button)){
-                root.on(ModalEvents.save, function(e){
-                    if(!self.validate()){
-                        e.preventDefault();   
+            root.on(ModalEvents.save, function(e){
+                e.preventDefault();
+                if(self.validate()){
+                    if((_element.attr('id') == button)){  
+                        self.createCourse();
+                        return;
                     }else{
-                        self.createCourse( );
-                    }    
-                });
-            }else{
-                root.on(ModalEvents.save, function(e){
-                    if(!self.validate()){
-                        e.preventDefault();   
-                    }else{
-                        self.duplicateCourse( );
+                        self.duplicateCourse();
+                        return;
                     }
-                });
-            }
+                }    
+            });
+            
             //remove modal on hide
             root.on(ModalEvents.hidden, function(){
                 //remove inputs otherwise duplicates are made causing id problems
@@ -126,8 +147,8 @@ export default class courseActionsLib {
     }
 
     /**
-     * Switch choosen template based on click in template list
-     */
+    * Switch choosen template based on click in template list
+    */
     populateDateSelects(selectstart, selectend) {
 
           //populate start and end dates
@@ -164,8 +185,8 @@ export default class courseActionsLib {
     }  
     
     /**
-     * Switch choosen template based on click in template list
-     */
+    * Switch choosen template based on click in template list
+    */
     setActiveTemplate(e) {
 
         var templateHolder = $('div[data-role="templateholder"');
@@ -173,8 +194,8 @@ export default class courseActionsLib {
         e.addClass("active");
     }
     /**
-     * Switch choosen template based on click in template list
-     */
+    * Enable or disable enddate selector
+    */
     setEnddate(e) {
 
         var checked;
@@ -187,8 +208,8 @@ export default class courseActionsLib {
     } 
     
     /**
-     * Switch choosen template based on click in template list
-     */
+    * Check if selected dates are valid
+    */
     validateDaysInMonth () { 
 
         var startyear = $(SELECTORS.STARTYEAR).val();
@@ -217,13 +238,12 @@ export default class courseActionsLib {
      * @param {Object} data - Data for template.
      * @param {Object} breadcrumbData - Data required for rending breadcrumbs.
      */
-     async render(template,templatenew,templateshort, istemplatelist) {
+     async render(template,templatenew,istemplatelist) {
 
         var templatelist = [];
         $.each(self._templatelist, function(key,val) {
             templatelist.push({"id":val.id,"fullname":val.fullname,"summary":val.summary, "courseimage": val.courseimage});
         });
-
 
         var categories = [];
         $.each(self._categories, function(key,val) {
@@ -231,7 +251,6 @@ export default class courseActionsLib {
         });
         const renderData = {
             templatenew: templatenew,
-            templateshort: templateshort,
             templatelist:templatelist,
             istemplatelist:istemplatelist,
             categories: categories
@@ -251,7 +270,6 @@ export default class courseActionsLib {
             $('.tmpl-label').bind('click', function() { self.setActiveTemplate($(this)); } );
             $('button[data-role="info_button"').bind('click', function() { self.showMoreInfo($(this)); } );
         }
-
     }
     /**
      * Sets up event listeners.
@@ -316,7 +334,8 @@ export default class courseActionsLib {
     }
 
     /**
-     * After modal info has been entered call ajax request
+     * For Template Lists, if button is clicked to show more
+     * info, create 2nd modal to pop up showing course description
      */
     showMoreInfo(e) {
         
@@ -327,7 +346,6 @@ export default class courseActionsLib {
                course = {"id":val.id,"fullname":val.fullname,"summary":val.summary, "courseimage": val.courseimage};
             }
         });
-        //adding in confirmation modal in case buttons accidentally clicked
         ModalFactory.create({
             type: ModalFactory.types.DEFAULT,
             title: course.fullname,
@@ -370,11 +388,8 @@ export default class courseActionsLib {
             var endminute = $(SELECTORS.ENDMINUTE).val();
             enddate = endday+"-"+endmonth+"-"+endyear+"-"+endhour+"-"+endminute;
         }
-        
-        if($('#mainspinner').length){
-            $('#mainspinner') .show();
-            $('#infoholder').addClass("block_urcourserequest_overlay");
-        }
+    
+        self.spinnerCheck("show");
 
         //duplicate course option selected
         // set args
@@ -398,10 +413,7 @@ export default class courseActionsLib {
         // initiate ajax call
         var promise = ajax.call([ajaxCall]);
         promise[0].done(function(response) {
-            if($('#mainspinner').length){
-                $('#mainspinner') .hide();
-                $('#infoholder').removeClass("block_urcourserequest_overlay");
-            }
+            self.spinnerCheck("hide");
 
             if(response.error!=""){
 
@@ -421,10 +433,7 @@ export default class courseActionsLib {
                 window.location.href = response.url;
             }
         }).fail(function(ex) {
-            if($('#mainspinner').length){
-                $('#mainspinner') .hide();
-                $('#infoholder').removeClass("block_urcourserequest_overlay");
-            }
+            self.spinnerCheck("hide");
             notification.exception;
         });  
     }
@@ -459,10 +468,7 @@ export default class courseActionsLib {
             enddate = endday+"-"+endmonth+"-"+endyear+"-"+endhour+"-"+endminute;
         }
 
-        if($('#mainspinner').length){
-            $('#mainspinner') .show();
-            $('#infoholder').addClass("block_urcourserequest_overlay");
-        }
+        self.spinnerCheck("show");
          
         //duplicate course option selected
         // set args
@@ -485,10 +491,7 @@ export default class courseActionsLib {
         // initiate ajax call
         var promise = ajax.call([ajaxCall]);
         promise[0].done(function(response) {
-            if($('#mainspinner').length){
-                $('#mainspinner') .hide();
-                $('#infoholder').removeClass("block_urcourserequest_overlay");
-            }
+            self.spinnerCheck("hide");
             if(response.error!=""){
 
                 title = "ERROR:"
@@ -507,12 +510,25 @@ export default class courseActionsLib {
                  window.location.href = response.url;
             }
         }).fail(function() {
-            if($('#mainspinner').length){
-                $('#mainspinner') .hide();
-                $('#infoholder').removeClass("block_urcourserequest_overlay");
-            }
+            self.spinnerCheck("hide");
             notification.exception;
         });  
+    }
+
+    /**
+    * Used mainly for enrolment spinners, start loading and stops
+    */
+    spinnerCheck(type) {
+
+        if($('#mainspinner').length){
+            if(type == "hide"){
+                $('#mainspinner') .hide();
+                $('#infoholder').removeClass("block_urcourserequest_overlay");
+            }else{
+                $('#mainspinner') .show();
+                $('#infoholder').addClass("block_urcourserequest_overlay");
+            }
+        }
     }
 }
 
