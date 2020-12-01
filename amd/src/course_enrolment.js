@@ -304,15 +304,15 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         var modaltitle = 'Would you like to change course dates?';
         var template =  await self.render(TEMPLATES.MODAL_COURSE_ACTION_CONTENT);
       
-        var startdate = _course.startdate.month+_course.startdate.mday+", "+_course.startdate.year;
-        var enddate = _course.enddate.month+_course.enddate.mday+", "+_course.enddate.year;
+        var startdate = _course.startdate.month+' '+_course.startdate.mday+", "+_course.startdate.year;
+        var enddate = _course.enddate.month+' '+_course.enddate.mday+", "+_course.enddate.year;
         //adding in confirmation modal in case buttons accidentally clicked
         ModalFactory.create({
             type: ModalFactory.types.SAVE_CANCEL,
             title: modaltitle,
-            body: ("<p><b>Current Course Dates:<br/>"
-                    +((_course.enddate.year < _course.startdate.year) ? "Start Date: "+startdate+"<br> No endate set" :startdate+ " until "+enddate)
-                    +"</b><br/><br/>"+template )
+            body: ("<p><b>Current Course Dates:<br/></b><div class='alert alert-warning' role='alert'>"
+                    +((_course.enddate.year < _course.startdate.year) ? "Start Date: "+startdate+"<br> End Date: No endate set" :startdate+ " until "+enddate)
+                    +"</div>"+template )
 
         }).then(function(modal) {
 
@@ -452,10 +452,18 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         // initiate ajax call
         var promise = ajax.call([ajaxCall]);
         promise[0].done(function(response) {
+
+            var title= "ERROR:";
+            info = '<div class="alert alert-warning" role="alert">'+response.result+'<br></div>';
+            if(response.result!=""){
+                title = "Enrolment assigned successfully"
+                info = '<div class="alert alert-success" role="alert">'+response.result+'<br></div>';
+
+            }
                      
             ModalFactory.create({
-                title: "Response:",
-                body: '<p><b>'+response.result+'</b><br></p>',
+                title: title,
+                body: info,
             }).then(function(modal) {
                 modal.show();
                 var root = modal.getRoot();
@@ -523,10 +531,17 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         promise[0].done(function(response) {
             //close previous modal
             $( 'button[data-action="cancel"] ').trigger( "click" );
+
+            var title= "ERROR:";
+            info = '<div class="alert alert-warning" role="alert">'+response.result+'<br></div>';
+            if(response.result!=""){
+                title = "Successfully Removed Enrolment"
+                info = '<div class="alert alert-success" role="alert">'+response.result+'<br></div>';
+            }
             
             ModalFactory.create({
-                title: "Response:",
-                body: '<p><b>'+response.result+'</b><br></p>',
+                title: title,
+                body: info,
             }).then(function(modal) {
                 modal.show();
                 var root = modal.getRoot();
