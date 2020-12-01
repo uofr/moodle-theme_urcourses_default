@@ -57,6 +57,7 @@ const TEMPLATES = {
  * @class ModalHelp
  * @property {Number} contextId - Current page context id. Null until it is set in init().
  * @property {Array} topicList - List of topcis for which there is help. Null until it is set in initContent().
+ * @property {Array} topicTitles - Just the titles.
  * @property {JQuery} searchBox - Search field jQuery element.
  * @property {JQuery} searchButton - Search button jQuery object.
  * @property {JQuery} searchClear - Clear search jQuery object.
@@ -71,6 +72,7 @@ export default class ModalHelp extends Modal {
 
         this.contextId = null;
         this.topicList = null;
+        this.topicTitles = null;
         this.searchBox = this.modal.find(SELECTORS.SEARCH);
         this.searchButton = this.modal.find(SELECTORS.SEARCH_BUTTON);
         this.searchClear = this.modal.find(SELECTORS.SEARCH_CLEAR);
@@ -108,8 +110,7 @@ export default class ModalHelp extends Modal {
         this.searchBox.on('input', () => {
             if (this.searchBox.val()) {
                 this.showSearchClear();
-            }
-            else {
+            } else {
                 this.hideSearchClear();
             }
             this.updateSuggestions();
@@ -222,7 +223,8 @@ export default class ModalHelp extends Modal {
         try {
             const topicList = await ModalHelpAjax.getTopicList(this.contextId);
             this.topicList = topicList;
-            FuzzySearch.setDictionary(topicList.map(topic => topic.title));
+            this.topicTitles = topicList.map(topic => topic.title);
+            FuzzySearch.setDictionary(this.topicTitles);
         } catch (error) {
             Notification.exception(error);
         }
@@ -244,13 +246,12 @@ export default class ModalHelp extends Modal {
             var reg1 = /\.\/|\.\.\//g;
             var reg2 = /href="\b(?!https\b)/g;
             var reg3 = /src="\b(?!https\b)/g;
-            
+
             stringified = stringified.replace(reg1, base);
             stringified = stringified.replace(reg2, 'href="'+base);
             landingPage.html = stringified.replace(reg3, 'src="'+base);
             this.render(TEMPLATES.MODAL_HELP_GUIDE_PAGE, landingPage, this.breadcrumbData);
-        }
-        catch (error) {
+        } catch (error) {
             Notification.exception(error);
         }
     }
@@ -275,7 +276,7 @@ export default class ModalHelp extends Modal {
         const query = this.searchBox.val();
         let suggestions = FuzzySearch.search(query);
         if (!suggestions.length) {
-            suggestions = this.topicList.map(suggestion => suggestion.title);
+            suggestions = this.topicTitles;
         }
         const suggestionList = this.getSuggestions(suggestions);
         this.suggestionBox.html('');
@@ -314,8 +315,7 @@ export default class ModalHelp extends Modal {
             };
             this.breadcrumbData.page = false;
             this.render(TEMPLATES.MODAL_HELP_SEARCH_RESULTS, searchResults, this.breadcrumbData);
-        }
-        catch (error) {
+        } catch (error) {
             Notification.exception(error);
         }
     }
@@ -360,8 +360,7 @@ export default class ModalHelp extends Modal {
                 title: title
             };
             this.render(TEMPLATES.MODAL_HELP_GUIDE_PAGE, guidePage, this.breadcrumbData);
-        }
-        catch (error) {
+        } catch (error) {
             Notification.exception(error);
         }
     }
