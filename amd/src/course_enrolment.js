@@ -304,16 +304,15 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         var modaltitle = 'Would you like to change course dates?';
         var template =  await self.render(TEMPLATES.MODAL_COURSE_ACTION_CONTENT);
       
+        var startdate = _course.startdate.month+_course.startdate.mday+", "+_course.startdate.year;
+        var enddate = _course.enddate.month+_course.enddate.mday+", "+_course.enddate.year;
         //adding in confirmation modal in case buttons accidentally clicked
         ModalFactory.create({
             type: ModalFactory.types.SAVE_CANCEL,
             title: modaltitle,
-            body: ("<p><b>Current Course Dates:"
-                    +_course.startdate.month+_course.startdate.mday+", "+_course.startdate.year
-                    +" until "
-                    +_course.enddate.month+_course.enddate.mday+", "+_course.enddate.year
-                    +"</b><br />"+template ),
-           
+            body: ("<p><b>Current Course Dates:<br/>"
+                    +((_course.enddate.year < _course.startdate.year) ? "Start Date: "+startdate+"<br> No endate set" :startdate+ " until "+enddate)
+                    +"</b><br/><br/>"+template )
 
         }).then(function(modal) {
 
