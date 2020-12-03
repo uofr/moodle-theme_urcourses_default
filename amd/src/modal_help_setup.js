@@ -38,8 +38,7 @@ export const init = async (contextId) => {
     try {
         const helpModal = await ModalFactory.create(modalHelpConfig, modalHelpTrigger);
         helpModal.init(contextId);
-    }
-    catch(error) {
+    } catch(error) {
         Notification.exception(error);
     }
 };

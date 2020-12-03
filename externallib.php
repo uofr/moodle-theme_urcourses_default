@@ -342,11 +342,11 @@ class theme_urcourses_default_external extends external_api {
                 }else{
                     //Little catch cases, would be better to rewrite the grav links to match
                     if($url == "quizzes")
-                        $url="quizzesexams";
+                        $url=$isinstructor ? "quizzes": "quizzesexams";
                     else if($url == "gradebook")
                         $url = "bookshelf";
 
-                    $endurl = "student/$url";
+                    $endurl = $isinstructor ? "instructor/$url" : "student/$url";
                 }
 
                 break;
@@ -377,6 +377,7 @@ class theme_urcourses_default_external extends external_api {
 
         return array(
             'html' => $html,
+            'title' => $title,
             'contenturls' => $contenturls,
             'base' => $base
         );
@@ -390,6 +391,7 @@ class theme_urcourses_default_external extends external_api {
     public static function get_landing_page_returns() {
         return new external_single_structure(array(
             'html' => new external_value(PARAM_RAW),
+            'title' => new external_value(PARAM_TEXT),
             'contenturls' => new external_multiple_structure(new external_single_structure(array(
                 'name' => new external_value(PARAM_TEXT),
                 'url' => new external_value(PARAM_URL)
@@ -427,7 +429,7 @@ class theme_urcourses_default_external extends external_api {
         $topic_list_full = $json_output->jsondata->page_data[0]->all_pages;
 
         foreach ($topic_list_full as $topic) {
-            $url = substr($topic->url, strpos($topic->url, '/', 1));
+            $url = substr($topic->url, strpos($topic->url, '/guides/', 0));
             $topic->url = $url;
             $topic->title = htmlspecialchars_decode($topic->title);
         }
@@ -540,9 +542,10 @@ class theme_urcourses_default_external extends external_api {
         $search_url = new moodle_url("/guides/search.json/query:$query");
         $json_output = json_decode(file_get_contents($search_url));
 
+
         $search_results = $json_output->jsondata;
         foreach($search_results as $result) {
-            $url = substr($result->url, strpos($result->url, '/', 1));
+            $url = substr($result->url, strpos($result->url, '/guides/', 0));
             $result->url = $url;
         }
         
