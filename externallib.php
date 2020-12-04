@@ -381,6 +381,14 @@ class theme_urcourses_default_external extends external_api {
             $contenturls = array();
         }
 
+        $reg1 = '/\.\/|\.\.\//';
+        $reg2 = '/href="\b(?!https\b)/';
+        $reg3 = '/src="\b(?!https\b)/';
+
+        $html = preg_replace($reg1, $base, $html);
+        $html = preg_replace($reg2, 'href="' . $base, $html);
+        $html = preg_replace($reg3, 'src="' . $base, $html);
+
         return array(
             'html' => $html,
             'title' => $title,
@@ -479,7 +487,8 @@ class theme_urcourses_default_external extends external_api {
      */
     public static function get_guide_page_parameters() {
         return new external_function_parameters(array(
-            'url' => new external_value(PARAM_TEXT)
+            'url' => new external_value(PARAM_TEXT),
+            'contextid' => new external_value(PARAM_INT)
         ));
     }
 
@@ -488,19 +497,43 @@ class theme_urcourses_default_external extends external_api {
      *
      * @param string $url 
      */
-    public static function get_guide_page($url) {
+    public static function get_guide_page($url, $contextid) {
         $params = self::validate_parameters(self::get_guide_page_parameters(), array(
-            'url' => $url
+            'url' => $url,
+            'contextid' => $contextid
         ));
 
-        $content_url = new moodle_url($params['url'] . '.json');
+        $context = context::instance_by_id($params['contextid']);
+        self::validate_context($context);
+
+        // get url of format /guides/.../page.json
+        $relative_path = substr($params['url'], strpos($params['url'], '/guides/'));
+        $url_trimmed = (strpos($relative_path, '/index.html') !== false)
+            ? str_replace('/index.html', '', $relative_path)
+            : rtrim($relative_path, '/');
+        list($content_url, $target) = explode('#', $url_trimmed);
+        $target = $target ? "#$target" : null;
+        
+        $content_url = new moodle_url($content_url . '.json');
         $json_output = json_decode(file_get_contents($content_url));
         $html = ($json_output->content) ? $json_output->content : $json_output->jsondata->page_data[0]->content;
         $title = $json_output->jsondata ? $json_output->jsondata->page_data[0]->title : '';
 
+        // convert links in the html
+        //$base = $context->contextlevel === CONTEXT_MODULE ? '../../guides/' : '../guides/';
+
+        //$reg1 = '/\.\/|\.\.\//';
+        //$reg2 = '/href="\b(?!https|http\b)/';
+        //$reg3 = '/src="\b(?!https|http\b)/';
+ 
+        //$html = preg_replace($reg1, $base, $html);
+        //$html = preg_replace($reg2, 'href="' . $base, $html);
+        //$html = preg_replace($reg3, 'src="' . $base, $html);
+
         return array(
             'html' => $html,
-            'title' => $title
+            'title' => $title,
+            'target' => $target
         );
     }
 
@@ -512,7 +545,8 @@ class theme_urcourses_default_external extends external_api {
     public static function get_guide_page_returns() {
         return new external_single_structure(array(
             'html' => new external_value(PARAM_RAW),
-            'title' => new external_value(PARAM_TEXT)
+            'title' => new external_value(PARAM_TEXT),
+            'target' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL, null)
         ));
     }
 

@@ -33,11 +33,12 @@ export default class ModalHelpAjax {
         return Ajax.call([ajaxConfig])[0];
     }
 
-    static getGuidePage(url) {
+    static getGuidePage(url, contextid) {
         const ajaxConfig = {
             methodname: 'theme_urcourses_default_get_guide_page',
             args: {
-                url: url
+                url: url,
+                contextid: contextid
             }
         };
         return Ajax.call([ajaxConfig])[0];
