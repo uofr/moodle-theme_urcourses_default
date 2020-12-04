@@ -30,7 +30,7 @@ import Modal from 'core/modal';
 import ModalEvents from 'core/modal_events';
 import ModalRegistry from 'core/modal_registry';
 import ModalHelpAjax from 'theme_urcourses_default/modal_help_ajax';
-import {FuzzySet} from 'theme_urcourses_default/fuzzyset';
+import FuzzySearch from 'theme_urcourses_default/fuzzysearch';
 
 const SELECTORS = {
     SEARCH: '#modal_help_search',
@@ -57,8 +57,7 @@ const TEMPLATES = {
  * @class ModalHelp
  * @property {Number} contextId - Current page context id. Null until it is set in init().
  * @property {Array} topicList - List of topcis for which there is help. Null until it is set in initContent().
- * @property {FuzzySet} topicIndex - FuzzySet to enable autocomplete.
- * @property {Number} minSearchScore - How similar a search term has to be to attempt autocomplete.
+ * @property {Array} topicTitles - Just the titles.
  * @property {JQuery} searchBox - Search field jQuery element.
  * @property {JQuery} searchButton - Search button jQuery object.
  * @property {JQuery} searchClear - Clear search jQuery object.
@@ -73,8 +72,7 @@ export default class ModalHelp extends Modal {
 
         this.contextId = null;
         this.topicList = null;
-        this.topicIndex = FuzzySet();
-        this.minSearchScore = 0;
+        this.topicTitles = null;
         this.searchBox = this.modal.find(SELECTORS.SEARCH);
         this.searchButton = this.modal.find(SELECTORS.SEARCH_BUTTON);
         this.searchClear = this.modal.find(SELECTORS.SEARCH_CLEAR);
@@ -112,8 +110,7 @@ export default class ModalHelp extends Modal {
         this.searchBox.on('input', () => {
             if (this.searchBox.val()) {
                 this.showSearchClear();
-            }
-            else {
+            } else {
                 this.hideSearchClear();
             }
             this.updateSuggestions();
@@ -226,11 +223,9 @@ export default class ModalHelp extends Modal {
         try {
             const topicList = await ModalHelpAjax.getTopicList(this.contextId);
             this.topicList = topicList;
-            for (const topic of topicList) {
-                this.topicIndex.add(topic.title);
-            }
-        }
-        catch (error) {
+            this.topicTitles = topicList.map(topic => topic.title);
+            FuzzySearch.setDictionary(this.topicTitles);
+        } catch (error) {
             Notification.exception(error);
         }
     }
@@ -251,13 +246,12 @@ export default class ModalHelp extends Modal {
             var reg1 = /\.\/|\.\.\//g;
             var reg2 = /href="\b(?!https\b)/g;
             var reg3 = /src="\b(?!https\b)/g;
-            
+
             stringified = stringified.replace(reg1, base);
             stringified = stringified.replace(reg2, 'href="'+base);
             landingPage.html = stringified.replace(reg3, 'src="'+base);
             this.render(TEMPLATES.MODAL_HELP_GUIDE_PAGE, landingPage, this.breadcrumbData);
-        }
-        catch (error) {
+        } catch (error) {
             Notification.exception(error);
         }
     }
@@ -280,28 +274,24 @@ export default class ModalHelp extends Modal {
      */
     updateSuggestions() {
         const query = this.searchBox.val();
-        const defaultSuggestions = this.topicIndex.values();
-        const minScore = this.minSearchScore;
-        const suggestions = this.getSuggestions(query, defaultSuggestions, minScore);
+        let suggestions = FuzzySearch.search(query);
+        if (!suggestions.length) {
+            suggestions = this.topicTitles;
+        }
+        const suggestionList = this.getSuggestions(suggestions);
         this.suggestionBox.html('');
-        this.suggestionBox.append(suggestions);
+        this.suggestionBox.append(suggestionList);
         this.showSuggestionBox();
     }
 
     /**
-     * Get a list of suggestions based on the query.
+     * Returns html markup based on list of suggested words.
      *
      * @method getSuggestions
-     * @param {String} query - What to fuzzy search for in the topicList.
-     * @param {Array} defaultSuggestions - Default suggestions to show if there is no match.
-     * @param {Number} minScore - How similar the query has to be to a topic.
+     * @param {Array} suggestions - List of suggested words.
      * @returns {Array} An array of html tags.
      */
-    getSuggestions(query, defaultSuggestions, minScore) {
-        let suggestions = this.topicIndex.get(query, defaultSuggestions, minScore);
-        if (Array.isArray(suggestions[0])) {
-            suggestions = suggestions.map(suggestion => suggestion[1]);
-        }
+    getSuggestions(suggestions) {
         return suggestions.map(suggestion => `<a href="#" class="modal-help-suggestion-item"
                                               data-value="${suggestion}">${suggestion}</a>`);
     }
@@ -325,8 +315,7 @@ export default class ModalHelp extends Modal {
             };
             this.breadcrumbData.page = false;
             this.render(TEMPLATES.MODAL_HELP_SEARCH_RESULTS, searchResults, this.breadcrumbData);
-        }
-        catch (error) {
+        } catch (error) {
             Notification.exception(error);
         }
     }
@@ -371,8 +360,7 @@ export default class ModalHelp extends Modal {
                 title: title
             };
             this.render(TEMPLATES.MODAL_HELP_GUIDE_PAGE, guidePage, this.breadcrumbData);
-        }
-        catch (error) {
+        } catch (error) {
             Notification.exception(error);
         }
     }
