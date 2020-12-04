@@ -340,11 +340,17 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                         +((_course.enddate.year < _course.startdate.year) ? "Start Date: "+startdate+"<br> End Date: No endate set" :startdate+ " until "+enddate)
                         +"</div>"
                         +((formatednewstart=="") ? "":"The "+data.semester+" term will begin "+formatednewstart+"<br/><br/>")
-                        +template )
+                        +template ), 
+                backdrop: 'static',
+                keyboard: false,
+                dismissible:false
 
             }).then(function(modal) {
 
                 modal.setSaveButtonText('Update');
+
+                //pointer-event: none;
+
 
                 var root = modal.getRoot();
                 root.on(ModalEvents.cancel, function(){
@@ -359,15 +365,24 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                     }     
                 });
                 
-                //remove modal on hide
-                root.on(ModalEvents.hidden, function(){
-                    //remove inputs otherwise duplicates are made causing id problems
-                    $( SELECTORS.ENDHOLDER).remove();
-                    $( SELECTORS.STARTHOLDER).remove();
-                    $( SELECTORS.ERR_START).remove();
-                    $( SELECTORS.ERR_END).remove();
-                });
                 modal.show();
+
+                modaltemp = modal.modal;
+                $(modaltemp).find(".close").attr("id","closemodal");
+                $("#closemodal").bind('click', function() { _closeDateConfirm($(this), modal) } );
+                $(modaltemp).find(".close").addClass( "dateconfirm" );
+                $(root).click(function(e) {
+                    if(!$(e.target).hasClass("close") && !$(e.target).parent().hasClass("close")){
+                        e.preventDefault;
+                        modal.show();
+                    }else{
+                        $( SELECTORS.ENDHOLDER).remove();
+                        $( SELECTORS.STARTHOLDER).remove();
+                        $( SELECTORS.ERR_START).remove();
+                        $( SELECTORS.ERR_END).remove();
+                        modal.hide();
+                    }
+                });
             }).done(function() {
 
                 var startdatefill = {"year": (new Date()).getFullYear(), "mon": (new Date()).getMonth(),"mday":(new Date()).getDate()};
@@ -391,6 +406,15 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             });
         }
     };
+
+    var _closeDateConfirm = function(e, modal){
+
+        $( SELECTORS.ENDHOLDER).remove();
+        $( SELECTORS.STARTHOLDER).remove();
+        $( SELECTORS.ERR_START).remove();
+        $( SELECTORS.ERR_END).remove();
+        modal.hide();
+    }
     /**
      * For Enrolemnt date selectors
      * Check if dates are valid 
