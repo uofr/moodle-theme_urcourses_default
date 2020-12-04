@@ -42,7 +42,8 @@ const SELECTORS = {
     BREADCRUMBS: '#breadcrumbs',
     BREADCRUMB_SEARCH: '#breadcrumb_search',
     BREADCRUMB_HOME: '#breadcrumb_home',
-    BREADCRUMB_PAGE: '#breadcrumb_page'
+    BREADCRUMB_PAGE: '#breadcrumb_page',
+    GUIDE_PAGE_LINK: '[data-region="guide-page-content"] a'
 };
 
 const TEMPLATES = {
@@ -90,11 +91,11 @@ export default class ModalHelp extends Modal {
     init(contextId) {
         this.contextId = contextId;
 
-        this.getRoot().on(ModalEvents.shown, () => {
+        this.getRoot().on(ModalEvents.shown, async () => {
             if (!this.topicList) {
                 this.initTopics();
             }
-            this.showLandingPage();
+            await this.showLandingPage();
         });
 
         this.getRoot().on(ModalEvents.hidden, () => {
@@ -195,23 +196,27 @@ export default class ModalHelp extends Modal {
             this.showSearchResults(query);
         });
 
+        this.getRoot().on('click', SELECTORS.GUIDE_PAGE_LINK, (e) => {
+            const href = $(e.currentTarget).attr('href');
+            if (href.startsWith('#')) return;
+
+            e.preventDefault();
+            if (href.includes('/guides/')) {
+                this.showGuideLink(href);
+            } else {
+                window.open(href, '_blank');
+            }
+        });
+
     }
 
-    /**
-     * Update the modal body using given template and data.
-     *
-     * @method render
-     * @param {String} template - The name of the template to render.
-     * @param {Object} data - Data for template.
-     * @param {Object} breadcrumbData - Data required for rending breadcrumbs.
-     */
     async render(template, data, breadcrumbData) {
         const renderData = {
             data: data,
             breadcrumbs: breadcrumbData
         };
-        const renderPromise = Templates.render(template, renderData);
-        this.setBody(renderPromise);
+        return Templates.render(template, renderData)
+            .then((html, js) => Templates.replaceNodeContents(this.getBody(), html, js));
     }
 
     /*
@@ -241,15 +246,6 @@ export default class ModalHelp extends Modal {
             this.breadcrumbData.home = true;
             this.breadcrumbData.search = false;
             this.breadcrumbData.page = false;
-            var stringified = landingPage.html;
-            var base = landingPage.base;
-            var reg1 = /\.\/|\.\.\//g;
-            var reg2 = /href="\b(?!https\b)/g;
-            var reg3 = /src="\b(?!https\b)/g;
-
-            stringified = stringified.replace(reg1, base);
-            stringified = stringified.replace(reg2, 'href="'+base);
-            landingPage.html = stringified.replace(reg3, 'src="'+base);
             this.render(TEMPLATES.MODAL_HELP_GUIDE_PAGE, landingPage, this.breadcrumbData);
         } catch (error) {
             Notification.exception(error);
@@ -329,7 +325,7 @@ export default class ModalHelp extends Modal {
      */
     async showSearchResult(url, title) {
         try {
-            const guidePage = await ModalHelpAjax.getGuidePage(url);
+            const guidePage = await ModalHelpAjax.getGuidePage(url, this.contextId);
             this.breadcrumbData.home = false;
             this.breadcrumbData.search.active = false;
             this.breadcrumbData.page = {
@@ -352,7 +348,7 @@ export default class ModalHelp extends Modal {
      */
     async showSuggestionPage(url, title) {
         try {
-            const guidePage = await ModalHelpAjax.getGuidePage(url);
+            const guidePage = await ModalHelpAjax.getGuidePage(url, this.contextId);
             this.breadcrumbData.home = false;
             this.breadcrumbData.search = false;
             this.breadcrumbData.page = {
@@ -365,6 +361,31 @@ export default class ModalHelp extends Modal {
         }
     }
 
+    async showGuideLink(url) {
+        try {
+            console.log('contextid', this.contextId);
+            const guidePage = await ModalHelpAjax.getGuidePage(url, this.contextId);
+            const {html, title, target} = guidePage;
+
+            console.log(guidePage);
+
+            this.breadcrumbData.home = false;
+            this.breadcrumbData.page = {
+                url: url,
+                title: title
+            };
+            await this.render(TEMPLATES.MODAL_HELP_GUIDE_PAGE, guidePage, this.breadcrumbData);
+
+            const anchor = $(`h2${target}`);
+            if (anchor.length) {
+                anchor[0].scrollIntoView();
+            } else {
+                this.getBody()[0].scrollTop = 0;
+            }
+        } catch (error) {
+            Notification.exception(error);
+        }
+    }
 
     /**
      * Clears whatever is in the search box.
