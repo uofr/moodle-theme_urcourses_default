@@ -128,7 +128,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      */
     var _registerDeleteButtons = function() {
         //set event listners for template options
-        $('button[data-role="delete_button"]').bind('click', function() { _deleteConfirmation($(this)); } );
+        $('div[data-role="delete_button"]').bind('click', function() { _deleteConfirmation($(this)); } );
     }
 
      /**
@@ -190,23 +190,23 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                                 '</div>';
             });
             //add group division checkbox
-            templatelist += '<br><div class="form-check">'
+            templatelist += '<br><div class="form-check ml-3">'
                         +'<input class="form-check-input" type="checkbox" value="" id="course_tools_groups">'
                         +'<label class="form-check-label" for="course_tools_groups">'
-                        +' Create groups for each section'
+                        +'<h6> Create groups for each section </h6>'
                         +' </label>'
                         +' </div>';
         }else{
             // else not error message
             //add default template option even if there is no template category
-            templatelist += '<div data-role = "templateselect" class="tmpl-label list-group-item list-group-item-action active" id = "0" >'+
-                '<p>There are no available Banner Sections for this course </p>'+
+            templatelist += '<div data-role = "templateselect" class="tmpl-label list-group-item list-group-item-action" id = "0" >'+
+                '<p>There are no additional sections available at this time </p>'+
                 '</div>';
         }
 
         //For banner sections already enrolled in current semester
         if(data.activated.length !=0){
-            activatedtitle = "<small>The following Banner sections are already enrolled for the selected term:</small>";
+            activatedtitle = '<label class="col-form-label d-inline"><b> Current enrolments:  </b></label></br>';
             activatedlist += '<div class="list-group">';
             $.each( data.activated, function( key, value ) {
                 var linkedClass = "alert-warning";
@@ -214,10 +214,12 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                     linkedClass = "alert-success";
                 }
 
-                activatedlist +='<div class="list-group-item list-group-item-secondary '+linkedClass+'">'+
-                                '<button data-role="delete_button" type="button" class="btn btn-primary float-right" id="delete_'+value.crn+'_'+value.urid+'">Delete Enrolment</button>'+
-                                '<h6>'+value.subject + ' ' +value.course + '-' + value.section + '<br>'+
-                                'enrolled into '+ value.fullname+'</h6>'+
+                activatedlist +='<div data-role="delete_button" id="delete_'+value.crn+'_'+value.urid+'" class="list-group-item list-group-item-secondary enrollment-delete '+linkedClass+' ">'+
+                                '<h6 class ="ml-3 d-inline">'+value.subject + ' ' +value.course + '-' + value.section +
+                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                                '<span aria-hidden="true">&times;</span>'+
+                                '</button>'+
+                                ' enrolled into '+ value.fullname+'</h6>'+
                                 '</div>';
                 });
                 activatedlist += '</div><br>';
@@ -228,16 +230,14 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         ModalFactory.create({
             type: (data.courseinfo.length != 0) ? ModalFactory.types.SAVE_CANCEL :ModalFactory.types.CANCEL,
             title: modaltitle,
-            body: ((isavailable) ? "<p><b>Are you sure you want to modify enrolment for this course?</b><br />"
-                    + "<small>The following CRNs are available for the selected term:</small>"
+            body: ((isavailable) ? '<label class="col-form-label d-inline"><b> Available enrolments:  </b></label></br>'
                     + templatelist
                     +"</br>"
                     + activatedtitle 
-                    + activatedlist 
-                    + "</p>" : output),
+                    + activatedlist  : ""),
         }).then(function(modal) {
 
-            modal.footer.prepend('<a type="button" class="btn btn-primary justify-content-start mr-auto p-2" href="'+_homeurl+'/blocks/urcourserequest">See All Enrolments</a>');
+            modal.footer.prepend('<a type="button" class="btn btn-primary justify-content-start mr-auto p-2" href="'+_homeurl+'/blocks/urcourserequest?semester='+_semester +'">My enrolment overview</a>');
 
             if(isavailable && data.courseinfo.length != 0){
                 modal.setSaveButtonText('Save');
@@ -253,7 +253,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                     //no selected template error
                     if(selectedTemplates.length <=0){
                         e.preventDefault(); 
-                        $("#error_course_tools_section").text("Please select a banner section");
+                        $("#error_course_tools_section").text("Please select a section");
                         $("#error_course_tools_section").attr("display", "block");
                         $("#error_course_tools_section").show();
                     }else{
@@ -262,7 +262,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                             templateids.push( {"crn": $(selectedTemplates[i]).attr('id')});
                         }
                         var groupcheck = $("#course_tools_groups").prop("checked") 
-                        _addEnrolmentDateConfirm(data.courseinfo, templateids, groupcheck); 
+                        _addEnrolmentDateConfirm(data, templateids, groupcheck); 
                     }   
                 });
             }else{
@@ -300,68 +300,96 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      */
     var _addEnrolmentDateConfirm = async function(data, templateids,groupcheck) {
 
-        // create modal with current selection as header
-        var modaltitle = 'Would you like to change course dates?';
-        var template =  await self.render(TEMPLATES.MODAL_COURSE_ACTION_CONTENT);
-      
-        var startdate = _course.startdate.month+' '+_course.startdate.mday+", "+_course.startdate.year;
-        var enddate = _course.enddate.month+' '+_course.enddate.mday+", "+_course.enddate.year;
-        //adding in confirmation modal in case buttons accidentally clicked
-        ModalFactory.create({
-            type: ModalFactory.types.SAVE_CANCEL,
-            title: modaltitle,
-            body: ("<p><b>Current Course Dates:<br/></b><div class='alert alert-warning' role='alert'>"
-                    +((_course.enddate.year < _course.startdate.year) ? "Start Date: "+startdate+"<br> End Date: No endate set" :startdate+ " until "+enddate)
-                    +"</div>"+template )
 
-        }).then(function(modal) {
+        var nextyear = (new Date()).getFullYear()+1;
+        var newstart = (new Date()).getMonth()+' '+(new Date()).getDate()+', '+(new Date()).getFullYear();
+        var newend = (new Date()).getMonth()+' '+(new Date()).getDate()+', '+nextyear;
+        var formatednewstart ="";
 
-            modal.setSaveButtonText('Update Dates');
+        jQuery.each(_semesterdates, function(index, item) {
+            if(index == _semester){
+                var starttemp = item.startdate.split("-");
+                var endtemp = item.enddate.split("-");
 
-            var root = modal.getRoot();
-            root.on(ModalEvents.cancel, function(){
-                _addEnrolment(templateids,groupcheck,true); 
-            });
-                    
-            root.on(ModalEvents.save, function(e){
-                if(!validate()){
-                    e.preventDefault();   
-                }else{
-                    _addEnrolment(templateids,groupcheck, false); 
-                }     
-            });
-            
-            //remove modal on hide
-            root.on(ModalEvents.hidden, function(){
-                //remove inputs otherwise duplicates are made causing id problems
-                $( SELECTORS.ENDHOLDER).remove();
-                $( SELECTORS.STARTHOLDER).remove();
-                $( SELECTORS.ERR_START).remove();
-                $( SELECTORS.ERR_END).remove();
-            });
-            modal.show();
-        }).done(function() {
-
-            $('button[data-action="cancel"]').text("Leave Dates");
-            $('button[data-action="cancel"]').text("Leave Dates");
-            
-            var startdate = {"year": (new Date()).getFullYear(), "mon": (new Date()).getMonth(),"mday":(new Date()).getDate()};
-            var enddate = {"year": (new Date()).getFullYear() +1, "mon": (new Date()).getMonth(),"mday":(new Date()).getDate()};
-
-            jQuery.each(_semesterdates, function(index, item) {
-                if(index == _semester){
-                    var starttemp = item.startdate.split("-");
-                    var endtemp = item.enddate.split("-");
-
-                    startdate = {"year": starttemp[2], "mon": starttemp[1],"mday":starttemp[0]};
-                    enddate = {"year": endtemp[2], "mon": endtemp[1],"mday":endtemp[0]};
-                }
-            });
-            //add numbers to date selectors
-            courseActionsLib.populateDateSelects(startdate,enddate);  
-            courseActionsLib.registerDateEventListeners(_element);
-
+                newstart = parseInt(starttemp[1],10)+" "+starttemp[0]+", " +starttemp[2];
+                newend = parseInt(endtemp[1],10)+" "+endtemp[0]+", " +endtemp[2];
+                var d = new Date(starttemp[2],starttemp[1]-1,starttemp[0]);
+                formatednewstart = d.toLocaleString('default', { month: 'short' })+" "+starttemp[0]+", " +starttemp[2];
+            }
         });
+
+        var startdate = _course.startdate.mon+' '+_course.startdate.mday+", "+_course.startdate.year;
+        var enddate = _course.enddate.mon+' '+_course.enddate.mday+", "+_course.enddate.year;
+
+        if( startdate == newstart && enddate == newend){
+            _addEnrolment(templateids,groupcheck,true); 
+        }else{
+
+            // create modal with current selection as header
+            var modaltitle = 'Would you like to change course dates?';
+            var template =  await self.render(TEMPLATES.MODAL_COURSE_ACTION_CONTENT);
+        
+            var startdate = _course.startdate.month+' '+_course.startdate.mday+", "+_course.startdate.year;
+            var enddate = _course.enddate.month+' '+_course.enddate.mday+", "+_course.enddate.year;
+           
+            //adding in confirmation modal in case buttons accidentally clicked
+            ModalFactory.create({
+                type: ModalFactory.types.SAVE_CANCEL,
+                title: modaltitle,
+                body: ("<p><b>Current Course Dates:<br/></b><div class='alert alert-warning' role='alert'>"
+                        +((_course.enddate.year < _course.startdate.year) ? "Start Date: "+startdate+"<br> End Date: No endate set" :startdate+ " until "+enddate)
+                        +"</div>"
+                        +((formatednewstart=="") ? "":"The "+data.semester+" term will begin "+formatednewstart+"<br/><br/>")
+                        +template )
+
+            }).then(function(modal) {
+
+                modal.setSaveButtonText('Update');
+
+                var root = modal.getRoot();
+                root.on(ModalEvents.cancel, function(){
+                    _addEnrolment(templateids,groupcheck,true); 
+                });
+                        
+                root.on(ModalEvents.save, function(e){
+                    if(!validate()){
+                        e.preventDefault();   
+                    }else{
+                        _addEnrolment(templateids,groupcheck, false); 
+                    }     
+                });
+                
+                //remove modal on hide
+                root.on(ModalEvents.hidden, function(){
+                    //remove inputs otherwise duplicates are made causing id problems
+                    $( SELECTORS.ENDHOLDER).remove();
+                    $( SELECTORS.STARTHOLDER).remove();
+                    $( SELECTORS.ERR_START).remove();
+                    $( SELECTORS.ERR_END).remove();
+                });
+                modal.show();
+            }).done(function() {
+
+                var startdatefill = {"year": (new Date()).getFullYear(), "mon": (new Date()).getMonth(),"mday":(new Date()).getDate()};
+                var enddatefill = {"year": (new Date()).getFullYear() +1, "mon": (new Date()).getMonth(),"mday":(new Date()).getDate()};
+
+                jQuery.each(_semesterdates, function(index, item) {
+                    if(index == _semester){
+                        var starttemp = item.startdate.split("-");
+                        var endtemp = item.enddate.split("-");
+
+                        startdatefill = {"year": starttemp[2], "mon": starttemp[1],"mday":starttemp[0]};
+                        enddatefill = {"year": endtemp[2], "mon": endtemp[1],"mday":endtemp[0]};
+                    }
+                });
+
+                $('button[data-action="cancel"]').text("Continue without updating");
+                //add numbers to date selectors
+                courseActionsLib.populateDateSelects(startdatefill,enddatefill);  
+                courseActionsLib.registerDateEventListeners(_element);
+
+            });
+        }
     };
     /**
      * For Enrolemnt date selectors
@@ -458,19 +486,21 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             if(response.result!=""){
                 title = "Enrolment assigned successfully"
                 info = '<div class="alert alert-success" role="alert">'+response.result+'<br></div>';
-
             }
                      
             ModalFactory.create({
+                type: ModalFactory.types.CANCEL,
                 title: title,
                 body: info,
             }).then(function(modal) {
                 modal.show();
                 var root = modal.getRoot();
+                $('button[data-action="cancel"]').text("Close");
                  //remove modal on hide
                  root.on(ModalEvents.hidden, function(){
                     location.reload();
                  });
+
                 
             })
         }).fail(function(ex) {
@@ -500,6 +530,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                 _deleteEnrollment(element);
             });
             modal.show();
+            
         });
     };
 
@@ -540,6 +571,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             }
             
             ModalFactory.create({
+                type: ModalFactory.types.CANCEL,
                 title: title,
                 body: info,
             }).then(function(modal) {
@@ -549,6 +581,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                 root.on(ModalEvents.hidden, function(){
                     location.reload();
                  });
+                $('button[data-action="cancel"]').text("Close");
             })
         }).fail(function(ex) {
             notification.exception;
