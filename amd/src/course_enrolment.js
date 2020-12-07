@@ -214,12 +214,11 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                     linkedClass = "alert-success";
                 }
 
-                activatedlist +='<div data-role="delete_button" id="delete_'+value.crn+'_'+value.urid+'" class="list-group-item list-group-item-secondary enrollment-delete '+linkedClass+' ">'+
+                activatedlist +='<div data-role="delete_button" data-fullname ="'+value.fullname+'" id="delete_'+value.crn+'_'+value.urid+'" class="list-group-item list-group-item-secondary enrollment-delete '+linkedClass+' ">'+
                                 '<h6 class ="ml-3 d-inline">'+value.subject + ' ' +value.course + '-' + value.section +
                                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
                                 '<span aria-hidden="true">&times;</span>'+
-                                '</button>'+
-                                ' enrolled into '+ value.fullname+'</h6>'+
+                                '</button></h6>'+
                                 '</div>';
                 });
                 activatedlist += '</div><br>';
@@ -372,7 +371,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                 $("#closemodal").bind('click', function() { _closeDateConfirm($(this), modal) } );
                 $(modaltemp).find(".close").addClass( "dateconfirm" );
                 $(root).click(function(e) {
-                    if(!$(e.target).hasClass("close") && !$(e.target).parent().hasClass("close")){
+                    if(!$(e.target).is("button") && !$(e.target).parent().is("button")){
                         e.preventDefault;
                         modal.show();
                     }else{
@@ -538,11 +537,14 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      * request to remove the selected enrolment
      */
     var _deleteConfirmation = function(element) {
+
+
+        var fullname = element.data( "fullname" );
     
         ModalFactory.create({
             type: ModalFactory.types.SAVE_CANCEL,
             title: "Delete Enrolment",
-            body: "<p><b>Are you sure you want to delete enrolment for this course?</b><br />",
+            body: "<p><b>Are you sure you want to delete enrolment for "+fullname+"?</b><br />",
         }).then(function(modal) {
 
             modal.setSaveButtonText('Delete');
