@@ -382,6 +382,10 @@ function theme_urcourses_default_get_course_templates() {
     //get category for Template Course
     $sql = "SELECT * FROM mdl_course_categories WHERE name = 'TEMPLATES' OR name = 'Template';";
     $category = $DB->get_record_sql($sql, null, IGNORE_MISSING);
+	
+    if (!(array)$category || !$category ){
+        return 0;
+    }
 
      //if no Template category
      if (!(array)$category || !$category) {
