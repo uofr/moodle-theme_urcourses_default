@@ -228,11 +228,14 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
 
         inSemester = true;
         jQuery.each(_semesterdates, function(index, item) {
-           //if semester is in furture dates then we can edit otherwise if
-           //it does not appear the semester is in the past and can not 
-           //be edited.
+         
             if(index == _semester){
-                inSemester=false;
+                var starttemp = item.startdate.split("-");
+                var d = new Date();
+                var m = d.getMonth();
+                if(m < starttemp[1]){
+                    inSemester=false;
+                }
             }
         });
 
