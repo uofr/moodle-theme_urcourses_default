@@ -224,73 +224,122 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                 activatedlist += '</div><br>';
         }
         templatelist += '</div>';
-        
-        //adding in confirmation modal in case buttons accidentally clicked
-        ModalFactory.create({
-            type: (data.courseinfo.length != 0) ? ModalFactory.types.SAVE_CANCEL :ModalFactory.types.CANCEL,
-            title: modaltitle,
-            body: ((isavailable) ? '<label class="col-form-label d-inline"><b> Available enrolments:  </b></label></br>'
-                    + templatelist
-                    +"</br>"
-                    + activatedtitle 
-                    + activatedlist  : ""),
-        }).then(function(modal) {
 
-            modal.footer.prepend('<a type="button" class="btn btn-primary justify-content-start mr-auto p-2" href="'+_homeurl+'/blocks/urcourserequest?semester='+_semester +'">My enrolment overview</a>');
 
-            if(isavailable && data.courseinfo.length != 0){
-                modal.setSaveButtonText('Save');
-                var root = modal.getRoot();
-                root.on(ModalEvents.cancel, function(){
-                    return;
-                });
-                    
-                root.on(ModalEvents.save, function(e){
-
-                    templateHolder = $('div[data-role="templateholder"');
-                    selectedTemplates = $(templateHolder).find('.active');
-                    //no selected template error
-                    if(selectedTemplates.length <=0){
-                        e.preventDefault(); 
-                        $("#error_course_tools_section").text("Please select a section");
-                        $("#error_course_tools_section").attr("display", "block");
-                        $("#error_course_tools_section").show();
-                    }else{
-                        var templateids = [];
-                        for(var i = 0; i<selectedTemplates.length; i++){
-                            templateids.push( {"crn": $(selectedTemplates[i]).attr('id')});
-                        }
-                        var groupcheck = $("#course_tools_groups").prop("checked") 
-                        _addEnrolmentDateConfirm(data, templateids, groupcheck); 
-                    }   
-                });
-            }else{
-                var root = modal.getRoot();
-                root.on(ModalEvents.cancel, function(){
-                    return;
-                });
-            }
-            //remove modal on hide
-            root.on(ModalEvents.hidden, function(e){
-                //remove inputs otherwise duplicates are made causing id problems
-                $( "div[data-role='templateholder']" ).remove();
-            });
-            modal.show();
-        }).done(function(modal) {
-
-            
-            
-            if(isavailable){
-                if(data.courseinfo.length>0 ){
-                    _registerSelectorEventListeners(_element);
-                }else{
-                    $('button[data-action="cancel"]').text("Close");
-                }
-            }
-            if(data.activated.length !=0){
-                _registerDeleteButtons();
+        inSemester = true;
+        jQuery.each(_semesterdates, function(index, item) {
+           //if semester is in furture dates then we can edit otherwise if
+           //it does not appear the semester is in the past and can not 
+           //be edited.
+            if(index == _semester){
+                inSemester=false;
             }
         });
+
+        if(inSemester){
+
+            // create modal with current selection as header
+            var modaltitle = 'Modify enrolment'; 
+
+            var templatelist = '<div data-role = "templateselect" class="tmpl-label list-group-item list-group-item-action" id = "0" >'+
+            '<p>This is a past semester. Enrolment can not be modified. </p>'+
+            '</div><br>';
+
+            //For banner sections already enrolled in current semester
+            if(data.activated.length !=0){
+     
+                activatedlist = "";
+                activatedlist += '<div class="list-group">';
+                $.each( data.activated, function( key, value ) {
+                    var linkedClass = "alert-warning";
+                    if(value.linked){
+                        linkedClass = "alert-success";
+                    }
+
+                    activatedlist +='<div class="list-group-item list-group-item-secondary '+linkedClass+' ">'+
+                                    '<h6 class ="ml-3 d-inline">'+value.subject + ' ' +value.course + '-' + value.section +'</h6>'+
+                                    '</div>';
+                    });
+                    activatedlist += '</div><br>';
+            }
+
+            //adding in confirmation modal in case buttons accidentally clicked
+            ModalFactory.create({
+                type: ModalFactory.types.CANCEL,
+                title: modaltitle,
+                body: templatelist+activatedtitle+activatedlist,
+            }).then(function(modal) {
+
+                modal.footer.prepend('<a type="button" class="btn btn-primary justify-content-start mr-auto p-2" href="'+_homeurl+'/blocks/urcourserequest?semester='+_semester +'">My enrolment overview</a>');
+                modal.show();
+            });
+        }else{
+        
+            //adding in confirmation modal in case buttons accidentally clicked
+            ModalFactory.create({
+                type: (data.courseinfo.length != 0) ? ModalFactory.types.SAVE_CANCEL :ModalFactory.types.CANCEL,
+                title: modaltitle,
+                body: ((isavailable) ? '<label class="col-form-label d-inline"><b> Available enrolments:  </b></label></br>'
+                        + templatelist
+                        +"</br>"
+                        + activatedtitle 
+                        + activatedlist  : ""),
+            }).then(function(modal) {
+
+                modal.footer.prepend('<a type="button" class="btn btn-primary justify-content-start mr-auto p-2" href="'+_homeurl+'/blocks/urcourserequest?semester='+_semester +'">My enrolment overview</a>');
+
+                if(isavailable && data.courseinfo.length != 0){
+                    modal.setSaveButtonText('Save');
+                    var root = modal.getRoot();
+                    root.on(ModalEvents.cancel, function(){
+                        return;
+                    });
+                        
+                    root.on(ModalEvents.save, function(e){
+
+                        templateHolder = $('div[data-role="templateholder"');
+                        selectedTemplates = $(templateHolder).find('.active');
+                        //no selected template error
+                        if(selectedTemplates.length <=0){
+                            e.preventDefault(); 
+                            $("#error_course_tools_section").text("Please select a section");
+                            $("#error_course_tools_section").attr("display", "block");
+                            $("#error_course_tools_section").show();
+                        }else{
+                            var templateids = [];
+                            for(var i = 0; i<selectedTemplates.length; i++){
+                                templateids.push( {"crn": $(selectedTemplates[i]).attr('id')});
+                            }
+                            var groupcheck = $("#course_tools_groups").prop("checked") 
+                            _addEnrolmentDateConfirm(data, templateids, groupcheck); 
+                        }   
+                    });
+                }else{
+                    var root = modal.getRoot();
+                    root.on(ModalEvents.cancel, function(){
+                        return;
+                    });
+                }
+                //remove modal on hide
+                root.on(ModalEvents.hidden, function(e){
+                    //remove inputs otherwise duplicates are made causing id problems
+                    $( "div[data-role='templateholder']" ).remove();
+                });
+                modal.show();
+            }).done(function(modal) {
+
+                if(isavailable){
+                    if(data.courseinfo.length>0 ){
+                        _registerSelectorEventListeners(_element);
+                    }else{
+                        $('button[data-action="cancel"]').text("Close");
+                    }
+                }
+                if(data.activated.length !=0){
+                    _registerDeleteButtons();
+                }
+            });
+        }
     };
 
     /**
@@ -537,7 +586,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      * request to remove the selected enrolment
      */
     var _deleteConfirmation = function(element) {
-
 
         var fullname = element.data( "fullname" );
     
