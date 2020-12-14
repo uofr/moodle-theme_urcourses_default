@@ -705,6 +705,12 @@ class theme_urcourses_default_external extends external_api {
         
             //call external create user function
             $userid = user_create_user($user, false, true);
+            $sql = "SELECT * FROM mdl_user as u WHERE u.id ={$userid}";
+            $user = $DB->get_record_sql($sql);
+
+            //reset password and email out to new user
+            reset_password_and_mail($user);
+
             //enroll user in course
             //get enroll id for manual enrollment for current course
             $sql = "SELECT * FROM mdl_enrol WHERE courseid =".$params['courseid']." AND enrol = 'manual';";

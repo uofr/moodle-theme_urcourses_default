@@ -230,12 +230,15 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         jQuery.each(_semesterdates, function(index, item) {
          
             if(index == _semester){
-                var starttemp = item.startdate.split("-");
-                var d = new Date();
-                var m = d.getMonth();
-                if(m < starttemp[1]){
+            
+                starttemp = item.startdate.split("-")
+                start = new Date(starttemp[2]+"-"+starttemp[1]+"-"+starttemp[0] );
+                var current = new Date();
+                
+                if(current.getTime() < start.getTime() ){
+                    console.log("made it");
                     inSemester=false;
-                }
+                } 
             }
         });
 
