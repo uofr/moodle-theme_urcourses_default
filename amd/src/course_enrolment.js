@@ -236,7 +236,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                 var current = new Date();
                 
                 if(current.getTime() < start.getTime() ){
-                    console.log("made it");
                     inSemester=false;
                 } 
             }
