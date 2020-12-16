@@ -304,6 +304,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         
         // modal_help edit
         $header->context_id = $PAGE->context->id;
+        $header->local_url = $PAGE->url->out_as_local_url();
         
         // MODIFICATION START:
         // Change this to add the result in the html variable to be able to add further features below the header.

@@ -125,5 +125,13 @@ $functions = array(
         'description'   => 'Removes enrolled students from course',
         'type'          => 'write',
         'ajax'          => 'true'
+    ),
+    'theme_urcourses_default_user_is_instructor' => array(
+        'classname'     => 'theme_urcourses_default_external',
+        'methodname'    => 'user_is_instructor',
+        'classpath'     => 'theme/urcourses_default/externallib.php',
+        'description'   => 'Checks if current user is instructor.',
+        'type'          => 'write',
+        'ajax'          => 'true'
     )
 );

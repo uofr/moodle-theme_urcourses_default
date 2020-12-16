@@ -238,38 +238,16 @@ class theme_urcourses_default_external extends external_api {
         }
     }
 
-    /**
-     * Checks if the current user is an instructor.
-     * Users with the teacher, editingteacher, manager, and coursecreator roles are considered instructors.
-     * If we are in the site context, check if the user is an instructor anywhere.
-     * Otherwiser, check if the user is an instructor in the given context.
-     *
-     * @param context $context
-     * @return bool
-     */
-    public static function user_is_instructor($context) {
-        global $USER, $DB;
+    public static function user_is_instructor_parameters() {
+        return new external_function_parameters([]);
+    }
 
-        $role_query_cond = 'shortname = :a OR shortname = :b OR shortname = :c OR shortname = :d';
-        $role_query_arr = ['a' => 'editingteacher', 'b' => 'teacher', 'c' => 'manager', 'd' => 'coursecreator'];
-        $instructor_roles = $DB->get_fieldset_select('role', 'id', $role_query_cond, $role_query_arr);
-        
-        $roleassign_query_cond = 'userid = :uid AND (roleid = :r0 OR roleid = :r1 OR roleid = :r2 OR roleid = :r3)';
-        $roleassign_query_arr = [
-            'uid' => $USER->id,
-            'r0' => $instructor_roles[0],
-            'r1' => $instructor_roles[1],
-            'r2' => $instructor_roles[2],
-            'r3' => $instructor_roles[3]
-        ];
+    public static function user_is_instructor() {
+        return theme_urcourses_default_user_is_instructor();
+    }
 
-        //Prevents main dashboard from loading correct role
-       /* if ($context->contextlevel !== CONTEXT_SYSTEM) {
-            $roleassign_query_cond .= 'AND contextid = :cid';
-            $roleassign_query_arr['cid'] = $context->id;
-        }*/
-
-        return $DB->record_exists_select('role_assignments', $roleassign_query_cond, $roleassign_query_arr);
+    public static function user_is_instructor_returns() {
+        return new external_value(PARAM_BOOL);
     }
 
     /**
@@ -279,7 +257,8 @@ class theme_urcourses_default_external extends external_api {
      */
     public static function get_landing_page_parameters() {
         return new external_function_parameters(array(
-            'contextid' => new external_value(PARAM_INT)
+            'contextid' => new external_value(PARAM_INT),
+            'localurl' => new external_value(PARAM_TEXT)
         ));
     }
 
@@ -290,111 +269,179 @@ class theme_urcourses_default_external extends external_api {
      * @param int $currenturl
      * @return array
      */
-    public static function get_landing_page($contextid) {
+    public static function get_landing_page($contextid, $localurl) {
         global $PAGE;
 
         $params = self::validate_parameters(self::get_landing_page_parameters(), array(
-            'contextid' => $contextid
+            'contextid' => $contextid,
+            'localurl' => $localurl
         ));
 
         $context = context::instance_by_id($params['contextid']);
         self::validate_context($context);
 
-        $endurl ="";
-        $base = "";
-        $isbasic=false;
-        $isinstructor = self::user_is_instructor($context);
-
-        switch ($context->contextlevel) {
-            case CONTEXT_SYSTEM:
-                //return basic landing page
-                $base= "../guides/";
-                $isbasic=true;
-                break;
-            case CONTEXT_USER:
-                $endurl = ($isinstructor) ? "instructor" : "student";
-                $base= "../guides/";
-                break;
-            case CONTEXT_COURSECAT:
-                $endurl = ($isinstructor) ? "instructor/remote-teaching":"student/remote-learning";
-                $base= "../guides/";
-                break;
-            case CONTEXT_COURSE:
-                $endurl = ($isinstructor) ? "instructor/remote-teaching":"student/remote-learning" ;
-                $base= "../guides/";
-                break;
-            case CONTEXT_MODULE:
-                //check if any modules are ones in guides
-                ///use get topics list to compare
-                //return page closest to 
-                $content_url = new moodle_url('/guides/social/sample-b.json');
-                $json_output = json_decode(file_get_contents($content_url));
-                $topic_list_full = $json_output->jsondata->page_data[0]->all_pages;
-                $mod = $PAGE->activityname;
-                $url ="";
-                $base= "../../guides/";
-
-                foreach ($topic_list_full as $topic) {
-                    
-                    $title = htmlspecialchars_decode($topic->title);
-                    $pos = stripos($title, $mod);
-                    if ($pos !== false){
-                        $url = substr($topic->url, (strrpos($topic->url, '/')+1));
-                        break;
-                    }
-                }
-
-                if($url==""){
-                    $endurl = ($isinstructor) ?   "instructor/remote-teaching":"student/remote-learning";
-                }else{
-                    if($url == "quizzes")
-                        $url=$isinstructor ? "quizzes": "quizzesexams";
-                    else if($url == "gradebook")
-                        $url = "bookshelf";
-
-                    $endurl = $isinstructor ? "instructor/$url" : "student/$url";
-                }
-
-                break;
-            case CONTEXT_BLOCK:
-                $isbasic=true;
-                $base= "../guides/";
-                break;
+        $is_instructor = theme_urcourses_default_user_is_instructor();
+        $url = $is_instructor ? new moodle_url('/guides/instructor.json') : new moodle_url('/guides/student.json');
+        $target = '';
+        if ($is_instructor) {
+            if (strpos($params['localurl'], '/course/') === 0) {
+                $url = new moodle_url('/guides/instructor/courseadministration.json');
+            }
+            else if (strpos($params['localurl'], '/mod/assign/') === 0) {
+                $url = new moodle_url('/guides/instructor/assignments.json');
+                $target = '#assignment_activity';
+            }
+            else if (strpos($params['localurl'], '/mod/turnitintooltwo/') === 0) {
+                $url = new moodle_url('/guides/instructor/assignments.json');
+                $target = '#turnitin';
+            }
+            else if (strpos($params['localurl'], '/mod/kalvidassign/') === 0) {
+                $url = new moodle_url('/guides/instructor/assignments.json');
+                $target = '#media';
+            }
+            else if (strpos($params['localurl'], '/mod/attendance/') === 0) {
+                $url = new moodle_url('/guides/instructor/activities.json');
+                $target = '#attendance';
+            }
+            else if (strpos($params['localurl'], '/mod/oublog/') === 0) {
+                $url = new moodle_url('/guides/instructor/activities.json');
+                $target = '#blog';
+            }
+            else if (strpos($params['localurl'], '/mod/chat/') === 0) {
+                $url = new moodle_url('/guides/instructor/activities.json');
+                $target = '#chat';
+            }
+            else if (strpos($params['localurl'], '/mod/choice/') === 0) {
+                $url = new moodle_url('/guides/instructor/activities.json');
+                $target = '#choice';
+            }
+            else if (strpos($params['localurl'], '/mod/mail/') === 0) {
+                $url = new moodle_url('/guides/instructor/activities.json');
+                $target = '#course_email';
+            }
+            else if (strpos($params['localurl'], '/mod/data/') === 0) {
+                $url = new moodle_url('/guides/instructor/activities.json');
+                $target = '#database';
+            }
+            else if (strpos($params['localurl'], '/mod/feedback/') === 0) {
+                $url = new moodle_url('/guides/instructor/activities.json');
+                $target = '#feedback';
+            }
+            else if (strpos($params['localurl'], '/mod/glossary/') === 0) {
+                $url = new moodle_url('/guides/instructor/activities.json');
+                $target = '#glossary';
+            }
+            else if (strpos($params['localurl'], '/mod/lesson/') === 0) {
+                $url = new moodle_url('/guides/instructor/activities.json');
+                $target = '#lesson';
+            }
+            else if (strpos($params['localurl'], '/mod/questionnaire/') === 0) {
+                $url = new moodle_url('/guides/instructor/activities.json');
+                $target = '#questionnaire';
+            }
+            else if (strpos($params['localurl'], '/mod/scorm/') === 0) {
+                $url = new moodle_url('/guides/instructor/activities.json');
+                $target = '#scorm';
+            }
+            else if (strpos($params['localurl'], '/mod/survey/') === 0) {
+                $url = new moodle_url('/guides/instructor/activities.json');
+                $target = '#survey';
+            }
+            else if (strpos($params['localurl'], '/mod/wiki/') === 0) {
+                $url = new moodle_url('/guides/instructor/activities.json');
+                $target = '#wiki';
+            }
+            else if (strpos($params['localurl'], '/mod/workshop/') === 0) {
+                $url = new moodle_url('/guides/instructor/activities.json');
+                $target = '#workshop';
+            }
+            else if (strpos($params['localurl'], '/mod/lti/') === 0) {
+                $url = new moodle_url('/guides/instructor/more.json');
+                $target = '#external_tool';
+            }
+            else if (strpos($params['localurl'], '/mod/imscp/') === 0) {
+                $url = new moodle_url('/guides/instructor/more.json');
+                $target = '#ims';
+            }
+            else if (strpos($params['localurl'], '/mod/lightboxgallery/') === 0) {
+                $url = new moodle_url('/guides/instructor/more.json');
+                $target = '#lightbox_gallery';
+            }
+            else if (strpos($params['localurl'], '/mod/scheduler/') === 0) {
+                $url = new moodle_url('/guides/instructor/more.json');
+                $target = '#scheduler';
+            }
+            else if (strpos($params['localurl'], '/mod/skype/') === 0) {
+                $url = new moodle_url('/guides/instructor/more.json');
+                $target = '#skype';
+            }
+            else if (strpos($params['localurl'], '/mod/book/') === 0) {
+                $url = new moodle_url('/guides/instructor/resources.json');
+                $target = '#book';
+            }
+            else if (strpos($params['localurl'], '/mod/folder/') === 0) {
+                $url = new moodle_url('/guides/instructor/resources.json');
+                $target = '#folder';
+            }
+            else if (strpos($params['localurl'], '/mod/kalvidres/') === 0) {
+                $url = new moodle_url('/guides/instructor/resources.json');
+                $target = '#media';
+            }
+            else if (strpos($params['localurl'], '/mod/page/') === 0) {
+                $url = new moodle_url('/guides/instructor/resources.json');
+                $target = '#page';
+            }
+            else if (strpos($params['localurl'], '/local/mymedia/') === 0) {
+                $url = new moodle_url('/guides/instructor/kaltura.json');
+                $target = '#my_media';
+            }
+            else if (strpos($params['localurl'], '/mod/quiz/') === 0) {
+                $url = new moodle_url('/guides/instructor/quizzes.json');
+            }
+            else if (strpos($params['localurl'], '/mod/forum/') === 0) {
+                $url = new moodle_url('/guides/instructor/forums.json');
+            }
+            else if (strpos($params['localurl'], '/mod/zoom/') === 0) {
+                $url = new moodle_url('/guides/instructor/zoom.json');
+            }
+        } else {
+            if (strpos($params['localurl'], '/mod/mail/') === 0) {
+                $url = new moodle_url('/guides/student/courseemail.json');
+            }
+            else if (strpos($params['localurl'], '/mod/forum/') === 0) {
+                $url = new moodle_url('/guides/student/forums.json');
+            }
+            else if (strpos($params['localurl'], '/mod/chat/') === 0) {
+                $url = new moodle_url('/guides/student/chat.json');
+            }
+            else if (strpos($params['localurl'], '/mod/zoom/') === 0) {
+                $url = new moodle_url('/guides/student/zoom.json');
+            }
+            else if (strpos($params['localurl'], '/mod/assign/') === 0) {
+                $url = new moodle_url('/guides/student/assignments.json');
+            }
+            else if (strpos($params['localurl'], '/mod/turnitintooltwo/') === 0) {
+                $url = new moodle_url('/guides/student/turnitin.json');
+            }
+            else if (strpos($params['localurl'], '/mod/quiz/') === 0) {
+                $url = new moodle_url('/guides/student/quizzesexams.json');
+            }
+            else if (strpos($params['localurl'], '/mod/oublog/') === 0) {
+                $url = new moodle_url('/guides/student/blogs.json');
+            }
+            else if (strpos($params['localurl'], '/mod/wiki/') === 0) {
+                $url = new moodle_url('/guides/student/wikis.json');
+            }
+            else if (strpos($params['localurl'], '/mod/book/') === 0) {
+                $url = new moodle_url('/guides/student/bookshelf.json');
+            }
         }
 
-        if($isbasic){
-            $content_url = new moodle_url("/guides/urmodal.json/p:mod_$PAGE->activityname");
-            $json_output = json_decode(file_get_contents($content_url->out()));
-            $html = $json_output->jsondata->param_p_data[0]->content;
-            $contenturls = $json_output->jsondata->param_p_data[0]->contenturls;
+        return [
+            'url' => $url->get_path(),
+            'target' => $target
+        ];
 
-        }else{
-            //WILL NEED TO MODIFY THIS MORE
-            $content_url = new moodle_url("/guides/$endurl.json");
-            $json_output = json_decode(file_get_contents($content_url));
-            $html = ($json_output->content) ? $json_output->content : $json_output->jsondata->page_data[0]->content;
-            $title = $json_output->jsondata ? $json_output->jsondata->page_data[0]->title : '';
-            $contenturls = $json_output->jsondata ? $json_output->jsondata->page_data[0]->contenturls : array();
-        }
-
-        if($contenturls == ""){
-            $contenturls = array();
-        }
-
-        $reg1 = '/\.\/|\.\.\//';
-        $reg2 = '/href="\b(?!https\b)/';
-        $reg3 = '/src="\b(?!https\b)/';
-
-        $html = preg_replace($reg1, $base, $html);
-        $html = preg_replace($reg2, 'href="' . $base, $html);
-        $html = preg_replace($reg3, 'src="' . $base, $html);
-
-        return array(
-            'html' => $html,
-            'title' => $title,
-            'contenturls' => $contenturls,
-            'base' => $base
-        );
     }
 
     /**
@@ -403,15 +450,10 @@ class theme_urcourses_default_external extends external_api {
      * @return external_single_structure
     */
     public static function get_landing_page_returns() {
-        return new external_single_structure(array(
-            'html' => new external_value(PARAM_RAW),
-            'title' => new external_value(PARAM_TEXT),
-            'contenturls' => new external_multiple_structure(new external_single_structure(array(
-                'name' => new external_value(PARAM_TEXT),
-                'url' => new external_value(PARAM_URL)
-            ))),
-            'base'=> new external_value(PARAM_RAW),
-        ));
+        return new external_single_structure([
+            'url' => new external_value(PARAM_TEXT),
+            'target' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL, '')
+        ]);
     }
 
     /**
@@ -438,32 +480,12 @@ class theme_urcourses_default_external extends external_api {
         $context = context::instance_by_id($params['contextid']);
         self::validate_context($context);
 
-        $content_url = new moodle_url('/guides/social/sample-b.json');
-        $json_output = json_decode(file_get_contents($content_url));
-        $topic_list_full = $json_output->jsondata->page_data[0]->all_pages;
+        $content_url_absolute = new moodle_url('/guides/social/sample-b.json');
 
-        foreach ($topic_list_full as $topic) {
-            $url = substr($topic->url, strpos($topic->url, '/guides/', 0));
-            $topic->url = $url;
-            $topic->title = htmlspecialchars_decode($topic->title);
-        }
-
-        if (self::user_is_instructor($context)) {
-            $topic_list = array_filter($topic_list_full, function($item) {
-                return $item->prefix === 'Instructor' && $item->title !== 'Instructor';
-            });
-        }
-        else {
-            $topic_list = array_filter($topic_list_full, function($item) {
-                return $item->prefix === 'Students' && $item->title !== 'Student';
-            });
-        }
-
-        usort($topic_list, function($a, $b) {
-            return $a->title < $b->title ? -1 : 1;
-        });
-
-        return $topic_list;
+        return [
+            'url' => $content_url_absolute->get_path(),
+            'instructor' => theme_urcourses_default_user_is_instructor($context)
+        ];
     }
 
     /**
@@ -472,12 +494,10 @@ class theme_urcourses_default_external extends external_api {
      * @return external_multiple_structure
      */
     public static function get_topic_list_returns() {
-        return new external_multiple_structure(new external_single_structure(array(
-            'prefix' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL),
-            'title' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL),
-            'url' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL),
-            'excerpt' => new external_value(PARAM_TEXT, '', VALUE_OPTIONAL)
-        )));
+        return new external_single_structure([
+            'url' => new external_value(PARAM_TEXT),
+            'instructor' => new external_value(PARAM_BOOL)
+        ]);
     }
 
     /**
@@ -580,19 +600,7 @@ class theme_urcourses_default_external extends external_api {
 
         $query = urlencode($params['query']);
         $search_url = new moodle_url("/guides/search.json/query:$query");
-        $json_output = json_decode(file_get_contents($search_url));
-
-
-        $search_results = $json_output->jsondata;
-        foreach($search_results as $result) {
-            $url = substr($result->url, strpos($result->url, '/guides/', 0));
-            $result->url = $url;
-        }
-        
-        return array(
-            'results' => $search_results,
-            'query' => $params['query']
-        );
+        return $search_url->get_path();
     }
 
     /**
@@ -601,17 +609,7 @@ class theme_urcourses_default_external extends external_api {
      * @return external_single_structure
      */
     public static function modal_help_search_returns() {
-        return new external_single_structure(array(
-            'results' => new external_multiple_structure(new external_single_structure(array(
-                'page-date' => new external_value(PARAM_TEXT),
-                'page-modified-date' => new external_value(PARAM_TEXT),
-                'url' => new external_value(PARAM_URL),
-                'search-prefix' => new external_value(PARAM_TEXT),
-                'page-title' => new external_value(PARAM_TEXT),
-                'excerpt' => new external_value(PARAM_TEXT)
-            ))),
-            'query' => new external_value(PARAM_TEXT)
-        ));
+        return new external_value(PARAM_TEXT);
     }
 
     /**

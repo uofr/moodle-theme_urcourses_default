@@ -1,35 +1,12 @@
 <div id="breadcrumbs"> 
     <ol class="breadcrumb bg-secondary modal-help-breadcrumbs">
         {{#breadcrumbs}}
-            <li class="breadcrumb-item {{#home}}active{{/home}}">
-                {{#home}}
-                    Home
-                {{/home}}
-                {{^home}}
-                    <a href="#" id="breadcrumb_home">Home</a>
-                {{/home}}
+            <li class="breadcrumb-item {{#active}}active{{/active}}">
+                {{^active}} <a href="{{{url}}}" data-target="{{{target}}}">{{name}}</a> {{/active}}
+                {{#active}} {{name}} {{/active}}
             </li>
-            {{#search}}
-                <li class="breadcrumb-item {{#active}}active{{/active}}">
-                    {{#active}}
-                       Search Results 
-                    {{/active}}
-                    {{^active}}
-                        <a href="#" id="breadcrumb_search" data-query="{{{query}}}">
-                            Search Results
-                        </a>
-                    {{/active}}
-                </li>
-            {{/search}}
-            {{#page}}
-                <li class="breadcrumb-item active">
-                    {{{title}}}
-                </li>
-            {{/page}}
         {{/breadcrumbs}}
     </ol>   
 </div>
 
-{{#data}}
-    {{$content}} {{/content}}
-{{/data}}
+{{$content}} {{/content}}
