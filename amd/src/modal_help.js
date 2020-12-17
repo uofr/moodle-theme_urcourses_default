@@ -45,7 +45,10 @@ const SELECTORS = {
     BREADCRUMB_HOME: '#breadcrumb_home',
     BREADCRUMB_PAGE: '#breadcrumb_page',
     GUIDE_PAGE_LINK: '[data-region="guide-page-content"] a',
-    OVERLAY_LOADING: '.overlay-icon-container'
+    OVERLAY_LOADING: '.overlay-icon-container',
+    HOME: '[data-action="go-home"]',
+    BACK: '[data-action="go-back"]',
+    MAIN: '[data-region="modal-help-main"]'
 };
 
 const TEMPLATES = {
@@ -78,9 +81,11 @@ export default class ModalHelp extends Modal {
         this.searchButton = this.modal.find(SELECTORS.SEARCH_BUTTON);
         this.searchClear = this.modal.find(SELECTORS.SEARCH_CLEAR);
         this.suggestionBox = this.modal.find(SELECTORS.SUGGESTIONS);
+        this.content = this.modal.find(SELECTORS.MAIN);
         this.suggestionItemIndex = 0;
         this.currentPath = '';
         this.history = [];
+        this.landingPageUrl = '';
     }
 
     /**
@@ -247,6 +252,21 @@ export default class ModalHelp extends Modal {
             this.renderGuidePage(url, target);
         });
 
+        this.getModal().on('click', SELECTORS.BACK, (e) => {
+            e.preventDefault();
+            if (this.history.length > 1) {
+                this.history.pop();
+                const [url, target] = this.history.pop();
+                this.renderGuidePage(url, target);
+            }
+        });
+
+        this.getModal().on('click', SELECTORS.HOME, (e) => {
+            e.preventDefault();
+            const {url, target} = this.landingPageUrl;
+            this.renderGuidePage(url, target);
+        });
+
     }
        
     /**
@@ -294,6 +314,7 @@ export default class ModalHelp extends Modal {
     async searchGuides(query) {
         if (!query) return;
         try {
+            await this.setLoading(true);
             const searchUrl = await ModalHelpAjax.getSearchUrl(this.contextId, query);
             const searchResults = await this.getJsonData(searchUrl);
             const breadcrumbs = [{
@@ -302,10 +323,14 @@ export default class ModalHelp extends Modal {
                 url: '',
                 target: '',
             }];
-            await this.renderReplace(TEMPLATES.MODAL_HELP_SEARCH_RESULTS, {results: searchResults.jsondata, query: query, breadcrumbs: breadcrumbs}, this.getBody());
+            await this.renderReplace(TEMPLATES.MODAL_HELP_SEARCH_RESULTS, {results: searchResults.jsondata, query: query, breadcrumbs: breadcrumbs}, this.content);
             this.getBody()[0].scrollTop = 0;
+            
+            this.history.push([searchUrl]);
         } catch (error) {
             Notification.exception(error);
+        } finally {
+            this.setLoading(false);
         }
     }
 
@@ -316,8 +341,8 @@ export default class ModalHelp extends Modal {
      */
     async renderGuidePage(url, target = '') {
         try {
+            await this.setLoading(true);
             const page = await this.getJsonData(url);
-            console.log(url, page);
             const breadcrumbs = [];
             const {content, frontmatter, jsondata} = page;
             const {title} = frontmatter ? frontmatter : jsondata.page_data[0];
@@ -344,13 +369,17 @@ export default class ModalHelp extends Modal {
             }
 
             const html = content ? content : jsondata.page_data[0].content;
-            await this.renderReplace(TEMPLATES.MODAL_HELP_GUIDE_PAGE, {html: html, breadcrumbs: breadcrumbs}, this.getBody());
+            await this.renderReplace(TEMPLATES.MODAL_HELP_GUIDE_PAGE, {html: html, breadcrumbs: breadcrumbs}, this.content);
             this.currentPath = url.substring(0, url.lastIndexOf('/'));
             const anchor = $(target);
             if (anchor.length) anchor[0].scrollIntoView();
             else this.getBody()[0].scrollTop = 0;
+        
+            this.history.push([url, target]);
         } catch (error) {
             Notification.exception(error);
+        } finally {
+            this.setLoading(false);
         }
     }
 
@@ -365,11 +394,11 @@ export default class ModalHelp extends Modal {
 
     /**
      * Appends a loading spinner to modal if loading is true, removes spinner if false.
-     * @param {Boolean} loading True for loading, false for not-loading.
+     * @param {Boolean} loading True for loading, contentfalse for not-loading.
      */
     setLoading(loading) {
         if (loading) {
-            this.renderAppend(TEMPLATES.OVERLAY_LOADING, {visible: true}, this.getBody());
+            return this.renderAppend(TEMPLATES.OVERLAY_LOADING, {visible: true}, this.content);
         } else {
             this.getBody().find(SELECTORS.OVERLAY_LOADING).remove();
         }
