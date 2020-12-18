@@ -616,7 +616,8 @@ class theme_urcourses_default_external extends external_api {
     public static function create_test_account_parameters() {
         return new external_function_parameters(array(
             'courseid' => new external_value(PARAM_INT),
-            'username' => new external_value(PARAM_TEXT)
+            'username' => new external_value(PARAM_TEXT),
+            'checked' => new external_value(PARAM_BOOL),
         ));
     }
      /**
@@ -626,7 +627,7 @@ class theme_urcourses_default_external extends external_api {
      * @param int $username of current user
      * @return array
      */
-    public static function create_test_account($courseid,$username) {
+    public static function create_test_account($courseid,$username, $checked) {
         global $USER, $DB, $CFG;
 
         // get params
@@ -635,6 +636,7 @@ class theme_urcourses_default_external extends external_api {
             array(
             'courseid' => $courseid,
             'username' => $username,
+            'checked' => $checked,
             )
         );
 
@@ -711,40 +713,45 @@ class theme_urcourses_default_external extends external_api {
             //reset password and email out to new user
             reset_password_and_mail($user);
 
-            //enroll user in course
-            //get enroll id for manual enrollment for current course
-            $sql = "SELECT * FROM mdl_enrol WHERE courseid =".$params['courseid']." AND enrol = 'manual';";
-            $enroll = $DB->get_record_sql($sql, null, MUST_EXIST);
+            if($checked){
+                //enroll user in course
 
-            $sql = "SELECT * FROM mdl_role WHERE shortname = 'student';";
-            $role = $DB->get_record_sql($sql, null, MUST_EXIST);
+                //get enroll id for manual enrollment for current course
+                $sql = "SELECT * FROM mdl_enrol WHERE courseid =".$params['courseid']." AND enrol = 'manual';";
+                $enroll = $DB->get_record_sql($sql, null, MUST_EXIST);
 
-            //enroll user in course as student
-            $dataobject = array(
-                "status"=>0,
-                "enrolid"=>$enroll->id,
-                "userid"=>$userid,
-                "timestart"=>time(),
-                "timeend"=>0,
-                "modififerid"=>$USER->id,
-                "timecreated"=>time(),
-                "timemodified"=>time()
-            );
-            $isenrolled =$DB->insert_record("user_enrolments", $dataobject, true, false);
+                $sql = "SELECT * FROM mdl_role WHERE shortname = 'student';";
+                $role = $DB->get_record_sql($sql, null, MUST_EXIST);
 
-            $dataobject = array(
-                "roleid"=>$role->id,
-                "contextid"=>$context->id,
-                "userid"=>$userid,
-                "timemodified"=>time(),
-                "modififerid"=>$USER->id,
-                "itemid"=>0,
-                "sortorder"=>0
-            );
-            $roleassigned = $DB->insert_record("role_assignments", $dataobject, true, false);
+                //enroll user in course as student
+                $dataobject = array(
+                    "status"=>0,
+                    "enrolid"=>$enroll->id,
+                    "userid"=>$userid,
+                    "timestart"=>time(),
+                    "timeend"=>0,
+                    "modififerid"=>$USER->id,
+                    "timecreated"=>time(),
+                    "timemodified"=>time()
+                );
+                $isenrolled =$DB->insert_record("user_enrolments", $dataobject, true, false);
 
-            //return userid, username, created true, and enrolled true
-            $return=array("userid"=>$userid,"username"=>$user->username,"enrolled"=>$isenrolled,"created"=>true );
+                $dataobject = array(
+                    "roleid"=>$role->id,
+                    "contextid"=>$context->id,
+                    "userid"=>$userid,
+                    "timemodified"=>time(),
+                    "modififerid"=>$USER->id,
+                    "itemid"=>0,
+                    "sortorder"=>0
+                );
+                $roleassigned = $DB->insert_record("role_assignments", $dataobject, true, false);
+
+                //return userid, username, created true, and enrolled true
+                $return=array("userid"=>$userid,"username"=>$user->username,"enrolled"=>$isenrolled,"created"=>true );
+            }else{
+                $return=array("userid"=>$userid,"username"=>$user->username,"enrolled"=>false,"created"=>true );
+            }
             
         }
         return $return;

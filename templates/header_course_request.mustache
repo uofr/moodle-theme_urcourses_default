@@ -37,11 +37,14 @@
           {{#studentaccount}} Modify test student {{/studentaccount}}
           {{^studentaccount}} Create test student {{/studentaccount}}
       </button>
-      <div class="dropdown-divider"></div>
-      <button class="dropdown-item ml-1" id="btn_student_enrol" type="button" data-value={{studentenrolled}} data-username = "{{username}}"><i class="fa fa-user-plus" aria-hidden="true"></i> 
-          {{^studentenrolled}}Enrol test student{{/studentenrolled}}
-          {{#studentenrolled}}Disenroll test student{{/studentenrolled}}
-      </button>
+      {{#studentaccount}}
+        <div class="dropdown-divider"></div>
+     
+          <button class="dropdown-item ml-1" id="btn_student_enrol" type="button" data-value={{studentenrolled}} data-username = "{{username}}"><i class="fa fa-user-plus" aria-hidden="true"></i> 
+              {{^studentenrolled}}Enrol test student{{/studentenrolled}}
+              {{#studentenrolled}}Disenroll test student{{/studentenrolled}}
+          </button>
+      {{/studentaccount}}
     </div>
   </div>
 </div>

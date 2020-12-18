@@ -108,14 +108,18 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
              getStudentAccountInfo(username);
         }else{
             
-            var modaltitle = 'Create and enroll test student account in course';
-            var modalaction = 'create the test student account '+username+'+urstudent@uregina.ca';
+            var modaltitle = 'Create test student account in course';
+            var modalaction = '<b>Do you want to create the test student account '+username+'+urstudent@uregina.ca?</b></br></br>' 
+                              +'<label class="form-check  fitem  ">'
+                              +'<input type="checkbox" name="id_enroll_test" class="form-check-input " id="id_enroll_test" value="1" size="">'
+                              +'Enroll test student into this course?'
+                              +'</label>';
             
             //adding in confirmation modal in case buttons accidentally clicked
             ModalFactory.create({
                 type: ModalFactory.types.SAVE_CANCEL,
                 title: modaltitle,
-                body: "<p><b>Do you want to "+ modalaction +"?</b><br /></p>"
+                body: "<p>"+ modalaction +"</p>"
             }).then(function(modal) {
                 
                 modal.setSaveButtonText('Create');
@@ -127,7 +131,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                 root.on(ModalEvents.save, function(e){
                     e.preventDefault();  
                     $(root).find('button[data-action="save"]').append(' <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="sr-only">Loading...</span>');
-                    _createStudentAccount(username);
+                    var checked = $(root).find("#id_enroll_test").is(":checked");
+                    _createStudentAccount(username, checked);
                 });
 
                 modal.show();
@@ -221,7 +226,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      /**
      * After modal info has been entered call ajax request
      */
-    var _createStudentAccount = function(username) {
+    var _createStudentAccount = function(username, checked) {
 
         // return if required values aren't set
         if (!_course.id) {
@@ -231,7 +236,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         // set args
         var args = {
             courseid: _course.id,
-            username: username
+            username: username,
+            checked: checked
         };
 
         // set ajax call
@@ -290,7 +296,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             if(data.created != false && data.enrolled !=false){
                 info +=data.username+" was created and enrolled into this course. New account information has been emailed to you. </div>";
             }else if(data.created != false && data.enrolled ==false ){
-                info += data.username+" was created, but FAILED to be enrolled into this course. </div>";
+                info += data.username+" was created, but was NOT enrolled into this course. New account information has been emailed to you. </div>";
             }else if(data.created == false && data.enrolled !=false ){
                 info += data.username+" has been enrolled into this course.</div>";
             }else{
@@ -359,7 +365,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             root.on(ModalEvents.save, function(e){
                 e.preventDefault();  
                 $(root).find('button[data-action="save"]').append(' <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="sr-only">Loading...</span>');
-                (value) ? _unenrollStudentAccount(username) : _createStudentAccount(username);
+                (value) ? _unenrollStudentAccount(username) : _createStudentAccount(username,true);
             });
 
             modal.show();
