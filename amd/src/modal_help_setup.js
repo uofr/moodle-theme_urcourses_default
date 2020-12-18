@@ -30,15 +30,18 @@ const SELECTORS = {
     MODAL_HELP_TRIGGER: '#modal_help_trigger'
 };
 
-export const init = async (contextId) => {
-    const modalHelpConfig = {
-        type: ModalHelp.getType()
-    };
-    const modalHelpTrigger = $(SELECTORS.MODAL_HELP_TRIGGER);
+export const init = (contextid, localUrl) => {
+    // Only create modal if user needs it.
+    $(SELECTORS.MODAL_HELP_TRIGGER).one('click', () => {
+        initHelpModal(contextid, localUrl);
+    });
+};
+
+const initHelpModal = async (contextid, localUrl) => {
     try {
-        const helpModal = await ModalFactory.create(modalHelpConfig, modalHelpTrigger);
-        helpModal.init(contextId);
+        const modalHelp = await ModalFactory.create({type: ModalHelp.getType()}, $(SELECTORS.MODAL_HELP_TRIGGER));
+        modalHelp.init(contextid, localUrl);
     } catch(error) {
-        Notification.exception(error);
+         Notification.exception(error);
     }
 };

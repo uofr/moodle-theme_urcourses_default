@@ -572,3 +572,28 @@ function theme_urcourses_default_test_account_enrollment($username, $courseid){
     }
      return false;
 }
+    /**
+     * Checks if the current user is an instructor.
+     * Users with the teacher, editingteacher, manager, and coursecreator roles are considered instructors.
+     * If we are in the site context, check if the user is an instructor anywhere.
+     * Otherwiser, check if the user is an instructor in the given context.
+     *
+     * @return bool
+     */
+    function theme_urcourses_default_user_is_instructor() {
+        global $USER, $DB;
+        
+        $role_query_cond = 'shortname = :a OR shortname = :b OR shortname = :c OR shortname = :d';
+        $role_query_arr = ['a' => 'editingteacher', 'b' => 'teacher', 'c' => 'manager', 'd' => 'coursecreator'];
+        $instructor_roles = $DB->get_fieldset_select('role', 'id', $role_query_cond, $role_query_arr);
+        $roleassign_query_cond = 'userid = :uid AND (roleid = :r0 OR roleid = :r1 OR roleid = :r2 OR roleid = :r3)';
+        $roleassign_query_arr = [
+        'uid' => $USER->id,
+        'r0' => $instructor_roles[0],
+        'r1' => $instructor_roles[1],
+        'r2' => $instructor_roles[2],
+        'r3' => $instructor_roles[3]
+        ];
+        
+        return $DB->record_exists_select('role_assignments', $roleassign_query_cond, $roleassign_query_arr);
+    }
