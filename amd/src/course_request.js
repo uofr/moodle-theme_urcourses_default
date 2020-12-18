@@ -114,10 +114,10 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                             +'<a class="btn btn-link p-0" role="button" data-toggle="modal" data-placement="right" data-target="moodle-email-modal-dialogue" data-html="true">'
                                 +'<i class="icon fa fa-question-circle text-info fa-fw " title="Help with test student account email" aria-label="Help with test student account email"></i>'
                             +'</a><br>'+username+'+urstudent@uregina.ca'
-                            +'<br><b>Username </b><br>'+username+'-urstudent'
+                            +'<br><br><b>Username </b><br>'+username+'-urstudent'
                             +'<hr/>'
          
-                            +'<br> You can enrol this account as a student for the ability to test and experience the course as a student.'
+                            +'You can enrol this account to test and experience a course as a student.'
                             +'<br><br>'
                             +'<b>Would you like to create the test student account?</b>'
                             +'<br><label class="form-check  fitem  ">'
