@@ -181,6 +181,7 @@ export default class ModalHelp extends Modal {
 
         /** Show home page when modal is open. */
         this.getRoot().on(ModalEvents.shown, () => {
+            console.log('show');
             this.renderGuidePage(this.landingPageUrl.url, this.landingPageUrl.target);
         });
 
@@ -430,7 +431,7 @@ export default class ModalHelp extends Modal {
      * Resets modal content and search.
      */
     resetModal() {
-        this.setBody('');
+        this.content.html('');
         this.searchBox.val('');
         this.suggestionBox.html('');
     }
