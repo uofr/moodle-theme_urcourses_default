@@ -107,13 +107,27 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             //view student account info
              getStudentAccountInfo(username);
         }else{
-            
-            var modaltitle = 'Create test student account in course';
-            var modalaction = '<b>Do you want to create the test student account '+username+'+urstudent@uregina.ca?</b></br></br>' 
-                              +'<label class="form-check  fitem  ">'
-                              +'<input type="checkbox" name="id_enroll_test" class="form-check-input " id="id_enroll_test" value="1" size="">'
-                              +'Enroll test student into this course?'
-                              +'</label>';
+        
+            var modaltitle = 'Create a test student for UR Courses';
+            var modalaction = '<b>The following test user account will be created: </b><br><br>'
+                            + '<b>Email address </b>'
+                            +'<a class="btn btn-link p-0" role="button" data-toggle="modal" data-placement="right" data-target="moodle-email-modal-dialogue" data-html="true">'
+                                +'<i class="icon fa fa-question-circle text-info fa-fw " title="Help with test student account email" aria-label="Help with test student account email"></i>'
+                            +'</a><br>'+username+'+urstudent@uregina.ca'
+                            +'<br><b>Username </b><br>'+username+'-urstudent'
+                            +'<hr/>'
+         
+                            +'<br> You can enrol this account as a student for the ability to test and experience the course as a student.'
+                            +'<br><br>'
+                            +'<b>Would you like to create the test student account?</b>'
+                            +'<br><label class="form-check  fitem  ">'
+                            +'<input type="checkbox" name="id_enroll_test" class="form-check-input " id="id_enroll_test" value="1" size="" checked>'
+                            +'Enrol test student into this course'
+                            +'</label>'
+                        
+                           // +'<li class="divider"></li>'
+                            
+                             ;
             
             //adding in confirmation modal in case buttons accidentally clicked
             ModalFactory.create({
@@ -128,6 +142,16 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                     return;
                 });
 
+                $(root).find('.fa-question-circle').parent().click(function() {
+                    ModalFactory.create({
+                        type: ModalFactory.types.CANCEL,
+                        title: "Help with test student account email",
+                        body:'<p>Email sent to this address will appear in your username@uregina.ca inbox</p>',
+                    }).then(function(modal) {
+                        modal.show();
+                    });
+                });
+
                 root.on(ModalEvents.save, function(e){
                     e.preventDefault();  
                     $(root).find('button[data-action="save"]').append(' <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="sr-only">Loading...</span>');
@@ -140,7 +164,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         }
     };
 
-         /**
+    /**
      * After modal info has been entered call ajax request
      */
     var getStudentAccountInfo =  function(username) {
@@ -345,8 +369,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         var value =$(SELECTORS.BTN_STUDENT_ENROL).data("value");
         var username =$(SELECTORS.BTN_STUDENT_ENROL).data("username");
         
-        var modaltitle =  (value) ? 'Disenroll test student account in course' :'Enroll test student account in course';
-        var modalaction =  (value) ? 'remove ':  'enroll the test student account ';
+        var modaltitle =  (value) ? 'Unenrol test student account in course' :'Enrol test student account in course';
+        var modalaction =  (value) ? 'remove ':  'enrol the test student account ';
         modalaction = modalaction+username+'+urstudent@uregina.ca from course';
             
         //adding in confirmation modal in case buttons accidentally clicked
@@ -356,7 +380,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             body: "<p><b>Do you want to "+ modalaction +"?</b><br /></p>"
         }).then(function(modal) {
                 
-            (value) ?modal.setSaveButtonText('Remove'):modal.setSaveButtonText('Enroll');
+            (value) ?modal.setSaveButtonText('Remove'):modal.setSaveButtonText('Enrol');
             var root = modal.getRoot();
             root.on(ModalEvents.cancel, function(){
                 return;
@@ -377,7 +401,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     */
     var _resetStudentAccount = function(e, username) { 
 
-        var modaltitle = 'Disenroll test student account';
+        var modaltitle = 'Unenrol test student account';
         var modalaction = 'do you want to reset the password for student account '+username+'+urstudent@uregina.ca.';
         
         //adding in confirmation modal in case buttons accidentally clicked
