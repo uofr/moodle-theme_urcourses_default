@@ -643,7 +643,7 @@ class theme_urcourses_default_external extends external_api {
         self::validate_context($context);
 
         //get username to create email
-        $email = $USER->username."+student@uregina.ca";
+        $email = $USER->username."+urstudent@uregina.ca";
         //check if test user account has already been created
         $select = 'SELECT * FROM mdl_user WHERE email ='.$email.';';
 
@@ -700,8 +700,8 @@ class theme_urcourses_default_external extends external_api {
 
             //replace User email with new email same for username
             $user->email = $email;
-            $user->username= $user->username."-student";
-            $user->lastname= $user->lastname." (student)";
+            $user->username= $user->username."-urstudent";
+            $user->lastname= $user->lastname." (urstudent)";
         
             //call external create user function
             $userid = user_create_user($user, false, true);
@@ -764,7 +764,234 @@ class theme_urcourses_default_external extends external_api {
         ));
     }
 
+    /**
+     * Returns description of create_test_account's parameters.
+     *
+     * @return external_function_parameters
+     */
+    public static function unenroll_test_account_parameters() {
+        return new external_function_parameters(array(
+            'courseid' => new external_value(PARAM_INT),
+            'username' => new external_value(PARAM_TEXT)
+        ));
+    }
+     /**
+     * Creates test student account and enrols in current course
+     *
+     * @param int $courseid
+     * @param int $username of current user
+     * @return array
+     */
+    public static function unenroll_test_account($courseid,$username) {
+        global $USER, $DB, $CFG;
+
+        // get params
+        $params = self::validate_parameters(
+            self::unenroll_test_account_parameters(),
+            array(
+            'courseid' => $courseid,
+            'username' => $username,
+            )
+        );
+
+        // ensure user has permissions to change image
+        $context = \context_course::instance($params['courseid']);
+        self::validate_context($context);
+
+        //get username to create email
+        $email = $USER->username."+urstudent@uregina.ca";
+        //check if test user account has already been created
+        $select = 'SELECT * FROM mdl_user WHERE email ='.$email.';';
+
+        $sql = "SELECT * FROM mdl_user as u WHERE u.email ='{$email}'";
+	
+        $user = $DB->get_record_sql($sql);
+
+        //if created
+        if($user){
+
+            //check if user is enrolled 
+            $isenrolled =is_enrolled($context, $user, 'mod/assignment:submit');
+
+            if($isenrolled){
+                //get enroll id for manual enrollment for current course
+                $sql = "SELECT * FROM mdl_enrol WHERE courseid =".$params['courseid']." AND enrol = 'manual';";
+                $enroll = $DB->get_record_sql($sql, null, MUST_EXIST);
+
+                $sql = "SELECT * FROM mdl_role WHERE shortname = 'student';";
+                $role = $DB->get_record_sql($sql, null, MUST_EXIST);
+                //enroll user in course as student
+                $dataobject = array( 
+                    "enrolid"=>$enroll->id,
+                    "userid"=>$user->id,        
+                );
+                $unenrolled = $DB->delete_records("user_enrolments", $dataobject);
+
+                if($unenrolled){
+                    $dataobject = array(
+                        "roleid"=>$role->id,
+                        "contextid"=>$context->id,
+                        "userid"=>$user->id,
+                    );
+               
+                    $roleassigned = $DB->delete_records("role_assignments", $dataobject);
+
+                    return array("userid"=>$user->id,"username"=>$user->username,"unenroll"=>$roleassigned);
+                }
+            }else{
+                return array("userid"=>$user->id,"username"=>$user->username,"unenroll"=>true); 
+            }
+        }
+        
+        return array("userid"=>$user->id,"username"=>$user->username,"unenroll"=>false); 
+    }
+
+    /**
+     * Returns description of unenroll_test_account return value.
+     *
+     * @return external_single_structure
+     */
+    public static function unenroll_test_account_returns() {
+        return new external_single_structure(array(
+            'userid' => new external_value(PARAM_INT),
+            'username' => new external_value(PARAM_TEXT),
+            'unenroll' => new external_value(PARAM_BOOL),
+        ));
+    }
+     /**
+     * Returns description of create_test_account's parameters.
+     *
+     * @return external_function_parameters
+     */
+    public static function test_account_info_parameters() {
+        return new external_function_parameters(array(
+            'courseid' => new external_value(PARAM_INT),
+            'username' => new external_value(PARAM_TEXT)
+        ));
+    }
+     /**
+     * Creates test student account and enrols in current course
+     *
+     * @param int $courseid
+     * @param int $username of current user
+     * @return array
+     */
+    public static function test_account_info($courseid,$username) {
+        global $USER, $DB, $CFG;
+
+        // get params
+        $params = self::validate_parameters(
+            self::test_account_info_parameters(),
+            array(
+            'courseid' => $courseid,
+            'username' => $username,
+            )
+        );
+
+        // ensure user has permissions to change image
+        $context = \context_course::instance($params['courseid']);
+        self::validate_context($context);
+
+        //get username to create email
+        $email = $USER->username."+urstudent@uregina.ca";
+
+        //check if test user account has already been created
+        $select = 'SELECT * FROM mdl_user WHERE email ='.$email.';';
+
+        $sql = "SELECT * FROM mdl_user as u WHERE u.email ='{$email}'";
+	
+        $user = $DB->get_record_sql($sql);
+
+        //if created
+        if($user){
+            return array("userid"=>$user->id,"username"=>$user->username,"email"=>$user->email,"datecreated"=> userdate($user->timecreated)); 
+        }
+        
+        return array("userid"=>0,"username"=>"","email"=>"","datecreated"=>""); 
+    }
+
+    /**
+     * Returns description of test_account_info return value.
+     *
+     * @return external_single_structure
+     */
+    public static function test_account_info_returns() {
+        return new external_single_structure(array(
+            'userid' => new external_value(PARAM_INT),
+            'username' => new external_value(PARAM_TEXT),
+            'email' => new external_value(PARAM_TEXT),
+            'datecreated' => new external_value(PARAM_TEXT),
+        ));
+    }
+
       /**
+     * Returns description of reset_test_account's parameters.
+     *
+     * @return external_function_parameters
+     */
+    public static function reset_test_account_parameters() {
+        return new external_function_parameters(array(
+            'courseid' => new external_value(PARAM_INT),
+            'username' => new external_value(PARAM_TEXT)
+        ));
+    }
+     /**
+     * Creates test student account and enrols in current course
+     *
+     * @param int $courseid
+     * @param int $username of current user
+     * @return array
+     */
+    public static function reset_test_account($courseid,$username) {
+        global $USER, $DB, $CFG;
+
+        // get params
+        $params = self::validate_parameters(
+            self::reset_test_account_parameters(),
+            array(
+            'courseid' => $courseid,
+            'username' => $username,
+            )
+        );
+
+        // ensure user has permissions to change image
+        $context = \context_course::instance($params['courseid']);
+        self::validate_context($context);
+
+        //get username to create email
+        $email = $USER->username."+urstudent@uregina.ca";
+
+        //check if test user account has already been created
+        $select = 'SELECT * FROM mdl_user WHERE email ='.$email.';';
+
+        $sql = "SELECT * FROM mdl_user as u WHERE u.email ='{$email}'";
+	
+        $user = $DB->get_record_sql($sql);
+    
+        //if created
+        if($user){
+            //reset password and email out to new user
+            $reset = reset_password_and_mail($user);
+            return array("userid"=>$user->id, "username"=>$user->username,"reset"=>$reset); 
+        }
+        
+        return array("userid"=>0,"reset"=>false); 
+    }
+
+    /**
+     * Returns description of reset_test_account return value.
+     *
+     * @return external_single_structure
+     */
+    public static function reset_test_account_returns() {
+        return new external_single_structure(array(
+            'userid' => new external_value(PARAM_INT),
+            'username' => new external_value(PARAM_TEXT),
+            'reset' => new external_value(PARAM_BOOL),
+        ));
+    }
+
+    /**
      * Returns description of duplicate_course's parameters.
      *
      * @return external_function_parameters

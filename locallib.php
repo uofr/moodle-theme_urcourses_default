@@ -528,7 +528,7 @@ function theme_urcourses_default_check_test_account($username){
     global $DB;
 
     //get username to create email
-    $email = $username."+student@uregina.ca";
+    $email = $username."+urstudent@uregina.ca";
     //check if test user account has already been created
     $select = 'SELECT * FROM mdl_user WHERE email ='.$email.';';
     $sql = "SELECT * FROM mdl_user as u WHERE u.email ='{$email}'";  
@@ -549,11 +549,11 @@ function theme_urcourses_default_check_test_account($username){
  * enrolled in current courese
  * @return bool
  */
-function theme_urcourses_default_test_account_enrollment($username){
+function theme_urcourses_default_test_account_enrollment($username, $courseid){
     global $DB;
 
     //get username to create email
-    $email = $username."+student@uregina.ca";
+    $email = $username."+urstudent@uregina.ca";
     //check if test user account has already been created
     $select = 'SELECT * FROM mdl_user WHERE email ='.$email.';';
     $sql = "SELECT * FROM mdl_user as u WHERE u.email ='{$email}'";
@@ -562,8 +562,9 @@ function theme_urcourses_default_test_account_enrollment($username){
     //if created
     if($user){
 
+        $context = \context_course::instance($courseid);
         //check if user is enrolled already
-        $isenrolled =is_enrolled($context, $user, 'mod/assignment:submit');
+        $isenrolled = is_enrolled($context, $user, 'mod/assignment:submit');
  
         if($isenrolled){
             return true;

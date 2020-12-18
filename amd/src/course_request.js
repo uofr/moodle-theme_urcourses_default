@@ -96,48 +96,16 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      /**
      * Modal after button click to create student account
      */
-    var _createStudentAction = function() {
+    var _createStudentAction =  function(e) {
+
 
         //look if created or not
-        var value =this.getAttribute("value");
-        var username =this.getAttribute("aria-username");
+        var value =$(SELECTORS.BTN_STUDENT_ACCOUNT).data("value");
+        var username =$(SELECTORS.BTN_STUDENT_ACCOUNT).data("username");
 
         if(value){
             //view student account info
-            var data =  getStudentAccountInfo(username);
-            
-            var modaltitle = 'User details for test student account';
-            
-            //adding in confirmation modal in case buttons accidentally clicked
-            ModalFactory.create({
-                type: ModalFactory.types.CANCEL,
-                title: modaltitle,
-                body: '<div class="card" style="width: 18rem;">'
-                         +'<div class="card-body">'
-                            +'<p class="card-text">'
-                            +'<b>Email address </b><br>'+data.email
-                            +'<br><b>Username </b><br>'+data.username
-                            +'<br><b>Account Creation Date </b><br>'+data.datecreated
-                            +'<div class="alert alert-warning" role="alert">'
-                                +'Reset test account password'
-                                +'<button id="test_account_reset" type="button" class="btn btn-primary">Reset Password</button>'
-                            +'</div>'
-                        +'</p></div> </div>',
-
-            }).then(function(modal) {
-            
-                var root = modal.getRoot();
-                $(root).find('button[data-action="cancel"]').text("Close");
-
-                $('"#test_account_reset"').bind('click', function() { _resetStudentAccount($(this)); } );
-                modal.show();
-
-                 //remove modal on hide
-                 root.on(ModalEvents.hidden, function(){
-                    //remove inputs otherwise duplicates are made causing id problems
-                    $( "#test_account_reset" ).remove();
-                });
-            });
+             getStudentAccountInfo(username);
         }else{
             
             var modaltitle = 'Create and enroll test student account in course';
@@ -156,8 +124,10 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                     return;
                 });
 
-                root.on(ModalEvents.save, function(){
-                    _createStudentAccount(username)
+                root.on(ModalEvents.save, function(e){
+                    e.preventDefault();  
+                    $(root).find('button[data-action="save"]').append(' <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="sr-only">Loading...</span>');
+                    _createStudentAccount(username);
                 });
 
                 modal.show();
@@ -168,7 +138,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
          /**
      * After modal info has been entered call ajax request
      */
-    var getStudentAccountInfo = function(username) {
+    var getStudentAccountInfo =  function(username) {
           // return if required values aren't set
           if (!_course.id) {
             return;
@@ -188,9 +158,60 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         };
 
         // initiate ajax call
-        var promise = ajax.call([ajaxCall]);
-        promise[0].done(function(response) {
-            return response;
+        var promise =  ajax.call([ajaxCall]);
+        promise[0].done(function(data) {
+
+            var modaltitle = 'User details for test student account';
+
+            if(data.userid != 0){
+               info = '<b>Email address </b>'
+                    +'<a class="btn btn-link p-0" role="button" data-toggle="modal" data-placement="right" data-target="moodle-email-modal-dialogue" data-html="true">'
+                        +'<i class="icon fa fa-question-circle text-info fa-fw " title="Help with test student account email" aria-label="Help with test student account email"></i>'
+                    +'</a><br>'+data.email
+                    +'<br><b>Username </b><br>'+data.username
+                    +'<br><b>Account Creation Date </b><br>'+data.datecreated+'<br/>'
+                    +'<br><div class="alert alert-warning d-flex justify-content-between bd-highlight " role="alert">'
+                        +'<div class="">Reset test account password </div>'  
+                        +'<button id="test_account_reset" type="button" class="btn btn-primary" >Reset Password</button>' 
+                    +'</div>'
+               
+            }else{
+               info= '<div class="alert alert-warning" role="alert">'
+                    +' Test student account could not be found!</div>';
+            }
+            
+            //adding in confirmation modal in case buttons accidentally clicked
+            ModalFactory.create({
+                type: ModalFactory.types.CANCEL,
+                title: modaltitle,
+                body:info,
+
+            }).then(function(modal) {
+            
+                var root = modal.getRoot();
+            
+                $(root).find('button[data-action="cancel"]').text("Close");
+
+                $(root).find('.fa-question-circle').parent().click(function() {
+                    ModalFactory.create({
+                        type: ModalFactory.types.CANCEL,
+                        title: "Help with test student account email",
+                        body:'<p>Email sent to this address will appear in your username@uregina.ca inbox</p>',
+                    }).then(function(modal) {
+                        modal.show();
+                    });
+                });
+
+                 //remove modal on hide
+                 root.on(ModalEvents.hidden, function(){
+                    //remove inputs otherwise duplicates are made causing id problems
+                    $( "#test_account_reset" ).remove();
+                });
+
+                modal.show();
+            }).done(function(modal) {
+                $("#test_account_reset").bind('click', function() { _resetStudentAccount($(this), username); } );
+            });
         }).fail(function(ex) {
             notification.exception;
         });	
@@ -234,68 +255,76 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      */
     var _studentAccountResponse = function(data) {
     
-        //THIS IS WHERE YOU LEFT OFF
-        //STILL NEED TO ADD ALL SERVICE FUNCTIONS
-        //AND FINISH RESPONSE
-
-
-
-
-
         if(typeof data.unenroll != "undefined"){
 
-        }else if(typeof data.enroll != "undefined"){
+            title = "Success: ";
+            info='<div class="alert alert-success" role="alert">'
+                    +data.username+" was removed from course. </div>";
 
+            if(!data.unenroll){
+                title = "ERROR:"
+                info='<div class="alert alert-warning" role="alert">';
+                info += data.username+" could not be removed from course. </div>";
+            }
+        }else if(typeof data.reset != "undefined"){
+            title = "Success: ";
+            info='<div class="alert alert-success" role="alert">'
+                    +data.username+" password was reset. You will recieve an email with new credentials. It may take a few minutes to process.</div>";
+
+            if(!data.reset && data.userid !=0){
+                title = "ERROR:"
+                info='<div class="alert alert-warning" role="alert">';
+                info += data.username+"'s password could not be reset, email failed to send </div>";
+            }else if(!data.reset && data.userid ==0){
+                title = "ERROR:"
+                info='<div class="alert alert-warning" role="alert">';
+                info += data.username+"'s account could not be found </div>";
+            }
         }else{
 
             //create new modal
             title = "Success: ";
-            info="";
-            action=" Would you like to logout, inorder to login to new account?";
+            info='<div class="alert alert-success" role="alert">';
 
             //if both actions were done
             if(data.created != false && data.enrolled !=false){
-                info =data.username+" was created and enrolled into this course. Login password is the same as current account.";
+                info +=data.username+" was created and enrolled into this course. New account information has been emailed to you. </div>";
             }else if(data.created != false && data.enrolled ==false ){
-                info = data.username+" was created, but FAILED to be enrolled into this course";
+                info += data.username+" was created, but FAILED to be enrolled into this course. </div>";
             }else if(data.created == false && data.enrolled !=false ){
-                info = data.username+" already existed, and has now been enrolled into this course. Login password is the same as current account.";
+                info += data.username+" has been enrolled into this course.</div>";
             }else{
                 title = "ERROR:"
-                info = data.username+" already exists and is enrolled into the course";
-
-                ModalFactory.create({
-                    title: title,
-                    body: '<p><b>'+info+'</b><br></p>',
-                })
-                .done(function(modal) {
-                    modal.show();
-                });
-                
-                return;
+                info='<div class="alert alert-warning" role="alert">';
+                info += data.username+" already exists and is enrolled into the course. </div>";
             }
-
         }
         
         //adding in confirmation modal in case buttons accidentally clicked
         ModalFactory.create({
-            type: ModalFactory.types.SAVE_CANCEL,
+            type: ModalFactory.types.CANCEL,
             title: title,
-            body: "<p><b>"+ info +"</b><br>"+action+"<br /></p>"
+            body:  info 
         })
         .then(function(modal) {
             
-            modal.setSaveButtonText('Logout');
             var root = modal.getRoot();
+            $(root).find('button[data-action="cancel"]').text("Close");
             root.on(ModalEvents.cancel, function(){
+                if(typeof data.reset == "undefined"){
+                    location.reload();
+                }
+                return;
+            });
+           
+            
+            root.find(".close").click(function() {
+                if(typeof data.reset == "undefined"){
+                    location.reload();
+                }
                 return;
             });
 
-            root.on(ModalEvents.save, function(){
-                var href = $('a[data-title="logout,moodle"]').attr('href');
-                window.location.href = href;
-                $("#username").value= data.username;      
-            });
             modal.show();
         });
     };
@@ -304,15 +333,15 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     /**
      * After modal info has been entered call ajax request
      */
-    var _enrollStudentAction = function(username) {
+    var _enrollStudentAction = function() {
 
         //look if created or not
-        var value =this.getAttribute("value");
-        var username =this.getAttribute("aria-username");
-
+        var value =$(SELECTORS.BTN_STUDENT_ENROL).data("value");
+        var username =$(SELECTORS.BTN_STUDENT_ENROL).data("username");
+        
         var modaltitle =  (value) ? 'Disenroll test student account in course' :'Enroll test student account in course';
-        var modalaction = (value) ? 'remove ':  'create the test student account ';
-        modalaction = modalaction+username+'+urstudent@uregina.ca from course?';
+        var modalaction =  (value) ? 'remove ':  'enroll the test student account ';
+        modalaction = modalaction+username+'+urstudent@uregina.ca from course';
             
         //adding in confirmation modal in case buttons accidentally clicked
         ModalFactory.create({
@@ -321,13 +350,15 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             body: "<p><b>Do you want to "+ modalaction +"?</b><br /></p>"
         }).then(function(modal) {
                 
-            modal.setSaveButtonText('Create');
+            (value) ?modal.setSaveButtonText('Remove'):modal.setSaveButtonText('Enroll');
             var root = modal.getRoot();
             root.on(ModalEvents.cancel, function(){
                 return;
             });
 
-            root.on(ModalEvents.save, function(){
+            root.on(ModalEvents.save, function(e){
+                e.preventDefault();  
+                $(root).find('button[data-action="save"]').append(' <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="sr-only">Loading...</span>');
                 (value) ? _unenrollStudentAccount(username) : _createStudentAccount(username);
             });
 
@@ -335,6 +366,60 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         });
     }
 
+    /**
+    * After modal info has been entered call ajax request
+    */
+    var _resetStudentAccount = function(e, username) { 
+
+        var modaltitle = 'Disenroll test student account';
+        var modalaction = 'do you want to reset the password for student account '+username+'+urstudent@uregina.ca.';
+        
+        //adding in confirmation modal in case buttons accidentally clicked
+        ModalFactory.create({
+            type: ModalFactory.types.SAVE_CANCEL,
+            title: modaltitle,
+            body: "<p><b>Do you want to "+ modalaction +"?</b><br /></p>"
+        }).then(function(modal) {
+            
+            modal.setSaveButtonText('Reset Password');
+            var root = modal.getRoot();
+          
+            root.on(ModalEvents.cancel, function(){
+                return;
+            });
+
+            root.on(ModalEvents.save, function(e){
+
+                e.preventDefault();  
+                $(root).find('button[data-action="save"]').append('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="sr-only">Loading...</span>');
+                
+                // set args
+                var args = {
+                    courseid: _course.id,
+                    username: username
+                };
+
+                // set ajax call
+                var ajaxCall = {
+                    methodname: 'theme_urcourses_default_header_reset_test_account',
+                    args: args,
+                    fail: notification.exception
+                };
+
+                // initiate ajax call
+                var promise = ajax.call([ajaxCall]);
+                promise[0].done(function(response) {
+                    $(root).find('button[data-action="cancel"]').click();
+                    _studentAccountResponse(response);
+                    return;
+                }).fail(function(ex) {
+                    notification.exception;
+                });
+            });
+
+            modal.show();
+        });
+    }
     /**
     * After modal info has been entered call ajax request
     */

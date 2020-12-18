@@ -33,14 +33,14 @@
       <div class="dropdown-divider"></div>
       <button class="dropdown-item ml-1" id="btn_new" type="button"><i class="fa fa-plus" aria-hidden="true"></i> Create blank course</button>
       <div class="dropdown-divider"></div>
-      <button class="dropdown-item ml-1" id="btn_student_account" type="button" data-value={{studentaccount}} aria-username = "{{username}}" ><i class="fa fa-user"  aria-hidden="true"></i> 
+      <button class="dropdown-item ml-1" id="btn_student_account" type="button" data-value={{studentaccount}} data-username = "{{username}}" ><i class="fa fa-user"  aria-hidden="true"></i> 
           {{#studentaccount}} Modify test student {{/studentaccount}}
           {{^studentaccount}} Create test student {{/studentaccount}}
       </button>
       <div class="dropdown-divider"></div>
-      <button class="dropdown-item ml-1" id="btn_student_enrol" type="button" data-value={{studentenrolled}} aria-username = "{{username}}"><i class="fa fa-user" aria-hidden="true"></i> 
-          {{#studentenrolled}}Enrol test student{{/studentenrolled}}
-          {{^studentenrolled}}Disenroll test student{{/studentenrolled}}
+      <button class="dropdown-item ml-1" id="btn_student_enrol" type="button" data-value={{studentenrolled}} data-username = "{{username}}"><i class="fa fa-user-plus" aria-hidden="true"></i> 
+          {{^studentenrolled}}Enrol test student{{/studentenrolled}}
+          {{#studentenrolled}}Disenroll test student{{/studentenrolled}}
       </button>
     </div>
   </div>

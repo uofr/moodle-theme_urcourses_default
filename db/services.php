@@ -122,8 +122,32 @@ $functions = array(
         'classname'     => 'theme_urcourses_default_external',
         'methodname'    => 'delete_enrollment',
         'classpath'     => 'theme/urcourses_default/externallib.php',
-        'description'   => 'Removes enrolled students from course',
+        'description'   => 'Removes enrolled banner students from course',
         'type'          => 'write',
         'ajax'          => 'true'
-    )
+    ),
+     'theme_urcourses_default_header_test_account_info' => array(
+        'classname'     => 'theme_urcourses_default_external',
+        'methodname'    => 'test_account_info',
+        'classpath'     => 'theme/urcourses_default/externallib.php',
+        'description'   => 'Retrieves information about users student test account',
+        'type'          => 'read',
+        'ajax'          => 'true'
+    ),
+     'theme_urcourses_default_header_unenroll_test_account' => array(
+        'classname'     => 'theme_urcourses_default_external',
+        'methodname'    => 'unenroll_test_account',
+        'classpath'     => 'theme/urcourses_default/externallib.php',
+        'description'   => 'Removes user test student account from course',
+        'type'          => 'write',
+        'ajax'          => 'true'
+     ),
+     'theme_urcourses_default_header_reset_test_account' => array(
+        'classname'     => 'theme_urcourses_default_external',
+        'methodname'    => 'reset_test_account',
+        'classpath'     => 'theme/urcourses_default/externallib.php',
+        'description'   => 'Reset password for student test account',
+        'type'          => 'write',
+        'ajax'          => 'true'
+     )
 );
