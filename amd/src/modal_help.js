@@ -181,7 +181,6 @@ export default class ModalHelp extends Modal {
 
         /** Show home page when modal is open. */
         this.getRoot().on(ModalEvents.shown, () => {
-            console.log('show');
             this.renderGuidePage(this.landingPageUrl.url, this.landingPageUrl.target);
         });
 
@@ -227,8 +226,9 @@ export default class ModalHelp extends Modal {
 
         /** If the user clicks a link inside the guide page, open the page. */
         this.getRoot().on('click', SELECTORS.GUIDE_PAGE_LINK, (e) => {
-            const href = $(e.currentTarget).attr('href');
+            let href = $(e.currentTarget).attr('href');
             if (href.startsWith('#') ) return;
+            if (href.endsWith('/')) href = href.substring(0, href.lastIndexOf('/'));
             e.preventDefault();
             if (href.startsWith('http') || href.startsWith('https') || href.startsWith('mailto')) {
                 window.open(href, '_blank');
@@ -369,7 +369,11 @@ export default class ModalHelp extends Modal {
                 path.pop();
             }
 
-            const html = content ? content : jsondata.page_data[0].content;
+            const guidesBase = path.join('/');
+            let html = content ? content : jsondata.page_data[0].content;
+            html = html.replaceAll('src="assets', `src="${guidesBase}/assets`);
+            html = html.replaceAll('src="../assets', `src="${guidesBase}/assets`);
+            html = html.replaceAll('src="./images', `src="${guidesBase}/images`);
             await this.renderReplace(TEMPLATES.MODAL_HELP_GUIDE_PAGE, {html: html, breadcrumbs: breadcrumbs}, this.content);
             this.currentPath = url.substring(0, url.lastIndexOf('/'));
             const anchor = $(target);
@@ -377,6 +381,8 @@ export default class ModalHelp extends Modal {
             else this.getBody()[0].scrollTop = 0;
         
             this.history.push([url, target]);
+
+            console.log(this.content.find('a'));
         } catch (error) {
             Notification.exception(error);
         } finally {
