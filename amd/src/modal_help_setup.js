@@ -39,8 +39,11 @@ export const init = (contextid, localUrl) => {
 
 const initHelpModal = async (contextid, localUrl) => {
     try {
-        const modalHelp = await ModalFactory.create({type: ModalHelp.getType()}, $(SELECTORS.MODAL_HELP_TRIGGER));
+        const modalHelp = await ModalFactory.create({type: ModalHelp.getType()});
         modalHelp.init(contextid, localUrl);
+        $(SELECTORS.MODAL_HELP_TRIGGER).on('click', () => {
+            modalHelp.show();
+        });
     } catch(error) {
          Notification.exception(error);
     }

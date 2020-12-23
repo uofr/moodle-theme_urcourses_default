@@ -46,7 +46,6 @@ const SELECTORS = {
     BREADCRUMB_PAGE: '#breadcrumb_page',
     GUIDE_PAGE_LINK: '[data-region="guide-page-content"] a',
     OVERLAY_LOADING: '.overlay-icon-container',
-    HOME: '[data-action="go-home"]',
     BACK: '[data-action="go-back"]',
     MAIN: '[data-region="modal-help-main"]'
 };
@@ -86,6 +85,7 @@ export default class ModalHelp extends Modal {
         this.currentPath = '';
         this.history = [];
         this.landingPageUrl = '';
+        this.userIsInstructor = null;
     }
 
     /**
@@ -97,9 +97,10 @@ export default class ModalHelp extends Modal {
     async init(contextId, localUrl) {
         try {
             this.contextId = contextId;
-            [this.topicList, this.landingPageUrl] = await Promise.all([
+            [this.topicList, this.landingPageUrl, this.userIsInstructor] = await Promise.all([
                 this.getTopicList(),
-                ModalHelpAjax.getLandingPageUrl(this.contextId, localUrl)
+                ModalHelpAjax.getLandingPageUrl(this.contextId, localUrl),
+                ModalHelpAjax.userIsInstructor()
             ]);
             this.topicTitles = this.topicList.map(topic => topic.title);
             FuzzySearch.setDictionary(this.topicTitles);
@@ -262,12 +263,6 @@ export default class ModalHelp extends Modal {
             }
         });
 
-        this.getModal().on('click', SELECTORS.HOME, (e) => {
-            e.preventDefault();
-            const {url, target} = this.landingPageUrl;
-            this.renderGuidePage(url, target);
-        });
-
     }
        
     /**
@@ -317,13 +312,25 @@ export default class ModalHelp extends Modal {
         try {
             await this.setLoading(true);
             const searchUrl = await ModalHelpAjax.getSearchUrl(this.contextId, query);
+            const basePath = searchUrl.split('/');
+            basePath.pop();
+            basePath.pop();
+            const baseUrl = basePath.join('/');
             const searchResults = await this.getJsonData(searchUrl);
-            const breadcrumbs = [{
-                active: true,
-                name: `Search Results: ${query}`,
-                url: '',
-                target: '',
-            }];
+            const breadcrumbs = [
+                {
+                    active: false,
+                    name: this.userIsInstructor ? 'Instructor Guide' : 'Student Guides',
+                    url: this.userIsInstructor ? `${baseUrl}/instructor.json` : `${baseUrl}/student.json`,
+                    target: ''
+                },
+                {
+                    active: true,
+                    name: `Search Results: ${query}`,
+                    url: '',
+                    target: '',
+                }
+            ];
             await this.renderReplace(TEMPLATES.MODAL_HELP_SEARCH_RESULTS, {results: searchResults.jsondata, query: query, breadcrumbs: breadcrumbs}, this.content);
             this.getBody()[0].scrollTop = 0;
             
@@ -368,21 +375,40 @@ export default class ModalHelp extends Modal {
                 });
                 path.pop();
             }
-
+            
             const guidesBase = path.join('/');
+
+            if (this.userIsInstructor && breadcrumbs[0].name !== 'Instructor Guide') {
+                breadcrumbs.unshift({
+                    active: false,
+                    name: 'Instructor Guide',
+                    url: `${guidesBase}/instructor.json`
+                });
+            }
+            
+            if (!this.userIsInstructor && breadcrumbs[0].name !== 'Student Guides') {
+                breadcrumbs.unshift({
+                    active: false,
+                    name: 'Student Guides',
+                    url: `${guidesBase}/student.json`
+                });
+            }
+
+
             let html = content ? content : jsondata.page_data[0].content;
             html = html.replaceAll('src="assets', `src="${guidesBase}/assets`);
             html = html.replaceAll('src="../assets', `src="${guidesBase}/assets`);
             html = html.replaceAll('src="./images', `src="${guidesBase}/images`);
             await this.renderReplace(TEMPLATES.MODAL_HELP_GUIDE_PAGE, {html: html, breadcrumbs: breadcrumbs}, this.content);
             this.currentPath = url.substring(0, url.lastIndexOf('/'));
-            const anchor = $(target);
-            if (anchor.length) anchor[0].scrollIntoView();
+            if (target) {
+                const anchor = target.startsWith('#') ? $(target) : $(`#${target}`);
+                if (anchor.length) anchor[0].scrollIntoView();
+            }
             else this.getBody()[0].scrollTop = 0;
         
             this.history.push([url, target]);
 
-            console.log(this.content.find('a'));
         } catch (error) {
             Notification.exception(error);
         } finally {
