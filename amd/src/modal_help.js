@@ -47,6 +47,7 @@ const SELECTORS = {
     GUIDE_PAGE_LINK: '[data-region="guide-page-content"] a',
     OVERLAY_LOADING: '.overlay-icon-container',
     BACK: '[data-action="go-back"]',
+    BACK_TO_TOP: '#modal-help-back-to-top',
     MAIN: '[data-region="modal-help-main"]'
 };
 
@@ -263,6 +264,20 @@ export default class ModalHelp extends Modal {
             }
         });
 
+        $(this.getModal()).find(".modal-body").scroll(function () {
+            if ($(this).scrollTop() > 50) {
+                $(SELECTORS.BACK_TO_TOP).fadeIn();
+            } else {
+                $(SELECTORS.BACK_TO_TOP).fadeOut();
+            }
+        });
+
+        this.getModal().on('click', SELECTORS.BACK_TO_TOP, (e) => {
+             $(this.getModal()).find(".modal-body").animate({
+                        scrollTop: 0
+                }, 400);
+                    return false;
+        });
     }
        
     /**
@@ -399,7 +414,11 @@ export default class ModalHelp extends Modal {
             html = html.replaceAll('src="assets', `src="${guidesBase}/assets`);
             html = html.replaceAll('src="../assets', `src="${guidesBase}/assets`);
             html = html.replaceAll('src="./images', `src="${guidesBase}/images`);
-            await this.renderReplace(TEMPLATES.MODAL_HELP_GUIDE_PAGE, {html: html, breadcrumbs: breadcrumbs}, this.content);
+            var back =false;
+            if (this.history.length > 0) {
+                back =true;
+            }
+            await this.renderReplace(TEMPLATES.MODAL_HELP_GUIDE_PAGE, {html: html, breadcrumbs: breadcrumbs,back:back}, this.content);
             this.currentPath = url.substring(0, url.lastIndexOf('/'));
             if (target) {
                 const anchor = target.startsWith('#') ? $(target) : $(`#${target}`);
@@ -528,3 +547,4 @@ if (!registered) {
     ModalRegistry.register(ModalHelp.getType(), ModalHelp, 'theme_urcourses_default/modal_help');
     registered = true;
 }
+

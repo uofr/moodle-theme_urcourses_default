@@ -2606,6 +2606,20 @@ body.format-topcoll.editing .section .activity .activityinstance {
 .modal-help-trigger {
     cursor: pointer;
 }
+.modal-help-back-to-top {
+    position: fixed;
+    display: none;
+    padding: .5rem; 
+    bottom: .5em; 
+    right: .5em;
+    color: #fff;
+    background-color: #848889;
+    border-radius: 100px; 
+    cursor: pointer; 
+    -webkit-box-shadow: 0 0 3px 1px rgba(0,0,0,.3);
+    box-shadow: 0 0 3px 1px rgba(0,0,0,.3);
+    z-index: 10;
+}
 
 .modal-help-header {
     width: 100%;
