@@ -392,7 +392,7 @@ function theme_urcourses_default_get_course_templates() {
         return 0;
     }
     //else use category id to find all courses in the templates category
-    $sql = "SELECT * FROM mdl_course WHERE category = {$category->id};";
+    $sql = "SELECT * FROM mdl_course WHERE category = {$category->id} ORDER BY shortname;";
     $courses = $DB->get_records_sql($sql);
   
     //if no Template category

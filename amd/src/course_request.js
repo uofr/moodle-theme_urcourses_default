@@ -123,11 +123,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                             +'<br><label class="form-check  fitem  ">'
                             +'<input type="checkbox" name="id_enroll_test" class="form-check-input " id="id_enroll_test" value="1" size="" checked>'
                             +'Enrol test student into this course'
-                            +'</label>'
-                        
-                           // +'<li class="divider"></li>'
-                            
-                             ;
+                            +'</label>';
             
             //adding in confirmation modal in case buttons accidentally clicked
             ModalFactory.create({

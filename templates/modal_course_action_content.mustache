@@ -25,6 +25,10 @@
         {{#templatenew}}   
             <div data-role="templateholder" class = "list-group overflow-auto" style = "height:148px" >
                 {{#istemplatelist}}
+                        <div data-role = "templateselect" class="tmpl-label list-group-item list-group-item-action active" id = "0" >
+                            <h6>Default Course</h6>
+                            <span><small>Basic course template. No activites included </small></span>
+                        </div>
                         {{#templatelist}}
                             <div data-role = "templateselect" class="tmpl-label list-group-item list-group-item-action " id = '{{{id}}}'>
                                 <h6>
@@ -35,10 +39,7 @@
                                 </h6>
                             </div>
                         {{/templatelist}}
-                        <div data-role = "templateselect" class="tmpl-label list-group-item list-group-item-action active" id = "0" >
-                            <h6>Default Course</h6>
-                            <span><small>Basic course template. No activites included </small></span>
-                        </div>
+                      
                 {{/istemplatelist}}
                 {{^istemplatelist}}
                     <div data-role = "templateselect" class="tmpl-label list-group-item list-group-item-action active" id = "0" >
