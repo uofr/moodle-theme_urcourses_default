@@ -418,7 +418,8 @@ export default class ModalHelp extends Modal {
             if (this.history.length > 0) {
                 back =true;
             }
-            await this.renderReplace(TEMPLATES.MODAL_HELP_GUIDE_PAGE, {html: html, breadcrumbs: breadcrumbs,back:back}, this.content);
+
+            await this.renderReplace(TEMPLATES.MODAL_HELP_GUIDE_PAGE, {html: html, breadcrumbs: breadcrumbs,isinstructor:this.userIsInstructor,back:back}, this.content);
             this.currentPath = url.substring(0, url.lastIndexOf('/'));
             if (target) {
                 const anchor = target.startsWith('#') ? $(target) : $(`#${target}`);
