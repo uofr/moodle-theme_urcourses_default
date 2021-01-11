@@ -186,7 +186,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             $.each( data.courseinfo, function( key, value ) {
                 templatelist += '<div data-role = "bannerselect" class="tmpl-label list-group-item list-group-item-action " id = '+value.crn+'>'+
                                 '<h6><i class="fa fa-square-o" aria-hidden="true"></i>  '+
-                                value.subject + ' ' +value.course + '-' + value.section +'</h6>'+
+                                value.subject + ' ' +value.course + '-' + value.section +' ('+value.crn+')</h6>'+
                                 '</div>';
             });
             //add group division checkbox
@@ -215,7 +215,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                 }
 
                 activatedlist +='<div data-role="delete_button" data-fullname ="'+value.fullname+'" id="delete_'+value.crn+'_'+value.urid+'" class="list-group-item list-group-item-secondary enrollment-delete '+linkedClass+' ">'+
-                                '<h6 class ="ml-3 d-inline">'+value.subject + ' ' +value.course + '-' + value.section +
+                                '<h6 class ="ml-3 d-inline">'+value.subject + ' ' +value.course + '-' + value.section + ' ('+value.crn+')'+
                                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
                                 '<span aria-hidden="true">&times;</span>'+
                                 '</button></h6>'+
