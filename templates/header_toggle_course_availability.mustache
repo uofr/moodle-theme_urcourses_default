@@ -21,7 +21,38 @@
 
 }}
 <div id="theme_urcourses_default_header_toggle_course_availability_{{uniqid}}" class="col-12 alert alert-{{^availability}}warning{{/availability}}{{#availability}}success{{/availability}} d-flex mb-0">
-	<div><div class="mb-2">This course is {{^visibility}}<b>not active</b>{{/visibility}}{{#visibility}}<b>active</b>{{/visibility}} on the student dashboard, {{^visibility}}{{^availability}}and{{/availability}}{{#availability}}but it is{{/availability}}{{/visibility}}{{#visibility}}{{^availability}}but it is {{/availability}}{{#availability}}and{{/availability}}{{/visibility}} {{^availability}}<b>not available</b>{{/availability}}{{#availability}}<b>available</b>{{/availability}} to students.</div><div class="mb-1"><a href="#" id="avail_btn">Make it {{#availability}}un{{/availability}}available <i class="icon fa fa-question-circle text-info fa-fw " title="Help with Course availability" aria-label="Help with Course availability"></i></a></div></div><div class="ml-auto d-flex ">{{{coursetools}}}</div></div>
+	<div>
+        <div class="mb-2">
+            {{#past}}
+                This course has <b>ended</b>,
+                {{^availability}}and{{/availability}}
+                {{#availability}}but it is{{/availability}}
+            {{/past}}
+            {{#current}}
+                 This course is <b>active,</b>
+                  {{^availability}}but it is {{/availability}}
+                  {{#availability}}and{{/availability}}
+            {{/current}}
+            {{#future}}
+                 This course is set for a <b>future</b> date,
+                 {{^availability}}and{{/availability}}
+                 {{#availability}}but it is{{/availability}}
+            {{/future}}
+            {{#ongoing}}
+                 This course is <b>active</b>,
+                  {{^availability}}but it is {{/availability}}
+                  {{#availability}}and{{/availability}}
+            {{/ongoing}}
+
+            {{^availability}}<b>not available</b>{{/availability}}
+            {{#availability}}<b>available</b>{{/availability}} to students.
+        </div>
+        <div class="mb-1"><a href="#" id="avail_btn">Make it {{#availability}}un{{/availability}}available 
+            <i class="icon fa fa-question-circle text-info fa-fw " title="Help with Course availability" aria-label="Help with Course availability"></i></a>
+        </div>
+    </div>
+    <div class="ml-auto d-flex ">{{{coursetools}}}</div>
+</div>
 
 {{#js}}
     require(['theme_urcourses_default/toggle_course_availability'], function(main) {

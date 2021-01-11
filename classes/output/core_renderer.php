@@ -466,18 +466,30 @@ class core_renderer extends \theme_boost\output\core_renderer {
         
         if ($this->page->user_is_editing()||(has_capability('moodle/course:update', context_course::instance($COURSE->id))&&$COURSE->visible==0)||$isedit) {
 
+            $dates = $this->get_course_visibility();
+            $past = $dates[0];
+            $current = $dates[1];
+            $future = $dates[2];
+            $ongoing = $dates[3];
+
             if($this->page->user_is_editing()){
                 $context = [
                     'courseid' => $COURSE->id,
                     'availability' => $COURSE->visible,
-                    'visibility' => $this->get_course_visibility(),
+                    'past' => $past,
+                    'current' => $current,
+                    'future' => $future,
+                    'ongoing' => $ongoing,
                     'coursetools' => $this->get_course_tools()
                 ];
             }else{
                 $context = [
                     'courseid' => $COURSE->id,
                     'availability' => $COURSE->visible,
-                    'visibility' => $this->get_course_visibility(),
+                    'past' => $past,
+                    'current' => $current,
+                    'future' => $future,
+                    'ongoing' => $ongoing,
                     'coursetools' => ""
                 ];
             }
@@ -492,9 +504,31 @@ class core_renderer extends \theme_boost\output\core_renderer {
         global $CFG, $DB, $COURSE, $USER, $PAGE;
 
         // check if date is past, current, active
-		
-		return false;
-    }
+        $pastterm = strtotime("-4 months", time());
+        $ongoingdate = 946706400; //Jan 01, 2000 set date for ongoing courses
+
+        //check if course is starting in the future
+        if(time() < $COURSE->startdate){
+            return array(false,false,"future",false);
+        }
+        //if continuing course date it set
+        if($ongoingdate == $COURSE->startdate){
+            return array(false,false,false,"ongoing");
+        }
+        //if end date is set 
+        if($COURSE->enddate  != 0 && isset($COURSE->enddate) && $COURSE->enddate < time() ){
+            return array("past",false,false,false);
+        }else if(($COURSE->enddate  == 0 || !isset($COURSE->enddate))&& $COURSE->startdate < $pastterm ){
+            //if there is no end date and startdate is greater then four month
+            //place in past year
+            return array("past",false,false,false);
+        }else if($COURSE->enddate > time() && $COURSE->startdate <= $pastterm){
+            return array(false,"current",false,false);
+        }else{
+            return array(false,"current",false,false);
+        }
+    }  	
+
     
     function get_course_tools() {
         global $COURSE;
