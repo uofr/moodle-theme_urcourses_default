@@ -226,7 +226,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         templatelist += '</div>';
 
 
-        inSemester = true;
+        inSemester = false; //change to true if want to block current semester enrollments
         jQuery.each(_semesterdates, function(index, item) {
          
             if(index == _semester){
