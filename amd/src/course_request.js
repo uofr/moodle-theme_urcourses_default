@@ -397,8 +397,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     */
     var _resetStudentAccount = function(e, username) { 
 
-        var modaltitle = 'Unenrol test student account';
-        var modalaction = 'do you want to reset the password for student account '+username+'+urstudent@uregina.ca.';
+        var modaltitle = 'Reset Password for test student account';
+        var modalaction = 'reset the password for student account '+username+'+urstudent@uregina.ca.';
         
         //adding in confirmation modal in case buttons accidentally clicked
         ModalFactory.create({

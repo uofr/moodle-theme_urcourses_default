@@ -472,6 +472,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $future = $dates[2];
             $ongoing = $dates[3];
 
+            if(URCOURSEREQUEST){
+                $enrollment = array("isenrollment"=>theme_urcourses_default_get_course_state($COURSE->id)); 
+            }else{
+                $enrollment = false;
+            }
+
             if($this->page->user_is_editing()){
                 $context = [
                     'courseid' => $COURSE->id,
@@ -480,6 +486,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
                     'current' => $current,
                     'future' => $future,
                     'ongoing' => $ongoing,
+                    'enrollment' => $enrollment,
                     'coursetools' => $this->get_course_tools()
                 ];
             }else{
@@ -490,6 +497,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
                     'current' => $current,
                     'future' => $future,
                     'ongoing' => $ongoing,
+                    'enrollment' => $enrollment,
                     'coursetools' => ""
                 ];
             }
@@ -567,7 +575,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
         global $COURSE, $CFG;
 
         if(URCOURSEREQUEST){
-            //NEED TO ADD ACTIVE TO THIS AND A FUNCTION CALL
             $context = [
                 'availability' => $COURSE->visible,
                 'semesters' => theme_urcourses_default_get_semesters(),

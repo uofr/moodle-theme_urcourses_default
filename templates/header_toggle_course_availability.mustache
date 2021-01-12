@@ -24,23 +24,59 @@
 	<div>
         <div class="mb-2">
             {{#past}}
-                This course has <b>ended</b>,
+                This course was in the <b>past</b>,
+                {{#enrollment}}
+                    {{#isenrollment}}
+                        with <b> active</b> enrolment,
+                    {{/isenrollment}}
+                    {{^isenrollment}}
+                        with <b>no active</b> enrolment,
+                    {{/isenrollment}}
+                {{/enrollment}}
+
                 {{^availability}}and{{/availability}}
-                {{#availability}}but it is{{/availability}}
+                {{#availability}}but is{{/availability}}
             {{/past}}
             {{#current}}
-                 This course is <b>active,</b>
-                  {{^availability}}but it is {{/availability}}
+                 This course is <b>in progress,</b>
+                  {{#enrollment}}
+                    {{#isenrollment}}
+                        with <b> active</b> enrolment,
+                    {{/isenrollment}}
+                    {{^isenrollment}}
+                        with <b>no active</b> enrolment,
+                    {{/isenrollment}}
+                {{/enrollment}}
+
+                  {{^availability}}but is {{/availability}}
                   {{#availability}}and{{/availability}}
             {{/current}}
             {{#future}}
-                 This course is set for a <b>future</b> date,
+                 This course is in the <b>future</b>,
+                {{#enrollment}}
+                    {{#isenrollment}}
+                        with <b> active</b> enrolment,
+                    {{/isenrollment}}
+                    {{^isenrollment}}
+                        with <b>no active</b> enrolment,
+                    {{/isenrollment}}
+                {{/enrollment}}
+
                  {{^availability}}and{{/availability}}
-                 {{#availability}}but it is{{/availability}}
+                 {{#availability}}but is{{/availability}}
             {{/future}}
             {{#ongoing}}
-                 This course is <b>active</b>,
-                  {{^availability}}but it is {{/availability}}
+                This course is <b>in progress</b>,
+                {{#enrollment}}
+                    {{#isenrollment}}
+                        with <b> active</b> enrolment,
+                    {{/isenrollment}}
+                    {{^isenrollment}}
+                        with <b>no active</b> enrolment,
+                    {{/isenrollment}}
+                {{/enrollment}}
+
+                  {{^availability}}but is {{/availability}}
                   {{#availability}}and{{/availability}}
             {{/ongoing}}
 

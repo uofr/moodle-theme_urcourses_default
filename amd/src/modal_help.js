@@ -54,6 +54,7 @@ const SELECTORS = {
 const TEMPLATES = {
     MODAL_HELP_GUIDE_PAGE: 'theme_urcourses_default/modal_help_guide_page',
     MODAL_HELP_SEARCH_RESULTS: 'theme_urcourses_default/modal_help_search_results',
+    MODAL_HELP_LINKS_PAGE: 'theme_urcourses_default/modal_help_links',
     OVERLAY_LOADING: 'core/overlay_loading'
 };
 
@@ -363,6 +364,7 @@ export default class ModalHelp extends Modal {
      * @param {String} target Anchor to scroll to when url is loaded.
      */
     async renderGuidePage(url, target = '') {
+ 
         try {
             await this.setLoading(true);
             const page = await this.getJsonData(url);
@@ -418,7 +420,10 @@ export default class ModalHelp extends Modal {
             if (this.history.length > 0) {
                 back =true;
             }
-
+            
+            if(!$(this.header).find(".modal-help-links").length){
+                await this.renderAppend(TEMPLATES.MODAL_HELP_LINKS_PAGE, {isinstructor:this.userIsInstructor}, $(this.header).find(".modal-help-header"));
+            }
             await this.renderReplace(TEMPLATES.MODAL_HELP_GUIDE_PAGE, {html: html, breadcrumbs: breadcrumbs,isinstructor:this.userIsInstructor,back:back}, this.content);
             this.currentPath = url.substring(0, url.lastIndexOf('/'));
             if (target) {
