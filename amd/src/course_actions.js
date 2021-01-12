@@ -492,14 +492,23 @@ export default class courseActionsLib {
         var promise = ajax.call([ajaxCall]);
         promise[0].done(function(response) {
             self.spinnerCheck("hide");
+            console.log("Back")
             if(response.error!=""){
+                console.log("error")
 
-                title = "ERROR:"
-                info = response.error;
+                var title = "Notice:"
+                if(response.user == ""){
+                    var info = '<p><b>'+response.error +'</b><br></p>';
+                }else{
+                    var info = '<div class="alert alert-warning" role="alert">'
+                            +response.error 
+                            +"<b>"+response.user+".</b>"
+                            +'</div>'
+                }
 
                 ModalFactory.create({
                     title: title,
-                    body: '<p><b>'+info+'</b><br></p>',
+                    body: info,
                 })
                 .done(function(modal) {
                     modal.show();

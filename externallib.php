@@ -1037,15 +1037,16 @@ class theme_urcourses_default_external extends external_api {
             )
         );
 
-        // ensure user has permissions to change image
-        $context = \context_course::instance($params['courseid']);
-        self::validate_context($context);
 
         $admins = get_admins(); 
         $isadmin = false; 
         foreach ($admins as $admin) { 
             if ($USER->id == $admin->id) 
             { $isadmin = true; break; } } 
+
+        // ensure user has permissions to change image
+        $context = \context_course::instance($params['courseid']);
+        self::validate_context($context);
 
         //split dates and get appropriate timestamp
         $start =  explode("-", $params['startdate']);
@@ -1060,15 +1061,15 @@ class theme_urcourses_default_external extends external_api {
         //get course from DB
         $sql = "SELECT * FROM mdl_course as c WHERE c.id ='{$params['courseid']}'";
         $course = $DB->get_record_sql($sql);
-
+        
         $newcourse =  new stdClass();
         //add in new variables, clear id
         $newcourse->id = "";
         $newcourse->startdate =$starttimestamp;
         $newcourse->enddate =$endtimestamp;
 
-        if($course->idnumber = "" || $course->idnumber = 0){
-            $newcourse->idnumber = self:: create_course_idnumber($params['shortname'],$username, 001);
+        if($course->idnumber == ""){
+            $newcourse->idnumber = self:: create_course_idnumber($params['shortname'],$USER->username, 001);
         }else{
             //grab and split id to get last $version number
             $idnumber = $course->idnumber;
@@ -1084,6 +1085,13 @@ class theme_urcourses_default_external extends external_api {
                 $version = $idpieces[3];
             }
 
+            //check for proper ownership before continuing
+            if($USER->username != $name && !$isadmin){
+                $sql = "SELECT * FROM mdl_user as u WHERE u.username ='{$name}'";
+                $owner = $DB->get_record_sql($sql);
+                return array('courseid'=>0, 'url'=>"", 'error'=>"Please request a copy of this course from owner ",'user'=>fullname($owner));
+            }
+            
             //check format, if not ### replace with 001
             $pattern = "/^[0-9]{3}$/";
             if(!preg_match($pattern, $version)){
@@ -1096,6 +1104,7 @@ class theme_urcourses_default_external extends external_api {
                 //increment until id not found
                 $version = $version +1;
             }
+
             $newcourse->idnumber = $subject."_".$name."_".str_pad($version,3,"0",STR_PAD_LEFT);
         }
 
@@ -1105,7 +1114,7 @@ class theme_urcourses_default_external extends external_api {
             'blocks' => 1,
             'filters' => 1,
             'users' => 0,
-            'enrolments' => backup::ENROL_WITHUSERS,
+            //'enrolments' => 0,
             'role_assignments' => 0,
             'comments' => 0,
             'userscompletion' => 0,
@@ -1119,11 +1128,6 @@ class theme_urcourses_default_external extends external_api {
         require_capability('moodle/course:create', $context);
         require_capability('moodle/restore:restorecourse', $context);
         require_capability('moodle/backup:backupcourse', $context);
-
-        if (!empty($backupsettings['users'])) {
-            require_capability('moodle/backup:userinfo', $context);
-            require_capability('moodle/restore:userinfo', $context);
-        }
 
         // Check if the shortname is used.
         if ($foundcourses = $DB->get_records('course', array('shortname'=>$params['shortname']))) {
@@ -1139,7 +1143,7 @@ class theme_urcourses_default_external extends external_api {
         $bc = new backup_controller(backup::TYPE_1COURSE, $course->id, backup::FORMAT_MOODLE,
         backup::INTERACTIVE_NO, backup::MODE_SAMESITE, $USER->id);
 
-        foreach ($backupsettings as $name => $value) {
+        foreach ($backupdefaults as $name => $value) {
             if ($setting = $bc->get_plan()->get_setting($name)) {
                 $bc->get_plan()->get_setting($name)->set_value($value);
             }
@@ -1223,12 +1227,6 @@ class theme_urcourses_default_external extends external_api {
 
         //check if instructor is enrolled in the template
         $newcontext = \context_course::instance($newcourse->id);
-
-        $admins = get_admins(); 
-        $isadmin = false; 
-        foreach ($admins as $admin) { 
-            if ($USER->id == $admin->id) 
-            { $isadmin = true; break; } } 
         
         $ogisenrolled =true; 
         if(!$isadmin){
@@ -1238,7 +1236,7 @@ class theme_urcourses_default_external extends external_api {
                 $isenrolled = self:: enroll_user($params['courseid'], $newcourse->id,$USER->id);
                 if(!$isenrolled)
                 {
-                    return array('courseid'=>0, 'url'=>"","error"=>"Was unable to enroll user in course");
+                    return array('courseid'=>0, 'url'=>"","error"=>"Was unable to enroll user in course",'user'=>"");
                 }
             }
         }
@@ -1246,7 +1244,7 @@ class theme_urcourses_default_external extends external_api {
          //return new course id & url
          $url = $CFG->wwwroot.'/course/view.php?id=' . $newcourse->id;
  
-         return array('courseid'=>$newcourse->id, 'url'=>$url, 'error'=>"");
+         return array('courseid'=>$newcourse->id, 'url'=>$url, 'error'=>"",'user'=>"");
     }
       /**
      * Returns description of duplicate_course return value.
@@ -1258,6 +1256,7 @@ class theme_urcourses_default_external extends external_api {
             'courseid' => new external_value(PARAM_INT),
             'url' => new external_value(PARAM_TEXT),
             'error' => new external_value(PARAM_TEXT),
+            'user' => new external_value(PARAM_TEXT),
         ));
     }
     /**
