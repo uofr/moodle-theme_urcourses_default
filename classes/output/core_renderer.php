@@ -478,7 +478,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 $enrollment = false;
             }
 
-            if($this->page->user_is_editing()){
+            if($this->page->user_is_editing() && !$isnursing){
                 $context = [
                     'courseid' => $COURSE->id,
                     'availability' => $COURSE->visible,
@@ -536,23 +536,31 @@ class core_renderer extends \theme_boost\output\core_renderer {
             return array(false,"current",false,false);
         }
     }  	
-
     
     function get_course_tools() {
-        global $COURSE;
+        global $USER,$COURSE, $DB,$CFG;
+
+        $sql = "SELECT a.name FROM {$CFG->prefix}course_categories a, {$CFG->prefix}course b WHERE a.id = b.category AND b.id = {$COURSE->id}";
+        $checkcategory = $DB->get_record_sql($sql);
+
+        $nursing = array("nursing","cnpp","cns","special sites","scbscn");
+        $isnursing = in_array(strtolower($checkcategory->name), $nursing);
+
         $context = [
             'courseid' => $COURSE->id,
             'availability' => $COURSE->visible,
-            'enrolment_state' => $this->get_course_enrolment(),
-            'course_state' => $this->get_course_request(),
+            'enrolment_state' => $this->get_course_enrolment($isnursing),
+            'course_state' => $this->get_course_request($isnursing),
         ];
         return $this->render_from_template('theme_urcourses_default/header_course_tools', $context);
     }
     
-    function get_course_request() {
+    function get_course_request($isnursing) {
         global $USER,$COURSE;
+
         $context = [
             'availability' => $COURSE->visible,
+            'isnursing' => $isnursing,
             'username'=> $USER->username,
             'studentaccount'=> theme_urcourses_default_check_test_account($USER->username),
             'studentenrolled'=> theme_urcourses_default_test_account_enrollment($USER->username, $COURSE->id),
@@ -571,10 +579,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $this->render_from_template('theme_urcourses_default/header_course_request', $context);
     }
     
-    function get_course_enrolment() {
+    function get_course_enrolment($isnursing) {
         global $COURSE, $CFG;
 
-        if(URCOURSEREQUEST){
+        if(URCOURSEREQUEST && !$isnursing){
             $context = [
                 'availability' => $COURSE->visible,
                 'semesters' => theme_urcourses_default_get_semesters(),

@@ -29,10 +29,12 @@
     <div class="dropdown-menu dropdown-menu-right">
       <button class="dropdown-item ml-1" id="btn_editdescription" type="button"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Course Description</button>
       <div class="dropdown-divider"></div>
-      <button class="dropdown-item ml-1" id="btn_duplicate" type="button"><i class="fa fa-files-o" aria-hidden="true"></i> Duplicate this course</button>
-      <div class="dropdown-divider"></div>
-      <button class="dropdown-item ml-1" id="btn_new" type="button"><i class="fa fa-plus" aria-hidden="true"></i> Create blank course</button>
-      <div class="dropdown-divider"></div>
+       {{^isnursing}}
+        <button class="dropdown-item ml-1" id="btn_duplicate" type="button"><i class="fa fa-files-o" aria-hidden="true"></i> Duplicate this course</button>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-item ml-1" id="btn_new" type="button"><i class="fa fa-plus" aria-hidden="true"></i> Create blank course</button>
+        <div class="dropdown-divider"></div>
+      {{/isnursing}}
       <button class="dropdown-item ml-1" id="btn_student_account" type="button" data-value={{studentaccount}} data-username = "{{username}}" ><i class="fa fa-user"  aria-hidden="true"></i> 
           {{#studentaccount}} Modify test student {{/studentaccount}}
           {{^studentaccount}} Create test student {{/studentaccount}}
