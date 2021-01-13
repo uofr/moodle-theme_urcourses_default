@@ -1123,7 +1123,8 @@ class theme_urcourses_default_external extends external_api {
         );
 
         $backupsettings = array();
-   
+        $adminuser = get_admin();
+
         // The backup controller check for this currently, this may be redundant.
         require_capability('moodle/course:create', $context);
         require_capability('moodle/restore:restorecourse', $context);
@@ -1141,7 +1142,7 @@ class theme_urcourses_default_external extends external_api {
 
         // Backup the course.
         $bc = new backup_controller(backup::TYPE_1COURSE, $course->id, backup::FORMAT_MOODLE,
-        backup::INTERACTIVE_NO, backup::MODE_SAMESITE, $USER->id);
+        backup::INTERACTIVE_NO, backup::MODE_SAMESITE, $adminuser->id);
 
         foreach ($backupdefaults as $name => $value) {
             if ($setting = $bc->get_plan()->get_setting($name)) {
@@ -1165,7 +1166,7 @@ class theme_urcourses_default_external extends external_api {
             $file->extract_to_pathname(get_file_packer('application/vnd.moodle.backup'), $backupbasepath);
         }
 
-        $adminuser = get_admin();
+       
         // Create new course.
         $newcourseid = restore_dbops::create_new_course($params['coursename'], $params['shortname'], $params['categoryid']);
 

@@ -573,7 +573,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
                                 "startdate"=>usergetdate($COURSE->startdate),
                                 "enddate"=>usergetdate($COURSE->enddate),
             )),
-
         ];
       
         return $this->render_from_template('theme_urcourses_default/header_course_request', $context);
