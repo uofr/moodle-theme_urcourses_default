@@ -1594,12 +1594,12 @@ class theme_urcourses_default_external extends external_api {
                     $courseinfo = block_urcourserequest_crn_info($params['semester'], $teachers[$i]->username);
 
                     if(!empty($courseinfo)){
-                        $activated= block_urcourserequest_activated_courses_id($params['courseid']);
+                        $activated= block_urcourserequest_activated_courses_id($params['courseid'], $params['semester']);
                         break 1;
                     }
                 }
             }
-            $activated= block_urcourserequest_activated_courses_id($params['courseid']);
+            $activated= block_urcourserequest_activated_courses_id($params['courseid'],$params['semester']);
             
             $isavailable = true;
 
@@ -1614,7 +1614,7 @@ class theme_urcourses_default_external extends external_api {
             }
         }else{
             $courseinfo = block_urcourserequest_crn_info($params['semester'], $USER->username);
-            $activated= block_urcourserequest_activated_courses_id($params['courseid']);
+            $activated= block_urcourserequest_activated_courses_id($params['courseid'],$params['semester']);
             $isavailable = true;
 
             if ($courseinfo) {
@@ -1627,7 +1627,7 @@ class theme_urcourses_default_external extends external_api {
                 }
             }
         }
-        return array("courseinfo"=>$courseinfo, "activated"=>$activated, "semester"=>block_urcourserequest_semester_string($semester),"isavaliable"=>$isavailable);
+        return array("courseinfo"=>$courseinfo, "activated"=>$activated, "semester"=>block_urcourserequest_semester_string($params['semester']),"isavaliable"=>$isavailable);
     }
     /**
      * Returns description of enrollment_info return value.

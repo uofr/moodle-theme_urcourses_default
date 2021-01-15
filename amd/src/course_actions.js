@@ -492,9 +492,7 @@ export default class courseActionsLib {
         var promise = ajax.call([ajaxCall]);
         promise[0].done(function(response) {
             self.spinnerCheck("hide");
-            console.log("Back")
             if(response.error!=""){
-                console.log("error")
 
                 var title = "Notice:"
                 if(response.user == ""){

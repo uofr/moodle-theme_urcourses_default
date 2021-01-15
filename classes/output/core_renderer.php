@@ -478,7 +478,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 $enrollment = false;
             }
 
-            if($this->page->user_is_editing() && !$isnursing){
+            if($this->page->user_is_editing()){
                 $context = [
                     'courseid' => $COURSE->id,
                     'availability' => $COURSE->visible,
