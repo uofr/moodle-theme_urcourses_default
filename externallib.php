@@ -663,12 +663,22 @@ class theme_urcourses_default_external extends external_api {
                 $sql = "SELECT * FROM mdl_enrol WHERE courseid =".$params['courseid']." AND enrol = 'manual';";
                 $enroll = $DB->get_record_sql($sql, null, MUST_EXIST);
 
+                if(!$enroll){
+                    $enrolid = $DB->insert_record('enrol', (object)array(
+                        'enrol' => 'manual',
+                        'courseid' => $params['courseid'],
+                        'roleid' => 5
+                    ));
+                }else{
+                    $enrolid = $enroll->id;
+                }
+
                 $sql = "SELECT * FROM mdl_role WHERE shortname = 'student';";
                 $role = $DB->get_record_sql($sql, null, MUST_EXIST);
                 //enroll user in course as student
                 $dataobject = array(
                     "status"=>0,
-                    "enrolid"=>$enroll->id,
+                    "enrolid"=>$enrolid,
                     "userid"=>$user->id,
                     "timestart"=>time(),
                     "timeend"=>0,
@@ -701,6 +711,7 @@ class theme_urcourses_default_external extends external_api {
             $user->email = $email;
             $user->username= $user->username."-urstudent";
             $user->lastname= $user->lastname." (urstudent)";
+            $user->auth= "manual";
         
             //call external create user function
             $userid = user_create_user($user, false, true);
@@ -717,13 +728,23 @@ class theme_urcourses_default_external extends external_api {
                 $sql = "SELECT * FROM mdl_enrol WHERE courseid =".$params['courseid']." AND enrol = 'manual';";
                 $enroll = $DB->get_record_sql($sql, null, MUST_EXIST);
 
+                if(!$enroll){
+                    $enrolid = $DB->insert_record('enrol', (object)array(
+                        'enrol' => 'manual',
+                        'courseid' => $params['courseid'],
+                        'roleid' => 5
+                    ));
+                }else{
+                    $enrolid = $enroll->id;
+                }
+
                 $sql = "SELECT * FROM mdl_role WHERE shortname = 'student';";
                 $role = $DB->get_record_sql($sql, null, MUST_EXIST);
 
                 //enroll user in course as student
                 $dataobject = array(
                     "status"=>0,
-                    "enrolid"=>$enroll->id,
+                    "enrolid"=>$enrolid,
                     "userid"=>$userid,
                     "timestart"=>time(),
                     "timeend"=>0,
@@ -1604,7 +1625,7 @@ class theme_urcourses_default_external extends external_api {
             $courseinfo = block_urcourserequest_crn_info($params['semester'], $USER->username);
             $activated= block_urcourserequest_activated_courses_id($params['courseid'],$params['semester']);
         }
-        
+
         $isavailable = true;
         if ($courseinfo) {
             //check if course is already activated in a different semester
