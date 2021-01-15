@@ -35,6 +35,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     var _course;
     var _element;
     var _semester;
+    var _currentsem;
     var _semesterdates;
     var _categories;
     var _templatelist;
@@ -73,10 +74,11 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      * @param {int} courseid - ID of current course.
      * @return void
      */
-    var _setGlobals = function(root, course,semesterdates,categories,templatelist,homeurl) {
+    var _setGlobals = function(root, course,semesterdates,categories,templatelist,homeurl, currentsem) {
        _root = $(root);
        _course = course;
        _semesterdates = semesterdates;
+       _currentsem = currentsem;
        _categories = categories;
        _templatelist = templatelist;
        _homeurl = homeurl;
@@ -227,7 +229,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
 
 
         inSemester = false; //change to true if want to block current semester enrollments
-        jQuery.each(_semesterdates, function(index, item) {
+       /* jQuery.each(_semesterdates, function(index, item) {
          
             if(index == _semester){
             
@@ -239,9 +241,15 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                     inSemester=false;
                 } 
             }
-        });
 
-        if(inSemester){
+
+        });*/
+        pastSemester = false;
+        if(_semester < _currentsem){
+            pastSemester = true;
+        }
+
+        if(/*inSemester*/ pastSemester){
 
             // create modal with current selection as header
             var modaltitle = 'Modify enrolment'; 
@@ -667,13 +675,44 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         });  
     };
 
+        /**
+     * Use passed course dates to find out current
+     * semester
+     */
+    var _semesterDateObject = function(item) {
+
+        temp = item.split("-");
+        return new Date(temp[2]+"-"+temp[1]+"-"+temp[0]);
+    }
+
+    /**
+     * Use passed course dates to find out current
+     * semester
+     */
+    var _getCurrentSem = function(semesterdates) {
+
+        var current = new Date();
+        var cterm = "";
+        jQuery.each(semesterdates, function(index, item) {
+
+            start =_semesterDateObject(item.startdate);
+            end =_semesterDateObject(item.enddate);
+
+            if(current >= start && current <= end){
+                cterm = index;
+                return index;
+            }
+        });
+        return cterm;
+    }
     /**
      * Entry point to module. Sets globals and registers event listeners.
      * @param {String} root Jquery selector for container.
      * @return void
      */
     var init = function(root, course, semesterdates,categories, templatelist, homeurl) {
-        _setGlobals(root, course, semesterdates,categories,templatelist, homeurl);
+        var currentsem = _getCurrentSem(semesterdates);
+        _setGlobals(root, course, semesterdates,categories,templatelist, homeurl,currentsem);
         _registerEventListeners();
     };
 

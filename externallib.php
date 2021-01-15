@@ -1600,33 +1600,26 @@ class theme_urcourses_default_external extends external_api {
                 }
             }
             $activated= block_urcourserequest_activated_courses_id($params['courseid'],$params['semester']);
-            
-            $isavailable = true;
-
-            if ($courseinfo) {
-               //check if course is already activated in a different semester
-                $activecourse = "select * from ur_crn_map where courseid='$course->idnumber'";
-                $active = $DB->get_record_sql($activecourse);
-    
-                if (!empty($active) && $active->semester != $semester) {
-                    $isavailable = false;
-                }
-            }
         }else{
             $courseinfo = block_urcourserequest_crn_info($params['semester'], $USER->username);
             $activated= block_urcourserequest_activated_courses_id($params['courseid'],$params['semester']);
-            $isavailable = true;
-
-            if ($courseinfo) {
-               //check if course is already activated in a different semester
-                $activecourse = "select * from ur_crn_map where  courseid='$course->idnumber'";
-                $active = $DB->get_record_sql($activecourse);
-    
-                if (!empty($active) && $active->semester != $semester) {
-                    $isavailable = false;
-                }
-            }
         }
+        
+        $isavailable = true;
+        if ($courseinfo) {
+            //check if course is already activated in a different semester
+             $activecourse = "select * from ur_crn_map where courseid='$course->idnumber'";
+             $active = $DB->get_records_sql($activecourse);
+
+             if(!empty($active)){
+                 $isavailable=false;
+                 foreach($active as $c){
+                     if ( $c->semester == $semester) {
+                         $isavailable = true;
+                     }
+                 }
+             }
+         }
         return array("courseinfo"=>$courseinfo, "activated"=>$activated, "semester"=>block_urcourserequest_semester_string($params['semester']),"isavaliable"=>$isavailable);
     }
     /**
