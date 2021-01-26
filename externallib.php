@@ -719,7 +719,46 @@ class theme_urcourses_default_external extends external_api {
             $user = $DB->get_record_sql($sql);
 
             //reset password and email out to new user
-            reset_password_and_mail($user);
+            //reset_password_and_mail($user);
+
+            $site  = get_site();
+            $supportuser = core_user::get_support_user();
+        
+            $userauth = get_auth_plugin($user->auth);
+            if (!$userauth->can_reset_password() or !is_enabled_auth($user->auth)) {
+                trigger_error("Attempt to reset user password for user $user->username with Auth $user->auth.");
+                $return=array("userid"=>$userid,"username"=>$user->username,"enrolled"=>false,"created"=>false );
+            }
+        
+            $newpassword = generate_password();
+        
+            if (!$userauth->user_update_password($user, $newpassword)) {
+                print_error("cannotsetpassword");
+            }
+        
+            $a = new stdClass();
+            $a->firstname   = $user->firstname;
+            $a->lastname    = $user->lastname;
+            $a->sitename    = format_string($site->fullname);
+            $a->username    = $user->username;
+            $a->newpassword = $newpassword;
+            $a->link        = $CFG->wwwroot .'/login';
+            $a->signoff     = generate_email_signoff();
+        
+            $message = get_string('newtestaccount', 'theme_urcourses_default', $a);
+        
+            $subject  = format_string($site->fullname) .': '. get_string('newtestuser','theme_urcourses_default');
+        
+            unset_user_preference('create_password', $user); // Prevent cron from generating the password.
+        
+            // Directly email rather than using the messaging system to ensure its not routed to a popup or jabber.
+            $issent = email_to_user($user, $supportuser, $subject, $message);
+            if(!$issent){
+                trigger_error("Could not send email to $user->username");
+            }
+
+             //forced password change
+			set_user_preference('auth_forcepasswordchange', 1, $user);
 
             if($checked){
                 //enroll user in course
