@@ -23,7 +23,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace theme_urcourses_default\output\core;
+namespace theme_urcourses_default\output;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -41,7 +41,7 @@ require_once($CFG->dirroot . '/course/renderer.php');
  * @package theme_urcourses_default
  * @category output
  */
-class course_renderer extends \theme_boost\output\core\course_renderer {
+class course_renderer extends \theme_boost\output\course_renderer {
 
     /**
      * Displays one course in the list of courses.
