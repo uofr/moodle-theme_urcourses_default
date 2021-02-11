@@ -137,6 +137,18 @@ export default class courseActionsLib {
                  $(SELECTORS.SHORTNAME).val(self._shortname+" (Copy)");
             }
 
+            //if new course
+            if(_element.attr('id') == button){
+                var d = new Date();
+                selectstart.year = d.getFullYear();
+                selectstart.mon = d.getMonth()+1;
+                selectstart.mday = d.getDate();
+                selectend.year= d.getFullYear()+1;
+                selectend.mon= d.getMonth()+1;
+                selectend.mday= d.getDate();
+               
+            }
+
             self.populateDateSelects(selectstart,selectend);
 
             //change category to that of course  

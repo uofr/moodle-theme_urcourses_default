@@ -1414,7 +1414,7 @@ class theme_urcourses_default_external extends external_api {
             $course->maxbytes =0;
             $course->legacyfiles =0;
             $course->showreports =0;
-            $course->visible =1;
+            $course->visible =0;
             $course->visibleold =1;
             $course->groupmode =0;
             $course->groupmodeforce =0;
@@ -1426,6 +1426,48 @@ class theme_urcourses_default_external extends external_api {
             $course->completionnotify =0;
         
             $newcourse = create_course($course);
+
+             //add course email to new course'
+             $mail = array(
+                "course"=>$newcourse->id,
+                "name"=>"Course Email",
+                "intro"=>"",
+                "introformat"=>1,
+                "timecreated" =>time());
+
+            $instance = $DB->insert_record("mail", $mail);
+            $module = $DB->get_record("modules", array("name"=>"mail"), $fields='*', $strictness=MUST_EXIST);
+            $section =$DB->get_record("course_sections", array("course"=>$newcourse->id), $fields='*', $strictness=MUST_EXIST);
+
+            $coursemod = array(
+                'course'=>$newcourse->id,
+                'module'=>$module->id,
+                'instance'=>$instance,
+                'section'=> $section->id,
+                'added'=>time() ,
+                'score'=>0,
+                'indent'=>0,
+                'visible'=>1,
+                'visibleoncoursepage'=>1,
+                'visibleold'=>1,
+                'groupmode'=>0,
+                'groupingid'=>0,
+                'completion'=>0,
+                'completionview'=>0,
+                'completionexpected'=>0,
+                'showdescription'=>0,
+                'deletioninprogress'=>0
+            );
+
+            
+            $cmid = $DB->insert_record("course_modules", $coursemod);
+
+            //now update section
+            $section = $DB->get_record('course_sections',
+                array('course' => $newcourse->id, 'section' => 0), '*', MUST_EXIST);
+    
+            $newsequence = "$section->sequence,$cmid";
+            $DB->set_field("course_sections", "sequence", $newsequence, array("id" => $section->id));
 
              //ENROLL CURRENT INSTRUCTOR INTO COURSE
              if(!$isadmin){
@@ -1473,6 +1515,7 @@ class theme_urcourses_default_external extends external_api {
             $course->startdate =$starttimestamp;
             $course->enddate =$endtimestamp;
             $course->summary="";
+            $course->visible =0;
             $course->idnumber = self:: create_course_idnumber($params['shortname'],$username, 001);
             //send to external function
             $newcourse = create_course($course);
