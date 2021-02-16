@@ -33,6 +33,4 @@ if (!html_is_blank($footnotesetting)) {
     $footnotesetting = format_text($footnotesetting);
 
     $templatecontext['footnotesetting'] = $footnotesetting;
-
-    echo $OUTPUT->render_from_template('theme_urcourses_default/footnote', $templatecontext);
 }

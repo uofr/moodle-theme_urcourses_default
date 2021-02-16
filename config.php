@@ -24,6 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+
+require_once($CFG->dirroot.'/theme/urcourses_default/locallib.php');
+
 $THEME->name = 'urcourses_default';
 $THEME->parents = ['boost'];
 

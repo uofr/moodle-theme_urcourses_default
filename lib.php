@@ -32,6 +32,8 @@ if (is_file($CFG->dirroot.'/blocks/urcourserequest/lib.php')){
     define('URCOURSEREQUEST', FALSE);  
 }
 
+require_once($CFG->dirroot.'/theme/urcourses_default/locallib.php');
+
 /**
  * Get compiled css.
  *
@@ -121,7 +123,10 @@ function theme_urcourses_default_get_pre_scss($theme) {
         'footerhideusertourslink' => ['footerhideusertourslink'],
         'navdrawerfullwidth' => ['navdrawerfullwidth'],
         'helptextmodal' => ['helptextmodal'],
-        'breakpoint' => ['breakpoint']
+        'breakpoint' => ['breakpoint'],
+        'blockcolumnwidth' => ['blockcolumnwidth'],
+        'blockcolumnwidthdashboard' => ['blockcolumnwidthdashboard'],
+        'addablockposition' => ['addablockposition']
         // MODIFICATION END.
     ];
 
@@ -135,6 +140,27 @@ function theme_urcourses_default_get_pre_scss($theme) {
             $scss .= '$' . $target . ': ' . $value . ";\n";
         }, (array) $targets);
     }
+
+    // MODIFICATION START: Overwrite Boost core SCSS variables which need units and thus couldn't be added to $configurable above.
+    // Set variables which are processed in the context of the blockcolumnwidth setting.
+    if (isset($theme->settings->blockcolumnwidth)) {
+        $scss .= '$blocks-column-width: ' . $theme->settings->blockcolumnwidth . "px;\n";
+        $scss .= '$grid-gutter-width: ' . "30px;\n";
+    }
+    // MODIFICATION END.
+
+    // MODIFICATION START: Set own SCSS variables which need units or calculations and thus couldn't be
+    // added to $configurable above.
+    // Set variables which are processed in the context of the blockcolumnwidth setting.
+    if (isset($theme->settings->blockcolumnwidthdashboard)) {
+        $scss .= '$blocks-column-width-dashboard: ' . $theme->settings->blockcolumnwidthdashboard . "px;\n";
+        $scss .= '$blocks-plus-gutter-dashboard: $blocks-column-width-dashboard + ( $grid-gutter-width / 2 )' . ";\n";
+    }
+    // MODIFICATION END.
+
+    // MODIFICATION START: Add login background images that are uploaded to the setting 'loginbackgroundimage' to CSS.
+    $scss .= theme_boost_campus_get_loginbackgroundimage_scss();
+    // MODIFICATION END.
 
     // Prepend pre-scss.
     if (!empty($theme->settings->scsspre)) {
@@ -168,10 +194,14 @@ function theme_urcourses_default_pluginfile($course, $cm, $context, $filearea, $
             return $theme->setting_file_serve('favicon', $args, $forcedownload, $options);
         } else if (s($filearea === 'logo' || $filearea === 'backgroundimage')) {
             return $theme->setting_file_serve($filearea, $args, $forcedownload, $options);
+        } else if ($filearea === 'loginbackgroundimage') {
+            return $theme->setting_file_serve('loginbackgroundimage', $args, $forcedownload, $options);
         } else if ($filearea === 'fontfiles') {
             return $theme->setting_file_serve('fontfiles', $args, $forcedownload, $options);
         } else if ($filearea === 'imageareaitems') {
             return $theme->setting_file_serve('imageareaitems', $args, $forcedownload, $options);
+        } else if ($filearea === 'additionalresources') {
+            return $theme->setting_file_serve('additionalresources', $args, $forcedownload, $options);
         } else {
             send_file_not_found();
         }
@@ -188,9 +218,6 @@ function theme_urcourses_default_reset_app_cache() {
     $themeboostcampuscache = cache::make('theme_urcourses_default', 'imagearea');
     // Delete the cache for the imagearea.
     $themeboostcampuscache->delete('imageareadata');
-    // To be safe and because there can only be one callback function added to a plugin setting,
-    // we also delete the complete theme cache here.
-    theme_reset_all_caches();
 }
 
 /**

@@ -24,6 +24,144 @@
  use \core_course\external\course_summary_exporter;
  defined('MOODLE_INTERNAL') || die();
  
+    /**
+     * Return the files from the loginbackgroundimage file area.
+     * This function always loads the files from the filearea that is not really performant.
+     * However, we accept this at the moment as it is only invoked on the login page.
+     *
+     * @return array|null
+     * @throws coding_exception
+     * @throws dml_exception
+     */
+    function theme_urcourses_default_get_loginbackgroundimage_files() {
+        
+        // Static variable to remember the files for subsequent calls of this function.
+        static $files = null;
+        
+        if ($files == null) {
+            // Get the system context.
+            $systemcontext = \context_system::instance();
+            
+            // Get filearea.
+            $fs = get_file_storage();
+            
+            // Get all files from filearea.
+            $files = $fs->get_area_files($systemcontext->id, 'theme_urcourses_default', 'loginbackgroundimage',
+                                         false, 'itemid', false);
+        }
+        
+        return $files;
+    }
+    
+    /**
+     * Get the random number for displaying the background image on the login page randomly.
+     *
+     * @return int|null
+     * @throws coding_exception
+     * @throws dml_exception
+     */
+    function theme_urcourses_default_get_random_loginbackgroundimage_number() {
+        
+        // Static variable.
+        static $number = null;
+        
+        if ($number == null) {
+            // Get all files for loginbackgroundimages.
+            $files = theme_urcourses_default_get_loginbackgroundimage_files();
+            
+            // Get count of array elements.
+            $filecount = count($files);
+            
+            // We only return a number if images are uploaded to the loginbackgroundimage file area.
+            if ($filecount > 0) {
+                // Generate random number.
+                $number = rand(1, $filecount);
+            }
+        }
+        
+        return $number;
+    }
+    
+    /**
+     * Get a random class for body tag for the background image of the login page.
+     *
+     * @return string
+     */
+    function theme_urcourses_default_get_random_loginbackgroundimage_class() {
+        // Get the static random number.
+        $number = theme_urcourses_default_get_random_loginbackgroundimage_number();
+        
+        // Only create the class name with the random number if there is a number (=files uploaded to the file area).
+        if ($number != null) {
+            return "loginbackgroundimage" . $number;
+        } else {
+            return "";
+        }
+    }
+    
+    /**
+     * Get the text that should be displayed for the randomly displayed background image on the login page.
+     *
+     * @return string
+     * @throws coding_exception
+     * @throws dml_exception
+     */
+    function theme_urcourses_default_get_loginbackgroundimage_text() {
+        // Get the random number.
+        $number = theme_urcourses_default_get_random_loginbackgroundimage_number();
+        
+        // Only search for the text if there's a background image.
+        if ($number != null) {
+            
+            // Get the files from the filearea loginbackgroundimage.
+            $files = theme_urcourses_default_get_loginbackgroundimage_files();
+            // Get the file for the selected random number.
+            $file = array_slice($files, ($number - 1), 1, false);
+            // Get the filename.
+            $filename = array_pop($file)->get_filename();
+            
+            // Get the config for loginbackgroundimagetext and make array out of the lines.
+            $lines = explode("\n", get_config('theme_urcourses_default', 'loginbackgroundimagetext'));
+            
+            // Proceed the lines.
+            foreach ($lines as $line) {
+                $settings = explode("|", $line);
+                // Compare the filenames for a match and return the text that belongs to the randomly selected image.
+                if (strcmp($filename, $settings[0]) == 0) {
+                    return format_string($settings[1]);
+                    break;
+                }
+            }
+        } else {
+            return "";
+        }
+    }
+    
+    /**
+     * Add background images from setting 'loginbackgroundimage' to SCSS.
+     *
+     * @return string
+     */
+    function theme_urcourses_default_get_loginbackgroundimage_scss() {
+        $count = 0;
+        $scss = "";
+        
+        // Get all files from filearea.
+        $files = theme_urcourses_default_get_loginbackgroundimage_files();
+        
+        // Add URL of uploaded images to eviqualent class.
+        foreach ($files as $file) {
+            $count++;
+            // Get url from file.
+            $url = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(),
+                                                   $file->get_itemid(), $file->get_filepath(), $file->get_filename());
+            // Add this url to the body class loginbackgroundimage[n] as a background image.
+            $scss .= '$loginbackgroundimage' . $count.': "' . $url . '";';
+        }
+        
+        return $scss;
+    }
+
 /**
  * Create information needed for the imagearea.mustache file.
  *
@@ -57,48 +195,71 @@ function theme_urcourses_default_get_imageareacontent() {
                     // Create an array with a dummy entry because the function array_key_exists need a
                     // not empty array for parameter 2.
                     $links = array('foo');
+                    $alttexts = array('bar');
                     continue;
                 } else {
                     $settings = explode("|", $line);
-                    // Check if both parameters are set.
-                    if (!empty($settings[1])) {
-                        // The name of the image is the key for the URL that will be set.
-                        $links[$settings[0]] = $settings[1];
+                    // Check if parameter 2 or 3 is set.
+                    if (!empty($settings[1]) || !empty($settings[2])) {
+                        foreach ($settings as $i => $setting) {
+                            $setting = trim($setting);
+                            if (!empty($setting)) {
+                                switch ($i) {
+                                    // Check for the first param: link.
+                                    case 1:
+                                        // The name of the image is the key for the URL that will be set.
+                                        $links[$settings[0]] = $settings[1];
+                                        break;
+                                    // Check for the second param: alt text.
+                                    case 2:
+                                        // The name of the image is the key for the alt text that will be set.
+                                        $alttexts[$settings[0]] = $settings[2];
+                                        break;
+                                }
+                            }
+                        }
                     }
                 }
             }
+            // Initialize the array which holds the data which is later stored in the cache.
+            $imageareacache = [];
             // Traverse the files.
             foreach ($files as $file) {
                 // Get the Moodle url for each file.
                 $url = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(),
-                    $file->get_itemid(), $file->get_filepath(), $file->get_filename());
+                        $file->get_itemid(), $file->get_filepath(), $file->get_filename());
                 // Get the path to the file.
                 $filepath = $url->get_path();
                 // Get the filename.
                 $filename = $file->get_filename();
-                // If filename and key value from the imageareaitemslink setting entry match.
+                // If filename and link value from the imageareaitemsattributes setting entry match.
                 if (array_key_exists($filename, $links)) {
-                    // Set the file and the corresponding link.
-                    $imageareacache[] = array('filepath' => $filepath, 'linkpath' => $links[$filename]);
-                    // Fill the cache.
-                    $themeboostcampuscache->set('imageareadata', $imageareacache);
-                } else { // Just add the file without a link.
-                    $imageareacache[] = array('filepath' => $filepath);
-                    // Fill the cache.
-                    $themeboostcampuscache->set('imageareadata', $imageareacache);
+                    $linkpath = $links[$filename];
+                } else {
+                    $linkpath = "";
                 }
+                // If filename and alt text value from the imageareaitemsattributes setting entry match.
+                if (array_key_exists($filename, $alttexts)) {
+                    $alttext = $alttexts[$filename];
+                } else {
+                    $alttext = "";
+                }
+                // Add the file.
+                $imageareacache[] = array('filepath' => $filepath, 'linkpath' => $linkpath, 'alttext' => $alttext);
             }
             // Sort array alphabetically ascending to the key "filepath".
             usort($imageareacache, function($a, $b) {
                 return strcmp($a["filepath"], $b["filepath"]);
             });
+            // Fill the cache.
+            $themeboostcampuscache->set('imageareadata', $imageareacache);
             return $imageareacache;
         } else { // If no images are uploaded, then cache an empty array.
-            return $themeboostcampuscache->set('imageareadata', array());
+            $themeboostcampuscache->set('imageareadata', array());
+            return array();
         }
     }
 }
-
 
 /**
  * Returns a modified flat_navigation object.
@@ -168,9 +329,11 @@ function theme_urcourses_default_set_node_on_top(flat_navigation $flatnav, $node
         // Set the showdivider of the new top node to false that no empty nav-element will be created.
         $pageflatnav->set_showdivider(false);
         // Add the showdivider to the coursehome node as this is the next one and this will add a margin top to it.
-        $beforenode->set_showdivider(true);
+        $beforenode->set_showdivider(true, $beforenode->text);
         // Remove the site home navigation node that it does not appear twice in the menu.
         $flatnav->remove($nodename);
+        // Set the collection label for this node.
+        $flatnav->set_collectionlabel($pageflatnav->text);
         // Add the saved site home node before the $beforenode.
         $flatnav->add($pageflatnav, $beforenode->key);
     }
@@ -287,8 +450,6 @@ function theme_urcourses_default_get_course_guest_access_hint($courseid) {
 
     return $html;
 }
-
-
 
 /**
  * Return the UR Category class for a given course id.

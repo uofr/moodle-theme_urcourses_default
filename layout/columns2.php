@@ -145,11 +145,12 @@ $templatecontext = [
     // MODIFICATION END.
 ];
 
+$nav = $PAGE->flatnav;
 // MODIDFICATION START.
 // Use the returned value from theme_urcourses_default_get_modified_flatnav_defaulthomepageontop as the template context.
 $templatecontext['flatnavigation'] = theme_urcourses_default_process_flatnav($PAGE->flatnav);
 // If setting showsettingsincourse is enabled.
-if (get_config('theme_urcourses_default', 'showsettingsincourse') == 'yes') {
+if (get_config('theme_urcourses_default', 'showsettingsincourse') == 'yes' && $PAGE->bodyid != 'page-contentbank') {
     // Context value for requiring incoursesettings.js.
     $templatecontext['incoursesettings'] = true;
     // Add the returned value from theme_urcourses_default_get_incourse_settings to the template context.
@@ -157,39 +158,23 @@ if (get_config('theme_urcourses_default', 'showsettingsincourse') == 'yes') {
     // Add the returned value from theme_urcourses_default_get_incourse_activity_settings to the template context.
     $templatecontext['activitynode'] = theme_urcourses_default_get_incourse_activity_settings();
 }
+// MODIFICATION END.
+/* ORIGINAL START.
+$templatecontext['flatnavigation'] = $nav;
+ORIGINAL END. */
 
-// MODIFICATION START: Handle additional layout elements.
-// The output buffer is needed to render the additional layout elements now without outputting them to the page directly.
-ob_start();
+$templatecontext['firstcollectionlabel'] = $nav->get_collectionlabel();
 
-// Require additional layout files.
-// Add footer blocks and standard footer.
+// MODIFICATION START.
+// Set the template context for the footer and additional layouts.
 require_once(__DIR__ . '/includes/footer.php');
-// Get imageareaitems config.
-$imageareaitems = get_config('theme_urcourses_default', 'imageareaitems');
-if (!empty($imageareaitems)) {
-    // Add imagearea layout file.
-    require_once(__DIR__ . '/includes/imagearea.php');
-}
-// Get footnote config.
-$footnote = get_config('theme_urcourses_default', 'footnote');
-if (!empty($footnote)) {
-    // Add footnote layout file.
-    require_once(__DIR__ . '/includes/footnote.php');
-}
+require_once(__DIR__ . '/includes/imagearea.php');
+require_once(__DIR__ . '/includes/footnote.php');
+// MODIFICATION END.
 
-// Get output buffer.
-$pagebottomelements = ob_get_clean();
-
-// If there isn't anything in the buffer, set the additional layouts string to an empty string to avoid problems later on.
-if ($pagebottomelements == false) {
-    $pagebottomelements = '';
-}
-// Add the additional layouts to the template context.
-$templatecontext['pagebottomelements'] = $pagebottomelements; 
-
-// Render columns2.mustache from urcourses_default.
-echo $OUTPUT->render_from_template('theme_urcourses_default/columns2', $templatecontext);
+// MODIFICATION START.
+// Render columns2.mustache from boost_campus.
+echo $OUTPUT->render_from_template('theme_boost_campus/columns2', $templatecontext);
 // MODIFICATION END.
 /* ORIGINAL START.
 echo $OUTPUT->render_from_template('theme_boost/columns2', $templatecontext);

@@ -35,6 +35,7 @@ if (is_file($CFG->dirroot.'/blocks/urcourserequest/lib.php')){
     require_once($CFG->dirroot.'/blocks/urcourserequest/lib.php');
 }
 
+require_once($CFG->dirroot.'/theme/urcourses_default/locallib.php');
 
 class theme_urcourses_default_external extends external_api {
 
@@ -1887,6 +1888,3 @@ class theme_urcourses_default_external extends external_api {
         ));
     }
 }
- 
-
-

@@ -26,6 +26,7 @@
 namespace theme_urcourses_default\output;
 
 use coding_exception;
+use core\plugininfo\enrol;
 use html_writer;
 use tabobject;
 use tabtree;
@@ -143,8 +144,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * @return string
      */
     public function body_attributes($additionalclasses = array()) {
-        global $PAGE, $CFG;
-        require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
+        global $CFG;
+        require_once($CFG->dirroot . '/theme/boost_campus/locallib.php');
 
         if (!is_array($additionalclasses)) {
             $additionalclasses = explode(' ', $additionalclasses);
@@ -152,8 +153,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         // MODIFICATION START.
         // Only add classes for the login page.
-        if ($PAGE->bodyid == 'page-login-index') {
+        if ($this->page->bodyid == 'page-login-index') {
             $additionalclasses[] = 'loginbackgroundimage';
+            // Generating a random class for displaying a random image for the login page.
+            $additionalclasses[] = theme_boost_campus_get_random_loginbackgroundimage_class();
         }
         // MODIFICATION END.
 
@@ -163,18 +166,17 @@ class core_renderer extends \theme_boost\output\core_renderer {
     /**
      * Override to be able to use uploaded images from admin_setting as well.
      *
-     * Returns the URL for the favicon.
+     * Returns the moodle_url for the favicon.
      *
      * KIZ MODIFICATION: This renderer function is copied and modified from /lib/outputrenderers.php
      *
      * @since Moodle 2.5.1 2.6
-     * @return string The favicon URL
+     * @return moodle_url The moodle_url for the favicon
      */
     public function favicon() {
-        global $PAGE;
         // MODIFICATION START.
-        if (!empty($PAGE->theme->settings->favicon)) {
-            return $PAGE->theme->setting_file_url('favicon', 'favicon');
+        if (!empty($this->page->theme->settings->favicon)) {
+            return $this->page->theme->setting_file_url('favicon', 'favicon');
         } else {
             return $this->image_url('favicon', 'theme');
         }
@@ -189,20 +191,34 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * Override to display switched role information beneath the course header instead of the user menu.
      * We change this because the switch role function is course related and therefore it should be placed in the course context.
      *
+     * MODIFICATION: This renderer function is copied and modified from /lib/outputrenderers.php
+     *
      * Wrapper for header elements.
      *
      * @return string HTML to display the main header.
      */
     public function full_header() {
         // MODIFICATION START.
-        global $PAGE, $USER, $COURSE, $CFG, $DB;
+        global $USER, $COURSE, $CFG, $DB;
         // MODIFICATION END.
+
+        if ($this->page->include_region_main_settings_in_header_actions() && !$this->page->blocks->is_block_present('settings')) {
+            // Only include the region main settings if the page has requested it and it doesn't already have
+            // the settings block on it. The region main settings are included in the settings block and
+            // duplicating the content causes behat failures.
+            $this->page->add_header_action(html_writer::div(
+                    $this->region_main_settings_menu(),
+                    'd-print-none',
+                    ['id' => 'region-main-settings-menu']
+            ));
+        }
 
         $header = new stdClass();
         // MODIFICATION START.
         // Show the context header settings menu on all pages except for the profile page as we replace
-        // it with an edit button there.
-        if ($PAGE->pagelayout != 'mypublic') {
+        // it with an edit button there and if we are not on the content bank view page (contentbank/view.php)
+        // as this page only adds header actions.
+        if ($this->page->pagelayout != 'mypublic' && $this->page->bodyid != 'page-contentbank') {
             $header->settingsmenu = $this->context_header_settings_menu();
         }
         // MODIFICATION END.
@@ -210,6 +226,11 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $header->settingsmenu = $this->context_header_settings_menu();
         ORIGINAL END. */
         
+        // Boost Campus
+        /*
+         $header->contextheader = $this->context_header();
+         $header->hasnavbar = empty($this->page->layout_options['nonavbar']);
+         */
         $sitecontextheader = '<div class="page-context-header"><div class="page-header-headings"><h1>'.$COURSE->fullname.'</h1></div></div>';
         $headertext = (!empty($this->context_header())) ? $this->context_header() : $sitecontextheader;
         $header->contextheader = '<a href="'.$CFG->wwwroot.'/course/view.php?id='.$COURSE->id.'">'.$headertext.'</a>';  
@@ -223,7 +244,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $header->contextheader = $course_editname_html;
         }
 
-        $header->hasnavbar = empty($PAGE->layout_options['nonavbar']);
+        $header->hasnavbar = empty($this->page->layout_options['nonavbar']);
         $header->navbar = $this->navbar();
         
         // TODO: Show notice if course is hidden AND editing is turned on OR on course edit page
@@ -234,7 +255,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         // MODIFICATION START.
         // Show the page heading button on all pages except for the profile page.
         // There we replace it with an edit profile button.
-        if ($PAGE->pagelayout != 'mypublic') {
+        if ($this->page->pagelayout != 'mypublic') {
             $header->pageheadingbutton = $this->page_heading_button();
         } else {
             // Get the id of the user for whom the profile page is shown.
@@ -259,6 +280,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $header->pageheadingbutton = $this->page_heading_button();
         ORIGINAL END. */
         $header->courseheader = $this->course_header();
+        $header->headeractions = $this->page->get_header_actions();
         
         $header->instructors = $this->course_authornames();
         $instnum = substr_count($this->course_authornames(), 'href');
@@ -295,7 +317,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         
         $context = \context_course::instance($COURSE->id);
         
-        $urenderer = $PAGE->get_renderer('core');
+        $urenderer = $this->page->get_renderer('core');
         $exporter = new course_summary_exporter($COURSE, ['context' => $context]);
         $cobits = $exporter->export($urenderer);
         
@@ -303,23 +325,30 @@ class core_renderer extends \theme_boost\output\core_renderer {
         if ($COURSE->id == 1) $header->courseimage = $CFG->wwwroot.'/theme/urcourses_default/pix/siteheader.jpg';
         
         // modal_help edit
-        $header->context_id = $PAGE->context->id;
-        $header->local_url = $PAGE->url->out_as_local_url();
+        $header->context_id = $this->page->context->id;
+        $header->local_url = $this->page->url->out_as_local_url();
         
         // MODIFICATION START:
         // Change this to add the result in the html variable to be able to add further features below the header.
-        // Render from the own header template.
-        $html = $this->render_from_template('theme_urcourses_default/header', $header);
+        // Render from the own header template if we are not on the content bank view page (contentbank/view.php).
+        if ($this->page->bodyid == 'page-contentbank') {
+            $html = $this->render_from_template('core/full_header', $header);
+        } else {
+            $html = $this->render_from_template('theme_urcourses_default/full_header', $header);
+        }
         // MODIFICATION END.
         /* ORIGINAL START
-        return $this->render_from_template('theme_boost/header', $header);
+        return $this->render_from_template('core/full_header', $header);
         ORIGINAL END. */
 
         // MODIFICATION START:
         // If the setting showhintcoursehidden is set, the visibility of the course is hidden and
         // a hint for the visibility will be shown.
-        if (get_config('theme_urcourses_default', 'showhintcoursehidden') == 'yes' && $COURSE->visible == false &&
-            $PAGE->has_set_url() && $PAGE->url->compare(new moodle_url('/course/view.php'), URL_MATCH_BASE)) {
+        if (get_config('theme_urcourses_default', 'showhintcoursehidden') == 'yes'
+                && has_capability('theme/urcourses_default:viewhintinhiddencourse', \context_course::instance($COURSE->id))
+                && $this->page->has_set_url()
+                && $this->page->url->compare(new moodle_url('/course/view.php'), URL_MATCH_BASE)
+                && $COURSE->visible == false) {
             $html .= html_writer::start_tag('div', array('class' => 'course-hidden-infobox alert alert-warning'));
             $html .= html_writer::tag('i', null, array('class' => 'fa fa-exclamation-circle fa-3x fa-pull-left'));
             $html .= get_string('showhintcoursehiddengeneral', 'theme_urcourses_default', $COURSE->id);
@@ -339,8 +368,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
         // intended.
         if (get_config('theme_urcourses_default', 'showhintcourseguestaccess') == 'yes'
             && is_guest(\context_course::instance($COURSE->id), $USER->id)
-            && $PAGE->has_set_url()
-            && $PAGE->url->compare(new moodle_url('/course/view.php'), URL_MATCH_BASE)
+            && $this->page->has_set_url()
+            && $this->page->url->compare(new moodle_url('/course/view.php'), URL_MATCH_BASE)
             && !is_role_switched($COURSE->id)) {
             $html .= html_writer::start_tag('div', array('class' => 'course-guestaccess-infobox alert alert-warning'));
             $html .= html_writer::tag('i', null, array('class' => 'fa fa-exclamation-circle fa-3x fa-pull-left'));
@@ -348,6 +377,48 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 array('role' => role_get_name(get_guest_role())));
             $html .= theme_urcourses_default_get_course_guest_access_hint($COURSE->id);
             $html .= html_writer::end_tag('div');
+        }
+        // MODIFICATION END.
+
+        // MODIFICATION START:
+        // If the setting showhintcourseselfenrol is set, a hint for users is shown that the course has an unrestricted self
+        // enrolment. This hint is only shown if the course is visible, the self enrolment is visible and if the user has the
+        // capability "theme/boost_campus:viewhintcourseselfenrol".
+        if (get_config('theme_urcourses_default', 'showhintcourseselfenrol') == 'yes'
+                && has_capability('theme/urcourses_default:viewhintcourseselfenrol', \context_course::instance($COURSE->id))
+                && $this->page->has_set_url()
+                && $this->page->url->compare(new moodle_url('/course/view.php'), URL_MATCH_BASE)
+                && $COURSE->visible == true) {
+            // Get the active enrol instances for this course.
+            $enrolinstances = enrol_get_instances($COURSE->id, true);
+            foreach ($enrolinstances as $instance) {
+                if ($instance->enrol == 'self' && empty($instance->password) && empty($instance->enrolenddate)) {
+                    if (empty($instance->name)) {
+                        $selfenrolinstances[$instance->id] = get_string('pluginname', 'enrol_self') .
+                                " (" . get_string('defaultcoursestudent', 'core') . ")";
+                    } else {
+                        $selfenrolinstances[$instance->id] = $instance->name;
+                    }
+                }
+            }
+
+            if (!empty($selfenrolinstances)) {
+                // Give out a hint for each unrestricted active self enrolment in the course.
+                foreach ($selfenrolinstances as $selfenrolinstanceid => $selfenrolinstancename) {
+                    $html .= html_writer::start_tag('div', array('class' => 'course-selfenrol-infobox alert alert-info'));
+                    $html .= html_writer::tag('i', null, array('class' => 'fa fa-sign-in fa-3x fa-pull-left'));
+                    $html .= get_string('showhintcourseselfenrol', 'theme_urcourses_default',
+                            array('name' => $selfenrolinstancename));
+                    // Only show the link to edit the specific self enrolment if the user has the capability to config self enrolments.
+                    if (has_capability('enrol/self:config', \context_course::instance($COURSE->id))) {
+                        $url = new moodle_url('/enrol/editinstance.php', array('courseid' => $COURSE->id,
+                                                                               'id' => $selfenrolinstanceid, 'type' => 'self'));
+                        $html .= html_writer::tag('div', get_string('showhintcourseselfenrollink',
+                                'theme_urcourses_default', array('url' => $url->out())));
+                    }
+                    $html .= html_writer::end_tag('div');
+                }
+            }
         }
         // MODIFICATION END.
 
@@ -430,7 +501,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
     
     
     public function get_course_toggle_availability() {
-        global $CFG, $DB, $COURSE, $USER, $PAGE;
+        global $CFG, $DB, $COURSE, $USER;
         
         /*
         $sql = <<<EOD
@@ -458,7 +529,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         
         $page = basename($_SERVER['PHP_SELF']);
 
-        if ($COURSE->id==1||($PAGE->url!=$allowurl && $PAGE->url!=$allowurl2 )) return false; 
+        if ($COURSE->id==1||($this->page->url!=$allowurl && $this->page->url!=$allowurl2 )) return false; 
 
         $isedit = false;
         if($page == "edit.php")
@@ -509,7 +580,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
     
     public function get_course_visibility() {
-        global $CFG, $DB, $COURSE, $USER, $PAGE;
+        global $CFG, $DB, $COURSE, $USER;
 
         // check if date is past, current, active
         $pastterm = strtotime("-4 months", time());
@@ -611,6 +682,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * This is an optional menu that can be added to a layout by a theme. It contains the
      * menu for the course administration, only on the course main page.
      *
+     * MODIFICATION: This renderer function is copied and modified from /lib/outputrenderers.php.
+     *
      * @return string
      */
     public function context_header_settings_menu() {
@@ -624,6 +697,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $showfrontpagemenu = false;
         $showusermenu = false;
 
+        // We are on the course home page.
         // MODIFICATION START.
         // REASON: With the original code, the course settings icon will only appear on the course main page.
         // Therefore the access to the course settings and related functions is not possible on other
@@ -722,6 +796,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * Override to use theme_urcourses_default login template
      * Renders the login form.
      *
+     * MODIFICATION: This renderer function is copied and modified from lib/outputrenderers.php
+     *
      * @param \core_auth\output\login $form The renderable.
      * @return string
      */
@@ -762,6 +838,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
     /**
      * Implementation of user image rendering.
+     *
+     * MODIFICATION: This renderer function is copied and modified from lib/outputrenderers.php
      *
      * @param help_icon $helpicon A help icon instance
      * @return string HTML fragment

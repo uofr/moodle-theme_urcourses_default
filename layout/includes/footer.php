@@ -34,42 +34,21 @@ if ($footerblocksetting === '0columns') {
 
 // Setting is set to one columns layout.
 if ($footerblocksetting === '1columns') {
-    $footerblock1columns = true;
-
-    $footerleftblockshtml = $OUTPUT->blocks('footer-left');
-
-    $templatecontext['footerleftblocks'] = $footerleftblockshtml;
-    $templatecontext['footerblock1columns'] = $footerblock1columns;
-
-    echo $OUTPUT->render_from_template('theme_urcourses_default/footer', $templatecontext);
+    $templatecontext['footerleftblocks'] = $OUTPUT->blocks('footer-left');
+    $templatecontext['footerblock1columns'] = true;
 }
 
 // Setting is set to two columns layout.
 if ($footerblocksetting === '2columns') {
-    $footerblock2columns = true;
-
-    $footerleftblockshtml = $OUTPUT->blocks('footer-left');
-    $footerrightblockshtml = $OUTPUT->blocks('footer-right');
-
-    $templatecontext['footerleftblocks'] = $footerleftblockshtml;
-    $templatecontext['footerrightblocks'] = $footerrightblockshtml;
-    $templatecontext['footerblock2columns'] = $footerblock2columns;
-
-    echo $OUTPUT->render_from_template('theme_urcourses_default/footer', $templatecontext);
+    $templatecontext['footerleftblocks'] = $OUTPUT->blocks('footer-left');
+    $templatecontext['footerrightblocks'] = $OUTPUT->blocks('footer-right');
+    $templatecontext['footerblock2columns'] = true;
 }
 
 // Setting is set to three columns layout.
 if ($footerblocksetting === '3columns') {
-    $footerblock3columns = true;
-
-    $footerleftblockshtml = $OUTPUT->blocks('footer-left');
-    $footermiddleblockshtml = $OUTPUT->blocks('footer-middle');
-    $footerrightblockshtml = $OUTPUT->blocks('footer-right');
-
-    $templatecontext['footerleftblocks'] = $footerleftblockshtml;
-    $templatecontext['footermiddleblocks'] = $footermiddleblockshtml;
-    $templatecontext['footerrightblocks'] = $footerrightblockshtml;
-    $templatecontext['footerblock3columns'] = $footerblock3columns;
-
-    echo $OUTPUT->render_from_template('theme_urcourses_default/footer', $templatecontext);
+    $templatecontext['footerleftblocks'] = $OUTPUT->blocks('footer-left');
+    $templatecontext['footermiddleblocks'] = $OUTPUT->blocks('footer-middle');
+    $templatecontext['footerrightblocks'] = $OUTPUT->blocks('footer-right');
+    $templatecontext['footerblock3columns'] = true;
 }
