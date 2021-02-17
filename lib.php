@@ -159,7 +159,7 @@ function theme_urcourses_default_get_pre_scss($theme) {
     // MODIFICATION END.
 
     // MODIFICATION START: Add login background images that are uploaded to the setting 'loginbackgroundimage' to CSS.
-    $scss .= theme_boost_campus_get_loginbackgroundimage_scss();
+    $scss .= theme_urcourses_default_get_loginbackgroundimage_scss();
     // MODIFICATION END.
 
     // Prepend pre-scss.
@@ -253,3 +253,42 @@ function theme_urcourses_default_get_fontawesome_icon_map() {
         'theme_urcourses_default:i/times' => 'fa-times'
     ];
 }
+ /**
+ * If setting is updated, use this callback to reset the theme_urcourses_default_infobanner_dismissed user preferences.
+ */
+function theme_urcourses_default_infobanner_reset_visibility() {
+    global $DB;
+
+    if (get_config('theme_urcourses_default', 'perpibresetvisibility') == 1) {
+        // Get all users that have dismissed the info banner once and therefore the user preference.
+        $whereclause = 'name = :name AND value = :value';
+        $params = ['name' => 'theme_urcourses_default_infobanner_dismissed', 'value' => '1'];
+        $users = $DB->get_records_select('user_preferences', $whereclause, $params, '', 'userid');
+
+        // Initialize variable for feedback messages.
+        $somethingwentwrong = false;
+        // Store coding exception.
+        $codingexception[] = array();
+
+        foreach ($users as $user) {
+            try {
+                unset_user_preference('theme_urcourses_default_infobanner_dismissed', $user->userid);
+            } catch (coding_exception $e) {
+                $somethingwentwrong = true;
+                $codingexception['message'] = $e->getMessage();
+                $codingexception['stacktrace'] = $e->getTraceAsString();
+            }
+        }
+
+        if (!$somethingwentwrong) {
+            \core\notification::success(get_string('resetperpetualinfobannersuccess', 'theme_boost_campus'));
+        } else {
+            \core\notification::error(get_string('resetperpetualinfobannervisibilityerror',
+                    'theme_urcourses_default', $codingexception));
+        }
+
+        // Reset the checkbox.
+        set_config('perpibresetvisibility', 0, 'theme_urcourses_default');
+    }
+}
+

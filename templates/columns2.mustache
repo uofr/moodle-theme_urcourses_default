@@ -31,6 +31,14 @@
     * regionmainsettingsmenu - HTML for the region main settings menu
     * hasregionmainsettingsmenu - There is a region main settings menu on this page.
     * pagebottomelements - HTML for all additional layout elements below the main content, e.g. the footer.
+      * timedinfobannershowonselectedpage - true if the time controlled info banner should be displayed.
+    * timedetualinfobannercontent - The content that should be shown in the time controled information banner.
+    * timedetualinfobannercssclass - The Bootstrap class that is used for the time controlled info banner.
+    * perpinfobannershowonselectedpage - true if the perpetual info banner should be displayed.
+    * perpibcontent - The content that should be shown in the perpetual information banner.
+    * perpibcss - The Bootstrap class that is used for the perpetual info banner.
+    * perpibdismiss - true if the setting perpibdismiss is enabled.
+    * bcbttbutton - true if the setting bcbttbutton is enabled.
 
     Example context (json):
     {
@@ -48,6 +56,15 @@
         "regionmainsettingsmenu": "",
         "hasregionmainsettingsmenu": false,
         "pagebottomelements": ""
+         "timedinfobannershowonselectedpage": true,
+        "timedibcontent": "This is a test content for timed info banner.",
+        "timedibcss": "danger",
+        "perpinfobannershowonselectedpage": true,
+        "perpibcontent": "This is a test content for perpetual info banner.",
+        "perpibcss": "primary",
+        "perpibdismiss": true,
+        "infobannerconfirmationdialogue": true,
+        "bcbttbutton": true
     }
 }}
 {{! MODIFICATION:
@@ -56,22 +73,47 @@
     * If setting "showsettingsincourse" is enabled, then render course context menu from theme_urcourses_default/settings_link_page
       template and use the equivalent own javascript "incoursesettings".
     * Call to own navbar mustache template instead of boost/navbar.
-    * Add own additional layout elements: the footer, footnote or image area.
+    * Use own footer instead of the theme_boost footer.
+    * Add own additional layout elements: footnote or image area.
+    * Added the possibility to show information banners.
+    * Added the possibility to show Boost Campus traditional "Back to top" button instead of Boost core "Go to top" button
+      located in footer.mustache file.
 }}
 {{> theme_boost/head }}
 
 <body {{{ bodyattributes }}}>
+{{> core/local/toast/wrapper}}
 
 <div id="page-wrapper">
 
     {{{ output.standard_top_of_body_html }}}
 
     {{> theme_urcourses_default/navbar }}
+    {{> > theme_urcourses_default/nav-drawer }}
 
     <div id="page" class="container-fluid">
+        <div id="page" class="container-fluid d-print-block">
+
+        {{#timedinfobannershowonselectedpage}}
+        <div id="themeboostcampusitimedinfobanner" class="alert {{#timedibcss}}alert-{{{ timedibcss }}}{{/timedibcss}} mt-3" role="alert">
+          {{{ timedibcontent }}}
+        </div>
+        {{/timedinfobannershowonselectedpage}}
+
+        {{#perpinfobannershowonselectedpage}}
+        <div id="themeboostcampusperpinfobanner" class="alert {{#perpibcss}}alert-{{{ perpibcss }}}{{/perpibcss}} {{#perpibdismiss}}alert-dismissible fade show{{/perpibdismiss}} mt-3" role="alert">
+          {{{ perpibcontent }}}
+          {{#perpibdismiss}}
+          <button type="button" id="themeboostcampusperpinfobannerclosebutton" class="close" data-dismiss="alert" aria-label="{{#str}}close, theme_boost_campus{{/str}}">
+              <span aria-hidden="true">&times;</span>
+           </button>
+           {{/perpibdismiss}}
+        </div>
+        {{/perpinfobannershowonselectedpage}}
+
         {{{ output.full_header }}}
 
-        <div id="page-content" class="row pb-3">
+        <div id="page-content" class="row pb-3 d-print-block">
             <div id="region-main-box" class="col-12">
                 {{#node}}
                     {{> theme_urcourses_default/settings_link_page }}
@@ -111,13 +153,22 @@
 </body>
 </html>
 {{#js}}
-require(['theme_boost/loader']);
-require(['theme_boost/drawer'], function(mod) {
-    mod.init();
+M.util.js_pending('theme_boost/loader');
+require(['theme_boost/loader'], function() {
+    M.util.js_complete('theme_boost/loader');
 });
+
+M.util.js_pending('theme_boost/drawer');
+require(['theme_boost/drawer'], function(drawer) {
+    drawer.init();
+    M.util.js_complete('theme_boost/drawer');
+});
+{{#bcbttbutton}}
 require(['theme_urcourses_default/backtotop'], function(mod) {
     mod.init();
 });
+{{/bcbttbutton}}
+
 require(['theme_urcourses_default/catchshortcuts'], function(mod) {
     mod.init({{{catchshortcuts}}});
 });
@@ -131,4 +182,9 @@ require(['theme_urcourses_default/nav_toggle'], function(mod) {
     mod.init();
     });
 {{/incoursesettings}}
+{{#perpinfobannershowonselectedpage}}
+    require(['theme_urcourses_default/infobanner'], function(mod) {
+    mod.init({{{perbibconfirmdialogue}}});
+    });
+{{/perpinfobannershowonselectedpage}}
 {{/js}}
