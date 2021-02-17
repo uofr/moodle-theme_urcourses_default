@@ -141,7 +141,7 @@ body.loginbackgroundimage, body .loginbackgroundimage, body.loginbackgroundimage
         }
     }
 }
-/*
+
 .navbar {
 	background-color: #4d4d4f !important;
 	background-image: url([[pix:theme|navbkgsmall]]);
@@ -161,12 +161,12 @@ body.loginbackgroundimage, body .loginbackgroundimage, body.loginbackgroundimage
     .usertext:hover,
     .dropdown-toggle:hover,
     .site-name:hover {
-        color: $brand-primary;
+        color: $primary;
     }
     .navbar-brand:not(.has-logo) .site-name:hover {
         color: #fff;
     }
-}*/
+}
 
 /* Add media breakpoint to only load images on screens with a medium size and up.
  * Check if variable exists to only add code to images that were uploaded.
