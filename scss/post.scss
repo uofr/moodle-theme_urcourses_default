@@ -707,7 +707,7 @@ body.pagelayout-secure nav {
         li.section.main.current {
             border-bottom: $primary 4px solid;
             border-top: $primary 3px solid; /*1px less because of section dividing border. */
-            background: $gray-lightest;
+            background: $gray-100;
         }
         /* Remove highlighting from Theme Boost. */
         li.section.main.current::before {
@@ -739,7 +739,7 @@ body.pagelayout-secure nav {
         }
         /* Add border to descripion text to differ it from module content. */
         .section .contentafterlink {
-            border-left: 2px solid $gray-light;
+            border-left: 2px solid $gray-600;
             padding-left: 10px;
             font-size: .9rem;
         }
@@ -806,7 +806,7 @@ body.pagelayout-secure nav {
  */
 /* Add a decent background to intro text */
 #intro {
-    background-color: $gray-lightest;
+    background-color: $gray-100;
     margin-bottom: 1em;
     border-left: 3px solid $primary;
     padding-left: 15px;
@@ -974,10 +974,10 @@ blockquote::before {
         display: inline;
         padding-left: 0.75rem;
         // As these icons are just for information and not clickable, make the color gray.
-        color: $gray-light;
+        color: $gray-600;
     }
     .moreinfo a + div.enrolmenticons {
-        border-left: 2px solid $gray-light;
+        border-left: 2px solid $gray-600;
     }
 }
 .coursebox.arts {
@@ -1117,11 +1117,11 @@ body.arts .block.card {
 
     /* Set footer blocks text color from white to dark gray. */
     .block {
-        color: $gray-dark;
+        color: $gray-900;
         /* Set link and icon color from white to gray. */
         a,
         .icon {
-            color: $gray-dark;
+            color: $gray-900;
         }
         /* Remove the underline decoration from footer blocks context menu items.*/
         .dropdown-item.menu-action {
@@ -1344,7 +1344,7 @@ a[href^="mailto"]::before {
             }
             /* We have to add a border for the users who do not have a switch role menu item due to their capabilities. */
             .dropdown-menu.dropdown-menu-right a:last-child {
-                border-bottom: 1px solid $gray-lighter;
+                border-bottom: 1px solid $gray-300;
             }
             .dropdown-menu-right div:last-of-type {
                 margin-bottom: 0;
@@ -1516,7 +1516,7 @@ a[href^="mailto"]::before {
     .vjs-big-play-button {
         &:focus,
         &:active {
-            background-color: $gray-dark;
+            background-color: $gray-900;
         }
     }
     .vjs-loading-spinner {
@@ -1526,7 +1526,7 @@ a[href^="mailto"]::before {
         background-color: transparent;
     }
     .vjs-control-bar {
-        background-color: $gray-dark !important;
+        background-color: $gray-900 !important;
         color: #fff;
     }
     .vjs-play-progress,
