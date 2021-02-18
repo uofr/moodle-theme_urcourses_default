@@ -51,7 +51,7 @@ define(['jquery', 'core/str'], function($, str) {
                 event.preventDefault();
                 $('html, body').animate({scrollTop: 0}, 500);
             });
-            
+
             return true;
         }).fail(Notification.exception);
     }
