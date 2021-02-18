@@ -280,6 +280,7 @@ export default class ModalHelp extends Modal {
                     return false;
         });
     }
+       
     /**
      * Get list of help topics.
      * @return {Array} Array of topics.
@@ -363,7 +364,7 @@ export default class ModalHelp extends Modal {
      * @param {String} target Anchor to scroll to when url is loaded.
      */
     async renderGuidePage(url, target = '') {
-
+ 
         try {
             await this.setLoading(true);
             const page = await this.getJsonData(url);
@@ -391,6 +392,7 @@ export default class ModalHelp extends Modal {
                 });
                 path.pop();
             }
+            
             const guidesBase = path.join('/');
 
             if (this.userIsInstructor && breadcrumbs[0].name !== 'Instructor Guide') {
@@ -418,7 +420,7 @@ export default class ModalHelp extends Modal {
             if (this.history.length > 0) {
                 back =true;
             }
-
+            
             if(!$(this.header).find(".modal-help-links").length){
                 await this.renderAppend(TEMPLATES.MODAL_HELP_LINKS_PAGE, {isinstructor:this.userIsInstructor}, $(this.header).find(".modal-help-header"));
             }
@@ -429,7 +431,7 @@ export default class ModalHelp extends Modal {
                 if (anchor.length) anchor[0].scrollIntoView();
             }
             else this.getBody()[0].scrollTop = 0;
-
+        
             this.history.push([url, target]);
 
         } catch (error) {

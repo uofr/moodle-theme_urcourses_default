@@ -1,6 +1,4 @@
 define(['jquery'], function($) {
-
-    console.log("MADE IT INTO TOGGLE ");
     var messageButton = $('#message-drawer-toggle-nav');
     var drawerButton = $('div[data-region="drawer-toggle"] > button.nav-link');
     var eventSet = false;

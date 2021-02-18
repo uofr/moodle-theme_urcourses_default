@@ -14,14 +14,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This Library is responsilble for
- * Course Creation-> creates and displays modal and handles ajax request
- * Course Duplication-> creates and displays modal and handles ajax request
+ * This Library is responsilble for 
+ * Course Creation-> creates and displays modal and handles ajax request 
+ * Course Duplication-> creates and displays modal and handles ajax request 
  * Date Selectors-> create and displays date selectors form
  *
  * @package    theme_urcourses_default
  * @author     Brooke Clary
- *
+ * 
  */
 
 import $ from 'jquery';
@@ -69,7 +69,7 @@ export default class courseActionsLib {
     self ;
 
     constructor(courseid,coursename, shortname, startdate, enddate, templatelist, categories){
-
+        
         self = this;
         self._courseid = courseid;
         self._coursename = coursename;
@@ -84,7 +84,7 @@ export default class courseActionsLib {
     * Used for new course and duplicate course creation on button clicks
     */
     async coursereqAction(_element,button,selectcatergory, selectstart, selectend) {
-                                                                                                                
+                                                                                                                                         
         var modaltitle = (_element.attr('id') == button) ? 'Create new course' : 'Duplicate this course';
         var modalaction = (_element.attr('id') == button) ? 'create a new' : 'duplicate this';
 
@@ -108,20 +108,20 @@ export default class courseActionsLib {
             root.on(ModalEvents.cancel, function(){
                 return;
             });
-
+                
             root.on(ModalEvents.save, function(e){
                 e.preventDefault();
                 if(self.validate()){
-                    if((_element.attr('id') == button)){
+                    if((_element.attr('id') == button)){  
                         self.createCourse();
                         return;
                     }else{
                         self.duplicateCourse();
                         return;
                     }
-                }
+                }    
             });
-
+            
             //remove modal on hide
             root.on(ModalEvents.hidden, function(){
                 //remove inputs otherwise duplicates are made causing id problems
@@ -139,9 +139,9 @@ export default class courseActionsLib {
 
             self.populateDateSelects(selectstart,selectend);
 
-            //change category to that of course
+            //change category to that of course  
             $(SELECTORS.CATEGORY).val(selectcatergory);
-
+                
             self.registerDateEventListeners(_element);
         });
     }
@@ -173,7 +173,7 @@ export default class courseActionsLib {
               $(SELECTORS.ENDDAY).append('<option value="'+day+'" '+(((day == selectend.mday && selectend.year >= selectstart.year) || (day == currentday && selectend.year <selectstart.year) ) ? "selected": " " )+'>' + day + '</option>');
           }
 
-          for (var hour = 0; hour < 24; hour++) {
+          for (var hour = 0; hour < 24; hour++) { 
               $(SELECTORS.STARTHOUR).append('<option value="'+hour+'">' + ((hour < 10) ? "0"+hour: hour ) + '</option>');
               $(SELECTORS.ENDHOUR).append('<option value="'+hour+'">' + ((hour < 10) ? "0"+hour: hour ) + '</option>');
           }
@@ -182,8 +182,8 @@ export default class courseActionsLib {
               $(SELECTORS.STARTMINUTE).append('<option value="'+minute+'"    >' + ((minute < 10) ? "0"+minute: minute ) + '</option>');
               $(SELECTORS.ENDMINUTE).append('<option  value="'+minute+'"  >' + ((minute < 10) ? "0"+minute: minute ) + '</option>');
           }
-    }
-
+    }  
+    
     /**
     * Switch choosen template based on click in template list
     */
@@ -205,11 +205,12 @@ export default class courseActionsLib {
         $(SELECTORS.ENDYEAR).prop("disabled", checked);
         $(SELECTORS.ENDHOUR).prop("disabled", checked);
         $(SELECTORS.ENDMINUTE).prop("disabled", checked);
-    }
+    } 
+    
     /**
     * Check if selected dates are valid
     */
-    validateDaysInMonth () {
+    validateDaysInMonth () { 
 
         var startyear = $(SELECTORS.STARTYEAR).val();
         var endyear = $(SELECTORS.ENDYEAR).val();
@@ -297,8 +298,8 @@ export default class courseActionsLib {
         var endyear = $(SELECTORS.ENDYEAR).val();
         var endday = $(SELECTORS.ENDDAY).val();
         var endmonth = $(SELECTORS.ENDMONTH).val();
-
-        var test =true;
+   
+        var test =true; 
         if(coursename.length ==0){
             $(SELECTORS.ERR_COURSENAME).text("Please enter a name for the course");
             $(SELECTORS.ERR_COURSENAME).attr("display", "block");
@@ -319,7 +320,7 @@ export default class courseActionsLib {
 
         var startdate = new Date(startyear+"."+startmonth+"."+startday).getTime()/1000;
         var enddate = new Date(endyear+"."+endmonth+"."+endday).getTime()/1000;
-
+      
         if(enddate < startdate && $(SELECTORS.ENDENABLE).is(":checked") ){
             $(SELECTORS.ERR_START).text("Course end date can not be before start date");
             $(SELECTORS.ERR_START).attr("display", "block");
@@ -337,7 +338,7 @@ export default class courseActionsLib {
      * info, create 2nd modal to pop up showing course description
      */
     showMoreInfo(e) {
-
+        
         var course ="";
         $.each(self._templatelist, function(key,val) {
             var id = e.attr('id').split("_");
@@ -362,11 +363,11 @@ export default class courseActionsLib {
         if (!self._courseid) {
             return;
         }
-
+        
         var templateHolder = $('div[data-role="templateholder"');
         var selectedTemplate = $(templateHolder).find('.active')
         var templateid = $(selectedTemplate).attr('id');
-
+        
         var coursename = $(SELECTORS.COURSENAME).val();
         var shortname = $(SELECTORS.SHORTNAME).val();
         var category = $(SELECTORS.CATEGORY).val();
@@ -387,7 +388,7 @@ export default class courseActionsLib {
             var endminute = $(SELECTORS.ENDMINUTE).val();
             enddate = endday+"-"+endmonth+"-"+endyear+"-"+endhour+"-"+endminute;
         }
-
+    
         self.spinnerCheck("show");
 
         //duplicate course option selected
@@ -441,7 +442,7 @@ export default class courseActionsLib {
      * After modal info has been entered call ajax request
      */
       duplicateCourse() {
-
+        
         // return if required values aren't set
         if (!self._courseid) {
             return;
@@ -468,7 +469,7 @@ export default class courseActionsLib {
         }
 
         self.spinnerCheck("show");
-
+         
         //duplicate course option selected
         // set args
         var args = {

@@ -19,58 +19,12 @@
                 display: block;
             }
         }
-        [data-region="blocks-column"] {
-            width: $blocks-column-width;
-            @include media-breakpoint-down(md) {
-                width: 100%;
-            }
-        }
     }
 }
-
-/* Change the block column width on the Dashboard if setting 'blockcolumnwidthdashboard' is different from setting 'blockcolumnwidth'. */
-@if variable-exists(blockcolumnwidthdashboard) and variable-exists(blockcolumnwidth) {
-    @if $blockcolumnwidthdashboard != $blockcolumnwidth {
-        /* Distinguish again if setting 'breakpoint' is active.
-           This if-construction has duplicated code by purpose for the sake of readability. */
-        @if variable-exists(breakpoint) and $breakpoint == 'yes' {
-            #page-my-index #region-main-settings-menu.has-blocks,
-            #page-my-index #region-main.has-blocks {
-                display: inline-block;
-                width: calc(100% - #{$blocks-plus-gutter-dashboard});
-                @include media-breakpoint-down(md) {
-                    width: 100%;
-                    /* MDL-63102 - Remove extra space at bottom.
-                    If modifying make sure block-region is horizontally stacked when in full screen */
-                    display: block;
-                }
-            }
-            #page-my-index [data-region="blocks-column"] {
-                width: $blocks-column-width-dashboard;
-                @include media-breakpoint-down(md) {
-                    width: 100%;
-                }
-            }
-        }
-        @else {
-            #page-my-index #region-main-settings-menu.has-blocks,
-            #page-my-index #region-main.has-blocks {
-                display: inline-block;
-                width: calc(100% - #{$blocks-plus-gutter-dashboard});
-                @include media-breakpoint-down(lg) {
-                    width: 100%;
-                    /* MDL-63102 - Remove extra space at bottom.
-                    If modifying make sure block-region is horizontally stacked when in full screen */
-                    display: block;
-                }
-            }
-            #page-my-index [data-region="blocks-column"] {
-                width: $blocks-column-width-dashboard;
-                @include media-breakpoint-down(lg) {
-                    width: 100%;
-                }
-            }
-        }
+[data-region="blocks-column"] {
+    width: $blocks-column-width;
+    @include media-breakpoint-down(md) {
+        width: 100%;
     }
 }
 
@@ -79,7 +33,7 @@
   Login page
   -------------------------------------*/
 
-body.loginbackgroundimage, body .loginbackgroundimage, body.loginbackgroundimage #page {
+body.loginbackgroundimage, body .loginbackgroundimage {
     background-size: cover;
     background-position: center;
     background-repeat: repeat-x;
@@ -161,212 +115,21 @@ body.loginbackgroundimage, body .loginbackgroundimage, body.loginbackgroundimage
     .usertext:hover,
     .dropdown-toggle:hover,
     .site-name:hover {
-        color: $primary;
+        color: $brand-primary;
     }
     .navbar-brand:not(.has-logo) .site-name:hover {
         color: #fff;
     }
 }
 
-/* Add media breakpoint to only load images on screens with a medium size and up.
- * Check if variable exists to only add code to images that were uploaded.
- * Note: Building this code with a @for loop did not work. */
- @include media-breakpoint-up(md) {
-	/*.navbar {
+@include media-breakpoint-up(md) {
+	.navbar {
 		background-color: #4d4d4f;
 		background-image: url([[pix:theme|navbkgsmall]]);
 		background-position: -18px 0;
 		background-repeat: no-repeat;
-    }*/
-    @if variable-exists(loginbackgroundimage1) {
-        body.loginbackgroundimage1 #page {
-            background-image: url($loginbackgroundimage1);
-        }
-    }
-    @if variable-exists(loginbackgroundimage2) {
-        body.loginbackgroundimage2 #page {
-            background-image: url($loginbackgroundimage2);
-        }
-    }
-    @if variable-exists(loginbackgroundimage3) {
-        body.loginbackgroundimage3 #page {
-            background-image: url($loginbackgroundimage3);
-        }
-    }
-    @if variable-exists(loginbackgroundimage4) {
-        body.loginbackgroundimage4 #page {
-            background-image: url($loginbackgroundimage4);
-        }
-    }
-    @if variable-exists(loginbackgroundimage5) {
-        body.loginbackgroundimage5 #page {
-            background-image: url($loginbackgroundimage5);
-        }
-    }
-    @if variable-exists(loginbackgroundimage6) {
-        body.loginbackgroundimage6 #page {
-            background-image: url($loginbackgroundimage6);
-        }
-    }
-    @if variable-exists(loginbackgroundimage7) {
-        body.loginbackgroundimage7 #page {
-            background-image: url($loginbackgroundimage7);
-        }
-    }
-    @if variable-exists(loginbackgroundimage8) {
-        body.loginbackgroundimage8 #page {
-            background-image: url($loginbackgroundimage8);
-        }
-    }
-    @if variable-exists(loginbackgroundimage9) {
-        body.loginbackgroundimage9 #page {
-            background-image: url($loginbackgroundimage9);
-        }
-    }
-    @if variable-exists(loginbackgroundimage10) {
-        body.loginbackgroundimage10 #page {
-            background-image: url($loginbackgroundimage10);
-        }
-    }
-    @if variable-exists(loginbackgroundimage11) {
-        body.loginbackgroundimage11 #page {
-            background-image: url($loginbackgroundimage11);
-        }
-    }
-    @if variable-exists(loginbackgroundimage12) {
-        body.loginbackgroundimage12 #page {
-            background-image: url($loginbackgroundimage12);
-        }
-    }
-    @if variable-exists(loginbackgroundimage13) {
-        body.loginbackgroundimage13 #page {
-            background-image: url($loginbackgroundimage13);
-        }
-    }
-    @if variable-exists(loginbackgroundimage14) {
-        body.loginbackgroundimage14 #page {
-            background-image: url($loginbackgroundimage14);
-        }
-    }
-    @if variable-exists(loginbackgroundimage15) {
-        body.loginbackgroundimage15 #page {
-            background-image: url($loginbackgroundimage15);
-        }
-    }
-    @if variable-exists(loginbackgroundimage16) {
-        body.loginbackgroundimage16 #page {
-            background-image: url($loginbackgroundimage16);
-        }
-    }
-    @if variable-exists(loginbackgroundimage17) {
-        body.loginbackgroundimage17 #page {
-            background-image: url($loginbackgroundimage17);
-        }
-    }
-    @if variable-exists(loginbackgroundimage18) {
-        body.loginbackgroundimage18 #page {
-            background-image: url($loginbackgroundimage18);
-        }
-    }
-    @if variable-exists(loginbackgroundimage19) {
-        body.loginbackgroundimage19 #page {
-            background-image: url($loginbackgroundimage19);
-        }
-    }
-    @if variable-exists(loginbackgroundimage20) {
-        body.loginbackgroundimage20 #page {
-            background-image: url($loginbackgroundimage20);
-        }
-    }
-    @if variable-exists(loginbackgroundimage21) {
-        body.loginbackgroundimage21 #page {
-            background-image: url($loginbackgroundimage21);
-        }
-    }
-    @if variable-exists(loginbackgroundimage22) {
-        body.loginbackgroundimage22 #page {
-            background-image: url($loginbackgroundimage22);
-        }
-    }
-    @if variable-exists(loginbackgroundimage23) {
-        body.loginbackgroundimage23 #page {
-            background-image: url($loginbackgroundimage23);
-        }
-    }
-    @if variable-exists(loginbackgroundimage24) {
-        body.loginbackgroundimage24 #page {
-            background-image: url($loginbackgroundimage24);
-        }
-    }
-    @if variable-exists(loginbackgroundimage25) {
-        body.loginbackgroundimage25 #page {
-            background-image: url($loginbackgroundimage25);
-        }
-    }
+	}
 }
-/* Design for the text that can be added to the background images of the login page. */
-#loginbackgroundimagetext span {
-    background-color: #fff;
-    border: 1px solid rgba(0, 0, 0, .125);
-}
-/* This will only be needed if the setting "loginform" is checked */
-@if variable-exists(loginform) {
-    @if $loginform == 'yes' {
-        /* Make background of login panel slightly transparent */
-        #page-login-index #region-main-box {
-            div.card {
-                background-color: rgba(255, 255, 255, 0.8);
-                border-radius: 3px;
-            }
-            .card-header > img {
-                width: 100%;
-                height: auto;
-            }
-        }
-        #page-login-index #page {
-            margin-top: 0;
-        }
-        /* Adjust the design for the loginbackgroundimagetext. */
-        #loginbackgroundimagetext span {
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 3px;
-        }
-    }
-}
-
-/*------------------------------------
-  Page header
-  -------------------------------------*/
-
-/*
- * Navbar
- */
-/* Make page navbar dark if setting "darknavabr" is set to yes. */
-@if variable-exists(darknavbar) {
-    @if $darknavbar == 'yes' {
-        .navbar {
-            .navbar-nav .nav-link .icon,
-            .navbar-nav .nav-link,
-            .usertext,
-            .dropdown-toggle,
-            .site-name,
-            .login,
-            .login a {
-                color: #fff;
-            }
-            .navbar-nav .nav-link .icon:hover,
-            .usertext:hover,
-            .dropdown-toggle:hover,
-            .site-name:hover {
-                color: $primary;
-            }
-            .navbar-brand:not(.has-logo) .site-name:hover {
-                color: #fff;
-            }
-        }
-    }
-}
-
 
 
 /*
@@ -478,10 +241,14 @@ body.arts .page-navbkg {
 
 
 .course-hdr-chooser-container {
+	
+
+    
     .course-hdr-chooser {
         /*background-color: rgba(255, 255, 255, .8);*/
         display: block;
     }
+
 }
 
 .page-head {
@@ -743,10 +510,7 @@ body.arts .page-navbkg .context-header-settings-menu .fa-cog:hover {
     /* Course home menu. */
     .list-group-item[data-key="coursehome"] {
         padding: .75rem 1.25rem;
-          /* As this node is a heading node, no icon is needed and the media span can be hidden. */
-          .media-left {
-            display: none;
-        }
+        
     }
 
     /* Menu item: my courses. */
@@ -760,8 +524,7 @@ body.arts .page-navbkg .context-header-settings-menu .fa-cog:hover {
 
     /* Remove border of child nodes which should appear as one block. */
     .list-group-item[data-parent-key="mycourses"],
-    .list-group-item[href*="#section-"]:not([href*="#section-0"]),
-    .list-group-item[href*="&section="]:not([href*="&section=0"]) {
+    .list-group-item[href*="#section-"]:not([href*="#section-0"]) {
         border-top: none;
     }
 }
@@ -849,6 +612,7 @@ body.pagelayout-secure nav {
     }
 }
 
+
 /*------------------------------------
   Course header
   -------------------------------------*/
@@ -918,10 +682,10 @@ body.pagelayout-secure nav {
         .contentwithoutlink ul li {
             list-style-position: inside;
         }
-        /* Set section dividing border-color to primary. */
+        /* Set section dividing border-color to brand-primary. */
         li.section.main {
             border: none;
-            border-bottom: 1px solid $primary;
+            border-bottom: 1px solid $brand-primary;
             padding-top: 3rem;
             padding-bottom: 2rem;
             margin: 0;
@@ -941,9 +705,9 @@ body.pagelayout-secure nav {
         }
         /* Change style of highlighted section to highlight more. */
         li.section.main.current {
-            border-bottom: $primary 4px solid;
-            border-top: $primary 3px solid; /*1px less because of section dividing border. */
-            background: $gray-100;
+            border-bottom: $brand-primary 4px solid;
+            border-top: $brand-primary 3px solid; /*1px less because of section dividing border. */
+            background: $gray-lightest;
         }
         /* Remove highlighting from Theme Boost. */
         li.section.main.current::before {
@@ -963,10 +727,6 @@ body.pagelayout-secure nav {
         img.icon.spacer {
             display: none;
         }
-        /* Make the summary aligned the same way as with option all section on one page. */
-        .summarytext {
-            margin-left: 25px;
-        }
         /* Increase space from section title (edit mode off) to left border. */
         h3.sectionname {
             padding-left: 15px;
@@ -979,22 +739,9 @@ body.pagelayout-secure nav {
         }
         /* Add border to descripion text to differ it from module content. */
         .section .contentafterlink {
-            border-left: 2px solid $gray-600;
+            border-left: 2px solid $gray-light;
             padding-left: 10px;
             font-size: .9rem;
-        }
-           /* Add border to description text for restricted activities and show it also to students.
-           This is needed because the classes for teachers and students differ. */
-           .section li:not(.label) .contentwithoutlink:not(:empty) {
-            border-left: 2px solid $gray-600;
-            padding-left: 10px;
-            font-size: .9rem;
-            display: block;
-            margin-left: 30px;
-            margin-top: .5em;
-            p {
-                margin: .5em 0;
-            }
         }
         /* Place meta information in a new line. */
         .resourcelinkdetails {
@@ -1020,7 +767,7 @@ body.pagelayout-secure nav {
         }
         .section-navigation .mdl-left:not(:empty),
         .section-navigation .mdl-right:not(:empty) {
-            background-color: $primary;
+            background-color: $brand-primary;
             padding: 2px 8px;
             border-radius: 2px;
             a {
@@ -1037,7 +784,7 @@ body.pagelayout-secure nav {
     ul.periods {
         /* Add bottom border to last section in editing mode. */
         li.section.main:last-child {
-            border-bottom: 1px solid $primary;
+            border-bottom: 1px solid $brand-primary;
         }
         /* Special rule for hidden sections in editing mode as indents are different in this view. */
         li.section.main.hidden {
@@ -1059,9 +806,9 @@ body.pagelayout-secure nav {
  */
 /* Add a decent background to intro text */
 #intro {
-    background-color: $gray-100;
+    background-color: $gray-lightest;
     margin-bottom: 1em;
-    border-left: 3px solid $primary;
+    border-left: 3px solid $brand-primary;
     padding-left: 15px;
     padding-right: 15px;
 }
@@ -1072,7 +819,7 @@ body.pagelayout-secure nav {
 /* Adjust the activity navigation buttons to suit to the topics navigation buttons. */
 #next-activity-link,
 #prev-activity-link {
-    background-color: $primary;
+    background-color: $brand-primary;
     padding: 4px 8px;
     border-radius: 2px;
     color: #fff;
@@ -1227,10 +974,10 @@ blockquote::before {
         display: inline;
         padding-left: 0.75rem;
         // As these icons are just for information and not clickable, make the color gray.
-        color: $gray-600;
+        color: $gray-light;
     }
     .moreinfo a + div.enrolmenticons {
-        border-left: 2px solid $gray-600;
+        border-left: 2px solid $gray-light;
     }
 }
 .coursebox.arts {
@@ -1370,11 +1117,11 @@ body.arts .block.card {
 
     /* Set footer blocks text color from white to dark gray. */
     .block {
-        color: $gray-900;
+        color: $gray-dark;
         /* Set link and icon color from white to gray. */
         a,
         .icon {
-            color: $gray-900;
+            color: $gray-dark;
         }
         /* Remove the underline decoration from footer blocks context menu items.*/
         .dropdown-item.menu-action {
@@ -1444,7 +1191,7 @@ body.arts .block.card {
     /* We need a top border only if there are footer block columns. */
     @if variable-exists(footerblocks) {
         @if $footerblocks != '0columns' {
-            .container-fluid:nth-of-type(2) > .row {
+            .container-fluid:nth-of-type(2) > .row-fluid {
                 border-top: 1px solid #fff;
                 padding-top: 1rem;
             }
@@ -1454,7 +1201,7 @@ body.arts .block.card {
     /* If all Moodle links are hidden in the footer, we don't need a top line for the performance info.*/
     @if variable-exists(footerhidehelplink) and variable-exists(footerhidelogininfo) and variable-exists(footerhidehomelink) {
         @if $footerhidehelplink == 'yes' and $footerhidelogininfo == 'yes' and $footerhidehomelink == 'yes' {
-            .container-fluid:nth-of-type(2) > .row {
+            .container-fluid:nth-of-type(2) > .row-fluid {
                 border-top: none;
             }
         }
@@ -1468,7 +1215,7 @@ body.arts .block.card {
 
 /* Mark broken links with red color. */
 a[href*="/brokenfile.php"] {
-    color: $danger;
+    color: $brand-danger;
 }
 
 /* Add Font Awesome "broken chain" icon in front of broken link. */
@@ -1531,29 +1278,12 @@ a[href^="mailto"]::before {
     flex-shrink: 0;
 }
 
-/*
- * Info banner.
- */
-/* This is needed because otherwise the top and bottom margin are not equal within the alert box. */
-#themeboostcampusperpinfobanner p,
-#themeboostcampustimedinfobanner p {
-    margin-bottom: 0;
-}
-
 
 /*------------------------------------
   Additional Elements
   -------------------------------------*/
 
 /* Back to top button */
-/* Moodle Core Back to top button */
-body.scrolled #goto-top-link {
-    /* For unknown reasons, the Moodle Core Back to top button is made unclickable by the Boost Campus footer.
-       We fix this by simply raising the z-index of the button. */
-    z-index: $zindex-tooltip;
-}
-
-/* Boost Campus Back to top button */
 #back-to-top {
     display: none;
     position: fixed;
@@ -1562,7 +1292,7 @@ body.scrolled #goto-top-link {
     right: 0.5em;
     line-height: 1.7rem;
     color: #fff;
-    background-color: $primary;
+    background-color: $brand-primary;
     border-radius: 100px;
     cursor: pointer;
     box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.3);
@@ -1597,11 +1327,6 @@ body.scrolled #goto-top-link {
     }
 }
 
-/* As this is already placed within the activity content card, the border around the settings card should be removed. */
-#boost-campus-activity-settings {
-    border: none;
-}
-
 /* Setting to move 'Switch role to...' menu item to the course settings - but only if
    setting showsettingsincourse is also enabled. */
 @if (variable-exists(incoursesettingsswitchtoroleposition) and variable-exists(showsettingsincourse)) {
@@ -1619,7 +1344,7 @@ body.scrolled #goto-top-link {
             }
             /* We have to add a border for the users who do not have a switch role menu item due to their capabilities. */
             .dropdown-menu.dropdown-menu-right a:last-child {
-                border-bottom: 1px solid $gray-300;
+                border-bottom: 1px solid $gray-lighter;
             }
             .dropdown-menu-right div:last-of-type {
                 margin-bottom: 0;
@@ -1741,10 +1466,10 @@ body.scrolled #goto-top-link {
 .vjs-menu-button-inline .vjs-menu {
     left: 3em;
 }
-.vjs-paused.vjs-has-started.video-js:not(.vjs-audio) .vjs-big-play-button {
+.vjs-paused.vjs-has-started.video-js .vjs-big-play-button {
     display: block;
 }
-.video-js :not(.vjs-audio) {
+.video-js {
     &.vjs-ended .vjs-big-play-button,
     &.vjs-paused .vjs-big-play-button {
         display: block;
@@ -1781,32 +1506,32 @@ body.scrolled #goto-top-link {
         top: 50%;
         left: 50%;
         margin-left: -1.5em;
-        background-color: $primary;
+        background-color: $brand-primary;
         border-radius: 2px;
         margin-top: -1em !important;
     }
     &:hover .vjs-big-play-button {
-        background-color: $primary;
+        background-color: $brand-primary;
     }
     .vjs-big-play-button {
         &:focus,
         &:active {
-            background-color: $gray-900;
+            background-color: $gray-dark;
         }
     }
     .vjs-loading-spinner {
-        border-color: $primary;
+        border-color: $brand-primary;
     }
     .vjs-control-bar2 {
         background-color: transparent;
     }
     .vjs-control-bar {
-        background-color: $gray-900 !important;
+        background-color: $gray-dark !important;
         color: #fff;
     }
     .vjs-play-progress,
     .vjs-volume-level {
-        background-color: $primary;
+        background-color: $brand-primary;
     }
     .vjs-big-play-button {
         width: 2em !important;
@@ -1865,20 +1590,6 @@ body.scrolled #goto-top-link {
         border-top: none;
     }
 }
-/* Special styles for plugin mod_attendance to fix problems with positioning of the table headers in editing mode when
-   the add a block widget is placed in the blocks column. */
-@if variable-exists(addablockposition) {
-    @if $addablockposition == 'positionblockregion' {
-        #page-mod-attendance-report .attendancereporttable .headcol {
-            left: 20px;
-        }
-        #page-mod-attendance-report.has-region-side-pre:not(.empty-region-side-pre) .attendancereporttable .headcol {
-            left: 20px;
-            width: 300px;
-        }
-    }
-}
-
 
 
 div[data-region="drawer-toggle"] button.btn-secondary {
@@ -2443,7 +2154,7 @@ body.format-topcoll.editing ul.ctopics .section .activity .action {
 }
 
 .nav-item img.userpicture {
-    /*margin-right: 0;*/
+    margin-right: 0;
 }
 
 .navbar {

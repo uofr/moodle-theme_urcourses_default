@@ -29,7 +29,7 @@ $footerblocksetting = get_config('theme_urcourses_default', 'footerblocks');
 
 // Setting is set to no footer blocks layout.
 if ($footerblocksetting === '0columns') {
-    //echo $OUTPUT->render_from_template('theme_urcourses_default/footer', $templatecontext);
+    echo $OUTPUT->render_from_template('theme_urcourses_default/footer', $templatecontext);
 }
 
 // Setting is set to one columns layout.

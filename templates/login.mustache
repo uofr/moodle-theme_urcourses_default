@@ -26,58 +26,30 @@
             "page_title": "Login page",
             "favicon": "favicon.ico",
             "main_content": "<h1>Headers keep HTML validators happy</h1>"
-        },
-        "timedinfobannershowonselectedpage": true,
-        "timedibcontent": "This is a test content for timed info banner.",
-        "timedibcss": "danger",
-        "perpinfobannershowonselectedpage": true,
-        "perpibcontent": "This is a test content for perpetual info banner.",
-        "perpibcss": "primary",
-        "perpibdismiss": true
+        }
         * pagebottomelements - HTML for all additional layout elements: the footnote.
     }
 }}
 {{! MODIFICATION:
     * Add own additional layout elements: the footnote.
-    * Added the possibility to show information banners.
-    * Added the login background image text elements.
 }}
 {{> theme_boost/head }}
 
 <body {{{ bodyattributes }}} style="background-image:url({{output.get_login_bg_url}});">
-{{> core/local/toast/wrapper}}
 
 <div id="page-wrapper" class="loginbackgroundimage">
     {{{ output.standard_top_of_body_html }}}
-    {{#timedinfobannershowonselectedpage}}
-    <div id="themeurcoursesdefaulttimedinfobanner" class="alert alert-{{{ timedibcss }}} m-3" role="alert">
-        {{{ timedibcontent }}}
-    </div>
-    {{/timedinfobannershowonselectedpage}}
-
-    {{#perpinfobannershowonselectedpage}}
-    <div id="themeurcoursesdefaultperpinfobanner" class="alert alert-{{{ perpibcss }}} m-3" role="alert">
-        {{{ perpibcontent }}}
-    </div>
-    {{/perpinfobannershowonselectedpage}}
 
     <div id="page" class="container-fluid mt-0">
         <div id="page-content" class="row">
             <div id="region-main-box" class="col-12">
-                <section id="region-main" class="col-12" aria-label="{{#str}}content{{/str}}">
+                <section id="region-main" class="col-12">
                     {{{ output.course_content_header }}}
                     {{{ output.main_content }}}
                     {{{ output.course_content_footer }}}
                 </section>
             </div>
         </div>
-         {{# loginbackgroundimagetext }}
-           <div class="row justify-content-end" id="loginbackgroundimagetext">
-                <span class="m-3 px-3 py-2 d-none d-md-inline">
-                    {{loginbackgroundimagetext}}
-                </span>
-            </div>
-        {{/ loginbackgroundimagetext }}
     </div>
     <footer id="page-footer" class="py-3 bg-dark text-light">
         <div class="container">
@@ -108,12 +80,8 @@
 </body>
 </html>
 {{#js}}
-/*require(['theme_boost/loader']);
+require(['theme_boost/loader']);
 require(['theme_urcourses_default/bgloader'], function(mod) {
     mod.init();
-});*/
-M.util.js_pending('theme_boost/loader');
-require(['theme_boost/loader'], function() {
-  M.util.js_complete('theme_boost/loader');
 });
 {{/js}}
