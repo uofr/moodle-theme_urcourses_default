@@ -87,7 +87,7 @@ body.loginbackgroundimage, body .loginbackgroundimage {
             .usertext:hover,
             .dropdown-toggle:hover,
             .site-name:hover {
-                color: $brand-primary;
+                color: $primary;
             }
             .navbar-brand:not(.has-logo) .site-name:hover {
                 color: #fff;
@@ -115,7 +115,7 @@ body.loginbackgroundimage, body .loginbackgroundimage {
     .usertext:hover,
     .dropdown-toggle:hover,
     .site-name:hover {
-        color: $brand-primary;
+        color: $primary;
     }
     .navbar-brand:not(.has-logo) .site-name:hover {
         color: #fff;
@@ -685,7 +685,7 @@ body.pagelayout-secure nav {
         /* Set section dividing border-color to brand-primary. */
         li.section.main {
             border: none;
-            border-bottom: 1px solid $brand-primary;
+            border-bottom: 1px solid $primary;
             padding-top: 3rem;
             padding-bottom: 2rem;
             margin: 0;
@@ -705,8 +705,8 @@ body.pagelayout-secure nav {
         }
         /* Change style of highlighted section to highlight more. */
         li.section.main.current {
-            border-bottom: $brand-primary 4px solid;
-            border-top: $brand-primary 3px solid; /*1px less because of section dividing border. */
+            border-bottom: $primary 4px solid;
+            border-top: $primary 3px solid; /*1px less because of section dividing border. */
             background: $gray-lightest;
         }
         /* Remove highlighting from Theme Boost. */
@@ -767,7 +767,7 @@ body.pagelayout-secure nav {
         }
         .section-navigation .mdl-left:not(:empty),
         .section-navigation .mdl-right:not(:empty) {
-            background-color: $brand-primary;
+            background-color: $primary;
             padding: 2px 8px;
             border-radius: 2px;
             a {
@@ -784,7 +784,7 @@ body.pagelayout-secure nav {
     ul.periods {
         /* Add bottom border to last section in editing mode. */
         li.section.main:last-child {
-            border-bottom: 1px solid $brand-primary;
+            border-bottom: 1px solid $primary;
         }
         /* Special rule for hidden sections in editing mode as indents are different in this view. */
         li.section.main.hidden {
@@ -808,7 +808,7 @@ body.pagelayout-secure nav {
 #intro {
     background-color: $gray-lightest;
     margin-bottom: 1em;
-    border-left: 3px solid $brand-primary;
+    border-left: 3px solid $primary;
     padding-left: 15px;
     padding-right: 15px;
 }
@@ -819,7 +819,7 @@ body.pagelayout-secure nav {
 /* Adjust the activity navigation buttons to suit to the topics navigation buttons. */
 #next-activity-link,
 #prev-activity-link {
-    background-color: $brand-primary;
+    background-color: $primary;
     padding: 4px 8px;
     border-radius: 2px;
     color: #fff;
@@ -1215,7 +1215,7 @@ body.arts .block.card {
 
 /* Mark broken links with red color. */
 a[href*="/brokenfile.php"] {
-    color: $brand-danger;
+    color: $danger;
 }
 
 /* Add Font Awesome "broken chain" icon in front of broken link. */
@@ -1292,7 +1292,7 @@ a[href^="mailto"]::before {
     right: 0.5em;
     line-height: 1.7rem;
     color: #fff;
-    background-color: $brand-primary;
+    background-color: $primary;
     border-radius: 100px;
     cursor: pointer;
     box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.3);
@@ -1506,12 +1506,12 @@ a[href^="mailto"]::before {
         top: 50%;
         left: 50%;
         margin-left: -1.5em;
-        background-color: $brand-primary;
+        background-color: $primary;
         border-radius: 2px;
         margin-top: -1em !important;
     }
     &:hover .vjs-big-play-button {
-        background-color: $brand-primary;
+        background-color: $primary;
     }
     .vjs-big-play-button {
         &:focus,
@@ -1520,7 +1520,7 @@ a[href^="mailto"]::before {
         }
     }
     .vjs-loading-spinner {
-        border-color: $brand-primary;
+        border-color: $primary;
     }
     .vjs-control-bar2 {
         background-color: transparent;
@@ -1531,7 +1531,7 @@ a[href^="mailto"]::before {
     }
     .vjs-play-progress,
     .vjs-volume-level {
-        background-color: $brand-primary;
+        background-color: $primary;
     }
     .vjs-big-play-button {
         width: 2em !important;

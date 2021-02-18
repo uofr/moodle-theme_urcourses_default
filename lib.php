@@ -159,7 +159,7 @@ function theme_urcourses_default_get_pre_scss($theme) {
     // MODIFICATION END.
 
     // MODIFICATION START: Add login background images that are uploaded to the setting 'loginbackgroundimage' to CSS.
-    $scss .= theme_boost_campus_get_loginbackgroundimage_scss();
+    $scss .= theme_urcourses_default_get_loginbackgroundimage_scss();
     // MODIFICATION END.
 
     // Prepend pre-scss.
