@@ -158,6 +158,32 @@ table, table td, table tr, table th, .forumpost, .path-mod-feedback table.analys
     color: #e2d2a2;
 }
 
+.section-modchooser-link:hover{
+
+    color: #d9b945;
+
+}
+
+.path-mod-assign [data-region="grade-panel"] .fitem.has-popout {
+     background-color: #848889; 
+    border: 1px solid rgba(107, 107, 107, 0.125);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.ajax-contact-button, #message-user-button {
+    color: #e2d2a2;
+}
+.ajax-contact-button:hover , #message-user-button:hover{
+    color: #d9b945;
+}
+
+dt {
+    font-weight: 700;
+    color: #f8f1f9;
+    margin-top: 5px;
+}
+
 @media (max-width: 991.98px){
     .simplesearchform .collapse.show, .simplesearchform .collapsing {
         position: absolute;
