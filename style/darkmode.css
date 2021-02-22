@@ -159,16 +159,39 @@ table, table td, table tr, table th, .forumpost, .path-mod-feedback table.analys
 }
 
 .section-modchooser-link:hover{
-
     color: #d9b945;
+}
 
+.section-modchooser-link, a.tiles-summary-edit {
+    background: #474541;
+    border-color: rgba(10, 10, 10, 0.25);
+    color: #ffdaa9 !important;
 }
 
 .path-mod-assign [data-region="grade-panel"] .fitem.has-popout {
-     background-color: #848889; 
+    background-color: #848889; 
     border: 1px solid rgba(107, 107, 107, 0.125);
-    padding: 1.25rem;
-    margin-bottom: 1rem;
+}
+
+.path-mod-assign [data-region="grade-panel"] .gradingform_rubric .criterion .levels .level.checked {
+    background-color: #dff0d8;
+    color: #848889!important;
+    border: none;
+    border-left: 1px solid #ddd;
+}
+.path-mod-assign [data-region="grade-panel"] .gradingform_rubric.evaluate .criterion .levels .level:hover {
+    color: #848889!important;
+}
+
+.levels, .levels:hover{
+    color: #848889!important;
+}
+.gradingform_rubric .criterion.even {
+    background: #474541;
+}
+
+.path-mod-assign [data-region="grade-panel"] .gradingform_rubric .criterion .levels {
+    background-color: #4f4f4d;
 }
 
 .ajax-contact-button, #message-user-button {
@@ -297,7 +320,7 @@ td.day.text-center.hasevent a,
 
 .block .card-body, .card, .callout, .pagelayout-embedded #page, .file-picker .fp-content,
 .file-picker .fp-navbar, .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd,
-.jschooser .choosercontainer #chooseform .instruction {
+.jschooser .choosercontainer #chooseform .instruction, .remark, textarea {
     border-color: rgba(10, 10, 10, 0.25);
     background-color: #4f4f4d;
     color: #e5e3e8!important;
