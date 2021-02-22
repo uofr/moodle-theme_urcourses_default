@@ -127,6 +127,65 @@ table, table td, table tr, table th, .forumpost, .path-mod-feedback table.analys
     background-color: #4f4f4d!important;
 }
 
+.simplesearchform .btn-submit{
+    color: #f8f1f9;
+    background-color: #848889 !important;
+    border-color: #848889 !important;
+}
+.close {
+    float: right;
+    font-size: 1.40625rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #848889!important;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .5;
+}
+
+.optionaction:hover{
+    background-color: #1b1b1b!important;
+}
+
+.optionaction:active{
+    background-color: #1b1b1b!important;
+}
+
+.text-muted {
+     color: #f8f1f9!important; 
+}
+
+.optionname{
+    color: #e2d2a2;
+}
+
+@media (max-width: 991.98px){
+    .simplesearchform .collapse.show, .simplesearchform .collapsing {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        display: flex;
+        background-color: #4f4f4d;
+        z-index: 1060;
+        height: 50px;
+    }
+}
+
+.dropdown-header {
+    display: block;
+    padding: .5rem 1.5rem;
+    margin-bottom: 0;
+    font-size: .8203125rem;
+    color: #f8f1f9 !important;
+    white-space: nowrap;
+}
+
+.alert-warning {
+    color: #654922;
+    background-color: #ecdcc5;
+    border-color: #fbe8cd;
+}
+
 .btn-primary, #toggle-sections .btn.btn-primary {
     color: #f8f1f9;
     background-color: #848889 !important;
@@ -713,6 +772,9 @@ ul.oublog-accordion li {
 #nav-drawer, .message-drawer, .bg-light, .bg-white {
     background-color: #383736!important;
     color: #e5e3e8;
+}
+.message-app {
+    background-color: #454342 !important;
 }
 .message-drawer .bg-secondary {
     background-color: #454342 !important;
