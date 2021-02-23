@@ -319,16 +319,18 @@ body.editing .page-head {
 
 .page-navbkg a {
     color: #fff;
-    &:focus,
-    &:active {
-        background-color: transparent;
-        color: #fff;
-        text-decoration: underline;
-        border-top:none;
-        border-bottom:none;
-        
-    }
 }
+
+.breadcrumb a:active, .breadcrumb a:focus{
+    background-color: transparent;
+    color: #fff;
+    border-top:none;
+    border-bottom:none;
+    border-width: 0px;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
 .page-navbkg a[role="menuitem"] {
 	color: #333;
 }
