@@ -74,11 +74,12 @@ const setDictionary = (dictionary) => {
         _gramMap = {};
         _originals = {};
     }
-    for (const word of dictionary) {
+   
+    dictionary.forEach(function(word) {
         for (let gramSize = _GRAM_SIZE_LOWER; gramSize < _GRAM_SIZE_UPPER + 1; gramSize++) {
             addWord(word, gramSize);
         }
-    }
+    });
 };
 
 /**

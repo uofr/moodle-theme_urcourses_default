@@ -3,7 +3,6 @@ import Ajax from 'core/ajax';
 export default class ModalHelpAjax {
 
     static async getLandingPageUrl(contextid, localUrl) {
-        console.log(localUrl);
         const ajaxConfig = {
             methodname: 'theme_urcourses_default_get_landing_page',
             args: {
