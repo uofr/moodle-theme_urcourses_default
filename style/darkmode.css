@@ -566,7 +566,7 @@ span[data-flexitour="container"][x-placement="left-start"] div[data-role="arrow"
 table.dataTable tr.odd, .path-mod-workshop .userplan dd,
 table.dataTable tr.odd td.sorting_1, .courses .coursebox.even,
 .mod_turnitintooltwo .top.listbar.clearfix {
-    background-color: #3c3934;
+    background-color: #3c3934 !important;
 }
 .submissionsDataTable .odd {
     background: #3c3934!important;
