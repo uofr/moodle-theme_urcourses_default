@@ -104,28 +104,28 @@
             <div class="card-block">
                 <h2 class="card-header text-center" ><img src="{{loginlogourl}}" title="{{sitename}}" alt="{{sitename}}" /></h2>
                 <div class="card-body">
-					{{#maintenance}}
+                    {{#maintenance}}
                     <div class="alert alert-info">
                         <h5><b>UR Courses is in maintenance mode.</b></h5>
-						<p><small>{{#str}}sitemaintenance, core_admin{{/str}}</small></p>
+                        <p><small>{{#str}}sitemaintenance, core_admin{{/str}}</small></p>
                     </div>
-					{{/maintenance}}
-					
-					
+                    {{/maintenance}}
+                    
+                    
                     {{#cansignup}}
                         <div class="sr-only">
                             <a href="{{signupurl}}">{{#str}} tocreatenewaccount {{/str}}</a>
                         </div>
                     {{/cansignup}}
-					
-					<h2>UR Courses Login</h2>
+                    
+                    <h2>UR Courses Login</h2>
 
-					<div class="mt-3">
-					Log in below using your U of R username and password<br />
-					<span>{{#str}} cookiesenabled {{/str}}
-					{{{cookieshelpiconformatted}}}</span>
-					</div>
-					
+                    <div class="mt-3">
+                    Log in below using your U of R username and password<br />
+                    <span>{{#str}} cookiesenabled {{/str}}
+                    {{{cookieshelpiconformatted}}}</span>
+                    </div>
+                    
                     {{#error}}
                         <div class="loginerrors mt-3">
                             <a href="#" id="loginerrormessage" class="accesshide">{{error}}</a>
@@ -135,6 +135,13 @@
 
                     <div class="row justify-content-md-center">
                         <div class="col-12">
+                            <p><a data-toggle="collapse" href="login/index.php?authCAS=CAS" role="button" class="btn btn-primary btn-block mt-3 collapse show loginfrm" id="loginbtn" aria-expanded="true">{{#str}}login{{/str}} with CAS<br /><small>I have a uregina username and password</small></a></p>
+                    
+                    
+                            <p><a data-toggle="collapse" data-target=".loginfrm" href="#otherlogin" role="button" aria-expanded="false" aria-controls="otherlogin loginbtn otherx">Log in with other credentials</a><a data-toggle="collapse" data-target=".loginfrm" href="#loginx" class="btn btn-secondary collapse loginfrm ml-1" id="otherx" role="button" aria-expanded="false" aria-controls="otherlogin loginbtn otherx">Cancel</a></p>
+                            
+                            <div class="collapse loginfrm" id="otherlogin">
+                                
                             <form class="mt-3" action="{{loginurl}}" method="post" id="login">
                                 <input id="anchor" type="hidden" name="anchor" value="">
                                 <script>document.getElementById('anchor').value = location.hash;</script>
@@ -169,16 +176,18 @@
                                 <button type="submit" class="btn btn-primary btn-block mt-3" id="loginbtn">{{#str}}login{{/str}}</button>
                             </form>
                         </div>
+                            
+                        </div>
 
                         <div class="col-12">
                             <div class="forgetpass mt-3">
-								<div class="form-label">Need help logging in?</div>
-											              <ul>
-											                  <li><a href="https://novapp.cc.uregina.ca/perl/studentlookup.cgi">Are you a new student?</a></li>
-											                  <li><a href="https://novapp.cc.uregina.ca/perl/resetpass.cgi">{{#str}} forgotten {{/str}}</a></li>
-											                  <li><a href="https://novapp.cc.uregina.ca/perl/activate.cgi">Activate your account?</a></li>
-											              </ul>
-											              <p>For further assistance, please contact <a href="mailto:IT.Support@uregina.ca">IT.Support@uregina.ca</a> or call <a href="tel:+1-306-585-4685">(306) 585-4685</a>.</p>
+                                <div class="form-label">Need help logging in?</div>
+                                                          <ul>
+                                                              <li><a href="https://novapp.cc.uregina.ca/perl/studentlookup.cgi">Are you a new student?</a></li>
+                                                              <li><a href="https://novapp.cc.uregina.ca/perl/resetpass.cgi">{{#str}} forgotten {{/str}}</a></li>
+                                                              <li><a href="https://novapp.cc.uregina.ca/perl/activate.cgi">Activate your account?</a></li>
+                                                          </ul>
+                                                          <p>For further assistance, please contact <a href="mailto:IT.Support@uregina.ca">IT.Support@uregina.ca</a> or call <a href="tel:+1-306-585-4685">(306) 585-4685</a>.</p>
                             </div>
                             {{#canloginasguest}}
                                 <div class="mt-2">
@@ -213,14 +222,14 @@
             </div>
         </div>
     </div>
-	<div class="col-sm-12 col-md-4 offset-md-2 col-lg-3 offset-lg-5">
+    <div class="col-sm-12 col-md-4 offset-md-2 col-lg-3 offset-lg-5">
         <div class="card p-3 mt-2 login-art-credit">
-		<p class="small mb-0" title="">
-			<a class="text-dark" href="http://www2.uregina.ca/president/art/outdoor/lionel-peyachew/" target="_blank"><b>The Four Directions, 2005</b></a><br />
-			Lionel Peyachew</p>
-		<p class="small my-0 mt-2" style="color: #395a77"><i>Reproduced with the permission of the artist. Photograph by the University of Regina.</i></p>
-		</div>
-	</div>	
+        <p class="small mb-0" title="">
+            <a class="text-dark" href="http://www2.uregina.ca/president/art/outdoor/lionel-peyachew/" target="_blank"><b>The Four Directions, 2005</b></a><br />
+            Lionel Peyachew</p>
+        <p class="small my-0 mt-2" style="color: #395a77"><i>Reproduced with the permission of the artist. Photograph by the University of Regina.</i></p>
+        </div>
+    </div>  
 </div>
 
 
