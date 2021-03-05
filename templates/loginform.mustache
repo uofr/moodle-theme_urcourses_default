@@ -135,7 +135,7 @@
 
                     <div class="row justify-content-md-center">
                         <div class="col-12">
-                            <p><a data-toggle="collapse" href="login/index.php?authCAS=CAS" role="button" class="btn btn-primary btn-block mt-3 collapse show loginfrm" id="loginbtn" aria-expanded="true">{{#str}}login{{/str}} with CAS<br /><small>I have a uregina username and password</small></a></p>
+                            <p><a href="index.php?authCAS=CAS" role="button" class="btn btn-primary btn-block mt-3 collapse show loginfrm" id="loginbtn" aria-expanded="true">{{#str}}login{{/str}} with CAS<br /><small>I have a uregina username and password</small></a></p>
                     
                     
                             <p><a data-toggle="collapse" data-target=".loginfrm" href="#otherlogin" role="button" aria-expanded="false" aria-controls="otherlogin loginbtn otherx">Log in with other credentials</a><a data-toggle="collapse" data-target=".loginfrm" href="#loginx" class="btn btn-secondary collapse loginfrm ml-1" id="otherx" role="button" aria-expanded="false" aria-controls="otherlogin loginbtn otherx">Cancel</a></p>
@@ -200,7 +200,7 @@
                                     </form>
                                 </div>
                             {{/canloginasguest}}
-
+<!--
                             {{#hasidentityproviders}}
                                 <h6 class="mt-2">{{#str}} potentialidps, auth {{/str}}</h6>
                                 <div class="potentialidplist" class="mt-3">
@@ -216,7 +216,7 @@
                                     {{/identityproviders}}
                                 </div>
                             {{/hasidentityproviders}}
-                        </div>
+-->                        </div>
                     </div>
                 </div>
             </div>
