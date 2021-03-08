@@ -31,6 +31,14 @@
     * regionmainsettingsmenu - HTML for the region main settings menu
     * hasregionmainsettingsmenu - There is a region main settings menu on this page.
     * pagebottomelements - HTML for all additional layout elements below the main content, e.g. the footer.
+    * timedinfobannershowonselectedpage - true if the time controlled info banner should be displayed.
+    * timedetualinfobannercontent - The content that should be shown in the time controled information banner.
+    * timedetualinfobannercssclass - The Bootstrap class that is used for the time controlled info banner.
+    * perpinfobannershowonselectedpage - true if the perpetual info banner should be displayed.
+    * perpibcontent - The content that should be shown in the perpetual information banner.
+    * perpibcss - The Bootstrap class that is used for the perpetual info banner.
+    * perpibdismiss - true if the setting perpibdismiss is enabled.
+    * bcbttbutton - true if the setting bcbttbutton is enabled.
 
     Example context (json):
     {
@@ -47,8 +55,8 @@
         "navdraweropen":true,
         "regionmainsettingsmenu": "",
         "hasregionmainsettingsmenu": false,
-        "pagebottomelements": ""
-        timedinfobannershowonselectedpage":true,
+        "pagebottomelements": "".,
+        "timedinfobannershowonselectedpage":true,
         "timedibcontent": "This is a test content for perpetual info banner.",
         "timedibcss": danger,
         "perpinfobannershowonselectedpage":true,
@@ -114,7 +122,6 @@
                 </div>
                 {{/hasregionmainsettingsmenu}}
                 <section id="region-main" {{#hasblocks}}class="has-blocks mb-3"{{/hasblocks}} aria-label="{{#str}}content{{/str}}">
-
                     {{#hasregionmainsettingsmenu}}
                         <div class="region_main_settings_menu_proxy"></div>
                     {{/hasregionmainsettingsmenu}}
