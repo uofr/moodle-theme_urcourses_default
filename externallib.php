@@ -84,7 +84,7 @@ class theme_urcourses_default_external extends external_api {
      * @return external_single_structure
      */
     public static function choose_header_style_returns() {
-        return new external_single_structure(array('success' => new external_value(PARAM_BOOL)));
+        return new external_single_structure(array('success' => new external_value(PARAM_INT)));
     }
 
     /**
