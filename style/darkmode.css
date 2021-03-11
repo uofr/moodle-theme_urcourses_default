@@ -737,6 +737,11 @@ ul.oublog-accordion li {
     color: rgba(10, 10, 10, 0.85)!important; 
 }
 
+.editor_atto_content_wrap {
+    background-color: #4f4f4d;
+    color: #fffbef;
+}
+
 #region-main, .region_main_settings_menu_proxy, .ui-widget-content,
 [data-fieldtype="modgrade"], .format-tiles #page .course-content ul li.section.main, .format-tiles .course-content .section {
     background-color: #4f4f4d;
