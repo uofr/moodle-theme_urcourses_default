@@ -2027,6 +2027,7 @@ li.inline-nav-admin icon, li.inline-na icon {
 
     body.loginbackgroundimage {
         background-size: initial;
+        height:auto;
     }
 }
 
@@ -2036,7 +2037,7 @@ body .loginbackgroundimage {
 	background-size: cover;
 	background-position: 60% bottom;
     background-repeat: repeat-x;
-    height:auto;
+    /*height:auto;*/
 }
 
 /*Default link colour override. Would be the brand colour otherwise*/ 
