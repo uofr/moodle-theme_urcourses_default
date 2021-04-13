@@ -18,7 +18,7 @@ export default class ModalHelpAjax {
             methodname: 'theme_urcourses_default_get_topic_list',
             args: {
                 contextid: contextid
-            } 
+            }
         };
         return Ajax.call([ajaxConfig])[0];
     }

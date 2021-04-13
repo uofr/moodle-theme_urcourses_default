@@ -22,11 +22,12 @@
  *
  * @package    theme_urcourses_default
  * @author     Brooke Clary
- * 
+ *
  */
 
 define(['jquery', 'core/ajax', 'core/notification', 'core/str',
-    'core/modal_factory', 'core/modal_events','theme_urcourses_default/course_actions'], function($, ajax, notification, str, ModalFactory, ModalEvents,courseActionsLib) {
+    'core/modal_factory', 'core/modal_events','theme_urcourses_default/course_actions'],
+    function($, ajax, notification, str, ModalFactory, ModalEvents,courseActionsLib) {
 
     /** Container jquery object. */
     var _root;
@@ -61,7 +62,14 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
        _categories = categories;
 
        //course constructor, incase any create or duplicate course
-       courseActionsLib = new courseActionsLib(_course.id,_course.coursename, _course.shortname, _course.startdate, _course.enddate, _templatelist, _categories);
+       courseActionsLib = new courseActionsLib(
+        _course.id,
+        _course.coursename,
+        _course.shortname,
+        _course.startdate,
+        _course.enddate,
+        _templatelist,
+         _categories);
     };
 
     /**
@@ -80,9 +88,9 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
 
     /**
      * If course has been used in previous term, options to
-     * duplicate or create are given. If either duplicate or create are 
-     * clicked they are passed to this function, which calls on the 
-     * Course Action Library to provide the correct modals, and perform 
+     * duplicate or create are given. If either duplicate or create are
+     * clicked they are passed to this function, which calls on the
+     * Course Action Library to provide the correct modals, and perform
      * any ajax requests
      */
     var _courseAction = function() {
@@ -91,13 +99,12 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         var _element = $(this);
 
         courseActionsLib.coursereqAction(_element,button, _course.category, _course.startdate, _course.enddate);
-    }
+    };
 
      /**
      * Modal after button click to create student account
      */
-    var _createStudentAction =  function(e) {
-
+    var _createStudentAction =  function() {
 
         //look if created or not
         var value =$(SELECTORS.BTN_STUDENT_ACCOUNT).data("value");
@@ -107,31 +114,34 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             //view student account info
              getStudentAccountInfo(username);
         }else{
-        
+
             var modaltitle = 'Create a test student for UR Courses';
             var modalaction = '<b>The following test user account will be created: </b><br><br>'
                             + '<b>Email address </b>'
-                            +'<a class="btn btn-link p-0" role="button" data-toggle="modal" data-placement="right" data-target="moodle-email-modal-dialogue" data-html="true">'
-                                +'<i class="icon fa fa-question-circle text-info fa-fw " title="Help with test student account email" aria-label="Help with test student account email"></i>'
+                            +'<a class="btn btn-link p-0" role="button" data-toggle="modal" '
+                            +'data-placement="right" data-target="moodle-email-modal-dialogue" data-html="true">'
+                                +'<i class="icon fa fa-question-circle text-info fa-fw " '
+                                +'title="Help with test student account email" '
+                                +'aria-label="Help with test student account email"></i>'
                             +'</a><br>'+username+'+urstudent@uregina.ca'
                             +'<br><br><b>Username </b><br>'+username+'-urstudent'
                             +'<hr/>'
-         
                             +'You can enrol this account to test and experience a course as a student.'
                             +'<br><br>'
                             +'<b>Would you like to create the test student account?</b>'
                             +'<br><label class="form-check  fitem  ">'
-                            +'<input type="checkbox" name="id_enroll_test" class="form-check-input " id="id_enroll_test" value="1" size="" checked>'
+                            +'<input type="checkbox" name="id_enroll_test" class="form-check-input "'
+                            +' id="id_enroll_test" value="1" size="" checked>'
                             +'Enrol test student into this course'
                             +'</label>';
-            
+
             //adding in confirmation modal in case buttons accidentally clicked
             ModalFactory.create({
                 type: ModalFactory.types.SAVE_CANCEL,
                 title: modaltitle,
                 body: "<p>"+ modalaction +"</p>"
             }).then(function(modal) {
-                
+
                 modal.setSaveButtonText('Create');
                 var root = modal.getRoot();
                 root.on(ModalEvents.cancel, function(){
@@ -149,8 +159,10 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                 });
 
                 root.on(ModalEvents.save, function(e){
-                    e.preventDefault();  
-                    $(root).find('button[data-action="save"]').append(' <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="sr-only">Loading...</span>');
+                    e.preventDefault();
+                    $(root).find('button[data-action="save"]').append(
+                        ' <span class="spinner-border spinner-border-sm" '+
+                        'role="status" aria-hidden="true"></span><span class="sr-only">Loading...</span>');
                     var checked = $(root).find("#id_enroll_test").is(":checked");
                     _createStudentAccount(username, checked);
                 });
@@ -187,24 +199,25 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         promise[0].done(function(data) {
 
             var modaltitle = 'User details for test student account';
-
+            var info ="";
             if(data.userid != 0){
                info = '<b>Email address </b>'
-                    +'<a class="btn btn-link p-0" role="button" data-toggle="modal" data-placement="right" data-target="moodle-email-modal-dialogue" data-html="true">'
-                        +'<i class="icon fa fa-question-circle text-info fa-fw " title="Help with test student account email" aria-label="Help with test student account email"></i>'
+                    +'<a class="btn btn-link p-0" role="button" data-toggle="modal" '
+                    +'data-placement="right" data-target="moodle-email-modal-dialogue" data-html="true">'
+                    +'<i class="icon fa fa-question-circle text-info fa-fw "'
+                    +' title="Help with test student account email" aria-label="Help with test student account email"></i>'
                     +'</a><br>'+data.email
                     +'<br><b>Username </b><br>'+data.username
                     +'<br><b>Account Creation Date </b><br>'+data.datecreated+'<br/>'
                     +'<br><div class="alert alert-warning d-flex justify-content-between bd-highlight " role="alert">'
-                        +'<div class="">Reset test account password </div>'  
-                        +'<button id="test_account_reset" type="button" class="btn btn-primary" >Reset Password</button>' 
-                    +'</div>'
-               
+                        +'<div class="">Reset test account password </div>'
+                        +'<button id="test_account_reset" type="button" class="btn btn-primary" >Reset Password</button>'
+                    +'</div>';
             }else{
                info= '<div class="alert alert-warning" role="alert">'
                     +' Test student account could not be found!</div>';
             }
-            
+
             //adding in confirmation modal in case buttons accidentally clicked
             ModalFactory.create({
                 type: ModalFactory.types.CANCEL,
@@ -212,9 +225,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                 body:info,
 
             }).then(function(modal) {
-            
                 var root = modal.getRoot();
-            
                 $(root).find('button[data-action="cancel"]').text("Close");
 
                 $(root).find('.fa-question-circle').parent().click(function() {
@@ -237,11 +248,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             }).done(function(modal) {
                 $("#test_account_reset").bind('click', function() { _resetStudentAccount($(this), username); } );
             });
-        }).fail(function(ex) {
-            notification.exception;
-        });	
-
-    }
+        });
+    };
 
      /**
      * After modal info has been entered call ajax request
@@ -271,16 +279,16 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         var promise = ajax.call([ajaxCall]);
         promise[0].done(function(response) {
             _studentAccountResponse(response);
-        }).fail(function(ex) {
-            notification.exception;
-        });	
+        });
     };
     /**
      * Handles ajax return and response to return data
-     * @param {Object} response 
+     * @param {Object} response
      */
     var _studentAccountResponse = function(data) {
-    
+
+        var title ="";
+        var info ="";
         if(typeof data.unenroll != "undefined"){
 
             title = "Success: ";
@@ -288,21 +296,23 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                     +data.username+" was removed from course. </div>";
 
             if(!data.unenroll){
-                title = "ERROR:"
+                title = "ERROR:";
                 info='<div class="alert alert-warning" role="alert">';
                 info += data.username+" could not be removed from course. </div>";
             }
         }else if(typeof data.reset != "undefined"){
             title = "Success: ";
             info='<div class="alert alert-success" role="alert">'
-                    +data.username+" password was reset. You will recieve an email with new credentials. It may take a few minutes to process.</div>";
+                    +data.username+" password was reset. "+
+                    "You will recieve an email with new credentials. "+
+                    "It may take a few minutes to process.</div>";
 
             if(!data.reset && data.userid !=0){
-                title = "ERROR:"
+                title = "ERROR:";
                 info='<div class="alert alert-warning" role="alert">';
                 info += data.username+"'s password could not be reset, email failed to send </div>";
             }else if(!data.reset && data.userid ==0){
-                title = "ERROR:"
+                title = "ERROR:";
                 info='<div class="alert alert-warning" role="alert">';
                 info += data.username+"'s account could not be found </div>";
             }
@@ -314,26 +324,28 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
 
             //if both actions were done
             if(data.created != false && data.enrolled !=false){
-                info +=data.username+" was created and enrolled into this course. New account information has been emailed to you. </div>";
+                info +=data.username+" was created and enrolled into this course. "+
+                "New account information has been emailed to you. </div>";
             }else if(data.created != false && data.enrolled ==false ){
-                info += data.username+" was created, but was NOT enrolled into this course. New account information has been emailed to you. </div>";
+                info += data.username+" was created, but was NOT enrolled into this course. "+
+                "New account information has been emailed to you. </div>";
             }else if(data.created == false && data.enrolled !=false ){
                 info += data.username+" has been enrolled into this course.</div>";
             }else{
-                title = "ERROR:"
+                title = "ERROR:";
                 info='<div class="alert alert-warning" role="alert">';
                 info += data.username+" already exists and is enrolled into the course. </div>";
             }
         }
-        
+
         //adding in confirmation modal in case buttons accidentally clicked
         ModalFactory.create({
             type: ModalFactory.types.CANCEL,
             title: title,
-            body:  info 
+            body:  info
         })
         .then(function(modal) {
-            
+
             var root = modal.getRoot();
             $(root).find('button[data-action="cancel"]').text("Close");
             root.on(ModalEvents.cancel, function(){
@@ -342,8 +354,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                 }
                 return;
             });
-           
-            
+
             root.find(".close").click(function() {
                 if(typeof data.reset == "undefined"){
                     location.reload();
@@ -355,7 +366,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         });
     };
 
-
     /**
      * After modal info has been entered call ajax request
      */
@@ -364,61 +374,66 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         //look if created or not
         var value =$(SELECTORS.BTN_STUDENT_ENROL).data("value");
         var username =$(SELECTORS.BTN_STUDENT_ENROL).data("username");
-        
         var modaltitle =  (value) ? 'Unenrol test student account in course' :'Enrol test student account in course';
         var modalaction =  (value) ? 'remove ':  'enrol the test student account ';
         modalaction = modalaction+username+'+urstudent@uregina.ca from course';
-            
+
         //adding in confirmation modal in case buttons accidentally clicked
         ModalFactory.create({
             type: ModalFactory.types.SAVE_CANCEL,
             title: modaltitle,
             body: "<p><b>Do you want to "+ modalaction +"?</b><br /></p>"
         }).then(function(modal) {
-                
-            (value) ?modal.setSaveButtonText('Remove'):modal.setSaveButtonText('Enrol');
+
+            if(value) {modal.setSaveButtonText('Remove');}
+            else{modal.setSaveButtonText('Enrol');}
             var root = modal.getRoot();
             root.on(ModalEvents.cancel, function(){
                 return;
             });
 
             root.on(ModalEvents.save, function(e){
-                e.preventDefault();  
-                $(root).find('button[data-action="save"]').append(' <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="sr-only">Loading...</span>');
-                (value) ? _unenrollStudentAccount(username) : _createStudentAccount(username,true);
+                e.preventDefault();
+                $(root).find('button[data-action="save"]').append(
+                    ' <span class="spinner-border spinner-border-sm"'+
+                    ' role="status" aria-hidden="true"></span><span class="sr-only">Loading...</span>');
+                if(value) {_unenrollStudentAccount(username);}
+                else{ _createStudentAccount(username,true);}
             });
 
             modal.show();
         });
-    }
+    };
 
     /**
     * After modal info has been entered call ajax request
     */
-    var _resetStudentAccount = function(e, username) { 
+    var _resetStudentAccount = function(e, username) {
 
         var modaltitle = 'Reset Password for test student account';
         var modalaction = 'reset the password for student account '+username+'+urstudent@uregina.ca.';
-        
+
         //adding in confirmation modal in case buttons accidentally clicked
         ModalFactory.create({
             type: ModalFactory.types.SAVE_CANCEL,
             title: modaltitle,
             body: "<p><b>Do you want to "+ modalaction +"?</b><br /></p>"
         }).then(function(modal) {
-            
+
             modal.setSaveButtonText('Reset Password');
             var root = modal.getRoot();
-          
+
             root.on(ModalEvents.cancel, function(){
                 return;
             });
 
             root.on(ModalEvents.save, function(e){
 
-                e.preventDefault();  
-                $(root).find('button[data-action="save"]').append('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="sr-only">Loading...</span>');
-                
+                e.preventDefault();
+                $(root).find('button[data-action="save"]').append(
+                    '<span class="spinner-border spinner-border-sm"'+
+                    ' role="status" aria-hidden="true"></span><span class="sr-only">Loading...</span>');
+
                 // set args
                 var args = {
                     courseid: _course.id,
@@ -438,14 +453,11 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                     $(root).find('button[data-action="cancel"]').click();
                     _studentAccountResponse(response);
                     return;
-                }).fail(function(ex) {
-                    notification.exception;
                 });
             });
-
             modal.show();
         });
-    }
+    };
     /**
     * After modal info has been entered call ajax request
     */
@@ -473,16 +485,14 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         var promise = ajax.call([ajaxCall]);
         promise[0].done(function(response) {
             _studentAccountResponse(response);
-        }).fail(function(ex) {
-            notification.exception;
-        });	
+        });
     };
      /**
      * Link to course edit page to edit course description
      */
     var _editCourseDescription = function() {
 
-        var origin   = window.location.href;    
+        var origin   = window.location.href;
         origin =origin.substring(0,origin.lastIndexOf('/'));
 
         var target = origin + "/edit.php?id="+_course.id+"#id_descriptionhdr";
@@ -494,8 +504,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      */
     var _checkCourseEdit = function() {
 
-        var origin   = window.location.href;     
-
+        var origin   = window.location.href;
         if (origin.indexOf("course/edit.php") >= 0){
             if(window.location.hash != ""){
                 var navHeight = $('.navbar').outerHeight();

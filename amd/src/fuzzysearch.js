@@ -74,7 +74,7 @@ const setDictionary = (dictionary) => {
         _gramMap = {};
         _originals = {};
     }
-   
+
     dictionary.forEach(function(word) {
         for (let gramSize = _GRAM_SIZE_LOWER; gramSize < _GRAM_SIZE_UPPER + 1; gramSize++) {
             addWord(word, gramSize);
@@ -122,7 +122,7 @@ const addWord = (word, gramSize = 3) => {
 const search = (word) => {
     for (let gramSize = _GRAM_SIZE_UPPER; gramSize >= _GRAM_SIZE_LOWER; gramSize--) {
         const results = lookup(word, gramSize);
-        if (results) return results.map(result => _originals[result[1]]);
+        if (results) {return results.map(result => _originals[result[1]]);}
     }
     return null;
 };
@@ -154,7 +154,7 @@ const lookup = (word, gramSize) => {
         }
     }
 
-    if (!matches) return null; // if there are no potential matches, return null
+    if (!matches) {return null; }// if there are no potential matches, return null
 
     // for each potential match, calculate the cosine similarity score (divide dot product by the product of each normal)
     for (const matchIndex in matches) {

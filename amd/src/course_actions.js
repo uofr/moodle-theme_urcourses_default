@@ -14,14 +14,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This Library is responsilble for 
- * Course Creation-> creates and displays modal and handles ajax request 
- * Course Duplication-> creates and displays modal and handles ajax request 
+ * This Library is responsilble for
+ * Course Creation-> creates and displays modal and handles ajax request
+ * Course Duplication-> creates and displays modal and handles ajax request
  * Date Selectors-> create and displays date selectors form
  *
  * @package    theme_urcourses_default
  * @author     Brooke Clary
- * 
+ *
  */
 
 import $ from 'jquery';
@@ -59,17 +59,17 @@ const SELECTORS = {
 };
 
 export default class courseActionsLib {
-    _courseid =0;
-    _coursename="";
-    _shortname="";
-    _startdate="";
-    _enddate="";
-    _templatelist = "";
-    _categories = "";
-    self ;
+    //_courseid =0;
+   // _coursename="";
+    //_shortname="";
+    //_startdate="";
+    //_enddate="";
+   // _templatelist = "";
+   // _categories = "";
+    //self ;
 
     constructor(courseid,coursename, shortname, startdate, enddate, templatelist, categories){
-        
+
         self = this;
         self._courseid = courseid;
         self._coursename = coursename;
@@ -84,13 +84,10 @@ export default class courseActionsLib {
     * Used for new course and duplicate course creation on button clicks
     */
     async coursereqAction(_element,button,selectcatergory, selectstart, selectend) {
-                                                                                                                                         
         var modaltitle = (_element.attr('id') == button) ? 'Create new course' : 'Duplicate this course';
         var modalaction = (_element.attr('id') == button) ? 'create a new' : 'duplicate this';
-
         var templatenew = (_element.attr('id') == button) ? true : "";
         var istemplatelist = (self._templatelist.length>0) ? true : "";
-
         var template =  await self.render(TEMPLATES.MODAL_COURSE_ACTION_CONTENT, templatenew,istemplatelist);
 
         //adding in confirmation modal in case buttons accidentally clicked
@@ -98,7 +95,8 @@ export default class courseActionsLib {
             type: ModalFactory.types.SAVE_CANCEL,
             title: modaltitle,
             body: "<p><b>Are you sure you want to "+ modalaction +" course?</b><br />"
-                + ((_element.attr('id') == button) ? "<small>Select from the templates below. (Scroll for more options)</small>" : "<small>Student data will not be included in the duplicated course.</small>")
+                + ((_element.attr('id') == button) ? "<small>Select from the templates below. "+
+                "(Scroll for more options)</small>" : "<small>Student data will not be included in the duplicated course.</small>")
                 + template
                 + "</p>"
         }).then(function(modal) {
@@ -108,20 +106,19 @@ export default class courseActionsLib {
             root.on(ModalEvents.cancel, function(){
                 return;
             });
-                
+
             root.on(ModalEvents.save, function(e){
                 e.preventDefault();
                 if(self.validate()){
-                    if((_element.attr('id') == button)){  
+                    if((_element.attr('id') == button)){
                         self.createCourse();
                         return;
                     }else{
                         self.duplicateCourse();
                         return;
                     }
-                }    
+                }
             });
-            
             //remove modal on hide
             root.on(ModalEvents.hidden, function(){
                 //remove inputs otherwise duplicates are made causing id problems
@@ -146,14 +143,13 @@ export default class courseActionsLib {
                 selectend.year= d.getFullYear()+1;
                 selectend.mon= d.getMonth()+1;
                 selectend.mday= d.getDate();
-               
             }
 
             self.populateDateSelects(selectstart,selectend);
 
-            //change category to that of course  
+            //change category to that of course
             $(SELECTORS.CATEGORY).val(selectcatergory);
-                
+
             self.registerDateEventListeners(_element);
         });
     }
@@ -163,39 +159,56 @@ export default class courseActionsLib {
     */
     populateDateSelects(selectstart, selectend) {
 
-          //populate start and end dates
-          var currentyear = (new Date()).getFullYear();
-          for (var year = 1900; year < currentyear+30; year++) {
-              $(SELECTORS.STARTYEAR).append('<option  value="'+year+'" '+ ((year == selectstart.year) ? "selected": " " ) +'>' + year + '</option>');
-              $(SELECTORS.ENDYEAR).append('<option value="'+year+'"'+(((year == selectend.year && selectend.year >= selectstart.year) || (year == currentyear && selectend.year <selectstart.year) ) ? "selected": " " )+'>' + year + '</option>');
-          }
+        //populate start and end dates
+        var currentyear = (new Date()).getFullYear();
+        for (var year = 1900; year < currentyear+30; year++) {
+            $(SELECTORS.STARTYEAR).append('<option  value="'+year+'" '
+                                + ((year == selectstart.year) ? "selected": " " ) +'>' + year + '</option>');
+            $(SELECTORS.ENDYEAR).append('<option value="'+year+'"'
+                                +(((year == selectend.year && selectend.year >= selectstart.year) ||
+                                (year == currentyear && selectend.year <selectstart.year) ) ? "selected": " " )+'>'
+                                + year + '</option>');
+        }
 
-          var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-          var currentmonth = (new Date()).getMonth();
-          for (var month = 0; month < monthNames.length; month++) {
+        var monthNames = ["January", "February", "March", "April", "May", "June", "July",
+                            "August", "September", "October", "November", "December"];
+        var currentmonth = (new Date()).getMonth();
+        for (var month = 0; month < monthNames.length; month++) {
               var mtemp = month;
               mtemp++;
-              $(SELECTORS.STARTMONTH).append('<option value="'+mtemp+'" '+((mtemp == selectstart.mon) ? "selected": " " )+'>' + monthNames[month] + '</option>');
-              $(SELECTORS.ENDMONTH).append('<option value="'+mtemp+'" '+(((mtemp == selectend.mon && selectend.year >= selectstart.year) || (month == currentmonth && selectend.year <selectstart.year) ) ? "selected": " " )+'>' + monthNames[month] + '</option>');
-          }
+              $(SELECTORS.STARTMONTH).append('<option value="'+mtemp+'" '
+                                        +((mtemp == selectstart.mon) ? "selected": " " )+'>' + monthNames[month] + '</option>');
+              $(SELECTORS.ENDMONTH).append('<option value="'+mtemp+'" '
+                                        +(((mtemp == selectend.mon && selectend.year >= selectstart.year) ||
+                                        (month == currentmonth && selectend.year <selectstart.year) ) ? "selected": " " )
+                                        +'>' + monthNames[month] + '</option>');
+        }
 
-          var currentday = (new Date()).getDate();
-          for (var day = 1; day < 32; day++) {
-              $(SELECTORS.STARTDAY).append('<option value="'+day+'" '+((day == selectstart.mday) ? "selected": " " )+'>' + day + '</option>');
-              $(SELECTORS.ENDDAY).append('<option value="'+day+'" '+(((day == selectend.mday && selectend.year >= selectstart.year) || (day == currentday && selectend.year <selectstart.year) ) ? "selected": " " )+'>' + day + '</option>');
-          }
+        var currentday = (new Date()).getDate();
+        for (var day = 1; day < 32; day++) {
+            $(SELECTORS.STARTDAY).append('<option value="'+day+'" '
+                                        +((day == selectstart.mday) ? "selected": " " )+'>' + day + '</option>');
+            $(SELECTORS.ENDDAY).append('<option value="'+day+'" '
+                                        +(((day == selectend.mday && selectend.year >= selectstart.year) ||
+                                        (day == currentday && selectend.year <selectstart.year) ) ? "selected": " " )
+                                        +'>' + day + '</option>');
+        }
 
-          for (var hour = 0; hour < 24; hour++) { 
-              $(SELECTORS.STARTHOUR).append('<option value="'+hour+'">' + ((hour < 10) ? "0"+hour: hour ) + '</option>');
-              $(SELECTORS.ENDHOUR).append('<option value="'+hour+'">' + ((hour < 10) ? "0"+hour: hour ) + '</option>');
-          }
-          
-          for (var minute = 0; minute < 61; minute++) {
-              $(SELECTORS.STARTMINUTE).append('<option value="'+minute+'"    >' + ((minute < 10) ? "0"+minute: minute ) + '</option>');
-              $(SELECTORS.ENDMINUTE).append('<option  value="'+minute+'"  >' + ((minute < 10) ? "0"+minute: minute ) + '</option>');
-          }
-    }  
-    
+        for (var hour = 0; hour < 24; hour++) {
+            $(SELECTORS.STARTHOUR).append('<option value="'+hour+'">'
+                                            + ((hour < 10) ? "0"+hour: hour ) + '</option>');
+            $(SELECTORS.ENDHOUR).append('<option value="'+hour+'">'
+                                        + ((hour < 10) ? "0"+hour: hour ) + '</option>');
+        }
+
+        for (var minute = 0; minute < 61; minute++) {
+            $(SELECTORS.STARTMINUTE).append('<option value="'+minute+'"    >'
+                                            + ((minute < 10) ? "0"+minute: minute ) + '</option>');
+            $(SELECTORS.ENDMINUTE).append('<option  value="'+minute+'"  >'
+                                            + ((minute < 10) ? "0"+minute: minute ) + '</option>');
+        }
+    }
+
     /**
     * Switch choosen template based on click in template list
     */
@@ -211,18 +224,17 @@ export default class courseActionsLib {
     setEnddate(e) {
 
         var checked;
-        (e.is(":checked")) ? checked=false: checked=true;
+        if(e.is(":checked")) {checked=false;} else{checked=true;}
         $(SELECTORS.ENDDAY).prop("disabled", checked);
         $(SELECTORS.ENDMONTH).prop("disabled", checked);
         $(SELECTORS.ENDYEAR).prop("disabled", checked);
         $(SELECTORS.ENDHOUR).prop("disabled", checked);
         $(SELECTORS.ENDMINUTE).prop("disabled", checked);
-    } 
-    
+    }
     /**
     * Check if selected dates are valid
     */
-    validateDaysInMonth () { 
+    validateDaysInMonth () {
 
         var startyear = $(SELECTORS.STARTYEAR).val();
         var endyear = $(SELECTORS.ENDYEAR).val();
@@ -310,8 +322,8 @@ export default class courseActionsLib {
         var endyear = $(SELECTORS.ENDYEAR).val();
         var endday = $(SELECTORS.ENDDAY).val();
         var endmonth = $(SELECTORS.ENDMONTH).val();
-   
-        var test =true; 
+        var test =true;
+
         if(coursename.length ==0){
             $(SELECTORS.ERR_COURSENAME).text("Please enter a name for the course");
             $(SELECTORS.ERR_COURSENAME).attr("display", "block");
@@ -332,7 +344,7 @@ export default class courseActionsLib {
 
         var startdate = new Date(startyear+"."+startmonth+"."+startday).getTime()/1000;
         var enddate = new Date(endyear+"."+endmonth+"."+endday).getTime()/1000;
-      
+
         if(enddate < startdate && $(SELECTORS.ENDENABLE).is(":checked") ){
             $(SELECTORS.ERR_START).text("Course end date can not be before start date");
             $(SELECTORS.ERR_START).attr("display", "block");
@@ -350,7 +362,7 @@ export default class courseActionsLib {
      * info, create 2nd modal to pop up showing course description
      */
     showMoreInfo(e) {
-        
+
         var course ="";
         $.each(self._templatelist, function(key,val) {
             var id = e.attr('id').split("_");
@@ -375,23 +387,21 @@ export default class courseActionsLib {
         if (!self._courseid) {
             return;
         }
-        
+
         var templateHolder = $('div[data-role="templateholder"');
-        var selectedTemplate = $(templateHolder).find('.active')
+        var selectedTemplate = $(templateHolder).find('.active');
         var templateid = $(selectedTemplate).attr('id');
-        
         var coursename = $(SELECTORS.COURSENAME).val();
         var shortname = $(SELECTORS.SHORTNAME).val();
         var category = $(SELECTORS.CATEGORY).val();
-
         var startday = $(SELECTORS.STARTDAY).val();
         var startmonth = $(SELECTORS.STARTMONTH).val();
         var startyear = $(SELECTORS.STARTYEAR).val();
         var starthour = $(SELECTORS.STARTHOUR).val();
         var startminute = $(SELECTORS.STARTMINUTE).val();
         var startdate = startday+"-"+startmonth+"-"+startyear+"-"+starthour+"-"+startminute;
-
         var enddate = "0";
+
         if($(SELECTORS.ENDENABLE).is(":checked") ){
             var endday = $(SELECTORS.ENDDAY).val();
             var endmonth= $(SELECTORS.ENDMONTH).val();
@@ -400,14 +410,14 @@ export default class courseActionsLib {
             var endminute = $(SELECTORS.ENDMINUTE).val();
             enddate = endday+"-"+endmonth+"-"+endyear+"-"+endhour+"-"+endminute;
         }
-    
+
         self.spinnerCheck("show");
 
         //duplicate course option selected
         // set args
         var args = {
             courseid: self._courseid,
-            templateid: templateid,    
+            templateid: templateid,
             coursename: coursename,
             shortname: shortname,
             categoryid: category,
@@ -429,8 +439,8 @@ export default class courseActionsLib {
 
             if(response.error!=""){
 
-                title = "ERROR:"
-                info = response.error;
+                var title = "ERROR:";
+                var info = response.error;
 
                 ModalFactory.create({
                     title: title,
@@ -444,17 +454,15 @@ export default class courseActionsLib {
             if(response.url !=""){
                 window.location.href = response.url;
             }
-        }).fail(function(ex) {
+        }).fail(function() {
             self.spinnerCheck("hide");
-            notification.exception;
-        });  
+        });
     }
 
      /**
      * After modal info has been entered call ajax request
      */
       duplicateCourse() {
-        
         // return if required values aren't set
         if (!self._courseid) {
             return;
@@ -481,7 +489,7 @@ export default class courseActionsLib {
         }
 
         self.spinnerCheck("show");
-         
+
         //duplicate course option selected
         // set args
         var args = {
@@ -506,14 +514,14 @@ export default class courseActionsLib {
             self.spinnerCheck("hide");
             if(response.error!=""){
 
-                var title = "Notice:"
+                var title = "Notice:";
                 if(response.user == ""){
                     var info = '<p><b>'+response.error +'</b><br></p>';
                 }else{
                     var info = '<div class="alert alert-warning" role="alert">'
-                            +response.error 
+                            +response.error
                             +"<b>"+response.user+".</b>"
-                            +'</div>'
+                            +'</div>';
                 }
 
                 ModalFactory.create({
@@ -530,8 +538,7 @@ export default class courseActionsLib {
             }
         }).fail(function() {
             self.spinnerCheck("hide");
-            notification.exception;
-        });  
+        });
     }
 
     /**
@@ -550,4 +557,3 @@ export default class courseActionsLib {
         }
     }
 }
-

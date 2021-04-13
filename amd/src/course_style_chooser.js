@@ -18,7 +18,7 @@
  *
  * @package    theme_urcourses_default
  * @author     John Lane
- * 
+ *
  */
 
 define(['jquery', 'core/ajax', 'core/notification', 'core/str',
@@ -70,7 +70,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         _element = $(this);
 
         //if current style is clicked, do nothing...
-        //console.log('_headerstyle:'+_headerstyle);
         /*
         if ('#'+_element.attr('id') == SELECTORS.HDRSTYLEA_BTN && _headerstyle == 0) {
             return;
@@ -156,7 +155,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     };
     /**
      * Handles theme_urcourses_default_upload_course_image response data.
-     * @param {Object} response 
+     * @param {Object} response
      */
     var _choiceDone = function() {
         str.get_string('success:coursestylechosen', 'theme_urcourses_default')

@@ -249,6 +249,10 @@ dt {
     border-color: #dad8ce;
 }
 
+.bg-secondary {
+    background-color: #252525!important;
+}
+
 #page-course-view-tiles .expand-collapse-all-btns .btn.btn-secondary{
     color: #212529 !important;
 }
@@ -1015,6 +1019,10 @@ background: #EFEFEF!important;
 .jumbotron, .nav-tabs, ul.nav.nav-tabs  {
     background-color: #42413e;
     background: #42413e;
+}
+
+.text-dark {
+    color: #c8cbce!important;
 }
 
 .table-primary, .table-secondary, .table-success, .table-danger, .table-warning, .table-info, .table-light, .table-dark,  .btn-group.course-hdr-chooser span {

@@ -60,7 +60,7 @@ const TEMPLATES = {
 
 /**
  * UR Courses help modal.
- * 
+ *
  * @class ModalHelp
  * @property {Number} contextId Context ID number.
  * @property {Array} topicList Array of help topics.
@@ -230,8 +230,8 @@ export default class ModalHelp extends Modal {
         /** If the user clicks a link inside the guide page, open the page. */
         this.getRoot().on('click', SELECTORS.GUIDE_PAGE_LINK, (e) => {
             let href = $(e.currentTarget).attr('href');
-            if (href.startsWith('#') ) return;
-            if (href.endsWith('/')) href = href.substring(0, href.lastIndexOf('/'));
+            if (href.startsWith('#') ) {return;}
+            if (href.endsWith('/')) {href = href.substring(0, href.lastIndexOf('/'));}
             e.preventDefault();
             if (href.startsWith('http') || href.startsWith('https') || href.startsWith('mailto')) {
                 window.open(href, '_blank');
@@ -240,8 +240,8 @@ export default class ModalHelp extends Modal {
                 const hrefPath = path.split('/');
                 const actualPath = this.currentPath.split('/');
                 for (const node of hrefPath) {
-                    if (node === '..') actualPath.pop();
-                    else if (node !== '.') actualPath.push(node);
+                    if (node === '..'){ actualPath.pop();}
+                    else if (node !== '.') {actualPath.push(node);}
                 }
                 const url = actualPath.join('/');
                 this.renderGuidePage(`${url}.json`, target);
@@ -280,7 +280,6 @@ export default class ModalHelp extends Modal {
                     return false;
         });
     }
-       
     /**
      * Get list of help topics.
      * @return {Array} Array of topics.
@@ -324,7 +323,7 @@ export default class ModalHelp extends Modal {
      * @param {String} query
      */
     async searchGuides(query) {
-        if (!query) return;
+        if (!query) {return;}
         try {
             await this.setLoading(true);
             const searchUrl = await ModalHelpAjax.getSearchUrl(this.contextId, query);
@@ -347,9 +346,12 @@ export default class ModalHelp extends Modal {
                     target: '',
                 }
             ];
-            await this.renderReplace(TEMPLATES.MODAL_HELP_SEARCH_RESULTS, {results: searchResults.jsondata, query: query, breadcrumbs: breadcrumbs}, this.content);
+            await this.renderReplace(TEMPLATES.MODAL_HELP_SEARCH_RESULTS,
+                {results: searchResults.jsondata,
+                    query: query,
+                    breadcrumbs: breadcrumbs}, this.content);
             this.getBody()[0].scrollTop = 0;
-            
+
             this.history.push([searchUrl]);
         } catch (error) {
             Notification.exception(error);
@@ -364,7 +366,6 @@ export default class ModalHelp extends Modal {
      * @param {String} target Anchor to scroll to when url is loaded.
      */
     async renderGuidePage(url, target = '') {
- 
         try {
             await this.setLoading(true);
             const page = await this.getJsonData(url);
@@ -392,7 +393,7 @@ export default class ModalHelp extends Modal {
                 });
                 path.pop();
             }
-            
+
             const guidesBase = path.join('/');
 
             if (this.userIsInstructor && breadcrumbs[0].name !== 'Instructor Guide') {
@@ -402,7 +403,6 @@ export default class ModalHelp extends Modal {
                     url: `${guidesBase}/instructor.json`
                 });
             }
-            
             if (!this.userIsInstructor && breadcrumbs[0].name !== 'Student Guides') {
                 breadcrumbs.unshift({
                     active: false,
@@ -410,7 +410,6 @@ export default class ModalHelp extends Modal {
                     url: `${guidesBase}/student.json`
                 });
             }
-
 
             let html = content ? content : jsondata.page_data[0].content;
             html = html.replaceAll('src="assets', `src="${guidesBase}/assets`);
@@ -420,20 +419,24 @@ export default class ModalHelp extends Modal {
             if (this.history.length > 0) {
                 back =true;
             }
-            
+
             if(!$(this.header).find(".modal-help-links").length){
-                await this.renderAppend(TEMPLATES.MODAL_HELP_LINKS_PAGE, {isinstructor:this.userIsInstructor}, $(this.header).find(".modal-help-header"));
+                await this.renderAppend(TEMPLATES.MODAL_HELP_LINKS_PAGE,
+                    {isinstructor:this.userIsInstructor},
+                    $(this.header).find(".modal-help-header"));
             }
-            await this.renderReplace(TEMPLATES.MODAL_HELP_GUIDE_PAGE, {html: html, breadcrumbs: breadcrumbs,isinstructor:this.userIsInstructor,back:back}, this.content);
+            await this.renderReplace(TEMPLATES.MODAL_HELP_GUIDE_PAGE,
+                {html: html,
+                breadcrumbs: breadcrumbs,
+                isinstructor:this.userIsInstructor,
+                back:back}, this.content);
             this.currentPath = url.substring(0, url.lastIndexOf('/'));
             if (target) {
                 const anchor = target.startsWith('#') ? $(target) : $(`#${target}`);
-                if (anchor.length) anchor[0].scrollIntoView();
-            }
-            else this.getBody()[0].scrollTop = 0;
-        
-            this.history.push([url, target]);
+                if (anchor.length){ anchor[0].scrollIntoView();}
+            }else {this.getBody()[0].scrollTop = 0;}
 
+            this.history.push([url, target]);
         } catch (error) {
             Notification.exception(error);
         } finally {

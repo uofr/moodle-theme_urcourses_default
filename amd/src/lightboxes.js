@@ -29,16 +29,12 @@ define(['jquery'], function($) {
      */
     function initLightBoxes() {
 		$('a[rel="lightbox"]').each(function() {
-			//console.log($( this ).attr( "title" )+'init');
 			$(this).attr('data-toggle','modal');
 			$(this).attr('data-target','#lightboxmodal');
 			$(this).click(function() {
 				$('#lbimg').attr('src',$(this).children('img').eq(0).attr('src'));
 				$('#lbimgcap').html($(this).attr('title'));
 				$('#lbdialog').css('max-width', ($('#lbimg').width() + 34)+' px');
-				//console.log($( this ).attr( "title" )+' clicked');
-				//console.log('obj:'+$(this).children('img').eq(0));
-				//console.log('src:'+$(this).children('img').eq(0).attr('src'));
 			});
 		});
     }
@@ -48,9 +44,9 @@ define(['jquery'], function($) {
 			// do we have links to lightbox?
 			if ($('a[rel="lightbox"]').length > 0) {
 				// does a modal already exist?
-				if (!$('#lightboxmodal').length > 0) { 
-			    	// it does not exist,create it
-				
+				if (!$('#lightboxmodal').length > 0) {
+					// it does not exist,create it
+
 					var modalmarkup = '<!-- Modal -->';
 					modalmarkup += '<div class="modal fade" id="lightboxmodal" role="dialog">';
 					modalmarkup += '<div class="modal-dialog" id="lbdialog">';
@@ -70,22 +66,19 @@ define(['jquery'], function($) {
 					modalmarkup += '    </div>';
 					modalmarkup += ' </div>';
 					modalmarkup += '</div>';
-				
-				    $("body").append(modalmarkup);
-				
+
+					$("body").append(modalmarkup);
 				}
-				
-            	initLightBoxes();
-				
+				initLightBoxes();
+
 				$('#lightboxmodal').on('show.bs.modal', function () {
-				       $(this).find('.modal-body').css({
-				              width:'auto', //probably not needed
-				              height:'auto', //probably not needed 
-				              'max-height':'100%'
-				       });
+					$(this).find('.modal-body').css({
+						width:'auto', //probably not needed
+						height:'auto', //probably not needed
+						'max-height':'100%'
+					});
 				});
-			
 			}
-        }
-    };
+		}
+	};
 });

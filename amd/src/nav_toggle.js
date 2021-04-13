@@ -30,15 +30,12 @@ define(['jquery'], function($) {
     var setToggles = function(){
         messageButton.click(closeDrawer);
         drawerButton.click(closeDrawer);
-
         eventSet = true;
     };
 
     var removeToggles = function(){
-        //console.log("remove toggles");
         messageButton.off("click");
         drawerButton.off("click");
-
         eventSet = false;
     };
 
