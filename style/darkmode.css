@@ -138,7 +138,7 @@ table, table td, table tr, table th, .forumpost, .path-mod-feedback table.analys
     font-weight: 700;
     line-height: 1;
     color: #848889!important;
-    text-shadow: 0 1px 0 #fff;
+    text-shadow: 0 1px 0 #fffbef;
     opacity: .5;
 }
 
@@ -231,7 +231,7 @@ dt {
 
 .alert-warning {
     color: #654922;
-    background-color: #ecdcc5;
+    background-color: #f7d5a4;
     border-color: #fbe8cd;
 }
 
@@ -319,7 +319,7 @@ td.day.text-center.today {
 td.day.text-center.hasevent a, 
 .course-img-uploader-container .course-image-uploader,
 .course-content ul.ctopics li.section .content .toggle a {
-    color: black;
+    color: #121212;
 }
 
 .block .card-body, .card, .callout, .pagelayout-embedded #page, .file-picker .fp-content,
@@ -436,7 +436,7 @@ div.editor_atto_toolbar div.atto_group button:only-child {
 
 .filemanager .filemanager-container {
     background-color: #3a3a38 !important;
-    color: black !important;
+    color:#121212 !important;
 	border: 1px solid rgba(10, 10, 10, 0.25) !important;
 }
 
@@ -562,6 +562,12 @@ span[data-flexitour="container"][x-placement="left-start"] div[data-role="arrow"
 
 .overview-description {
  color: #e6e5de;
+}
+
+/* configurable report*/
+#page-blocks-configurable_reports-viewreport .generaltable th.header {
+    background-color: #737373;
+    border-bottom-width: 2px;
 }
 
 /*table colors*/
@@ -773,7 +779,7 @@ table.quizreviewsummary th.cell {
 }
 .tag-info {
     background-color: #bd8a00;
-    color: black;
+    color: #121212;
 }
 
 .block_heatmap_heat_0 a,  .block_heatmap_heat_1 a, .block_heatmap_heat_2 a, .block_heatmap_heat_3 a,
@@ -783,7 +789,7 @@ table.quizreviewsummary th.cell {
 
 .block_heatmap_heat_0, .block_heatmap_heat_1, .block_heatmap_heat_2, 
 .block_heatmap_heat_3, .block_heatmap_heat_4 {
-    color: black;
+    color:#121212 ;
 }
 
 .ur_resub_msg {
@@ -922,7 +928,7 @@ table[class*="generic_small_callout"] {
 
 .callout-aqua {
     background-color: #359aae;
-    color: #fff;
+    color: #fffbef;
 }
 
 /*psuedo classes*/
@@ -1085,7 +1091,7 @@ div.section-modchooser a, .course-content .action-menu .dropdown-toggle, a.edits
 
 body.path-mod-mail #mail_container .btn-with, 
 body.path-mod-mail #mail_container .btn-with:hover {
-	color: #fff;
+	color: #fffbef;
 	background-color: #4f4f4d;
 }
 
@@ -1167,12 +1173,12 @@ body.path-mod-mail #mail_container .mail-list-toolbar .btn-primary {
 }
 
 body.path-mod-mail #mail_container .dropdown-item.active {
-	color: #fff;
+	color: #fffbef;
 	background-color: #999;
 }
 
 body.path-mod-mail #mail_container .dropdown-item:active {
-    color: #fff;
+    color: #fffbef;
     text-decoration: none;
     background-color: #247dcc;
 }
@@ -1185,7 +1191,7 @@ body.path-mod-mail #mail_container .btn-outline-primary:hover {
 
 body.path-mod-mail #mail_container .list-group-item-primary {
 	background-color: #247dcc;
-	color: #fff;
+	color: #fffbef;
 }
 
 body.path-mod-mail #mail_container .list-group-item-primary .mm-preview {
@@ -1199,4 +1205,13 @@ body.path-mod-mail .mm-message .quote {
 
 .hsuforum-thread {
 	background-color: transparent;
+}
+
+/*Scheduler plugin */
+.path-mod-scheduler div.commandbar {
+    background-color: #6d6c6c;
+}
+
+.path-mod-scheduler .maildisplay {
+    background: #6d6c6c;
 }
