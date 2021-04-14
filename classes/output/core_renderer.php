@@ -142,7 +142,46 @@ class core_renderer extends \core_renderer {
                     ['id' => 'region-main-settings-menu']
             ));
         }
+		
+        // Get course overview files.
+        if (empty($CFG->courseoverviewfileslimit)) {
+            return array();
+        }
+        require_once($CFG->libdir. '/filestorage/file_storage.php');
+        require_once($CFG->dirroot. '/course/lib.php');
+        $fs = get_file_storage();
+        $context = context_course::instance($COURSE->id);
+        $files = $fs->get_area_files($context->id, 'course', 'overviewfiles', false, 'filename', false);
+        if (count($files)) {
+            $overviewfilesoptions = course_overviewfiles_options($COURSE->id);
+            $acceptedtypes = $overviewfilesoptions['accepted_types'];
+            if ($acceptedtypes !== '*') {
+                // Filter only files with allowed extensions.
+                require_once($CFG->libdir. '/filelib.php');
+                foreach ($files as $key => $file) {
+                    if (!file_extension_in_typegroup($file->get_filename(), $acceptedtypes)) {
+                        unset($files[$key]);
+                    }
+                }
+            }
+            if (count($files) > $CFG->courseoverviewfileslimit) {
+                // Return no more than $CFG->courseoverviewfileslimit files.
+                $files = array_slice($files, 0, $CFG->courseoverviewfileslimit, true);
+            }
+        }
 
+        // Get course overview files as images - set $courseimage.
+        // The loop means that the LAST stored image will be the one displayed if >1 image file.
+        $courseimage = '';
+        foreach ($files as $file) {
+            $isimage = $file->is_valid_image();
+            if ($isimage) {
+                $courseimage = file_encode_url("$CFG->wwwroot/pluginfile.php",
+                    '/'. $file->get_contextid(). '/'. $file->get_component(). '/'.
+                    $file->get_filearea(). $file->get_filepath(). $file->get_filename(), !$isimage);
+            }
+        }
+		
         $header = new stdClass();
         // MODIFICATION START.
         // Show the context header settings menu on all pages except for the profile page as we replace
@@ -160,6 +199,7 @@ class core_renderer extends \core_renderer {
         $header->contextheader = $this->context_header();
         $header->hasnavbar = empty($this->page->layout_options['nonavbar']);
         $header->navbar = $this->navbar();
+		$header->image = $courseimage;
         // MODIFICATION START.
         // Show the page heading button on all pages except for the profile page.
         // There we replace it with an edit profile button.
@@ -470,6 +510,7 @@ class core_renderer extends \core_renderer {
         $context->logourl = $url;
         $context->sitename = format_string($SITE->fullname, true,
                 ['context' => context_course::instance(SITEID), "escape" => false]);
+		$context->summary = $SITE->summary;
         // MODIFICATION START.
         // Only if setting "loginform" is checked, then call own login.mustache.
         if (get_config('theme_boost_campus', 'loginform') == 'yes') {
