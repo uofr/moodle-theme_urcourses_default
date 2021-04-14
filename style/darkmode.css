@@ -1099,6 +1099,39 @@ body.path-mod-mail #mail_container .btn-outline-primary:hover {
 
 
 
+.selectize-dropdown, .selectize-dropdown.form-control {
+    border: 1px solid #333 !important;
+    -webkit-box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
+    box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
+}
+
+.selectize-input, .selectize-control.single .selectize-input.input-active {
+    background: #3a3a38;
+}
+
+.selectize-dropdown .optgroup {
+    color: #e5e3e8;
+    background: #3a3a38;
+}
+
+.selectize-dropdown:hover{
+    color: #e5e3e8;
+    background: #848889;
+}
+.selectize-dropdown:hover .optgroup:hover .option:hover{
+    color: #e5e3e8;
+    background: #848889;
+}
+.selectize-dropdown:focus .optgroup:focus .option:focus{
+    color: #e5e3e8;
+    background: #848889;
+}
+
+
+.selectize-dropdown .optgroup-header {
+    color: #e5e3e8;
+    background: #3a3a38;
+}
 
 body.path-mod-mail #mail_container .btn-outline-primary:active,
 body.path-mod-mail #mail_container .btn-outline-primary:focus {
