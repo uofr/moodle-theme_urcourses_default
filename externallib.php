@@ -542,6 +542,11 @@ class theme_urcourses_default_external extends external_api {
  
         //$html = preg_replace($reg1, $base, $html);
         //$html = preg_replace($reg2, 'href="' . $base, $html);
+
+
+
+
+
         //$html = preg_replace($reg3, 'src="' . $base, $html);
 
         return array(
@@ -1712,15 +1717,33 @@ class theme_urcourses_default_external extends external_api {
         $isavailable = true;
         if ($courseinfo) {
             //check if course is already activated in a different semester
-             $activecourse = "select * from ur_crn_map where courseid='$course->idnumber'";
+             $activecourse = "select * from ur_crn_map where courseid='$course->idnumber' ORDER BY semester";
              $active = $DB->get_records_sql($activecourse);
 
              if(!empty($active)){
-                 $isavailable=false;
-                 foreach($active as $c){
-                     if ( $c->semester == $semester) {
-                         $isavailable = true;
-                     }
+                $isavailable=false;
+                $inuse = 0;
+                
+                $crnstring ="";
+                $iscurrent =false;
+
+                 foreach($active as $activecrn){
+                    //if ( $c->semester == $semester) {
+                    //    $isavailable = true;
+                    // }
+                    if ($activecrn->archived == 0 && ($activecrn->semester != $semester) ) {
+                        $inuse = 1;
+                    }
+                    if($activecrn->archived == 0 && $activecrn->semester == $semester){
+                        $iscurrent=true;
+                    }
+                 }
+                 if ($inuse ) {
+                    if($iscurrent){   
+                        $isavailable=true;
+                    }
+                 }else{
+                    $isavailable=true;
                  }
              }
          }
@@ -1752,7 +1775,6 @@ class theme_urcourses_default_external extends external_api {
             ))),
             'semester' =>new external_value(PARAM_TEXT),
             'isavaliable' =>new external_value(PARAM_BOOL),
-
         ));
     }
 
