@@ -222,16 +222,26 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                     linkedClass = "alert-success";
                 }
 
-                activatedlist +='<div data-role="delete_button" data-fullname ="'+
-                                value.fullname+'" id="delete_'+value.crn+'_'+value.urid+
-                                '" class="list-group-item list-group-item-secondary enrollment-delete '+linkedClass+' ">'+
-                                '<h6 class ="ml-3 d-inline">'+value.subject + ' ' +
-                                value.course + '-' + value.section+' ('+value.crn+')'+
-                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
-                                '<span aria-hidden="true">&times;</span>'+
-                                '</button></h6>'+
-                                '</div>';
-                });
+                if(value.linked != 1){
+                    activatedlist +='<div data-role="delete_button" data-fullname ="'+
+                                    value.fullname+'" id="delete_'+value.crn+'_'+value.urid+
+                                    '" class="list-group-item list-group-item-secondary enrollment-delete '+linkedClass+' ">'+
+                                    '<h6 class ="ml-3 d-inline">'+value.subject + ' ' +
+                                    value.course + '-' + value.section+' ('+value.crn+')'+
+                                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                                    '<span aria-hidden="true">&times;</span>'+
+                                    '</button></h6>'+
+                                    '</div>';
+                }else{
+                    activatedlist +='<div data-fullname ="'+
+                        value.fullname+'" id="delete_'+value.crn+'_'+value.urid+
+                        '" class="list-group-item list-group-item-secondary enrollment-delete '+linkedClass+' ">'+
+                        '<h6 class ="ml-3 d-inline">'+value.subject + ' ' +
+                        value.course + '-' + value.section+' ('+value.crn+')'+
+                        '</h6>'+
+                        '</div>';
+                }
+            });
                 activatedlist += '</div><br>';
         }
         templatelist += '</div>';
