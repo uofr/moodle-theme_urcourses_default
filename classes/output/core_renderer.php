@@ -232,7 +232,15 @@ class core_renderer extends \theme_boost\output\core_renderer {
          $header->hasnavbar = empty($this->page->layout_options['nonavbar']);
          */
         $sitecontextheader = '<div class="page-context-header"><div class="page-header-headings"><h1>'.$COURSE->fullname.'</h1></div></div>';
+
         $headertext = (!empty($this->context_header())) ? $this->context_header() : $sitecontextheader;
+
+        //Little hack to add back missing header for dashboard
+        //The context header the comes through is not formated properly
+        if($this->page->pagelayout=="mydashboard"){
+            $headertext = $sitecontextheader;
+        }
+
         $header->contextheader = '<a href="'.$CFG->wwwroot.'/course/view.php?id='.$COURSE->id.'">'.$headertext.'</a>';  
 
         // JL EDIT: If user is editing a course, overwrite $header->contextheader with inplace editable
@@ -251,6 +259,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $header->toggle_course_availability = $this->get_course_toggle_availability();
         
         
+        error_log(print_r("THE PAGE",TRUE));
+        error_log(print_r($this->page->pagelayout ,TRUE));
         
         // MODIFICATION START.
         // Show the page heading button on all pages except for the profile page.
@@ -1267,4 +1277,39 @@ function search_small() {
             return $this->render_from_template('theme_urcourses_default/breadcrumbs', $this->page->navbar);
         }
     }
+
+
+    /**
+     * Internal implementation of user image rendering. For participants page
+     * to show user browser info for IT Support roles and admin
+     *
+     * @param user_picture $userpicture
+     * @return string
+     */
+  /*  protected function render_user_picture(\user_picture $userpicture) {
+
+        global $SESSION;
+
+
+        error_log(print_r("PAGE TYPE",TRUE));
+        error_log(print_r($this->page->pagetype,TRUE));
+
+        //if ($this->page->pagetype == 'site-index') {
+
+            //check if role is admin or IT Support
+
+
+           // require_once("$CFG->dirroot/user/profile/lib.php");
+            
+            error_log(print_r("User picture",TRUE));
+            error_log(print_r($userpicture,TRUE));
+            error_log(print_r("USER EMAIL??",TRUE));
+            error_log(print_r($SESSION['USER']->email,TRUE));
+            error_log(print_r("USER EMAIL??",TRUE));
+            error_log(print_r($SESSION[$userpicture->user->id]->email,TRUE));
+            //get all the user profile data 
+            $userp = profile_user_record($USER->id);
+        }
+        return parent::render_user_picture($userpicture);
+    }*/
 }
