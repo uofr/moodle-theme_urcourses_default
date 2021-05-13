@@ -1717,7 +1717,7 @@ class theme_urcourses_default_external extends external_api {
         $isavailable = true;
         if ($courseinfo) {
             //check if course is already activated in a different semester
-             $activecourse = "select * from ur_crn_map where courseid='$course->idnumber' ORDER BY semester";
+             $activecourse = "select * from ur_crn_map where courseid='$course->idnumber' AND archived = '0' ORDER BY semester";
              $active = $DB->get_records_sql($activecourse);
 
              if(!empty($active)){
