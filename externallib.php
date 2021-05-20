@@ -19,7 +19,7 @@
  *
  * @package    theme_uofr_conservatory
  * @author     John Lane
- * 
+ *
  */
 
 defined('MOODLE_INTERNAL') || die();

@@ -143,7 +143,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * @return string
      */
     public function body_attributes($additionalclasses = array()) {
-        global $PAGE, $CFG;
+        global $CFG;
         require_once($CFG->dirroot . '/theme/uofr_conservatory/locallib.php');
 
         if (!is_array($additionalclasses)) {
@@ -152,8 +152,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         // MODIFICATION START.
         // Only add classes for the login page.
-        if ($PAGE->bodyid == 'page-login-index') {
+        if ($this->page->bodyid == 'page-login-index') {
             $additionalclasses[] = 'loginbackgroundimage';
+            // Generating a random class for displaying a random image for the login page.
+            //$additionalclasses[] = theme_boost_campus_get_random_loginbackgroundimage_class();
         }
         // MODIFICATION END.
 
@@ -163,18 +165,17 @@ class core_renderer extends \theme_boost\output\core_renderer {
     /**
      * Override to be able to use uploaded images from admin_setting as well.
      *
-     * Returns the URL for the favicon.
+     * Returns the moodle_url for the favicon.
      *
      * KIZ MODIFICATION: This renderer function is copied and modified from /lib/outputrenderers.php
      *
      * @since Moodle 2.5.1 2.6
-     * @return string The favicon URL
+     * @return moodle_url The moodle_url for the favicon
      */
     public function favicon() {
-        global $PAGE;
         // MODIFICATION START.
-        if (!empty($PAGE->theme->settings->favicon)) {
-            return $PAGE->theme->setting_file_url('favicon', 'favicon');
+        if (!empty($this->page->theme->settings->favicon)) {
+            return $this->page->theme->setting_file_url('favicon', 'favicon');
         } else {
             return $this->image_url('favicon', 'theme');
         }
@@ -189,29 +190,56 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * Override to display switched role information beneath the course header instead of the user menu.
      * We change this because the switch role function is course related and therefore it should be placed in the course context.
      *
+     * MODIFICATION: This renderer function is copied and modified from /lib/outputrenderers.php
+     *
      * Wrapper for header elements.
      *
      * @return string HTML to display the main header.
      */
     public function full_header() {
         // MODIFICATION START.
-        global $PAGE, $USER, $COURSE, $CFG, $DB;
+        global $USER, $COURSE, $CFG, $DB;
         // MODIFICATION END.
+
+        if ($this->page->include_region_main_settings_in_header_actions() && !$this->page->blocks->is_block_present('settings')) {
+            // Only include the region main settings if the page has requested it and it doesn't already have
+            // the settings block on it. The region main settings are included in the settings block and
+            // duplicating the content causes behat failures.
+            $this->page->add_header_action(html_writer::div(
+                    $this->region_main_settings_menu(),
+                    'd-print-none',
+                    ['id' => 'region-main-settings-menu']
+            ));
+        }
 
         $header = new stdClass();
         // MODIFICATION START.
         // Show the context header settings menu on all pages except for the profile page as we replace
-        // it with an edit button there.
-        if ($PAGE->pagelayout != 'mypublic') {
+        // it with an edit button there and if we are not on the content bank view page (contentbank/view.php)
+        // as this page only adds header actions.
+        if ($this->page->pagelayout != 'mypublic' && $this->page->bodyid != 'page-contentbank') {
             $header->settingsmenu = $this->context_header_settings_menu();
         }
         // MODIFICATION END.
         /* ORIGINAL START
         $header->settingsmenu = $this->context_header_settings_menu();
         ORIGINAL END. */
-		
-		$sitecontextheader = '<div class="page-context-header"><div class="page-header-headings"><h1>'.$COURSE->fullname.'</h1></div></div>';
+
+        // Boost Campus
+        /*
+         $header->contextheader = $this->context_header();
+         $header->hasnavbar = empty($this->page->layout_options['nonavbar']);
+         */
+        $sitecontextheader = '<div class="page-context-header"><div class="page-header-headings"><h1>'.$COURSE->fullname.'</h1></div></div>';
+
         $headertext = (!empty($this->context_header())) ? $this->context_header() : $sitecontextheader;
+
+        //Little hack to add back missing header for dashboard
+        //The context header the comes through is not formated properly
+        if($this->page->pagelayout=="mydashboard"){
+            $headertext = $sitecontextheader;
+        }
+
         $header->contextheader = '<a href="'.$CFG->wwwroot.'/course/view.php?id='.$COURSE->id.'">'.$headertext.'</a>';  
 
         // JL EDIT: If user is editing a course, overwrite $header->contextheader with inplace editable
@@ -223,18 +251,16 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $header->contextheader = $course_editname_html;
         }
 
-        $header->hasnavbar = empty($PAGE->layout_options['nonavbar']);
+        $header->hasnavbar = empty($this->page->layout_options['nonavbar']);
         $header->navbar = $this->navbar();
-		
-		// TODO: Show notice if course is hidden AND editing is turned on
-		$header->toggle_course_availability = $this->get_course_toggle_availability();
-		
-		
-		
+        
+        // TODO: Show notice if course is hidden AND editing is turned on OR on course edit page
+        $header->toggle_course_availability = $this->get_course_toggle_availability();
+
         // MODIFICATION START.
         // Show the page heading button on all pages except for the profile page.
         // There we replace it with an edit profile button.
-        if ($PAGE->pagelayout != 'mypublic') {
+        if ($this->page->pagelayout != 'mypublic') {
             $header->pageheadingbutton = $this->page_heading_button();
         } else {
             // Get the id of the user for whom the profile page is shown.
@@ -280,25 +306,22 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 $header->course_image_uploader = $this->get_course_image_uploader();
                 $header->course_header_style = $this->get_course_header_style();
 	        }
-			
+
 			//check if course has alternate header style in database
 			if($record = $DB->get_record('theme_conservatory_hdrstyle', array('courseid'=>$COURSE->id, 'hdrstyle'=>1))){
 				$headerstyle = 1;
 			} else {
 				$headerstyle = 0;	
 			}
-			
-			
+            
+            
         } else $headerstyle = 1;
-		
-		
-		
-		
+
 		$header->headerstyle = $headerstyle;
-		
+        
         $context = \context_course::instance($COURSE->id);
-		
-		$urenderer = $PAGE->get_renderer('core');
+
+		$urenderer = $this->page->get_renderer('core');
 		$exporter = new course_summary_exporter($COURSE, ['context' => $context]);
 		$cobits = $exporter->export($urenderer);
 		
@@ -339,8 +362,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
         // intended.
         if (get_config('theme_uofr_conservatory', 'showhintcourseguestaccess') == 'yes'
             && is_guest(\context_course::instance($COURSE->id), $USER->id)
-            && $PAGE->has_set_url()
-            && $PAGE->url->compare(new moodle_url('/course/view.php'), URL_MATCH_BASE)
+            && $this->page->has_set_url()
+            && $this->page->compare(new moodle_url('/course/view.php'), URL_MATCH_BASE)
             && !is_role_switched($COURSE->id)) {
             $html .= html_writer::start_tag('div', array('class' => 'course-guestaccess-infobox alert alert-warning'));
             $html .= html_writer::tag('i', null, array('class' => 'fa fa-exclamation-circle fa-3x fa-pull-left'));
@@ -404,7 +427,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
     }
 
-	
+    
 	public function get_course_header_style() {
         global $CFG, $DB, $COURSE;
         
@@ -427,10 +450,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
             return false;
         }
 	}
-	
-	
+
+    
 	public function get_course_toggle_availability() {
-        global $CFG, $DB, $COURSE, $USER, $PAGE;
+        global $CFG, $DB, $COURSE, $USER;
         
 		/*
 		$sql = <<<EOD
@@ -455,7 +478,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 		//only show availability bar when on course main page, but not site home
 		$allowurl = $CFG->wwwroot.'/course/view.php?id='.$COURSE->id;
 		
-		if ($COURSE->id==1||$PAGE->url!=$allowurl) return false; 
+		if ($COURSE->id==1||$this->page->url!=$allowurl) return false; 
 		
         if ($this->page->user_is_editing()||(has_capability('moodle/course:update', context_course::instance($COURSE->id))&&$COURSE->visible==0)) {
             $context = [
@@ -469,12 +492,42 @@ class core_renderer extends \theme_boost\output\core_renderer {
             return false;
         }
 	}
-	
+    
+    public function get_course_visibility() {
+        global $CFG, $DB, $COURSE, $USER;
+
+        // check if date is past, current, active
+        $pastterm = strtotime("-4 months", time());
+        $ongoingdate = 946706400; //Jan 01, 2000 set date for ongoing courses
+
+        //check if course is starting in the future
+        if(time() < $COURSE->startdate){
+            return array(false,false,"future",false);
+        }
+        //if continuing course date it set
+        if($ongoingdate == $COURSE->startdate){
+            return array(false,false,false,"ongoing");
+        }
+        //if end date is set 
+        if($COURSE->enddate  != 0 && isset($COURSE->enddate) && $COURSE->enddate < time() ){
+            return array("past",false,false,false);
+        }else if(($COURSE->enddate  == 0 || !isset($COURSE->enddate))&& $COURSE->startdate < $pastterm ){
+            //if there is no end date and startdate is greater then four month
+            //place in past year
+            return array("past",false,false,false);
+        }else if($COURSE->enddate > time() && $COURSE->startdate <= $pastterm){
+            return array(false,"current",false,false);
+        }else{
+            return array(false,"current",false,false);
+        }
+    }  	
     /**
      * Override to display course settings on every course site for permanent access
      *
      * This is an optional menu that can be added to a layout by a theme. It contains the
      * menu for the course administration, only on the course main page.
+     *
+     * MODIFICATION: This renderer function is copied and modified from /lib/outputrenderers.php.
      *
      * @return string
      */
@@ -489,6 +542,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $showfrontpagemenu = false;
         $showusermenu = false;
 
+        // We are on the course home page.
         // MODIFICATION START.
         // REASON: With the original code, the course settings icon will only appear on the course main page.
         // Therefore the access to the course settings and related functions is not possible on other
@@ -587,6 +641,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * Override to use theme_uofr_conservatory login template
      * Renders the login form.
      *
+     * MODIFICATION: This renderer function is copied and modified from lib/outputrenderers.php
+     *
      * @param \core_auth\output\login $form The renderable.
      * @return string
      */
@@ -607,9 +663,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $url = $url->out(false);
         }
         $context->logourl = $url;
-		
-		$context->loginlogourl = $OUTPUT->image_url('uofr_logo_primary_blk', 'theme');
-		
+        
+        $context->loginlogourl = $OUTPUT->image_url('uofr_logo_primary_blk', 'theme');
+        
         $context->sitename = format_string($SITE->fullname, true,
             ['context' => context_course::instance(SITEID), "escape" => false]);
         // MODIFICATION START.
@@ -628,6 +684,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
     /**
      * Implementation of user image rendering.
      *
+     * MODIFICATION: This renderer function is copied and modified from lib/outputrenderers.php
+     *
      * @param help_icon $helpicon A help icon instance
      * @return string HTML fragment
      */
@@ -645,11 +703,11 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
         // MODIFICATION END.
     }
-	
+
 	public function activity_navigation() {
 	        return '';
 	    }
-	
+    
 	public function course_authornames() {
 
     global $CFG, $USER, $DB, $OUTPUT, $COURSE;
@@ -711,7 +769,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $course_authornames = html_writer::start_tag('div', array('class'=>'teacherlist'));
             $course_authornames .= implode('', $namesarray);
             $course_authornames .= html_writer::end_tag('div');
-			
+            
 			return $course_authornames;
         } else return '';
     }
@@ -780,7 +838,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
 
 function ur_check_course_cat() {
-	global $CFG,$DB,$COURSE;
+    global $CFG,$DB,$COURSE;
 
 	$ur_categories = array('','default'=>'',
 							'arts'=>'Faculty of Arts',
@@ -800,8 +858,8 @@ function ur_check_course_cat() {
 							'nursing'=>'Faculty of Nursing',
 							'scbscn'=>'',
 							'science'=>'Faculty of Science',
-							'socialwork'=>'Faculty of Social Work');
-    //error_log("theme: " . $COURSE->theme);
+                            'socialwork'=>'Faculty of Social Work');
+                            
 	if ($COURSE->theme != 'uofr_conservatory' && $COURSE->theme !== NULL && !empty($COURSE->theme)) {
 		$currthemeelms = explode('_',$COURSE->theme);
 		return array('css'=>'','name'=>$ur_categories[$currthemeelms[1]]);

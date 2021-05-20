@@ -18,7 +18,7 @@
  *
  * @package    theme_uofr_conservatory
  * @author     John Lane
- * 
+ *
  */
 
 define(['jquery', 'core/ajax', 'core/notification', 'core/str', 'core/modal_factory',
@@ -61,7 +61,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str', 'core/modal_fact
 
     /**
      * Initializes _imagedata.
-     * @param {string} imagedata 
+     * @param {string} imagedata
      */
     var _setImageData = function(imagedata) {
         _imagedata = imagedata;
@@ -69,7 +69,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str', 'core/modal_fact
 
     /**
      * Initializes _imagename.
-     * @param {string} imagename 
+     * @param {string} imagename
      */
     var _setImageName = function(imagename) {
         _imagename = imagename;
@@ -106,11 +106,11 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str', 'core/modal_fact
     /**
      * Sets course image to uploaded file.
      * Mostly lifted from theme_snap.
-     * @param {Object} event 
+     * @param {Object} event
      * @return void
      */
     var _handleImageChange = function(event) {
-        //console.log('imagechange');
+
         // if no file was uploaded, return
         if (!event.target.files.length) {
             return;
@@ -145,7 +145,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str', 'core/modal_fact
 
     /**
      * Prompts user to confirm image upload.
-     * @param {Object} event 
+     * @param {Object} event
      */
     var _confirmImageUpload = function(file) {
         var imagedata = file.target.result;
@@ -197,7 +197,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str', 'core/modal_fact
 
     /**
      * Handles theme_uofr_conservatory_upload_course_image response data.
-     * @param {Object} response 
+     * @param {Object} response
      */
     var _uploadDone = function() {
         // unset image data
@@ -241,7 +241,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str', 'core/modal_fact
     };
 
     /**
-     * Creates a bootstrap dismissable containing error text. 
+     * Creates a bootstrap dismissable containing error text.
      * Dismissable should appear in header and should cover upload button.
      * @param {string} text Error text
      */
@@ -329,5 +329,4 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str', 'core/modal_fact
     return {
         init: init
     };
-
 });

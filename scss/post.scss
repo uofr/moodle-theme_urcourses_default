@@ -19,12 +19,12 @@
                 display: block;
             }
         }
-    }
-}
-[data-region="blocks-column"] {
-    width: $blocks-column-width;
-    @include media-breakpoint-down(md) {
-        width: 100%;
+        [data-region="blocks-column"] {
+            width: $blocks-column-width;
+            @include media-breakpoint-down(md) {
+                width: 100%;
+            }
+        }
     }
 }
 
@@ -49,7 +49,7 @@ body.loginbackgroundimage, body .loginbackgroundimage {
         /* Make background of login panel slightly transparent */
         #page-login-index #region-main-box {
             div.card {
-                background-color: rgba(255, 255, 255, 0.95);
+                background-color: rgba(255, 255, 255, 0.8);
                 border-radius: 3px;
             }
             .card-header > img {
@@ -61,31 +61,6 @@ body.loginbackgroundimage, body .loginbackgroundimage {
             margin-top: 0;
         }
     }
-}
-
-.section-border-main {
-    display: block;
-    height: 5px;
-    background: #FFC82E;
-    margin-bottom: 9px;
-}
-.section-border-llc {
-    display: block;
-    height: 5px;
-    background: #136207;
-    margin-bottom: 9px;
-}
-.section-border-cpd{
-    display: block;
-    height: 5px;
-    background: #136207;
-    margin-bottom: 9px;
-}
-.section-border-con {
-    display: block;
-    height: 5px;
-    background: #136207;
-    margin-bottom: 9px;
 }
 
 /*------------------------------------
@@ -112,7 +87,7 @@ body.loginbackgroundimage, body .loginbackgroundimage {
             .usertext:hover,
             .dropdown-toggle:hover,
             .site-name:hover {
-                color: $brand-primary;
+                color: $primary;
             }
             .navbar-brand:not(.has-logo) .site-name:hover {
                 color: #fff;
@@ -135,12 +110,24 @@ body.loginbackgroundimage, body .loginbackgroundimage {
     .login,
     .login a {
         color: #fff;
+        margin-right:0.25rem;
+        margin-left:0.25rem;
     }
+
+.simplesearchform .btn-open {
+    color: #fff !important;
+    padding:0;
+}
+
+.simplesearchform:hover .btn-open:hover{
+    color: $primary !important;
+}
+
     .navbar-nav .nav-link .icon:hover,
     .usertext:hover,
     .dropdown-toggle:hover,
     .site-name:hover {
-        color: $brand-primary;
+        color: $primary;
     }
     .navbar-brand:not(.has-logo) .site-name:hover {
         color: #fff;
@@ -186,9 +173,6 @@ body.arts .page-navbkg {
     }
 	
 }
-
-
-
 
 .course-img-uploader-container {
 	
@@ -264,16 +248,11 @@ body.arts .page-navbkg {
     opacity: 0;
 }
 
-
 .course-hdr-chooser-container {
-	
-
-    
     .course-hdr-chooser {
         /*background-color: rgba(255, 255, 255, .8);*/
         display: block;
     }
-
 }
 
 .page-head {
@@ -332,7 +311,17 @@ body.editing .page-head {
 }
 
 .page-navbkg a {
-	color: #fff;
+    color: #fff;
+}
+
+.breadcrumb a:active, .breadcrumb a:focus{
+    background-color: transparent;
+    color: #fff;
+    border-top:none;
+    border-bottom:none;
+    border-width: 0px;
+    box-shadow: none;
+    text-decoration: underline;
 }
 
 .page-navbkg a[role="menuitem"] {
@@ -414,10 +403,9 @@ body.arts .page-navbkg .singlebutton button:hover {
 
 @include media-breakpoint-down(sm) {
     .page-navbkg .singlebutton button {
-		width: 1.75em;
-	    overflow: hidden;
-	    font-size: 1.5em;
-	    padding: 0 0.35em;
+        overflow: hidden;
+	    font-size: .9375rem;
+        padding: .375rem .75rem;
     }
 	.page-navbkg .singlebutton button:before {
 	    padding-right: 1em;
@@ -711,7 +699,7 @@ body.pagelayout-secure nav {
         /* Set section dividing border-color to brand-primary. */
         li.section.main {
             border: none;
-            border-bottom: 1px solid $brand-primary;
+            border-bottom: 1px solid $primary;
             padding-top: 3rem;
             padding-bottom: 2rem;
             margin: 0;
@@ -731,9 +719,9 @@ body.pagelayout-secure nav {
         }
         /* Change style of highlighted section to highlight more. */
         li.section.main.current {
-            border-bottom: $brand-primary 4px solid;
-            border-top: $brand-primary 3px solid; /*1px less because of section dividing border. */
-            background: $gray-lightest;
+            border-bottom: $primary 4px solid;
+            border-top: $primary 3px solid; /*1px less because of section dividing border. */
+            background: $gray-100;
         }
         /* Remove highlighting from Theme Boost. */
         li.section.main.current::before {
@@ -765,7 +753,7 @@ body.pagelayout-secure nav {
         }
         /* Add border to descripion text to differ it from module content. */
         .section .contentafterlink {
-            border-left: 2px solid $gray-light;
+            border-left: 2px solid $gray-600;
             padding-left: 10px;
             font-size: .9rem;
         }
@@ -793,7 +781,7 @@ body.pagelayout-secure nav {
         }
         .section-navigation .mdl-left:not(:empty),
         .section-navigation .mdl-right:not(:empty) {
-            background-color: $brand-primary;
+            background-color: $primary;
             padding: 2px 8px;
             border-radius: 2px;
             a {
@@ -810,7 +798,7 @@ body.pagelayout-secure nav {
     ul.periods {
         /* Add bottom border to last section in editing mode. */
         li.section.main:last-child {
-            border-bottom: 1px solid $brand-primary;
+            border-bottom: 1px solid $primary;
         }
         /* Special rule for hidden sections in editing mode as indents are different in this view. */
         li.section.main.hidden {
@@ -832,9 +820,9 @@ body.pagelayout-secure nav {
  */
 /* Add a decent background to intro text */
 #intro {
-    background-color: $gray-lightest;
+    background-color: $gray-100;
     margin-bottom: 1em;
-    border-left: 3px solid $brand-primary;
+    border-left: 3px solid $primary;
     padding-left: 15px;
     padding-right: 15px;
 }
@@ -845,7 +833,7 @@ body.pagelayout-secure nav {
 /* Adjust the activity navigation buttons to suit to the topics navigation buttons. */
 #next-activity-link,
 #prev-activity-link {
-    background-color: $brand-primary;
+    background-color: $primary;
     padding: 4px 8px;
     border-radius: 2px;
     color: #fff;
@@ -910,7 +898,7 @@ a.editsumm:before {
     content: "\f013\a0";
 }
 
-div.section-modchooser a, a.tiles-summary-edit {
+.section-modchooser-link, a.tiles-summary-edit {
     background: #f6f6f6;
     padding: .5em;
     font-size: .85em;
@@ -1000,10 +988,10 @@ blockquote::before {
         display: inline;
         padding-left: 0.75rem;
         // As these icons are just for information and not clickable, make the color gray.
-        color: $gray-light;
+        color: $gray-600;
     }
     .moreinfo a + div.enrolmenticons {
-        border-left: 2px solid $gray-light;
+        border-left: 2px solid $gray-600;
     }
 }
 .coursebox.arts {
@@ -1143,11 +1131,11 @@ body.arts .block.card {
 
     /* Set footer blocks text color from white to dark gray. */
     .block {
-        color: $gray-dark;
+        color: $gray-900;
         /* Set link and icon color from white to gray. */
         a,
         .icon {
-            color: $gray-dark;
+            color: $gray-900;
         }
         /* Remove the underline decoration from footer blocks context menu items.*/
         .dropdown-item.menu-action {
@@ -1241,7 +1229,7 @@ body.arts .block.card {
 
 /* Mark broken links with red color. */
 a[href*="/brokenfile.php"] {
-    color: $brand-danger;
+    color: $danger;
 }
 
 /* Add Font Awesome "broken chain" icon in front of broken link. */
@@ -1318,7 +1306,7 @@ a[href^="mailto"]::before {
     right: 0.5em;
     line-height: 1.7rem;
     color: #fff;
-    background-color: $brand-primary;
+    background-color: $primary;
     border-radius: 100px;
     cursor: pointer;
     box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.3);
@@ -1370,7 +1358,7 @@ a[href^="mailto"]::before {
             }
             /* We have to add a border for the users who do not have a switch role menu item due to their capabilities. */
             .dropdown-menu.dropdown-menu-right a:last-child {
-                border-bottom: 1px solid $gray-lighter;
+                border-bottom: 1px solid $gray-300;
             }
             .dropdown-menu-right div:last-of-type {
                 margin-bottom: 0;
@@ -1532,32 +1520,32 @@ a[href^="mailto"]::before {
         top: 50%;
         left: 50%;
         margin-left: -1.5em;
-        background-color: $brand-primary;
+        background-color: $primary;
         border-radius: 2px;
         margin-top: -1em !important;
     }
     &:hover .vjs-big-play-button {
-        background-color: $brand-primary;
+        background-color: $primary;
     }
     .vjs-big-play-button {
         &:focus,
         &:active {
-            background-color: $gray-dark;
+            background-color: $gray-900;
         }
     }
     .vjs-loading-spinner {
-        border-color: $brand-primary;
+        border-color: $primary;
     }
     .vjs-control-bar2 {
         background-color: transparent;
     }
     .vjs-control-bar {
-        background-color: $gray-dark !important;
+        background-color: $gray-900 !important;
         color: #fff;
     }
     .vjs-play-progress,
     .vjs-volume-level {
-        background-color: $brand-primary;
+        background-color: $primary;
     }
     .vjs-big-play-button {
         width: 2em !important;
@@ -1618,22 +1606,22 @@ a[href^="mailto"]::before {
 }
 
 
-div[data-region="drawer-toggle"] button.btn-secondary {
-	background-color: #ffc82e;
+div[data-region="drawer-toggle"] button.btn-light {
+	background-color: #ffc82e !important;
 	border-color: #bd8a00;
 }
 
-div[data-region="drawer-toggle"] button.btn-secondary:hover {
+div[data-region="drawer-toggle"] button.btn-light:hover {
 	background-color: #b88700;
 	border-color: #bd8a00;
 }
 
-div[data-region="drawer-toggle"] button.btn-secondary:not(:disabled):not(.disabled):active {
+div[data-region="drawer-toggle"] button.btn-light:not(:disabled):not(.disabled):active {
 	background-color: #b88700;
 	border-color: #bd8a00;
 }
 
-div[data-region="drawer-toggle"] button.btn-secondary:focus {
+div[data-region="drawer-toggle"] button.btn-light:focus {
 	box-shadow: none;
 }
 
@@ -2035,9 +2023,8 @@ body.loginbackgroundimage,
 body .loginbackgroundimage {
 	-webkit-background-size: cover;
 	background-size: cover;
-	background-position: 60% bottom;
+    background-position: 60% bottom;
     background-repeat: repeat-x;
-    /*height:auto;*/
 }
 
 /*Default link colour override. Would be the brand colour otherwise*/ 
@@ -2625,4 +2612,121 @@ body.format-topcoll.editing .section .activity .activityinstance {
 }
 @media only screen and (max-device-width: 800px), only screen and (device-width: 1024px) and (device-height: 600px), only screen and (width: 1280px) and (orientation: landscape), only screen and (device-width: 800px), only screen and (max-width: 767px) {
   .flex-video { padding-top: 0; }
+}
+
+.enrollment-delete {
+    cursor: pointer;
+}
+
+.modal-help-trigger {
+    cursor: pointer;
+}
+.modal-help-back-to-top {
+    position: fixed;
+    display: none;
+    padding: .5rem; 
+    bottom: .5em; 
+    right: .5em;
+    color: #fff;
+    background-color: #848889;
+    border-radius: 100px; 
+    cursor: pointer; 
+    -webkit-box-shadow: 0 0 3px 1px rgba(0,0,0,.3);
+    box-shadow: 0 0 3px 1px rgba(0,0,0,.3);
+    z-index: 10;
+}
+
+.modal-help-header {
+    width: 100%;
+
+    .modal-help-search-form {
+        position: relative;
+    }
+
+    .modal-help-search-clear {
+        position: absolute;
+        right: 3em;
+        top: 0.4em;
+        z-index: 1000;
+        cursor: pointer;
+        color: #848889;
+    }
+
+    .modal-help-search-suggestions {
+        position: absolute;
+        z-index: 1000;
+        background-color: white;
+        width: 100%;
+        border: 1px solid rgba(0,0,0,.15);
+        max-height: 20em;
+        overflow: auto;
+
+        .modal-help-suggestion-item {
+            display: block;
+            width: 100%;
+            padding: .25rem 1.5rem;
+            clear: both;
+            font-weight: 400;
+            color: #212529;
+            text-align: inherit;
+            white-space: nowrap;
+            background-color: transparent;
+            border: 0;
+        }
+        .modal-help-suggestion-item:focus {
+            background-color: #f8f9fa;
+        }
+
+        .loading-icon {
+            position: relative;
+            left: 50%;
+        }
+    }
+}
+
+.modal-help-header .modal-help-suggestion-box .modal-help-suggestion-item.suggestion-active {
+    background-color: #f2f2f2;
+}
+
+.modal-help-breadcrumbs {
+    padding: .75rem 1rem;
+    font-weight: bold;
+}
+
+#avail_btn {
+	background-color: rgba(91, 192, 222, 0.22);
+	padding: 0.5rem;
+	border-radius: 0.25rem;
+}
+div.no-overflow ul {
+padding-left: 1.1rem!important;
+}
+
+.urhiddendash  {
+	opacity: 65%;
+}
+div.dashboard-card.urhiddendash div.course-info-container {
+	border-top: 5px solid #fec82e50 !important;
+}
+
+div.card.dashboard-card.urhiddendash div.card-body {
+	border-style: dashed;
+}
+
+div.card.dashboard-card.urhiddendash {
+	border-style: none;
+	//fancy border
+	/*
+	background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23CCCCCCFF' stroke-width='4' stroke-dasharray='2%2c 8' stroke-dashoffset='0' stroke-linecap='butt'/%3e%3c/svg%3e");
+	*/
+}
+
+div.card.dashboard-card.urhiddendash div.card-body span.name-of-course,
+div.card.dashboard-card.urhiddendash .course-fav-icon.text-primary {
+	/*color: #aaa !important;*/
+}
+
+.urmodalsummary {
+	padding: 1em 2em;
+	margin: 1em 0;
 }

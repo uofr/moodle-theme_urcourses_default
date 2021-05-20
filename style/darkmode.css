@@ -26,6 +26,12 @@ a, #boost-campus-course-settings .card-body a, .ui-widget-content a, .btn-link,
     background-color: #f5eff9;
  }
 
+ .custom-select {
+    color: #efede7!important;
+    border: 1px solid #333 !important;
+    background-color: #616161;
+}
+
  ol.checklist .itemblack, .block_writinghelp .card-text a h4, .popover-body,
  .dropdown-menu.show .dropdown-item a, #page-header .course-head a .page-context-header .page-header-headings h1,
  #page-header h1 a, .popover-region-container {
@@ -39,7 +45,6 @@ a, #boost-campus-course-settings .card-body a, .ui-widget-content a, .btn-link,
  .text-primary {
      color:inherit!important;
  }
-
 
  /*Need to add a bg to red text to keep contrast ratio up*/
  .checklist-itemoverdue {
@@ -67,6 +72,20 @@ a, #boost-campus-course-settings .card-body a, .ui-widget-content a, .btn-link,
     color: rgba(10,10,10,0.5) !important;
 }
 */
+
+#page-header .page-navbkg {
+    color: #757575;
+}
+.page-navbkg a {
+    color: #757575;
+}
+
+.page-navbkg a:hover {
+    color: #9e9e9e;
+}
+.page-navbkg .breadcrumb-item+.breadcrumb-item::before {
+    color: #757575;
+}
 
 #page-header .course-head {
     background-color: rgba(10,10,10,.5);
@@ -119,6 +138,114 @@ table, table td, table tr, table th, .forumpost, .path-mod-feedback table.analys
 /*class colour swaps*/
 .bg-dark {
     background-color: #4f4f4d!important;
+}
+
+.simplesearchform .btn-submit{
+    color: #f5f5f5;
+    background-color: #848889 !important;
+    border-color: #848889 !important;
+}
+.close {
+    float: right;
+    font-size: 1.40625rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #848889!important;
+    text-shadow: 0 1px 0 #f5f5f5;
+    opacity: .5;
+}
+
+.optionaction:hover{
+    background-color: #1b1b1b!important;
+}
+
+.optionaction:active{
+    background-color: #1b1b1b!important;
+}
+
+.text-muted {
+     color: #f5f5f5!important; 
+}
+
+.optionname{
+    color: #e2d2a2;
+}
+
+.section-modchooser-link:hover{
+    color: #d9b945;
+}
+
+.section-modchooser-link, a.tiles-summary-edit {
+    background: #474541;
+    border-color: rgba(10, 10, 10, 0.25);
+    color: #ffdaa9 !important;
+}
+
+.path-mod-assign [data-region="grade-panel"] .fitem.has-popout {
+    background-color: #848889; 
+    border: 1px solid rgba(107, 107, 107, 0.125);
+}
+
+.path-mod-assign [data-region="grade-panel"] .gradingform_rubric .criterion .levels .level.checked {
+    background-color: #dff0d8;
+    color: #848889!important;
+    border: none;
+    border-left: 1px solid #ddd;
+}
+.path-mod-assign [data-region="grade-panel"] .gradingform_rubric.evaluate .criterion .levels .level:hover {
+    color: #848889!important;
+}
+
+.levels, .levels:hover{
+    color: #848889!important;
+}
+.gradingform_rubric .criterion.even {
+    background: #474541;
+}
+
+.path-mod-assign [data-region="grade-panel"] .gradingform_rubric .criterion .levels {
+    background-color: #424242;
+}
+
+.ajax-contact-button, #message-user-button {
+    color: #e2d2a2;
+}
+.ajax-contact-button:hover , #message-user-button:hover{
+    color: #d9b945;
+}
+
+dt {
+    font-weight: 700;
+    color: #f5f5f5;
+    margin-top: 5px;
+}
+
+@media (max-width: 991.98px){
+    .simplesearchform .collapse.show, .simplesearchform .collapsing {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        display: flex;
+        background-color: #424242;
+        z-index: 1060;
+        height: 50px;
+    }
+}
+
+.dropdown-header {
+    display: block;
+    padding: .5rem 1.5rem;
+    margin-bottom: 0;
+    font-size: .8203125rem;
+    color: #f5f5f5 !important;
+    white-space: nowrap;
+}
+
+.alert-warning {
+    color: #654922;
+    background-color: #f7d5a4;
+    border-color: #fbe8cd;
 }
 
 .btn-primary, #toggle-sections .btn.btn-primary {
@@ -296,7 +423,8 @@ div.editor_atto_toolbar div.atto_group button:only-child {
 }
 
 .editor_atto_content_wrap, .editor_atto + textarea {
-	border: solid 1px #333;
+    border: solid 1px #333;
+    background-color: #3a3a38;
 }
 
 .CodeMirror {
@@ -440,7 +568,13 @@ span[data-flexitour="container"][x-placement="left-start"] div[data-role="arrow"
 }
 
 .overview-description {
- color: #e6e5de;
+    color: #f5f5f5;
+}
+
+/* configurable report*/
+#page-blocks-configurable_reports-viewreport .generaltable th.header {
+    background-color: #737373;
+    border-bottom-width: 2px;
 }
 
 /*table colors*/
@@ -478,19 +612,145 @@ table.dataTable tr.odd td.sorting_1 {
 }
 
 .path-mod-assign td.submissionnotgraded {
-    background-color: #f2eff3;  
+    background-color: #f5f5f5;  
+}
+
+#categoryquestions > tbody > tr:nth-of-type(even) {
+    background: #585856;
 }
 
 .path-mod-quiz #mod_quiz_navblock .qnbutton.notyetanswered .trafficlight, 
 .path-mod-quiz #mod_quiz_navblock .qnbutton {
     background-color: #dad8ce;
 }
-
 .path-mod-quiz #mod_quiz_navblock .qnbutton.answersaved .trafficlight {
     background-color: #938696;
 }
 
-.pagination .page-link,
+
+#page-question-type-multichoice{
+    background-color: #424242 !important;
+}
+#page-question-type-multichoice div[id^=fitem_id_][id*=fraction_]{
+    background-color: #424242 !important;
+}
+body#page-question-type-multichoice div[id^=fitem_id_][id*=answer_]{
+    background-color: #424242 !important;
+}
+body#page-question-type-multichoice div[id^=fitem_id_][id*=feedback_]{
+    background-color: #424242 !important;
+}
+body#page-question-type-calculated div[id^=fgroup_id_][id*=answeroptions_], body#page-question-type-calculatedmulti div[id^=fgroup_id_][id*=answeroptions_] {
+    background-color: #424242;
+}
+body#page-question-type-calculated div[id^=fgroup_id_][id*=answertolerance_], body#page-question-type-calculated div[id^=fgroup_id_][id*=answerdisplay_], body#page-question-type-calculatedmulti div[id^=fgroup_id_][id*=answertolerance_], body#page-question-type-calculatedmulti div[id^=fgroup_id_][id*=answerdisplay_] {
+    background-color: #424242;
+}
+body#page-question-type-calculated div[id^=fitem_id_][id*=feedback_], body#page-question-type-calculatedmulti div[id^=fitem_id_][id*=feedback_] {
+    background-color: #424242;
+}
+body#page-question-type-calculated div[id^=fgroup_id_][id*=answertolerance_], body#page-question-type-calculated div[id^=fgroup_id_][id*=answerdisplay_], body#page-question-type-calculatedmulti div[id^=fgroup_id_][id*=answertolerance_], body#page-question-type-calculatedmulti div[id^=fgroup_id_][id*=answerdisplay_] {
+    background-color: #424242;
+}
+body#page-question-type-calculatedsimple div[id^=fgroup_id_][id*=answeroptions_] {
+    background-color: #424242;
+}
+body#page-question-type-calculatedsimple div[id^=fgroup_id_][id*=answertolerance_], body#page-question-type-calculatedsimple div[id^=fgroup_id_][id*=answerdisplay_] {
+    background-color: #424242;
+}
+body#page-question-type-calculatedsimple div[id^=fitem_id_][id*=feedback_] {
+    background-color: #424242;
+}
+body#page-question-type-ddmarker div[id^=fitem_id_][id*=hint_] {
+    background-color: #424242;
+}
+body#page-question-type-numerical div[id^=fgroup_id_][id*=answeroptions_] {
+    background-color: #424242;
+}
+body#page-question-type-numerical div[id^=fitem_id_][id*=feedback_] {
+    background-color: #424242;
+}
+body#page-question-type-shortanswer div[id^=fgroup_id_][id*=answeroptions_] {
+    background-color: #424242;
+}
+body#page-question-type-shortanswer div[id^=fitem_id_][id*=feedback_] {
+    background-color: #424242;
+}
+body#page-question-type-match div[id^=fitem_id_][id*=subquestions_] {
+    background-color: #424242;
+}
+body#page-question-type-match div[id^=fitem_id_][id*=subanswers_] {
+    background-color: #424242;
+}
+body#page-question-type-multichoiceset div[id^=fitem_id_][id*=answer_] {
+    background-color: #424242;
+}
+body#page-question-type-multichoiceset div[id^=fitem_id_][id*=feedback_]{
+    background-color: #424242;
+}
+body#page-question-type-ddimageortext div[id^=fgroup_id_][id*=drags_]{
+    background-color: #424242;
+}
+body#page-question-type-ddimageortext div[id^=fitem_id_][id*=dragitem_]{
+    background-color: #424242;
+}
+body#page-question-type-ddimageortext div[id^=fitem_id_][id*=draglabel_]{
+    background-color: #424242;
+}
+
+body#page-question-type-jme div[id^=fitem_id_][id*=fraction_], body#page-question-type-jme #fitem_id_addanswers + .fitem + .fitem, body#page-question-type-jme div[id^=fitem_id_][id*=feedback_], body#page-question-type-jme div[id^=fitem_id_][id*=otherfeedback]{
+    background-color: #424242;
+}
+
+.form-autocomplete-suggestions {
+    background-color: #424242;
+    border: 2px solid #f5f5f5;
+}
+
+#page-mod-quiz-edit ul.slots li.section .content {
+    background-color: #424242 !important;
+}
+
+#page-mod-quiz-edit ul.slots li.section li.activity .instancemaxmarkcontainer {
+    background: #6f6e6b;
+}
+
+#page-mod-quiz-edit ul.slots li.section li.activity{
+    background-color: #6f6e6b;
+}
+
+table.quizreviewsummary td.cell {
+    background: #3a3a38;
+}
+
+table.quizreviewsummary th.cell {
+    background: #3a3a38;
+}
+
+.que.essay .qtype_essay_response.readonly {
+    background-color: #3a3a38;
+    color: #efede7!important;
+}
+
+#page-mod-quiz-edit #categoryquestions .questionname, #page-mod-quiz-edit ul.slots li.activity div.activityinstance .questionname {
+    color: #e2d2a2;
+}
+#page-mod-quiz-edit ul.slots li.activity div.activityinstance .questiontext {
+    color: #e2d2a2;
+}
+#page-mod-quiz-edit .section .activity .actions {
+    background-color: transparent;
+}
+
+#page-mod-quiz-edit .slotnumber {
+    background: #3a3a38;
+}
+
+.searchoptions{
+    color: #f5f5f5!important;
+    border: 1px solid #333 !important;
+    background-color: #3a3a38
+}.pagination .page-link,
 #boost-campus-activity-settings .tab-content .card, 
 #boost-campus-course-settings .tab-content .card  {
     background-color: #6f6e6b;
@@ -571,6 +831,9 @@ ul.oublog-accordion li {
 #nav-drawer, .message-drawer, .bg-light, .bg-white {
     background-color: #383736!important;
     color: #e5e3e8;
+}
+.message-app {
+    background-color: #454342 !important;
 }
 .message-drawer .bg-secondary {
     background-color: #454342 !important;
@@ -696,6 +959,11 @@ a:hover {
     border-color: #dee2e6;
 }
 
+tr:hover{
+    background-color: #757575;
+    color: #f5f5f5;
+}
+
 /*decorated text spacing for easier readability*/
 i, b, .teachers {
     letter-spacing: .5px;
@@ -758,6 +1026,10 @@ background: #EFEFEF!important;
     background: #42413e;
 }
 
+.text-dark {
+    color: #f5f5f5!important;
+}
+
 .table-primary, .table-secondary, .table-success, .table-danger, .table-warning, .table-info, .table-light, .table-dark,  .btn-group.course-hdr-chooser span {
     color: #2f3440;
 }
@@ -784,8 +1056,6 @@ div.section-modchooser a, .course-content .action-menu .dropdown-toggle, a.edits
     border-color: rgba(10, 10, 10, 0.25);
     color: #ffdaa9 !important;
 }
-
-
 
 #boost-campus-course-settings .nav-tabs,
 #boost-campus-activity-settings .nav-tabs {
@@ -830,9 +1100,64 @@ body.path-mod-mail #mail_container .btn-outline-primary:hover {
 	color: #847b62;
 }
 
+.selectize-dropdown, .selectize-dropdown.form-control {
+    border: 1px solid #333 !important;
+    -webkit-box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
+    box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
+}
 
 
 
+.selectize-input {
+    border: 1px solid #333 !important;
+    -webkit-box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
+    box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.selectize-input, .selectize-control.single .selectize-input.input-active {
+    background: #3a3a38;
+    color: #f5f5f5;
+}
+
+.selectize-dropdown .optgroup {
+    color: #f5f5f5;
+    background: #3a3a38;
+}
+
+.selectize-dropdown, .selectize-input, .selectize-input input {
+    color: #f5f5f5;
+}
+
+.selectize-dropdown:hover{
+    color: #f5f5f5;
+    background: #848889;
+}
+.selectize-dropdown:focus{
+    color: #f5f5f5;
+    background: #848889;
+}
+.selectize-dropdown:hover .optgroup:hover .option:hover{
+    color: #f5f5f5;
+    background: #848889;
+}
+.selectize-dropdown:focus .optgroup:focus .option:focus{
+    color: #f5f5f5;
+    background: #848889;
+}
+
+.selectize-dropdown .optgroup-header {
+    color: #f5f5f5;
+    background: #3a3a38;
+}
+
+.selectize-control.multi .selectize-input > div {
+    color: #f5f5f5;
+    background: #848889;
+}
 body.path-mod-mail #mail_container .btn-outline-primary:active,
 body.path-mod-mail #mail_container .btn-outline-primary:focus {
     background-color: #f0f8ff;
@@ -878,4 +1203,13 @@ body.path-mod-mail .mm-message .quote {
 
 .hsuforum-thread {
 	background-color: transparent;
+}
+
+/*Scheduler plugin */
+.path-mod-scheduler div.commandbar {
+    background-color: #757575;
+}
+
+.path-mod-scheduler .maildisplay {
+    background: #757575;
 }

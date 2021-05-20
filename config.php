@@ -24,6 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+
+require_once($CFG->dirroot.'/theme/uofr_conservatory/locallib.php');
+
 $THEME->name = 'uofr_conservatory';
 $THEME->parents = ['boost'];
 

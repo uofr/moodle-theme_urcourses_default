@@ -18,7 +18,7 @@
  *
  * @package    theme_uofr_conservatory
  * @author     John Lane
- * 
+ *
  */
 
 define(['jquery', 'core/ajax', 'core/notification', 'core/str',
@@ -28,9 +28,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     var _root;
     /** Course ID */
     var _courseid;
-	
     var _availability;
-    var _element;
 
     /** Jquery selector strings. */
     var SELECTORS = {
@@ -65,10 +63,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      * Initiate ajax call to upload and set new image.
      */
     var _toggleAvailability = function() {
-        _element = $(this);
 
         //if current style is clicked, do nothing...
-        console.log('_availability:'+_availability);
         /*
         if ('#'+_element.attr('id') == SELECTORS.HDRSTYLEA_BTN && _headerstyle == 0) {
             return;
@@ -81,10 +77,13 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         ModalFactory.create({
             type: ModalFactory.types.SAVE_CANCEL,
             title: '<b>Make this course '+(_availability==1?'un':'')+'available?</b>',
-            body: "<p>Are you sure you want to make this course <b>"+(_availability==1?'un':'')+"available</b> to students?</b><br /><span class=\"small\">You can change the availability of this course as needed, when you're ready.</span></p>"
+            body: "<p>Are you sure you want to make this course <b>"+(_availability==1?'un':'')
+            +"available</b> to students?</b><br /><span class=\"small\">"
+            +"You can change the availability of this course as needed, when you're ready.</span></p>"
         })
         .then(function(modal) {
-            modal.setSaveButtonText('Yes, make it '+(_availability==1?'un':'')+'available');
+            modal.setSaveButtonText('Yes, make it '+(_availability==1?'un':'')
+            +'available');
             var root = modal.getRoot();
             root.on(ModalEvents.cancel, function(){
                 return;
@@ -96,7 +95,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
 
 
     var _availabilityChange = function() {
-        
 
         // return if required values aren't set
         if (!_courseid) {
@@ -122,7 +120,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
     };
     /**
      * Handles theme_uofr_conservatory_upload_course_image response data.
-     * @param {Object} response 
+     * @param {Object} response
      */
     var _choiceDone = function() {
         str.get_string('success:courseavailabilitychanged', 'theme_uofr_conservatory')
@@ -158,11 +156,37 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         // add to header's course image area
         $(SELECTORS.HEADER_TOP).append(popup);
 
+        var relotext = "Loading";
+
+        // create bootstrap 4 dismissable
+        var relopopup = $('<div></div>');
+        relopopup.text(relotext);
+        relopopup.prop('id','cstyle_success_popup');
+        relopopup.css({'position' : 'absolute'});
+        relopopup.css({'right' : '5px'});
+        relopopup.css({'bottom' : '30px'});
+        relopopup.css({'z-index' : '1200'});
+        relopopup.addClass('alert alert-success alert-dismissable fade show');
+
+        // create dismiss button
+        var relodismissBtn = $('<button></button>');
+        relodismissBtn.html('&times;');
+        relodismissBtn.addClass('close');
+        relodismissBtn.attr('type', 'button');
+        relodismissBtn.attr('data-dismiss', 'alert');
+
+        // append dismiss button to popup
+        relopopup.append(relodismissBtn);
+
+
         // makes the alert disapear after a set amout of time.
         setTimeout(function() {
             $('#cstyle_success_popup').fadeTo(500, 0).slideUp(500, function(){
                 $(this).remove();
-				location.reload(true);
+                // add to header's course image area
+                $(SELECTORS.HEADER_TOP).append(relopopup);
+
+                location.reload(true);
             });
         },1800);
     };

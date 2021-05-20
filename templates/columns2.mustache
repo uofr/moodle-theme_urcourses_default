@@ -31,6 +31,14 @@
     * regionmainsettingsmenu - HTML for the region main settings menu
     * hasregionmainsettingsmenu - There is a region main settings menu on this page.
     * pagebottomelements - HTML for all additional layout elements below the main content, e.g. the footer.
+    * timedinfobannershowonselectedpage - true if the time controlled info banner should be displayed.
+    * timedetualinfobannercontent - The content that should be shown in the time controled information banner.
+    * timedetualinfobannercssclass - The Bootstrap class that is used for the time controlled info banner.
+    * perpinfobannershowonselectedpage - true if the perpetual info banner should be displayed.
+    * perpibcontent - The content that should be shown in the perpetual information banner.
+    * perpibcss - The Bootstrap class that is used for the perpetual info banner.
+    * perpibdismiss - true if the setting perpibdismiss is enabled.
+    * bcbttbutton - true if the setting bcbttbutton is enabled.
 
     Example context (json):
     {
@@ -47,7 +55,16 @@
         "navdraweropen":true,
         "regionmainsettingsmenu": "",
         "hasregionmainsettingsmenu": false,
-        "pagebottomelements": ""
+        "pagebottomelements": "".,
+        "timedinfobannershowonselectedpage":true,
+        "timedibcontent": "This is a test content for perpetual info banner.",
+        "timedibcss": danger,
+        "perpinfobannershowonselectedpage":true,
+        "perpibcontent": "This is a test content for perpetual info banner.",
+        "perpibcss": primary,
+        "perpibdismiss": true,
+        "infobannerconfirmationdialogue" : true,
+        "bcbttbutton": true
     }
 }}
 {{! MODIFICATION:
@@ -57,21 +74,44 @@
       template and use the equivalent own javascript "incoursesettings".
     * Call to own navbar mustache template instead of boost/navbar.
     * Add own additional layout elements: the footer, footnote or image area.
+    * Use own footer instead of the theme_boost footer.
+    * Add own additional layout elements: footnote or image area.
+    * Added the possibility to show information banners.
+    * Added the possibility to show Boost Campus traditional "Back to top" button instead of Boost core "Go to top" button
+      located in footer.mustache file.
 }}
 {{> theme_boost/head }}
 
 <body {{{ bodyattributes }}}>
+{{> core/local/toast/wrapper}}
 
-<div id="page-wrapper">
+<div id="page-wrapper" class="d-print-block">
 
     {{{ output.standard_top_of_body_html }}}
 
     {{> theme_uofr_conservatory/navbar }}
+      <div id="page" class="container-fluid d-print-block">
 
-    <div id="page" class="container-fluid">
+        {{#timedinfobannershowonselectedpage}}
+        <div id="themeboostcampusitimedinfobanner" class="alert {{#timedibcss}}alert-{{{ timedibcss }}}{{/timedibcss}} mt-3" role="alert">
+          {{{ timedibcontent }}}
+        </div>
+        {{/timedinfobannershowonselectedpage}}
+
+        {{#perpinfobannershowonselectedpage}}
+        <div id="themeboostcampusperpinfobanner" class="alert {{#perpibcss}}alert-{{{ perpibcss }}}{{/perpibcss}} {{#perpibdismiss}}alert-dismissible fade show{{/perpibdismiss}} mt-3" role="alert">
+          {{{ perpibcontent }}}
+          {{#perpibdismiss}}
+          <button type="button" id="themeboostcampusperpinfobannerclosebutton" class="close" data-dismiss="alert" aria-label="{{#str}}close, theme_boost_campus{{/str}}">
+              <span aria-hidden="true">&times;</span>
+           </button>
+           {{/perpibdismiss}}
+        </div>
+        {{/perpinfobannershowonselectedpage}}
+
         {{{ output.full_header }}}
 
-        <div id="page-content" class="row pb-3">
+        <div id="page-content" class="row pb-3 d-print-block">
             <div id="region-main-box" class="col-12">
                 {{#node}}
                     {{> theme_uofr_conservatory/settings_link_page }}
@@ -81,8 +121,7 @@
                     <div> {{{ output.region_main_settings_menu }}} </div>
                 </div>
                 {{/hasregionmainsettingsmenu}}
-                <section id="region-main" {{#hasblocks}}class="has-blocks mb-3"{{/hasblocks}}>
-
+                <section id="region-main" {{#hasblocks}}class="has-blocks mb-3"{{/hasblocks}} aria-label="{{#str}}content{{/str}}">
                     {{#hasregionmainsettingsmenu}}
                         <div class="region_main_settings_menu_proxy"></div>
                     {{/hasregionmainsettingsmenu}}
@@ -96,7 +135,7 @@
 
                 </section>
                 {{#hasblocks}}
-                <section data-region="blocks-column" class="d-print-none">
+                <section data-region="blocks-column" class="d-print-none" aria-label="{{#str}}blocks{{/str}}">
                     {{{ sidepreblocks }}}
                 </section>
                 {{/hasblocks}}
@@ -104,31 +143,48 @@
         </div>
     </div>
     {{{ output.standard_after_main_region_html }}}
-    {{> theme_uofr_conservatory/nav-drawer }}
-    {{{ pagebottomelements }}}
+   {{> theme_uofr_conservatory/nav-drawer }}
+
+    {{> theme_boost_campus/footer }}
+    {{> theme_boost_campus/imagearea }}
+    {{> theme_boost_campus/footnote }}
 </div>
 
 </body>
 </html>
 {{#js}}
-require(['theme_boost/loader']);
-require(['theme_boost/drawer'], function(mod) {
+M.util.js_pending('theme_boost/loader');
+require(['theme_boost/loader'], function() {
+    M.util.js_complete('theme_boost/loader');
+});
+
+M.util.js_pending('theme_boost/drawer');
+require(['theme_boost/drawer'], function(drawer) {
+    drawer.init();
+    M.util.js_complete('theme_boost/drawer');
+});
+{{#bcbttbutton}}
+require(['theme_boost_campus/backtotop'], function(mod) {
     mod.init();
 });
-require(['theme_uofr_conservatory/backtotop'], function(mod) {
+{{/bcbttbutton}}
+require(['theme_urcourses_default/backtotop'], function(mod) {
     mod.init();
 });
-require(['theme_uofr_conservatory/catchshortcuts'], function(mod) {
+require(['theme_urcourses_default/catchshortcuts'], function(mod) {
     mod.init({{{catchshortcuts}}});
 });
-require(['jquery','theme_boost/tooltip'], function($){$('[data-toggle="tooltip"]').tooltip()});
-
-require(['theme_uofr_conservatory/nav_toggle'], function(mod) {
+require(['theme_urcourses_default/nav_toggle'], function(mod) {
     mod.init();
 });
 {{#incoursesettings}}
-    require(['theme_uofr_conservatory/incoursesettings'], function(mod) {
+    require(['theme_boost_campus/incoursesettings'], function(mod) {
     mod.init();
     });
 {{/incoursesettings}}
+{{#perpinfobannershowonselectedpage}}
+    require(['theme_boost_campus/infobanner'], function(mod) {
+    mod.init({{{perbibconfirmdialogue}}});
+    });
+{{/perpinfobannershowonselectedpage}}
 {{/js}}

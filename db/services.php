@@ -22,7 +22,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 $functions = array(
-
     'theme_uofr_conservatory_upload_course_image' => array(
         'classname'     => 'theme_uofr_conservatory_external',
         'methodname'    => 'upload_course_image',
@@ -31,7 +30,6 @@ $functions = array(
         'type'          => 'write',
         'ajax'          => 'true',
     ),
-	
     'theme_uofr_conservatory_header_choose_style' => array(
         'classname'     => 'theme_uofr_conservatory_external',
         'methodname'    => 'choose_header_style',
@@ -40,7 +38,6 @@ $functions = array(
         'type'          => 'write',
         'ajax'          => 'true',
     ),
-
     'theme_uofr_conservatory_toggle_course_availability' => array(
         'classname'     => 'theme_uofr_conservatory_external',
         'methodname'    => 'toggle_course_availability',
