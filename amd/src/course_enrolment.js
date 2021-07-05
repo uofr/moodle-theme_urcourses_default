@@ -106,7 +106,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      * Sets up event listeners.
      * @return void
      */
-    var _registerSelectorEventListeners = function(_element) {
+    var _registerSelectorEventListeners = function() {
         //set event listners for template options
         $('.tmpl-label').bind('click', function() { _setActiveTemplate($(this)); } );
     };
@@ -246,7 +246,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
         }
         templatelist += '</div>';
 
-        var inSemester = false; //change to true if want to block current semester enrollment
+        //var inSemester = false; //change to true if want to block current semester enrollment
        /* jQuery.each(_semesterdates, function(index, item) {
             if(index == _semester){
                 starttemp = item.startdate.split("-")
@@ -346,7 +346,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                     });
                 }
                 //remove modal on hide
-                root.on(ModalEvents.hidden, function(e){
+                root.on(ModalEvents.hidden, function(){
                     //remove inputs otherwise duplicates are made causing id problems
                     $( "div[data-role='templateholder']" ).remove();
                 });
@@ -563,7 +563,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             crns: templateids,
             groupcheck: groupcheck,
             startdate: startdate,
-            enddate: enddate
+            enddate: enddate,
+            isoriginal: isoriginal,
         };
 
         // set ajax call
@@ -620,7 +621,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
             root.on(ModalEvents.cancel, function(){
                 return;
             });
-            root.on(ModalEvents.save, function(e){
+            root.on(ModalEvents.save, function(){
                 _deleteEnrollment(element);
             });
             modal.show();

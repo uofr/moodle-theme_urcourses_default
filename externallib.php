@@ -1827,6 +1827,7 @@ class theme_urcourses_default_external extends external_api {
             'groupcheck' => new external_value(PARAM_INT),
             'startdate' => new external_value(PARAM_TEXT),
             'enddate' => new external_value(PARAM_TEXT),
+            'isoriginal' => new external_value(PARAM_BOOL),
         ));
     }
 
@@ -1839,7 +1840,7 @@ class theme_urcourses_default_external extends external_api {
      * @param string $crn code of banner section
      * @return array
      */
-    public static function activate_course($courseid, $semester, $crns,$groupcheck, $startdate, $enddate) {
+    public static function activate_course($courseid, $semester, $crns,$groupcheck, $startdate, $enddate, $isoriginal) {
 
         global $USER, $DB;
 
@@ -1853,6 +1854,7 @@ class theme_urcourses_default_external extends external_api {
             'groupcheck' => $groupcheck,
             'startdate' => $startdate,
             'enddate' => $enddate,
+            'isoriginal' => $isoriginal,
             )
         );
 
@@ -1875,7 +1877,7 @@ class theme_urcourses_default_external extends external_api {
         for($i=0; $i<count($params['crns']); $i++){
             foreach ($params['crns'][$i] as $crn) {
                 $result .= " ";
-                $result .= block_urcourserequest_activate_urcourse($params['courseid'], $crn, $params['semester'], $starttimestamp,$endtimestamp,$params['groupcheck']);
+                $result .= block_urcourserequest_activate_urcourse($params['courseid'], $crn, $params['semester'], $starttimestamp,$endtimestamp,$params['groupcheck'],$params['isoriginal']);
 
                 if(stripos($result, 'success') === false){
                     $value = false;
