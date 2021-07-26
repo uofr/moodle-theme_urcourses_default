@@ -62,6 +62,21 @@ $string['catchctrlarrowdownsetting'] = 'Ctrl + Arrow down shortcut';
 $string['catchctrlarrowdownsetting_desc'] = 'This setting will catch the "Ctrl + Arrow down" shortcut (Windows),';
 $string['catchkeys_desc_addition'] = 'prevent the default scrolling to the bottom of the web page and changes the behavior to scroll only to the bottom of the main course content.';
 
+// ..."Back to top" button.
+$string['bcbttbuttonheadingsetting'] = 'Boost Campus "Back to top" button';
+$string['bcbttbuttonsetting'] = 'Boost Campus "Back to top" button';
+$string['bcbttbuttonsetting_desc'] = 'Since Moodle 3.9, a "Go to top" button was integrated into theme Boost and usually that would make our provided solution obsolete.<br/>
+However, the core solution has still some little itches and that is the reason why we would like to provide the Boost Campus "Back to top" button as an optional setting. <br/>
+If you enable this setting, the core "Go to top" button will not be displayed and instead the Boost Campus "Back to top" button will occur. The differences are:<br/>
+<ul>
+<li>Smooth scolling: Boost Campus "Back to top" button uses smooth scrolling whilst the core "Go to top" button jumps directly to the top.</li>
+<li>URL implications: Boost Campus "Back to top" button only uses Javascript and has no implication to the URL whilst the core "Go to top" button adds a "#" at the end of the URL by clicking the button. If you copy the URL the "#" will be copied along.</li>
+<li>Styling: The styling of both buttons differ.</li>
+<li>Accessibility: Boost Campus "Back to top" button is not improved in terms of accessibility whilst the core "Go to top" button is.</li>
+</ul>
+Please note:<br/>
+This setting will be removed as soon a the core feature is improved so that no individual theme solution is needed anymore.';
+
 // Course layout settings.
 $string['courselayoutsettings'] = 'Course Layout Settings';
 // ...Section 0.
@@ -76,6 +91,7 @@ $string['coursehintsheadingsetting'] = 'Course related hints.';
 $string['showswitchedroleincoursesetting'] = 'Position of switch role information';
 $string['showswitchedroleincoursesetting_desc'] = 'With this setting you can choose the place where the information to which role a user has switched is being displayed. If not checked (default value), the role information will be displayed right beneath the user\'s name in the user menu (like in theme Boost). If checked, this information - together with a link to switch back - will be displayed beneath the course, as this functionality is course related.';
 $string['switchedroleto'] = 'You are viewing this course currently with the role:';
+
 // ...Add a block widget position.
 $string['addablockwidgetheadingsetting'] = 'Position of "Add a block" widget';
 $string['addablockpositionsetting'] = 'Position of "Add a block" widget';
@@ -88,6 +104,9 @@ $string['showhintcoursehiddensetting_desc'] = 'With this setting a hint will app
 // ... Show hint for guest access.
 $string['showhintcoursguestaccesssetting'] = 'Show hint for guest access';
 $string['showhintcourseguestaccesssetting_desc'] = 'With this setting a hint will appear in the course header when a user is accessing it with the guest access feature. If the course provides an active self enrolment, a link to that page is also presented to the user.';
+// ... Show hint for unrestricted self enrolment.
+$string['showhintcourseselfenrolsetting'] = 'Show hint for self enrolment without enrolment key';
+$string['showhintcourseselfenrolsetting_desc'] = 'With this setting a hint will appear in the course header if the course is visible and an enrolment without enrolment key is currently possible.';
 // ...Course settings.
 $string['coursesettingsheadingsetting'] = 'Course settings';
 // ...Show course settings within the course.
@@ -99,8 +118,7 @@ $string['incoursesettingsswitchtorolepositionsetting'] = '"Switch role to..." lo
 $string['incoursesettingsswitchtorolesettingjustmenu'] = 'Just in the user menu';
 $string['incoursesettingsswitchtorolesettingjustcourse'] = 'Just in the course settings';
 $string['incoursesettingsswitchtorolesettingboth'] = 'In both places: in the user menu and in the course settings';
-$string['incoursesettingsswitchtorolepositionsetting_desc'] = 'With this setting you can choose the place where the information to which role a user has switched is being displayed. If set to \'Just in the user menu\' (default value), the role information will be displayed right beneath the user\'s name in the user menu(like in theme Boost). If set to \'Just in the course settings\', this information - together with a link to switch back - will be displayed beneath the course, as this functionality is course related. If set to \'Both in the user menu and in the course settings\' it will be shown in both places. <br/>
-Please note that this setting won\'t have any effect if you do not activate the "In course settings menu" above.';
+$string['incoursesettingsswitchtorolepositionsetting_desc'] = 'With this setting you can choose the place where the information to which role a user has switched is being displayed. If set to \'Just in the user menu\' (default value), the role information will be displayed right beneath the user\'s name in the user menu (like in theme Boost). If set to \'Just in the course settings\', this information - together with a link to switch back - will be displayed beneath the course, as this functionality is course related. If set to \'Both in the user menu and in the course settings\' it will be shown in both places.';
 
 
 // Footer layout settings.
@@ -138,12 +156,16 @@ $string['imageareaheadingsetting'] = 'Image area';
 $string['imageareaheadingsetting_desc'] = 'The following settings allow adding an additional region for displaying images like logos. This region will be added beneath the standard footer and above the optional footnote region. If images are uploaded this area will be displayed on all sites that use the columns2 layout.';
 $string['imageareaitemssetting'] = 'Image area items';
 $string['imageareaitemssetting_desc'] = 'With this widget you can upload your images that will be displayed in the additional image area region. The images will be sorted and displayed alphabetically by the filename. To remove this region, simply delete all uploaded images.';
-$string['imageareaitemslinksetting'] = 'Image area item links';
-$string['imageareaitemslinksetting_desc'] = 'With this optional setting you can add links to your uploaded images.<br/>
-Each line consists of the file identifier (the file name) the a link URL, separated by pipe characters. Each link declaration needs to be written in a new line. <br/>
+$string['imageareaitemsattributessetting'] = 'Image area item additional attributes';
+$string['imageareaitemsattributessetting_desc'] = 'With this optional setting you can add additional attributes to your uploaded images:
+<ul>
+<li>a link</li>
+<li>an alt attribute which describes the image</li>
+</ul>
+Each line consists of the file identifier (the file name) the link URL and the alt-text, separated by pipe characters. Each link declaration needs to be written in a new line. <br/>
 For example:<br/>
-moodle.jpg|http://moodle.org<br/>
-You can declare links for a abitrary amount of your uploaded images. The links will be added only to those images that match their filename with the identifier declared in this setting.';
+<code>moodle.jpg|https://moodle.org|Moodle logo</code><br/><br/>
+You can declare the additional attributes for an arbitrary amount of your uploaded images. The attributes will be added only to those images that match their filename with the identifier declared in this setting.';
 $string['imageareaitemsmaxheightsetting'] = 'Image area items maximal height';
 $string['imageareaitemsmaxheightsetting_desc'] = 'With this setting you can change the height in pixels for your uploaded images. All images will have the same maximum height and their width will be resized proportionally. The default value is set to 100 pixels.';
 // ...Footnote.
@@ -163,7 +185,7 @@ $string['defaulthomepageontopsetting'] = 'Default homepage on top';
 $string['defaulthomepageontopsetting_desc'] = 'By checking this setting the default homepage link (Dashboard or Site home) will always be located at the top of the nav drawer. By default, this is already the case on every Moodle page except for course pages. There, the current course and its contents are placed on top. This might break user\'s expectations for the placement of the default homepage link.';
 // ...Navdrawer full width on small screens.
 $string['navdrawerfullwidthsetting'] = 'Nav drawer full width on small screens';
-$string['navdrawerfullwidthsettings_desc'] = 'By checking this setting you can enlarge the opened nav drawer and messaging menus to use the full page width on small screens. This is typically desireable because on small screens because the full width menus best suit the users\' expectations';
+$string['navdrawerfullwidthsettings_desc'] = 'By checking this setting you can enlarge the opened nav drawer menu to the full page width on small screens. This may be wanted because on small screens only very few of the main content area in the background is visible. And a full width menu might serve the users\' expectations how menus are displayed on small screens.';
 
 // Design settings.
 $string['designsettings'] = 'Design Settings';
@@ -171,18 +193,29 @@ $string['designsettings'] = 'Design Settings';
 $string['loginpagedesignheadingsetting'] = 'Login page';
 $string['loginbackgroundimagesetting'] = 'Login page background images';
 $string['loginbackgroundimagesetting_desc'] = 'Images uploaded in this setting will be randomly displayed on the login page as background images.';
+$string['loginbackgroundimagetextsetting'] = 'Display text for login background images';
+$string['loginbackgroundimagetextsetting_desc'] = 'With this optional setting you can add text, e.g. a copyright notice to your uploaded background images.<br/>
+Each line consists of the file identifier (the file name) and the text that should be displayed, separated by a pipe character. Each declaration needs to be written in a new line. <br/>
+For example:<br/>
+background-image-1.jpg|Copyright: CC0<br/>
+You can declare texts for a arbitrary amount of your uploaded background images. The texts will be added only to those images that match their filename with the identifier declared in this setting.';
 $string['loginform'] = 'Login form';
 $string['loginform_desc'] = 'With this setting you can optimize the login form to fit to a greater variety background images (if checked). This means that the login form will be moved to the left of the login page, will get smaller in width and will get a background that let the background image shine through. The login form will be placed on the left because many images have their main content rather in the center and so we keep this content visible. Note: You can also activate this setting if no background images are uploaded, of course.';
 // ...Fonts.
 $string['fontdesignheadingsetting'] = 'Fonts';
 $string['fontfilessetting'] = 'Font files';
-$string['fontfilessetting_desc'] = 'With this dialogue you can upload own font files. The upload is resricted to the font files of type .eot, .woff, .woff2, .ttf and .svg. <br/>
+$string['fontfilessetting_desc'] = 'With this dialogue you can upload own font files. The uplaod is resricted to the font files of type .eot, .woff, .woff2, .ttf and .svg. <br/>
 Important: To be able to use the uploaded fonts within this theme, you have to add related code to your "Raw SCSS" area in the tab "Advanced Settings". A full example for this can be found in the README.md file.';
 // ...Blocks.
 $string['blockdesignheadingsetting'] = 'Blocks';
 $string['blockiconsetting'] = 'Block icon';
 $string['blockiconsetting_desc'] = 'With this setting you can add a default Font Awesome icon in front of the block title.  If checked, we additionally provide individual icon replacements for many Moodle core blocks and also some widely used blocks. You also can change the icons easily for each block individually in your raw SCSS via the change of the Font Awesome content. For all available icons please visit http://fontawesome.io/icons/ and use the Unicode value of the icon to replace the default one. <br/> The code to change the icon looks like this example change for the block "People": <br/>';
 $string['blockiconsetting_desc_code'] = '.block_people .card-block .card-title::before { content: \'\f0c0\' ; }';
+$string['blockcolumnwidthsetting'] = 'Block column width on all other pages';
+$string['blockcolumnwidthsetting_desc'] = 'With this setting you can change the width (in pixels) of the block column on all other pages except the Dashboard.';
+$string['blockcolumnwidthdashboardsetting'] = 'Block column width on Dashboard';
+$string['blockcolumnwidthdashboardsetting_desc'] = 'With this setting you can change the width (in pixels) of the block column on the Dashboard.';
+$string['blockcolumnwidthdefault'] = 'The default width from Moodle 3.6 on is 360px, until Moodle 3.5 the width was 250px.';
 // ...Navbar.
 $string['navbardesignheadingsetting'] = 'Navbar';
 $string['darknavbarsetting'] = 'Dark navbar';
@@ -196,18 +229,109 @@ For this reason, with this setting you can decide that the help texts should be 
 $string['breakpointheadingsetting'] = 'Breakpoint';
 $string['breakpointsetting'] = 'Change breakpoint';
 $string['breakpointsetting_desc'] = 'In theme Boost, the right block column will break down even on devices with a width up to 1200 pixels (widescreen resolution of the iPad is 1024 pixels, for example).
-This is because the breakpoint is set to <a href="https://getbootstrap.com/docs/4.0/layout/overview/#responsive-breakpoints">media-breakpoint-down(lg)</a>. <br/>
+This is because the breakpoint is set to <a href="https://getbootstrap.com/docs/4.5/layout/overview/#responsive-breakpoints">media-breakpoint-down(lg)</a>. <br/>
 If you think there is enough space to show the content plus the blocks column side by side on a screen width of 992 pixels and up, then enable this setting. It will change the breakpoint to media-breakpoint-down(md). This will break the blocks column only on screens with widths of less than 992 pixels.';
+// ...Additional resources.
+$string['additionalresourcesheadingsetting'] = 'Additional resources';
+$string['additionalresourcessetting'] = 'Add additional resources';
+$string['additionalresourcessetting_desc'] = 'With this setting you can upload additional resources to the theme. You can reference these resources by using a link. The url will look like this: "/pluginfile.php/1/theme_boost_campus/additionalresources/0/yourfilename.someextention"<br/>
+The advantage of uploading files to this file area is that those files can be delivered without a check if the user is logged in. This is also why you should only add files that are uncritical and everyone should be allowed to access and don\'t need be protected with a valid login. <br/>
+An example for a use case can be found in the README.md file.';
+
+// Info banner settings.
+$string['infobannersettings'] = 'Info Banner Settings';
+
+// ...Perpetual information banner.
+$string['perpetualinfobannerheadingsetting'] = 'Perpetual information banner';
+$string['perpetualinfobannerheadingsetting_desc'] = 'The following settings allow to show some important information within a prominent perpetual banner.';
+$string['perpibenablesetting'] = 'Enable perpetual info banner';
+$string['perpibenablesetting_desc'] = 'With this checkbox you can decide if the perpetual information banner should be shown or hidden on the selected pages.';
+$string['perpibcontent'] = 'Perpetual information banner content';
+$string['perpibcontent_desc'] = 'Enter your information which should be shown within the banner here.';
+$string['perpibshowonpagessetting'] = 'Page layouts to display the info banner on';
+$string['perpibshowonpagessetting_desc'] = 'With this setting you can select the pages on which the perpetual information banner should be displayed.';
+$string['perpibcsssetting'] = 'Bootstrap css class for the perpetual info banner';
+$string['perpibcsssetting_desc'] = 'With this setting you can select the Bootstrap style with which the perpetual information banner should be displayed.';
+$string['perpibdismisssetting'] = 'Perpetual info banner dismissible';
+$string['perpibdismisssetting_desc'] = 'With this checkbox you can make the banner dismissible permanently. If the user clicks on the x-button a confirmation dialogue will appear and only after the user confirmed this dialogue the banner will be hidden for this user permanently.
+<br/><br/>Please note: <br/> This setting has no effect for the banners shown on the login page. Because banners on the login page cannot be clicked away permanently, we do not offer the possibility to click the banner away at all on the login page.';
+$string['perpibconfirmsetting'] = 'Confirmation dialogue';
+$string['perpibconfirmsetting_desc'] = 'When you enable this setting you can show a confirmation dialogue to a user when he is dismissing the info banner.
+<br/>The text is saved in the string with the name "closingperpetualinfobanner":<br/><br/>
+Are you sure you want to dismiss this information? Once done it will not occur again!<br/><br/>
+You can override this within your language customization if you need some other text in this dialogue.';
+$string['perpetualinfobannerresetvisiblitysetting'] = 'Reset visibility for perpetual info banner';
+$string['perpetualinfobannerresetvisiblitysetting_desc'] = 'By enabling this checkbox, the visibility of the individually dismissed perpetual info banners will be set to visible again. You can use this setting if you made important content changes and want to show the info to all users again.<br/><br/>
+Please note: <br/>
+After saving this option, the database operations for resetting the visibility will be triggered and this checkbox will be unticked again. The next enabling and saving of this feature will trigger the database operations for resetting the visibility again.';
+
+// ...Time controlled information banner.
+$string['timedinfobannerheadingsetting'] = 'Time controlled information banner';
+$string['timedinfobannerheadingsetting_desc'] = 'The following settings allow to show some important information within a prominent time controlled banner.';
+$string['timedibenablesetting'] = 'Enable time controlled info banner';
+$string['timedibenablesetting_desc'] = 'With this checkbox you can decide if the time controlled information banner should be shown or hidden on the selected pages.';
+$string['timedibcontent'] = 'Time controlled information banner content';
+$string['timedibcontent_desc'] = 'Enter your information which should be shown within the time controlled banner here.';
+$string['timedibshowonpagessetting'] = 'Page layouts to display the info banner on';
+$string['timedibshowonpagessetting_desc'] = 'With this setting you can select the pages on which the time controlled information banner should be displayed.
+<br/> If both info banners are active on a selected layout, the time controlled info banner will always appear above the perpetual info banner!';
+$string['timedibcsssetting'] = 'Bootstrap css class for the time controlled info banner';
+$string['timedibcsssetting_desc'] = 'With this setting you can select the Bootstrap style with which the time controlled information banner should be displayed.';
+$string['timedibstartsetting'] = 'Start time for the time controlled info banner';
+$string['timedibstartsetting_desc'] = 'With this setting you can define when the time controlled information banner should be displayed on the selected pages.
+<br/>Please enter a valid in this format: YYYY-MM-DD HH:MM:SS. For example: "2020-01-01 08:00:00". The time zone will be the time zone you have defined in the setting "Default timezone".
+<br/>If you leave this setting empty but entered a date in the for the end, it is the same as if you entered a date far in the past.';
+$string['timedibendsetting'] = 'End time for the time controlled info banner';
+$string['timedibendsetting_desc'] = 'With this setting you can define when the time controlled information banner should be hidden on the selected pages.
+<br/>Please enter a valid date in this format: YYYY-MM-DD HH:MM:SS. For example: "2020-01-07 08:00:00. The time zone will be the time zone you have defined in the setting "Default timezone".
+<br/>If you leave this setting empty but entered a date in the for the start, the banner won\'t hide after the starting time has been reached.';
+
+// ...General information banner.
+$string['ibcsssetting_nobootstrap'] = 'If you choose the \'{$a->bootstrapnone}\' option, the information banner will be output without any particular Bootstrap color.';
 
 // ADDITIONAL STRINGS (IN ALPHABETICAL ORDER).
+$string['backtotop'] = 'Back to top';
+$string['bootstrapprimarycolor'] = 'Primary color';
+$string['bootstrapsecondarycolor'] = 'Secondary color';
+$string['bootstrapsuccesscolor'] = 'Success color';
+$string['bootstrapdangercolor'] = 'Danger color';
+$string['bootstrapwarningcolor'] = 'Warning color';
+$string['bootstrapinfocolor'] = 'Info color';
+$string['bootstraplightcolor'] = 'Light color';
+$string['bootstrapdarkcolor'] = 'Dark color';
+$string['bootstrapnone'] = 'No Bootstrap color';
 $string['cachedef_imagearea'] = 'Cache for imagearea items';
+$string['close'] = 'Close';
+$string['confirmation'] = 'Confirmation';
+$string['closingperpetualinfobanner'] = 'Are you sure you want to dismiss this information? Once done it will not occur again!';
+$string['login_page'] = "Login page";
+$string['resetperpetualinfobannervisibilityerror'] = 'Oops... Something went wrong updating the database tables. The user preference "theme_boost_campus_infobanner_dismissed" should have been reset in the table "user_preferences".
+<br/>Exception thrown: {$a->message}.
+<br/>Stack Trace:
+<br/>{$a->stacktrace}.
+<br/>The setting "Reset visibility for perpetual info banner" has been reset nevertheless.';
+$string['resetperpetualinfobannersuccess'] = 'Success! All perpetual info banner instances are visible again.
+<br/>The setting "Reset visibility for perpetual info banner" has been reset.';
 $string['showhintcourseguestaccessgeneral'] = 'You are currently viewing this course as <strong>{$a->role}</strong>.';
 $string['showhintcourseguestaccesslink'] = 'To have full access to the course, you can <a href="{$a->url}">self enrol into this course</a>.';
 $string['showhintcoursehiddengeneral'] = 'This course is currently <strong>hidden</strong>. Only enrolled teachers can access this course when hidden.';
 $string['showhintcoursehiddensettingslink'] = 'You can change the visibility in the <a href="{$a->url}">course settings</a>.';
+$string['showhintcourseselfenrolstartcurrently'] = 'This course is currently visible and <strong>self enrolment without enrolment key</strong> is currently possible.';
+$string['showhintcourseselfenrolstartfuture'] = 'This course is currently visible and <strong>self enrolment without enrolment key</strong> is planned to become possible.';
+$string['showhintcourseselfenrolunlimited'] = 'The <strong>{$a->name}</strong> enrolment instance allows unrestricted self enrolment infinitely.';
+$string['showhintcourseselfenroluntil'] = 'The <strong>{$a->name}</strong> enrolment instance allows unrestricted self enrolment until {$a->until}.';
+$string['showhintcourseselfenrolfrom'] = 'The <strong>{$a->name}</strong> enrolment instance allows unrestricted self enrolment from {$a->from} on.';
+$string['showhintcourseselfenrolsince'] = 'The <strong>{$a->name}</strong> enrolment instance allows unrestricted self enrolment currently.';
+$string['showhintcourseselfenrolfromuntil'] = 'The <strong>{$a->name}</strong> enrolment instance allows unrestricted self enrolment from {$a->from} until {$a->until}.';
+$string['showhintcourseselfenrolsinceuntil'] = 'The <strong>{$a->name}</strong> enrolment instance allows unrestricted self enrolment until {$a->until}.';
+$string['showhintcourseselfenrolinstancecallforaction'] = 'If you don\'t want that any Moodle user can enrol into this course freely, please restrict the self enrolment settings.';
 $string['switchroleto'] = 'Switch role to';
+$string['yes_close'] = "Yes, close!";
 
 // PRIVACY.
+$string['privacy:metadata:preference:infobanner_dismissed'] = 'The user preference for the status if the perpetual info banner has been dismissed.';
+$string['privacy:metadata:request:infobanner_dismissed_yes'] = 'Perpetual info banner has been dismissed.';
+$string['privacy:metadata:request:infobanner_dismissed_no'] = 'Perpetual info banner has not been dismissed.';
 $string['privacy:metadata'] = 'The UR Courses default theme does not store any personal data about any user.';
 
 // HEADER
@@ -256,3 +380,7 @@ line at the top of your web browser window.
 
 Cheers from the \'{$a->sitename}\' administrator,
 {$a->signoff}';
+
+// CAPABILITIES.
+$string['boost_campus:viewhintcourseselfenrol'] = 'To be able to see a hint for unrestricted self enrolment in a visible course.';
+$string['boost_campus:viewhintinhiddencourse'] = 'To be able to see a hint in a hidden course.';

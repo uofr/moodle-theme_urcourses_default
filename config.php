@@ -44,7 +44,7 @@ if (get_config('theme_urcourses_default', 'footerblocks') == '1columns') {
     $regions[] = 'footer-left';
 } else if (get_config('theme_urcourses_default', 'footerblocks') == '2columns') {
     $regions[] = 'footer-left';
-    $regions[] = 'footer-middle';
+    $regions[] = 'footer-right';
 } else if (get_config('theme_urcourses_default', 'footerblocks') == '3columns') {
     $regions[] = 'footer-left';
     $regions[] = 'footer-middle';
@@ -54,7 +54,7 @@ if (get_config('theme_urcourses_default', 'footerblocks') == '1columns') {
 $THEME->layouts = [
     // Most backwards compatible layout without the blocks - this is the layout used by default.
     'base' => array(
-        'file' => 'base.php',
+        'file' => 'columns2.php',
         'regions' => $regions,
         'defaultregion' => 'side-pre',
     ),
@@ -93,7 +93,7 @@ $THEME->layouts = [
     // Server administration scripts.
     'admin' => array(
         'file' => 'columns2.php',
-        'regions' => array('side-pre'),
+        'regions' => $regions,
         'defaultregion' => 'side-pre',
     ),
     // My dashboard page.
@@ -169,7 +169,7 @@ $THEME->prescsscallback = 'theme_urcourses_default_get_pre_scss';
 $THEME->yuicssmodules = array();
 $THEME->rendererfactory = 'theme_overridden_renderer_factory';
 $THEME->requiredblocks = ' ';
-if (get_config('theme_boost_campus', 'addablockposition') == 'positionnavdrawer') {
+if (get_config('theme_urcourses_default', 'addablockposition') == 'positionnavdrawer') {
     $THEME->addblockposition = BLOCK_ADDBLOCK_POSITION_FLATNAV;
 } else {
     $THEME->addblockposition = BLOCK_ADDBLOCK_POSITION_DEFAULT;

@@ -29,6 +29,9 @@ global $CFG,$PAGE,$DB,$COURSE;
 // MODIFICATION END.
 
 user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
+// MODIFICATION START: Allow own user preference to be set via Javascript.
+user_preference_allow_ajax_update('theme_urcourses_default_infobanner_dismissed', PARAM_BOOL);
+// MODIFICATION END.
 require_once($CFG->libdir . '/behat/lib.php');
 // MODIFICATION Start: Require own locallib.php.
 require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
@@ -96,11 +99,11 @@ if (get_config('theme_urcourses_default', 'darknavbar') == 'yes') {
 $setdarkmode = optional_param('darkmode', -1, PARAM_INT);
 
 // MODIFICATION START: Setting 'navdrawerfullwidth'.
-$navdrawerfullwidth = get_config('theme_boost_campus', 'navdrawerfullwidth');
+$navdrawerfullwidth = get_config('theme_urcourses_default', 'navdrawerfullwidth');
 // MODIFICATION END.
 
 // MODIFICATION START: Setting 'bcbttbutton'.
-$bcbttbutton = get_config('theme_boost_campus', 'bcbttbutton');
+$bcbttbutton = get_config('theme_urcourses_default', 'bcbttbutton');
 // MODIFICATION END.
 
 // MODIFICATION START: Set these variables in any case as it's needed in the columns2.mustache file.
@@ -150,7 +153,7 @@ $templatecontext = [
     'navdraweropen' => $navdraweropen,
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
-    // MODIFICATION START: Add Boost Campus realated values to the template context.
+    // MODIFICATION START: Add Boost Campus related values to the template context.
     'catchshortcuts' => json_encode($catchshortcuts),
     'navdrawerfullwidth' => $navdrawerfullwidth,
     'darknavbar' => $darknavbar,
@@ -161,19 +164,19 @@ $templatecontext = [
 ];
 
 // MODIFICATION START: Settings for perpetual information banner.
-$perpibenable = get_config('theme_boost_campus', 'perpibenable');
+$perpibenable = get_config('theme_urcourses_default', 'perpibenable');
 
 if ($perpibenable) {
     $formatoptions = array('noclean' => true, 'newlines' => false);
-    $perpibcontent = format_text(get_config('theme_boost_campus', 'perpibcontent'), FORMAT_HTML, $formatoptions);
+    $perpibcontent = format_text(get_config('theme_urcourses_default', 'perpibcontent'), FORMAT_HTML, $formatoptions);
     // Result of multiselect is a string divided by a comma, so exploding into an array.
-    $perpibshowonpages = explode(",", get_config('theme_boost_campus', 'perpibshowonpages'));
-    $perpibcss = get_config('theme_boost_campus', 'perpibcss');
-    $perpibdismiss = get_config('theme_boost_campus', 'perpibdismiss');
-    $perbibconfirmdialogue = get_config('theme_boost_campus', 'perpibconfirm');
-    $perbibuserprefdialdismissed = get_user_preferences('theme_boost_campus_infobanner_dismissed');
+    $perpibshowonpages = explode(",", get_config('theme_urcourses_default', 'perpibshowonpages'));
+    $perpibcss = get_config('theme_urcourses_default', 'perpibcss');
+    $perpibdismiss = get_config('theme_urcourses_default', 'perpibdismiss');
+    $perbibconfirmdialogue = get_config('theme_urcourses_default', 'perpibconfirm');
+    $perbibuserprefdialdismissed = get_user_preferences('theme_urcourses_default_infobanner_dismissed');
 
-    $perpinfobannershowonselectedpage = theme_boost_campus_show_banner_on_selected_page($perpibshowonpages,
+    $perpinfobannershowonselectedpage = theme_urcourses_default_show_banner_on_selected_page($perpibshowonpages,
             $perpibcontent, $PAGE->pagelayout, $perbibuserprefdialdismissed);
 
     // Add the variables to the templatecontext array.
@@ -188,20 +191,20 @@ if ($perpibenable) {
 // MODIFICATION END.
 
 // MODIFICATION START: Settings for time controlled information banner.
-$timedibenable = get_config('theme_boost_campus', 'timedibenable');
+$timedibenable = get_config('theme_urcourses_default', 'timedibenable');
 
 if ($timedibenable) {
     $formatoptions = array('noclean' => true, 'newlines' => false);
-    $timedibcontent = format_text(get_config('theme_boost_campus', 'timedibcontent'), FORMAT_HTML, $formatoptions);
+    $timedibcontent = format_text(get_config('theme_urcourses_default', 'timedibcontent'), FORMAT_HTML, $formatoptions);
     // Result of multiselect is a string divided by a comma, so exploding into an array.
-    $timedibshowonpages = explode(",", get_config('theme_boost_campus', 'timedibshowonpages'));
-    $timedibcss = get_config('theme_boost_campus', 'timedibcss');
-    $timedibstartsetting = get_config('theme_boost_campus', 'timedibstart');
-    $timedibendsetting = get_config('theme_boost_campus', 'timedibend');
+    $timedibshowonpages = explode(",", get_config('theme_urcourses_default', 'timedibshowonpages'));
+    $timedibcss = get_config('theme_urcourses_default', 'timedibcss');
+    $timedibstartsetting = get_config('theme_urcourses_default', 'timedibstart');
+    $timedibendsetting = get_config('theme_urcourses_default', 'timedibend');
     // Get the current server time.
     $now = (new DateTime("now", core_date::get_server_timezone_object()))->getTimestamp();
 
-    $timedinfobannershowonselectedpage = theme_boost_campus_show_timed_banner_on_selected_page($now, $timedibshowonpages,
+    $timedinfobannershowonselectedpage = theme_urcourses_default_show_timed_banner_on_selected_page($now, $timedibshowonpages,
             $timedibcontent, $timedibstartsetting, $timedibendsetting, $PAGE->pagelayout);
 
     // Add the variables to the templatecontext array.
@@ -212,6 +215,7 @@ if ($timedibenable) {
     $templatecontext['timedinfobannershowonselectedpage'] = $timedinfobannershowonselectedpage;
 }
 // MODIFICATION END.
+
 $nav = $PAGE->flatnav;
 // MODIDFICATION START.
 // Use the returned value from theme_urcourses_default_get_modified_flatnav_defaulthomepageontop as the template context.
@@ -226,9 +230,11 @@ if (get_config('theme_urcourses_default', 'showsettingsincourse') == 'yes' && $P
     $templatecontext['activitynode'] = theme_urcourses_default_get_incourse_activity_settings();
 }
 // MODIFICATION END.
+// @codingStandardsIgnoreStart
 /* ORIGINAL START.
 $templatecontext['flatnavigation'] = $nav;
 ORIGINAL END. */
+// @codingStandardsIgnoreEnd
 
 $templatecontext['firstcollectionlabel'] = $nav->get_collectionlabel();
 
@@ -240,9 +246,11 @@ require_once(__DIR__ . '/includes/footnote.php');
 // MODIFICATION END.
 
 // MODIFICATION START.
-// Render columns2.mustache from boost_campus.
+// Render columns2.mustache from urcourses_default.
 echo $OUTPUT->render_from_template('theme_urcourses_default/columns2', $templatecontext);
 // MODIFICATION END.
+// @codingStandardsIgnoreStart
 /* ORIGINAL START.
 echo $OUTPUT->render_from_template('theme_boost/columns2', $templatecontext);
 ORIGINAL END. */
+// @codingStandardsIgnoreEnd

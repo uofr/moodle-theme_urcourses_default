@@ -85,5 +85,28 @@ function xmldb_theme_urcourses_default_upgrade($oldversion) {
 
         upgrade_plugin_savepoint(true, 2019073001, 'theme', 'urcourses_default');
     }
+    if ($oldversion < 2020030800) {
+
+        // The setting "theme_urcourses_default|imageareaitemslinks" has been renamed to imageareaitemsattributes.
+        // If the setting is configured.
+        if ($oldimageareaitemslinks = get_config('theme_urcourses_default', 'imageareaitemslink')) {
+            // Set the value of the setting to the new setting.
+            set_config('imageareaitemsattributes', $oldimageareaitemslinks, 'theme_urcourses_default');
+            // Drop the old setting.
+            set_config('imageareaitemslink', null, 'theme_urcourses_default');
+        }
+
+        upgrade_plugin_savepoint(true, 2020030800, 'theme', 'urcourses_default');
+    }
+
+    if ($oldversion < 2020082801) {
+        // The setting "theme_urcourses_default|courseeditbutton" has been removed because the setting was
+        // reimplemented in Boost core.
+        // Therefore we remove this setting in the database.
+        set_config('courseeditbutton', null, 'theme_urcourses_default');
+
+        upgrade_plugin_savepoint(true, 2020082801, 'theme', 'urcourses_default');
+    }
+
     return true;
 }

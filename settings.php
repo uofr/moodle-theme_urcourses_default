@@ -213,23 +213,36 @@ if ($ADMIN->fulltree) {
     //$settings->add($page);
     
     // Settings title for the Add a block widget. We don't need a description here.
-    $name = 'theme_boost_campus/addablockwidgetheading';
-    $title = get_string('addablockwidgetheadingsetting', 'theme_boost_campus', null, true);
+    $name = 'theme_urcourses_default/addablockwidgetheading';
+    $title = get_string('addablockwidgetheadingsetting', 'theme_urcourses_default', null, true);
     $setting = new admin_setting_heading($name, $title, null);
     $page->add($setting);
     // Setting to manage where the Add a block widget should be displayed.
-    $name = 'theme_boost_campus/addablockposition';
-    $title = get_string('addablockpositionsetting', 'theme_boost_campus', null, true);
-    $description = get_string('addablockpositionsetting_desc', 'theme_boost_campus', null, true);
+    $name = 'theme_urcourses_default/addablockposition';
+    $title = get_string('addablockpositionsetting', 'theme_urcourses_default', null, true);
+    $description = get_string('addablockpositionsetting_desc', 'theme_urcourses_default', null, true);
     $addablockpositionsetting = [
         // Don't use string lazy loading (= false) because the string will be directly used and would produce a
         // PHP warning otherwise.
-        'positionblockregion' => get_string('settingsaddablockpositionbottomblockregion', 'theme_boost_campus', null, false),
-        'positionnavdrawer' => get_string('settingsaddablockpositionbottomnavdrawer', 'theme_boost_campus', null, true),
+        'positionblockregion' => get_string('settingsaddablockpositionbottomblockregion', 'theme_urcourses_default', null, false),
+        'positionnavdrawer' => get_string('settingsaddablockpositionbottomnavdrawer', 'theme_urcourses_default', null, true),
     ];
     $setting = new admin_setting_configselect($name, $title, $description, $addablockpositionsetting['positionblockregion'],
         $addablockpositionsetting);
     $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
+
+    // Settings title for "Back to top" button. We don't need a description here.
+    $name = 'theme_urcourses_default/bcbttbuttonheading';
+    $title = get_string('bcbttbuttonheadingsetting', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_heading($name, $title, null);
+    $page->add($setting);
+
+    // Setting enabling the Boost Campus version of the "Back to top" button.
+    $name = 'theme_urcourses_default/bcbttbutton';
+    $title = get_string('bcbttbuttonsetting', 'theme_urcourses_default', null, true);
+    $description = get_string('bcbttbuttonsetting_desc', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
     $page->add($setting);
 
     // Add tab to settings page.
@@ -298,6 +311,16 @@ if ($ADMIN->fulltree) {
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
+    // Setting to display a hint that the active course has a unrestricted self enrolment.
+    $name = 'theme_urcourses_default/showhintcourseselfenrol';
+    $title = get_string('showhintcourseselfenrolsetting', 'theme_urcourses_default', null, true);
+    $description = get_string('showhintcourseselfenrolsetting_desc', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_configcheckbox($name, $title, $description, 'no', 'yes', 'no'); // Overriding default values
+    // yes = 1 and no = 0 because of the use of empty() in theme_urcourses_default_get_pre_scss() (lib.php).
+    // Default 0 value would not write the variable to scss that could cause the scss to crash if used in that file.
+    // See MDL-58376.
+    $page->add($setting);
+
     // Settings title for grouping course settings related aspects together. We don't need a description here.
     $name = 'theme_urcourses_default/coursesettingsheading';
     $title = get_string('coursesettingsheadingsetting', 'theme_urcourses_default', null, true);
@@ -329,6 +352,8 @@ if ($ADMIN->fulltree) {
         $incoursesettingsswitchtorolesetting);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
+    $settings->hide_if('theme_urcourses_default/incoursesettingsswitchtoroleposition',
+            'theme_urcourses_default/showsettingsincourse', 'notchecked');
 
     // Add tab to settings page.
     $settings->add($page);
@@ -547,6 +572,12 @@ if ($ADMIN->fulltree) {
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
+    $name = 'theme_urcourses_default/loginbackgroundimagetext';
+    $title = get_string('loginbackgroundimagetextsetting', 'theme_urcourses_default', null, true);
+    $description = get_string('loginbackgroundimagetextsetting_desc', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_configtextarea($name, $title, $description, null, PARAM_TEXT);
+    $page->add($setting);
+
     // Setting to change the position and design of the login form.
     $name = 'theme_urcourses_default/loginform';
     $title = get_string('loginform', 'theme_urcourses_default', null, true);
@@ -589,7 +620,25 @@ if ($ADMIN->fulltree) {
         $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
-     // Settings title to group navbar related settings together with a common heading. We don't want a description here.
+    // Setting for the width of the block column on the Dashboard.
+    $name = 'theme_urcourses_default/blockcolumnwidthdashboard';
+    $title = get_string('blockcolumnwidthdashboardsetting', 'theme_urcourses_default', null, true);
+    $description = get_string('blockcolumnwidthdashboardsetting_desc', 'theme_urcourses_default', null, true).' '.
+            get_string('blockcolumnwidthdefault', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_configtext_with_maxlength($name, $title, $description, 360, PARAM_INT, null, 3);
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
+
+    // Setting for the width of the block column on all other pages.
+    $name = 'theme_urcourses_default/blockcolumnwidth';
+    $title = get_string('blockcolumnwidthsetting', 'theme_urcourses_default', null, true);
+    $description = get_string('blockcolumnwidthsetting_desc', 'theme_urcourses_default', null, true).' '.
+            get_string('blockcolumnwidthdefault', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_configtext_with_maxlength($name, $title, $description, 360, PARAM_INT, null, 3);
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
+
+    // Settings title to group navbar related settings together with a common heading. We don't want a description here.
     $name = 'theme_urcourses_default/navbardesignheading';
     $title = get_string('navbardesignheadingsetting', 'theme_urcourses_default', null, true);
     $setting = new admin_setting_heading($name, $title, null);
@@ -633,6 +682,210 @@ if ($ADMIN->fulltree) {
     // not write the variable to scss that could cause the scss to crash if used in that file. See MDL-58376.
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
+
+    // Settings title to group additional resources settings together with a common heading. We don't want a description here.
+    $name = 'theme_urcourses_default/additionalresourcesheading';
+    $title = get_string('additionalresourcesheadingsetting', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_heading($name, $title, null);
+    $page->add($setting);
+
+    // Background image setting.
+    $name = 'theme_urcourses_default/additionalresources';
+    $title = get_string('additionalresourcessetting', 'theme_urcourses_default', null, true);
+    $description = get_string('additionalresourcessetting_desc', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_configstoredfile($name, $title, $description, 'additionalresources', 0,
+        array('maxfiles' => -1));
+    $page->add($setting);
+
+    // Add tab to settings page.
+    $settings->add($page);
+
+    // Create info banner settings tab.
+    $page = new admin_settingpage('theme_urcourses_default_infobanner', get_string('infobannersettings',
+            'theme_urcourses_default', null, true));
+
+    // Settings title to group perpetual information banner settings together with a common heading and description.
+    $name = 'theme_urcourses_default/perpetualinfobannerheading';
+    $title = get_string('perpetualinfobannerheadingsetting', 'theme_urcourses_default', null, true);
+    $description = get_string('perpetualinfobannerheadingsetting_desc', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_heading($name, $title, $description);
+    $page->add($setting);
+
+    // Activate perpetual information banner.
+    $name = 'theme_urcourses_default/perpibenable';
+    $title = get_string('perpibenablesetting', 'theme_urcourses_default', null, true);
+    $description = get_string('perpibenablesetting_desc', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
+    $page->add($setting);
+
+    // Perpetual information banner content.
+    $name = 'theme_urcourses_default/perpibcontent';
+    $title = get_string('perpibcontent', 'theme_urcourses_default', null, true);
+    $description = get_string('perpibcontent_desc', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_confightmleditor($name, $title, $description, '');
+    $page->add($setting);
+    $settings->hide_if('theme_urcourses_default/perpibcontent',
+            'theme_urcourses_default/perpibenable', 'notchecked');
+
+    // Select pages on which the perpetual information banner should be shown.
+    $name = 'theme_urcourses_default/perpibshowonpages';
+    $title = get_string('perpibshowonpagessetting', 'theme_urcourses_default', null, true);
+    $description = get_string('perpibshowonpagessetting_desc', 'theme_urcourses_default', null, true);
+    $perpibshowonpageoptions = [
+            // Don't use string lazy loading (= false) because the string will be directly used and would produce a
+            // PHP warning otherwise.
+            'mydashboard' => get_string('myhome', 'core', null, false),
+            'course' => get_string('course', 'core', null, false),
+            'login' => get_string('login_page', 'theme_urcourses_default', null, false)
+    ];
+    $setting = new admin_setting_configmultiselect($name, $title, $description,
+            array($perpibshowonpageoptions['mydashboard']), $perpibshowonpageoptions);
+    $page->add($setting);
+    $settings->hide_if('theme_urcourses_default/perpibshowonpages',
+            'theme_urcourses_default/perpibenable', 'notchecked');
+
+    // Select the bootstrap class that should be used for the perpetual info banner.
+    $name = 'theme_urcourses_default/perpibcss';
+    $title = get_string('perpibcsssetting', 'theme_urcourses_default', null, true);
+    $description = get_string('perpibcsssetting_desc', 'theme_urcourses_default', null, true).'<br />'.
+            get_string('ibcsssetting_nobootstrap', 'theme_urcourses_default',
+                   array('bootstrapnone' => get_string('bootstrapnone', 'theme_urcourses_default')));
+    $perpibcssoptions = [
+            // Don't use string lazy loading (= false) because the string will be directly used and would produce a
+            // PHP warning otherwise.
+            'primary' => get_string('bootstrapprimarycolor', 'theme_urcourses_default', null, false),
+            'secondary' => get_string('bootstrapsecondarycolor', 'theme_urcourses_default', null, false),
+            'success' => get_string('bootstrapsuccesscolor', 'theme_urcourses_default', null, false),
+            'danger' => get_string('bootstrapdangercolor', 'theme_urcourses_default', null, false),
+            'warning' => get_string('bootstrapwarningcolor', 'theme_urcourses_default', null, false),
+            'info' => get_string('bootstrapinfocolor', 'theme_urcourses_default', null, false),
+            'light' => get_string('bootstraplightcolor', 'theme_urcourses_default', null, false),
+            'dark' => get_string('bootstrapdarkcolor', 'theme_urcourses_default', null, false),
+            'none' => get_string('bootstrapnone', 'theme_urcourses_default', null, false)
+    ];
+    $setting = new admin_setting_configselect($name, $title, $description, $perpibcssoptions['primary'],
+            $perpibcssoptions);
+    $page->add($setting);
+    $settings->hide_if('theme_urcourses_default/perpibcss',
+            'theme_urcourses_default/perpibenable', 'notchecked');
+
+    // Perpetual information banner dismissible.
+    $name = 'theme_urcourses_default/perpibdismiss';
+    $title = get_string('perpibdismisssetting', 'theme_urcourses_default', null, true);
+    $description = get_string('perpibdismisssetting_desc', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
+    $page->add($setting);
+    $settings->hide_if('theme_urcourses_default/perpibdismiss',
+            'theme_urcourses_default/perpibenable', 'notchecked');
+
+    // Perpetual information banner show confirmation dialogue when dismissing.
+    $name = 'theme_urcourses_default/perpibconfirm';
+    $title = get_string('perpibconfirmsetting', 'theme_urcourses_default', null, true);
+    $description = get_string('perpibconfirmsetting_desc', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
+    $page->add($setting);
+    $settings->hide_if('theme_urcourses_default/perpibconfirm',
+            'theme_urcourses_default/perpibenable', 'notchecked');
+    $settings->hide_if('theme_urcourses_default/perpibconfirm',
+            'theme_urcourses_default/perpibdismiss', 'notchecked');
+
+    // Reset the user preference for all users.
+    $name = 'theme_urcourses_default/perpibresetvisibility';
+    $title = get_string('perpetualinfobannerresetvisiblitysetting', 'theme_urcourses_default', null, true);
+    $description = get_string('perpetualinfobannerresetvisiblitysetting_desc', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
+    $setting->set_updatedcallback('theme_urcourses_default_infobanner_reset_visibility');
+    $page->add($setting);
+    $settings->hide_if('theme_urcourses_default/perpibresetvisibility',
+            'theme_urcourses_default/perpibenable', 'notchecked');
+    $settings->hide_if('theme_urcourses_default/perpibresetvisibility',
+            'theme_urcourses_default/perpibdismiss', 'notchecked');
+
+    // Settings title to group time controlled information banner settings together with a common heading and description.
+    $name = 'theme_urcourses_default/timedinfobannerheading';
+    $title = get_string('timedinfobannerheadingsetting', 'theme_urcourses_default', null, true);
+    $description = get_string('timedinfobannerheadingsetting_desc', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_heading($name, $title, $description);
+    $page->add($setting);
+
+    // Activate time controlled information banner.
+    $name = 'theme_urcourses_default/timedibenable';
+    $title = get_string('timedibenablesetting', 'theme_urcourses_default', null, true);
+    $description = get_string('timedibenablesetting_desc', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
+    $page->add($setting);
+
+    // Time controlled information banner content.
+    $name = 'theme_urcourses_default/timedibcontent';
+    $title = get_string('timedibcontent', 'theme_urcourses_default', null, true);
+    $description = get_string('timedibcontent_desc', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_confightmleditor($name, $title, $description, '');
+    $page->add($setting);
+    $settings->hide_if('theme_urcourses_default/timedibcontent',
+            'theme_urcourses_default/timedibenable', 'notchecked');
+
+    // Select pages on which the time controlled information banner should be shown.
+    $name = 'theme_urcourses_default/timedibshowonpages';
+    $title = get_string('timedibshowonpagessetting', 'theme_urcourses_default', null, true);
+    $description = get_string('timedibshowonpagessetting_desc', 'theme_urcourses_default', null, true);
+    $timedibpageoptions = [
+        // Don't use string lazy loading (= false) because the string will be directly used and would produce a
+        // PHP warning otherwise.
+            'mydashboard' => get_string('myhome', 'core', null, false),
+            'course' => get_string('course', 'core', null, false),
+            'login' => get_string('login_page', 'theme_urcourses_default', null, false)
+    ];
+    $setting = new admin_setting_configmultiselect($name, $title, $description,
+            array($timedibpageoptions['mydashboard']), $timedibpageoptions);
+    $page->add($setting);
+    $settings->hide_if('theme_urcourses_default/timedibshowonpages',
+            'theme_urcourses_default/timedibenable', 'notchecked');
+
+    // Select the bootstrap class that should be used for the perpetual info banner.
+    $name = 'theme_urcourses_default/timedibcss';
+    $title = get_string('timedibcsssetting', 'theme_urcourses_default', null, true);
+    $description = get_string('timedibcsssetting_desc', 'theme_urcourses_default', null, true).'<br />'.
+            get_string('ibcsssetting_nobootstrap', 'theme_urcourses_default',
+                    array('bootstrapnone' => get_string('bootstrapnone', 'theme_urcourses_default')));
+    $timedibcssoptions = [
+        // Don't use string lazy loading (= false) because the string will be directly used and would produce a
+        // PHP warning otherwise.
+            'primary' => get_string('bootstrapprimarycolor', 'theme_urcourses_default', null, false),
+            'secondary' => get_string('bootstrapsecondarycolor', 'theme_urcourses_default', null, false),
+            'success' => get_string('bootstrapsuccesscolor', 'theme_urcourses_default', null, false),
+            'danger' => get_string('bootstrapdangercolor', 'theme_urcourses_default', null, false),
+            'warning' => get_string('bootstrapwarningcolor', 'theme_urcourses_default', null, false),
+            'info' => get_string('bootstrapinfocolor', 'theme_urcourses_default', null, false),
+            'light' => get_string('bootstraplightcolor', 'theme_urcourses_default', null, false),
+            'dark' => get_string('bootstrapdarkcolor', 'theme_urcourses_default', null, false),
+            'none' => get_string('bootstrapnone', 'theme_urcourses_default', null, false)
+    ];
+    $setting = new admin_setting_configselect($name, $title, $description, $timedibcssoptions['primary'],
+            $timedibcssoptions);
+    $page->add($setting);
+    $settings->hide_if('theme_urcourses_default/timedibcss',
+            'theme_urcourses_default/timedibenable', 'notchecked');
+
+    // This will check for the desired date time format YYYY-MM-DD HH:MM:SS.
+    $timeregex = '/(20[0-9]{2}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9])|^$/';
+
+    // Start time for controlled information banner.
+    $name = 'theme_urcourses_default/timedibstart';
+    $title = get_string('timedibstartsetting', 'theme_urcourses_default', null, true);
+    $description = get_string('timedibstartsetting_desc', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_configtext($name, $title, $description, '', $timeregex);
+    $page->add($setting);
+    $settings->hide_if('theme_urcourses_default/timedibstart',
+            'theme_urcourses_default/timedibenable', 'notchecked');
+
+    // End time for controlled information banner.
+    $name = 'theme_urcourses_default/timedibend';
+    $title = get_string('timedibendsetting', 'theme_urcourses_default', null, true);
+    $description = get_string('timedibendsetting_desc', 'theme_urcourses_default', null, true);
+    $setting = new admin_setting_configtext($name, $title, $description, '', $timeregex);
+    $page->add($setting);
+    $settings->hide_if('theme_urcourses_default/timedibend',
+            'theme_urcourses_default/timedibenable', 'notchecked');
 
     // Add tab to settings page.
     $settings->add($page);

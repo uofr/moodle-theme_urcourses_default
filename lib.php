@@ -221,6 +221,46 @@ function theme_urcourses_default_reset_app_cache() {
 }
 
 /**
+ * If setting is updated, use this callback to reset the theme_urcourses_default_infobanner_dismissed user preferences.
+ */
+function theme_urcourses_default_infobanner_reset_visibility() {
+    global $DB;
+
+    if (get_config('theme_urcourses_default', 'perpibresetvisibility') == 1) {
+        // Get all users that have dismissed the info banner once and therefore the user preference.
+        $whereclause = 'name = :name AND value = :value';
+        $params = ['name' => 'theme_urcourses_default_infobanner_dismissed', 'value' => '1'];
+        $users = $DB->get_records_select('user_preferences', $whereclause, $params, '', 'userid');
+
+        // Initialize variable for feedback messages.
+        $somethingwentwrong = false;
+        // Store coding exception.
+        $codingexception[] = array();
+
+        foreach ($users as $user) {
+            try {
+                unset_user_preference('theme_urcourses_default_infobanner_dismissed', $user->userid);
+            } catch (coding_exception $e) {
+                $somethingwentwrong = true;
+                $codingexception['message'] = $e->getMessage();
+                $codingexception['stacktrace'] = $e->getTraceAsString();
+            }
+        }
+
+        if (!$somethingwentwrong) {
+            \core\notification::success(get_string('resetperpetualinfobannersuccess', 'theme_urcourses_default'));
+        } else {
+            \core\notification::error(get_string('resetperpetualinfobannervisibilityerror',
+                    'theme_urcourses_default', $codingexception));
+        }
+
+        // Reset the checkbox.
+        set_config('perpibresetvisibility', 0, 'theme_urcourses_default');
+    }
+}
+
+
+/**
  * Inplace editable elements for boost campus theme.
  * @param string $itemtype
  * @param int $itemid

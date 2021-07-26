@@ -245,7 +245,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
                 });
 
                 modal.show();
-            }).done(function(modal) {
+            }).done(function() {
                 $("#test_account_reset").bind('click', function() { _resetStudentAccount($(this), username); } );
             });
         });

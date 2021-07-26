@@ -24,6 +24,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+global $CFG;
 require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
 
 $imageareafiles = theme_urcourses_default_get_imageareacontent();

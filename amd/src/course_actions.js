@@ -299,7 +299,7 @@ export default class courseActionsLib {
      * Sets up event listeners.
      * @return void
      */
-     registerDateEventListeners (_element) {
+     registerDateEventListeners () {
         //set event listners for template options
         $(SELECTORS.ENDENABLE).bind('click', function() { self.setEnddate($(this)); } );
         $(SELECTORS.ENDMONTH).bind('blur', function() { self.validateDaysInMonth ($(this)); } );

@@ -28,6 +28,52 @@
     }
 }
 
+/* Change the block column width on the Dashboard if setting 'blockcolumnwidthdashboard' is different from setting 'blockcolumnwidth'. */
+@if variable-exists(blockcolumnwidthdashboard) and variable-exists(blockcolumnwidth) {
+    @if $blockcolumnwidthdashboard != $blockcolumnwidth {
+        /* Distinguish again if setting 'breakpoint' is active.
+           This if-construction has duplicated code by purpose for the sake of readability. */
+        @if variable-exists(breakpoint) and $breakpoint == 'yes' {
+            #page-my-index #region-main-settings-menu.has-blocks,
+            #page-my-index #region-main.has-blocks {
+                display: inline-block;
+                width: calc(100% - #{$blocks-plus-gutter-dashboard});
+                @include media-breakpoint-down(md) {
+                    width: 100%;
+                    /* MDL-63102 - Remove extra space at bottom.
+                    If modifying make sure block-region is horizontally stacked when in full screen */
+                    display: block;
+                }
+            }
+            #page-my-index [data-region="blocks-column"] {
+                width: $blocks-column-width-dashboard;
+                @include media-breakpoint-down(md) {
+                    width: 100%;
+                }
+            }
+        }
+        @else {
+            #page-my-index #region-main-settings-menu.has-blocks,
+            #page-my-index #region-main.has-blocks {
+                display: inline-block;
+                width: calc(100% - #{$blocks-plus-gutter-dashboard});
+                @include media-breakpoint-down(lg) {
+                    width: 100%;
+                    /* MDL-63102 - Remove extra space at bottom.
+                    If modifying make sure block-region is horizontally stacked when in full screen */
+                    display: block;
+                }
+            }
+            #page-my-index [data-region="blocks-column"] {
+                width: $blocks-column-width-dashboard;
+                @include media-breakpoint-down(lg) {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
 
 /*------------------------------------
   Login page
@@ -59,6 +105,30 @@ body.loginbackgroundimage, body .loginbackgroundimage {
         }
         #page-login-index #page {
             margin-top: 0;
+        }
+    }
+}
+/* This will only be needed if the setting "loginform" is checked */
+@if variable-exists(loginform) {
+    @if $loginform == 'yes' {
+        /* Make background of login panel slightly transparent */
+        #page-login-index #region-main-box {
+            div.card {
+                background-color: rgba(255, 255, 255, 0.8);
+                border-radius: 3px;
+            }
+            .card-header > img {
+                width: auto;
+                height: auto;
+            }
+        }
+        #page-login-index #page {
+            margin-top: 0;
+        }
+        /* Adjust the design for the loginbackgroundimagetext. */
+        #loginbackgroundimagetext span {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 3px;
         }
     }
 }
@@ -115,13 +185,13 @@ body.loginbackgroundimage, body .loginbackgroundimage {
     }
 
 .simplesearchform .btn-open {
-        color: #fff !important;
-        padding:0;
-    }
+    color: #fff !important;
+    padding:0;
+}
 
-    .simplesearchform:hover .btn-open:hover{
-        color: $primary !important;
-    }
+.simplesearchform:hover .btn-open:hover{
+    color: $primary !important;
+}
 
     .navbar-nav .nav-link .icon:hover,
     .usertext:hover,
@@ -133,14 +203,147 @@ body.loginbackgroundimage, body .loginbackgroundimage {
         color: #fff;
     }
 }
-
+/* Add media breakpoint to only load images on screens with a medium size and up.
+ * Check if variable exists to only add code to images that were uploaded.
+ * Note: Building this code with a @for loop did not work. */
 @include media-breakpoint-up(md) {
+    @if variable-exists(loginbackgroundimage1) {
+        body.loginbackgroundimage1 #page {
+            background-image: url($loginbackgroundimage1);
+        }
+    }
+    @if variable-exists(loginbackgroundimage2) {
+        body.loginbackgroundimage2 #page {
+            background-image: url($loginbackgroundimage2);
+        }
+    }
+    @if variable-exists(loginbackgroundimage3) {
+        body.loginbackgroundimage3 #page {
+            background-image: url($loginbackgroundimage3);
+        }
+    }
+    @if variable-exists(loginbackgroundimage4) {
+        body.loginbackgroundimage4 #page {
+            background-image: url($loginbackgroundimage4);
+        }
+    }
+    @if variable-exists(loginbackgroundimage5) {
+        body.loginbackgroundimage5 #page {
+            background-image: url($loginbackgroundimage5);
+        }
+    }
+    @if variable-exists(loginbackgroundimage6) {
+        body.loginbackgroundimage6 #page {
+            background-image: url($loginbackgroundimage6);
+        }
+    }
+    @if variable-exists(loginbackgroundimage7) {
+        body.loginbackgroundimage7 #page {
+            background-image: url($loginbackgroundimage7);
+        }
+    }
+    @if variable-exists(loginbackgroundimage8) {
+        body.loginbackgroundimage8 #page {
+            background-image: url($loginbackgroundimage8);
+        }
+    }
+    @if variable-exists(loginbackgroundimage9) {
+        body.loginbackgroundimage9 #page {
+            background-image: url($loginbackgroundimage9);
+        }
+    }
+    @if variable-exists(loginbackgroundimage10) {
+        body.loginbackgroundimage10 #page {
+            background-image: url($loginbackgroundimage10);
+        }
+    }
+    @if variable-exists(loginbackgroundimage11) {
+        body.loginbackgroundimage11 #page {
+            background-image: url($loginbackgroundimage11);
+        }
+    }
+    @if variable-exists(loginbackgroundimage12) {
+        body.loginbackgroundimage12 #page {
+            background-image: url($loginbackgroundimage12);
+        }
+    }
+    @if variable-exists(loginbackgroundimage13) {
+        body.loginbackgroundimage13 #page {
+            background-image: url($loginbackgroundimage13);
+        }
+    }
+    @if variable-exists(loginbackgroundimage14) {
+        body.loginbackgroundimage14 #page {
+            background-image: url($loginbackgroundimage14);
+        }
+    }
+    @if variable-exists(loginbackgroundimage15) {
+        body.loginbackgroundimage15 #page {
+            background-image: url($loginbackgroundimage15);
+        }
+    }
+    @if variable-exists(loginbackgroundimage16) {
+        body.loginbackgroundimage16 #page {
+            background-image: url($loginbackgroundimage16);
+        }
+    }
+    @if variable-exists(loginbackgroundimage17) {
+        body.loginbackgroundimage17 #page {
+            background-image: url($loginbackgroundimage17);
+        }
+    }
+    @if variable-exists(loginbackgroundimage18) {
+        body.loginbackgroundimage18 #page {
+            background-image: url($loginbackgroundimage18);
+        }
+    }
+    @if variable-exists(loginbackgroundimage19) {
+        body.loginbackgroundimage19 #page {
+            background-image: url($loginbackgroundimage19);
+        }
+    }
+    @if variable-exists(loginbackgroundimage20) {
+        body.loginbackgroundimage20 #page {
+            background-image: url($loginbackgroundimage20);
+        }
+    }
+    @if variable-exists(loginbackgroundimage21) {
+        body.loginbackgroundimage21 #page {
+            background-image: url($loginbackgroundimage21);
+        }
+    }
+    @if variable-exists(loginbackgroundimage22) {
+        body.loginbackgroundimage22 #page {
+            background-image: url($loginbackgroundimage22);
+        }
+    }
+    @if variable-exists(loginbackgroundimage23) {
+        body.loginbackgroundimage23 #page {
+            background-image: url($loginbackgroundimage23);
+        }
+    }
+    @if variable-exists(loginbackgroundimage24) {
+        body.loginbackgroundimage24 #page {
+            background-image: url($loginbackgroundimage24);
+        }
+    }
+    @if variable-exists(loginbackgroundimage25) {
+        body.loginbackgroundimage25 #page {
+            background-image: url($loginbackgroundimage25);
+        }
+    }
 	.navbar {
 		background-color: #4d4d4f;
 		background-image: url([[pix:theme|navbkgsmall]]);
 		background-position: -18px 0;
 		background-repeat: no-repeat;
 	}
+}
+
+/* Design for the text that can be added to the background images of the login page. */
+#loginbackgroundimagetext span {
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, .125);
 }
 
 
@@ -173,9 +376,6 @@ body.arts .page-navbkg {
     }
 	
 }
-
-
-
 
 .course-img-uploader-container {
 	
@@ -251,16 +451,11 @@ body.arts .page-navbkg {
     opacity: 0;
 }
 
-
 .course-hdr-chooser-container {
-	
-
-    
     .course-hdr-chooser {
         /*background-color: rgba(255, 255, 255, .8);*/
         display: block;
     }
-
 }
 
 .page-head {
@@ -411,7 +606,7 @@ body.arts .page-navbkg .singlebutton button:hover {
 
 @include media-breakpoint-down(sm) {
     .page-navbkg .singlebutton button {
-	    overflow: hidden;
+        overflow: hidden;
 	    font-size: .9375rem;
         padding: .375rem .75rem;
     }
@@ -546,7 +741,8 @@ body.arts .page-navbkg .context-header-settings-menu .fa-cog:hover {
 
     /* Remove border of child nodes which should appear as one block. */
     .list-group-item[data-parent-key="mycourses"],
-    .list-group-item[href*="#section-"]:not([href*="#section-0"]) {
+    .list-group-item[href*="#section-"]:not([href*="#section-0"]),
+    .list-group-item[href*="&section="]:not([href*="&section=0"]) {
         border-top: none;
     }
 }
@@ -764,6 +960,19 @@ body.pagelayout-secure nav {
             border-left: 2px solid $gray-600;
             padding-left: 10px;
             font-size: .9rem;
+        }
+     /* Add border to description text for restricted activities and show it also to students.
+           This is needed because the classes for teachers and students differ. */
+     .section li:not(.label) .contentwithoutlink:not(:empty) {
+            border-left: 2px solid $gray-600;
+            padding-left: 10px;
+            font-size: .9rem;
+            display: block;
+            margin-left: 30px;
+            margin-top: .5em;
+            p {
+                margin: .5em 0;
+            }
         }
         /* Place meta information in a new line. */
         .resourcelinkdetails {
@@ -1300,12 +1509,28 @@ a[href^="mailto"]::before {
     flex-shrink: 0;
 }
 
+/*
+ * Info banner.
+ */
+/* This is needed because otherwise the top and bottom margin are not equal within the alert box. */
+#themeboostcampusperpinfobanner p,
+#themeboostcampustimedinfobanner p {
+    margin-bottom: 0;
+}
+
 
 /*------------------------------------
   Additional Elements
   -------------------------------------*/
 
-/* Back to top button */
+/* Moodle Core Back to top button */
+body.scrolled #goto-top-link {
+    /* For unknown reasons, the Moodle Core Back to top button is made unclickable by the Boost Campus footer.
+       We fix this by simply raising the z-index of the button. */
+    z-index: $zindex-tooltip;
+}
+
+/* Boost Campus Back to top button */
 #back-to-top {
     display: none;
     position: fixed;
@@ -1347,6 +1572,11 @@ a[href^="mailto"]::before {
         background-color: darken($body-bg, 5%);
         border: none;
     }
+}
+
+/* As this is already placed within the activity content card, the border around the settings card should be removed. */
+#boost-campus-activity-settings {
+    border: none;
 }
 
 /* Setting to move 'Switch role to...' menu item to the course settings - but only if
@@ -1411,6 +1641,12 @@ a[href^="mailto"]::before {
 
 @if variable-exists(helptextmodal) {
     @if $helptextmodal == 'yes' {
+
+        th .boost-campus-modal-help-dialog .modal-body {
+            text-align: left;
+            font-weight: $font-weight-base;
+        }
+
         .modal {
             /* Set font-size to normal size as the modals inherit the font size from the element they are placed in.
              * This is not intended and so we force the font size to be the normal size. */
@@ -1784,6 +2020,9 @@ body.format-topcoll .course-content ul.ctopics li.section .summary {
     white-space: nowrap;
     overflow: hidden;
 }
+
+
+
 
 ul.ctopics .content .section ul {
     margin: 0px 10px 10px 20px;

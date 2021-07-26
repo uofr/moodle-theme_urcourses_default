@@ -63,7 +63,6 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
      * Initiate ajax call to upload and set new image.
      */
     var _toggleAvailability = function() {
-       // _element = $(this);
 
         //if current style is clicked, do nothing...
         /*

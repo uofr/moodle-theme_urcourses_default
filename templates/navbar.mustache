@@ -15,9 +15,8 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-   {{!
 
-    @template theme_boost_campus/navbar
+    @template theme_urcourses_default/navbar
 
     This template renders the top navbar.
 
@@ -48,7 +47,7 @@
         <div data-region="drawer-toggle" class="d-inline-block mr-3">
             <button aria-expanded="{{#navdraweropen}}true{{/navdraweropen}}{{^navdraweropen}}false{{/navdraweropen}}" aria-controls="nav-drawer" type="button" class="btn nav-link float-sm-left mr-1 btn-light bg-gray" data-action="toggle-drawer" data-side="left" data-preference="drawer-open-nav">{{#pix}}i/menubars{{/pix}}<span class="sr-only">{{#str}}sidepanel, core{{/str}}</span></button>
         </div>
- 
+
        <a href="{{{ config.wwwroot }}}" class="navbar-brand {{# output.should_display_navbar_logo }}has-logo{{/ output.should_display_navbar_logo }}
             {{^ output.should_display_navbar_logo }}
                 d-none d-sm-inline
@@ -73,7 +72,7 @@
         </ul>
         <div class="ml-auto">
             {{{ output.search_box }}}
-        </div> 
+        </div>
         <ul class="nav navbar-nav usernav">
             <!--<div class="d-none d-lg-block">
             {{{ output.search_box }}}

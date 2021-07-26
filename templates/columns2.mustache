@@ -55,15 +55,15 @@
         "navdraweropen":true,
         "regionmainsettingsmenu": "",
         "hasregionmainsettingsmenu": false,
-        "pagebottomelements": "".,
-        "timedinfobannershowonselectedpage":true,
-        "timedibcontent": "This is a test content for perpetual info banner.",
-        "timedibcss": danger,
-        "perpinfobannershowonselectedpage":true,
+        "pagebottomelements": "",
+        "timedinfobannershowonselectedpage": true,
+        "timedibcontent": "This is a test content for timed info banner.",
+        "timedibcss": "danger",
+        "perpinfobannershowonselectedpage": true,
         "perpibcontent": "This is a test content for perpetual info banner.",
-        "perpibcss": primary,
+        "perpibcss": "primary",
         "perpibdismiss": true,
-        "infobannerconfirmationdialogue" : true,
+        "infobannerconfirmationdialogue": true,
         "bcbttbutton": true
     }
 }}
@@ -73,7 +73,6 @@
     * If setting "showsettingsincourse" is enabled, then render course context menu from theme_urcourses_default/settings_link_page
       template and use the equivalent own javascript "incoursesettings".
     * Call to own navbar mustache template instead of boost/navbar.
-    * Add own additional layout elements: the footer, footnote or image area.
     * Use own footer instead of the theme_boost footer.
     * Add own additional layout elements: footnote or image area.
     * Added the possibility to show information banners.
@@ -89,8 +88,10 @@
 
     {{{ output.standard_top_of_body_html }}}
 
-    {{> theme_urcourses_default/navbar }} 
-   <div id="page" class="container-fluid d-print-block">
+    {{> theme_urcourses_default/navbar }}
+    {{> theme_boost/nav-drawer }}
+
+    <div id="page" class="container-fluid d-print-block">
 
         {{#timedinfobannershowonselectedpage}}
         <div id="themeboostcampusitimedinfobanner" class="alert {{#timedibcss}}alert-{{{ timedibcss }}}{{/timedibcss}} mt-3" role="alert">
@@ -102,7 +103,7 @@
         <div id="themeboostcampusperpinfobanner" class="alert {{#perpibcss}}alert-{{{ perpibcss }}}{{/perpibcss}} {{#perpibdismiss}}alert-dismissible fade show{{/perpibdismiss}} mt-3" role="alert">
           {{{ perpibcontent }}}
           {{#perpibdismiss}}
-          <button type="button" id="themeboostcampusperpinfobannerclosebutton" class="close" data-dismiss="alert" aria-label="{{#str}}close, theme_boost_campus{{/str}}">
+          <button type="button" id="themeboostcampusperpinfobannerclosebutton" class="close" data-dismiss="alert" aria-label="{{#str}}close, theme_urcourses_default{{/str}}">
               <span aria-hidden="true">&times;</span>
            </button>
            {{/perpibdismiss}}
@@ -122,12 +123,13 @@
                 </div>
                 {{/hasregionmainsettingsmenu}}
                 <section id="region-main" {{#hasblocks}}class="has-blocks mb-3"{{/hasblocks}} aria-label="{{#str}}content{{/str}}">
+
                     {{#hasregionmainsettingsmenu}}
                         <div class="region_main_settings_menu_proxy"></div>
                     {{/hasregionmainsettingsmenu}}
                     {{{ output.course_content_header }}}
                     {{#activitynode}}
-                    {{> theme_urcourses_default/activity_settings_incourse }} 
+                        {{> theme_urcourses_default/activity_settings_incourse }} 
                     {{/activitynode}}
                     {{{ output.main_content }}}
                     {{{ output.activity_navigation }}}
@@ -143,11 +145,11 @@
         </div>
     </div>
     {{{ output.standard_after_main_region_html }}}
-    {{> theme_urcourses_default/nav-drawer }}
-      <!--{{{ pagebottomelements }}}-->
-    {{> theme_boost_campus/footer }}
-    {{> theme_boost_campus/imagearea }}
-    {{> theme_boost_campus/footnote }}
+    <!--{{> theme_urcourses_default/nav-drawer }}
+    {{{ pagebottomelements }}}-->
+    {{> theme_urcourses_default/footer }}
+    {{> theme_urcourses_default/imagearea }}
+    {{> theme_urcourses_default/footnote }}
 </div>
 
 </body>
@@ -164,7 +166,7 @@ require(['theme_boost/drawer'], function(drawer) {
     M.util.js_complete('theme_boost/drawer');
 });
 {{#bcbttbutton}}
-require(['theme_boost_campus/backtotop'], function(mod) {
+require(['theme_urcourses_default/backtotop'], function(mod) {
     mod.init();
 });
 {{/bcbttbutton}}
@@ -178,12 +180,12 @@ require(['theme_urcourses_default/nav_toggle'], function(mod) {
     mod.init();
 });
 {{#incoursesettings}}
-    require(['theme_boost_campus/incoursesettings'], function(mod) {
+    require(['theme_urcourses_default/incoursesettings'], function(mod) {
     mod.init();
     });
 {{/incoursesettings}}
 {{#perpinfobannershowonselectedpage}}
-    require(['theme_boost_campus/infobanner'], function(mod) {
+    require(['theme_urcourses_default/infobanner'], function(mod) {
     mod.init({{{perbibconfirmdialogue}}});
     });
 {{/perpinfobannershowonselectedpage}}
