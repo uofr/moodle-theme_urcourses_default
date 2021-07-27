@@ -35,7 +35,7 @@
             }]
         }]
     }
-}}
+}}<!--
 <div class="hd choosertitle">
     {{title}}
 </div>
@@ -52,6 +52,9 @@
                 </div>
 
                 <div class="options">
+                    <div class="instruction">
+                        {{instructions}}
+                    </div>
                     <ul class="nav nav-tabs">
                         {{#sections}}
                             <li class="modchooser_{{id}} modchoosersection">
@@ -88,40 +91,135 @@
                                 </ul>
                             </div>
                         {{/sections}}    
-                        <div id="modchooser_help" class="tab-pane fade row" role="tabpanel">
-                            {{#sections}}
-                                {{#items}}
-                                <div class="row">
-                                    <div class="col-1 modicon">
-                                        {{#icon}}
-                                            {{>core/pix_icon}}
-                                      {{/icon}}
-                                    </div>    
-                                    <div class="col-11">
-                                        <span class="typename">{{label}}</span>
-                                        <span class="type-summary">
-                                            {{{description}}}
-                                        </span>
-                                    </div>
-                                </div>
-                                {{/items}} 
-                            {{/sections}}
-                        </div>                    
+                               
                     </div>
                 </div>
 
+           
+
+{{#js}}
+   // require(['theme_urcourses_default/modchooser'], function(mod) {
+     //   mod.init();
+    //});
+{{/js}} -->
+
+<div class="hd choosertitle">
+    {{title}}
+</div>
+
+<div class="chooserdialoguebody">
+    <div class="choosercontainer">
+        <div id="chooseform">
+            <form action="{{actionurl}}" id="chooserform" method="{{method}}">
+                <div id="typeformdiv">
+                    {{#params}}
+                        <input type="hidden" id="{{id}}" name="{{name}}" value="{{value}}">
+                    {{/params}}
+                    <input type="hidden" name="sesskey" value="{{sesskey}}">
+                </div>
+
+                <div class="options">
+                    <ul class="nav nav-tabs">
+                        {{#sections}}
+                            <li class="modchooser_{{id}} modchoosersection">
+                                <a class="moduletypetitle" href="#modchooser_{{id}}" data-toggle="tab">
+                                    <span class="typename">{{label}}</span>
+                                </a>
+                            </li>
+                        {{/sections}}
+                        <li class="help-tab">
+                            <a class="moduletypetitle" href="#modchooser_help" data-toggle="tab">
+                                <span class="typename">Help</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content alloptions">
+                          {{#sections}}
+                            <div id="modchooser_{{id}}" class="tab-pane row text-center fade" role="tabpanel">
+                                <ul>
+
+                              
+                          
+                                {{#items}}
+                                     <div class="mod-option">
+                                        <div class="option">
+                                           <label for="item_{{id}}">
+                                                <input type="radio" name="{{paramname}}" id="item_{{id}}" value="{{value}}">
+                                                <span class="modicon">
+                                                    {{#icon}}
+                                                        {{>core/pix_icon}}
+                                                    {{/icon}}
+                                                </span>
+                                                <span class="typename">{{label}}</span>
+                                                <span class="typesummary" style="display:none">
+                                                 {{{description}}}
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                {{/items}}
+                     
+
+
+                               <!-- {{#items}}
+                                    <li class="mod-option">
+                                        <div class="option">
+                                           <label for="item_{{id}}">
+                                                <input type="radio" name="{{paramname}}" id="item_{{id}}" value="{{value}}">
+                                                <span class="modicon">
+                                                    {{#icon}}
+                                                        {{>core/pix_icon}}
+                                                    {{/icon}}
+                                                </span>
+                                                <span class="typename">{{label}}</span>
+                                                <span class="typesummary" style="display:none">
+                                                 {{{description}}}
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </li>
+
+                                {{/items}} -->
+                                </ul>
+                            </div>
+                        {{/sections}}
+                        
+
+                        <div id="modchooser_help" class="tab-pane fade row" role="tabpanel">
+                            {{#sections}}
+                                {{#items}}
+                                    <div class="row">
+                                         <div class="col-1 modicon">
+                                            {{#icon}}
+                                                {{>core/pix_icon}}
+                                            {{/icon}}
+                                        </div>  
+                                        <div class="col-11">
+                                            <span class="typename">{{label}}</span>
+                                            <span class="type-summary">
+                                                {{{description}}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                {{/items}}
+                            {{/sections}}
+                        </div>
+                    </div>
+                </div>
 
                 <div class="submitbuttons">
                     <input type="submit" name="submitbutton" class="submitbutton btn btn-primary" value={{#quote}}{{#str}}add{{/str}}{{/quote}}>
                     <input type="submit" name="addcancel" class="addcancel btn btn-secondary" value={{#quote}}{{#str}}cancel{{/str}}{{/quote}}>
                 </div>
+
             </form>
         </div>
     </div>
 </div>
 
 {{#js}}
-    require(['theme_urcourses_default/modchooser'], function(mod) {
-        mod.init();
+   require(['theme_urcourses_default/modchooser'], function(mod) {
+      mod.init();
     });
 {{/js}}

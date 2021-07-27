@@ -108,30 +108,6 @@ body.loginbackgroundimage, body .loginbackgroundimage {
         }
     }
 }
-/* This will only be needed if the setting "loginform" is checked */
-@if variable-exists(loginform) {
-    @if $loginform == 'yes' {
-        /* Make background of login panel slightly transparent */
-        #page-login-index #region-main-box {
-            div.card {
-                background-color: rgba(255, 255, 255, 0.8);
-                border-radius: 3px;
-            }
-            .card-header > img {
-                width: auto;
-                height: auto;
-            }
-        }
-        #page-login-index #page {
-            margin-top: 0;
-        }
-        /* Adjust the design for the loginbackgroundimagetext. */
-        #loginbackgroundimagetext span {
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 3px;
-        }
-    }
-}
 
 /*------------------------------------
   Page header
@@ -2512,7 +2488,7 @@ body.format-topcoll.editing ul.ctopics .section .activity .action {
 
 #chooserform .mod-option {
     display: inline-flex;
-    width: 15%;
+    /*width: 15%;*/
     list-style: none;
     flex-wrap: wrap;
 }
