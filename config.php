@@ -44,7 +44,7 @@ if (get_config('theme_urcourses_default', 'footerblocks') == '1columns') {
     $regions[] = 'footer-left';
 } else if (get_config('theme_urcourses_default', 'footerblocks') == '2columns') {
     $regions[] = 'footer-left';
-    $regions[] = 'footer-right';
+    $regions[] = 'footer-middle';
 } else if (get_config('theme_urcourses_default', 'footerblocks') == '3columns') {
     $regions[] = 'footer-left';
     $regions[] = 'footer-middle';
@@ -93,7 +93,7 @@ $THEME->layouts = [
     // Server administration scripts.
     'admin' => array(
         'file' => 'columns2.php',
-        'regions' => $regions,
+        'regions' => array('side-pre'),
         'defaultregion' => 'side-pre',
     ),
     // My dashboard page.

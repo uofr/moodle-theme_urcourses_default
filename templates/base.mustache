@@ -31,6 +31,14 @@
     * regionmainsettingsmenu - HTML for the region main settings menu
     * hasregionmainsettingsmenu - There is a region main settings menu on this page.
     * pagebottomelements - HTML for all additional layout elements below the main content, e.g. the footer.
+    * timedinfobannershowonselectedpage - true if the time controlled info banner should be displayed.
+    * timedetualinfobannercontent - The content that should be shown in the time controled information banner.
+    * timedetualinfobannercssclass - The Bootstrap class that is used for the time controlled info banner.
+    * perpinfobannershowonselectedpage - true if the perpetual info banner should be displayed.
+    * perpibcontent - The content that should be shown in the perpetual information banner.
+    * perpibcss - The Bootstrap class that is used for the perpetual info banner.
+    * perpibdismiss - true if the setting perpibdismiss is enabled.
+    * bcbttbutton - true if the setting bcbttbutton is enabled.
 
     Example context (json):
     {
@@ -47,7 +55,16 @@
         "navdraweropen":true,
         "regionmainsettingsmenu": "",
         "hasregionmainsettingsmenu": false,
-        "pagebottomelements": ""
+        "pagebottomelements": "",
+        "timedinfobannershowonselectedpage": true,
+        "timedibcontent": "This is a test content for timed info banner.",
+        "timedibcss": "danger",
+        "perpinfobannershowonselectedpage": true,
+        "perpibcontent": "This is a test content for perpetual info banner.",
+        "perpibcss": "primary",
+        "perpibdismiss": true,
+        "infobannerconfirmationdialogue": true,
+        "bcbttbutton": true
     }
 }}
 {{! MODIFICATION:
@@ -56,20 +73,25 @@
     * If setting "showsettingsincourse" is enabled, then render course context menu from theme_urcourses_default/settings_link_page
       template and use the equivalent own javascript "incoursesettings".
     * Call to own navbar mustache template instead of boost/navbar.
-    * Add own additional layout elements: the footer, footnote or image area.
+    * Use own footer instead of the theme_boost footer.
+    * Add own additional layout elements: footnote or image area.
+    * Added the possibility to show information banners.
+    * Added the possibility to show Boost Campus traditional "Back to top" button instead of Boost core "Go to top" button
+      located in footer.mustache file.
 }}
 {{> theme_boost/head }}
 
 <body {{{ bodyattributes }}}>
 {{> core/local/toast/wrapper}}
 
-<div id="page-wrapper">
+<div id="page-wrapper" class="d-print-block">
 
     {{{ output.standard_top_of_body_html }}}
 
-    {{> theme_urcourses_default/navbar }} 
+    {{> theme_urcourses_default/navbar }}
+    {{> theme_boost/nav-drawer }}
 
-    <div id="page" class="container-fluid">
+    <div id="page" class="container-fluid d-print-block">
 
         {{#timedinfobannershowonselectedpage}}
         <div id="themeboostcampusitimedinfobanner" class="alert {{#timedibcss}}alert-{{{ timedibcss }}}{{/timedibcss}} mt-3" role="alert">
@@ -90,41 +112,44 @@
 
         {{{ output.full_header }}}
 
-        <div id="page-content" class="row pb-3">
+        <div id="page-content" class="row pb-3 d-print-block">
             <div id="region-main-box" class="col-12">
                 {{#node}}
-                    {{> theme_urcourses_default/settings_link_page }}
+                 {{> theme_urcourses_default/settings_link_page }}
                 {{/node}}
                 {{#hasregionmainsettingsmenu}}
                 <div id="region-main-settings-menu" class="d-print-none">
                     <div> {{{ output.region_main_settings_menu }}} </div>
                 </div>
                 {{/hasregionmainsettingsmenu}}
-                <section id="region-main">
+                <section id="region-main"  aria-label="{{#str}}content{{/str}}">
 
                     {{#hasregionmainsettingsmenu}}
                         <div class="region_main_settings_menu_proxy"></div>
                     {{/hasregionmainsettingsmenu}}
                     {{{ output.course_content_header }}}
                     {{#activitynode}}
-                        {{> theme_urcourses_default/activity_settings_incourse }}
+                        {{> theme_urcourses_default/activity_settings_incourse }} 
                     {{/activitynode}}
                     {{{ output.main_content }}}
                     {{{ output.activity_navigation }}}
                     {{{ output.course_content_footer }}}
 
                 </section>
-               <!-- {{#hasblocks}}
-                <section data-region="blocks-column" class="d-print-none">
+                {{#hasblocks}}
+                <section data-region="blocks-column" class="d-print-none" style= "display: none" aria-label="{{#str}}blocks{{/str}}">
                     {{{ sidepreblocks }}}
                 </section>
-                {{/hasblocks}} -->
+                {{/hasblocks}}
             </div>
         </div>
     </div>
     {{{ output.standard_after_main_region_html }}}
-    {{> theme_urcourses_default/nav-drawer }}
-    {{{ pagebottomelements }}}
+    <!--{{> theme_urcourses_default/nav-drawer }}
+    {{{ pagebottomelements }}}-->
+    {{> theme_urcourses_default/footer }}
+    {{> theme_urcourses_default/imagearea }}
+    {{> theme_urcourses_default/footnote }}
 </div>
 
 </body>

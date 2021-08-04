@@ -47,8 +47,6 @@ if ($navdraweropen) {
     $extraclasses[] = 'drawer-open-left';
 }
 
-$PAGE->theme->addblockposition = BLOCK_ADDBLOCK_POSITION_FLATNAV;
-
 // get the UR Cateogry class, if one exists
 $extraclasses[] = theme_urcourses_default_get_ur_category_class($COURSE->id);
 
@@ -86,7 +84,7 @@ if (get_config('theme_urcourses_default', 'darknavbar') == 'yes') {
 $setdarkmode = optional_param('darkmode', -1, PARAM_INT);
 
 // MODIFICATION START: Setting 'navdrawerfullwidth'.
-$navdrawerfullwidth = get_config('theme_boost_campus', 'navdrawerfullwidth');
+$navdrawerfullwidth = get_config('theme_urcourses_default', 'navdrawerfullwidth');
 // MODIFICATION END.
 
 // MODIFICATION START: Setting 'bcbttbutton'.
@@ -140,7 +138,7 @@ $templatecontext = [
     'navdraweropen' => $navdraweropen,
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
-    // MODIFICATION START: Add Boost Campus realated values to the template context.
+    // MODIFICATION START: Add Boost Campus related values to the template context.
     'catchshortcuts' => json_encode($catchshortcuts),
     'navdrawerfullwidth' => $navdrawerfullwidth,
     'darknavbar' => $darknavbar,
