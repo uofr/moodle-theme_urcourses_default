@@ -61,14 +61,33 @@
 {{> theme_boost/head }}
 
 <body {{{ bodyattributes }}}>
+{{> core/local/toast/wrapper}}
 
 <div id="page-wrapper">
 
     {{{ output.standard_top_of_body_html }}}
 
-    {{> theme_urcourses_default/navbar }}
+    {{> theme_urcourses_default/navbar }} 
 
     <div id="page" class="container-fluid">
+
+        {{#timedinfobannershowonselectedpage}}
+        <div id="themeboostcampusitimedinfobanner" class="alert {{#timedibcss}}alert-{{{ timedibcss }}}{{/timedibcss}} mt-3" role="alert">
+          {{{ timedibcontent }}}
+        </div>
+        {{/timedinfobannershowonselectedpage}}
+
+        {{#perpinfobannershowonselectedpage}}
+        <div id="themeboostcampusperpinfobanner" class="alert {{#perpibcss}}alert-{{{ perpibcss }}}{{/perpibcss}} {{#perpibdismiss}}alert-dismissible fade show{{/perpibdismiss}} mt-3" role="alert">
+          {{{ perpibcontent }}}
+          {{#perpibdismiss}}
+          <button type="button" id="themeboostcampusperpinfobannerclosebutton" class="close" data-dismiss="alert" aria-label="{{#str}}close, theme_urcourses_default{{/str}}">
+              <span aria-hidden="true">&times;</span>
+           </button>
+           {{/perpibdismiss}}
+        </div>
+        {{/perpinfobannershowonselectedpage}}
+
         {{{ output.full_header }}}
 
         <div id="page-content" class="row pb-3">
@@ -95,11 +114,11 @@
                     {{{ output.course_content_footer }}}
 
                 </section>
-                {{#hasblocks}}
+               <!-- {{#hasblocks}}
                 <section data-region="blocks-column" class="d-print-none">
                     {{{ sidepreblocks }}}
                 </section>
-                {{/hasblocks}}
+                {{/hasblocks}} -->
             </div>
         </div>
     </div>
@@ -111,17 +130,27 @@
 </body>
 </html>
 {{#js}}
-require(['theme_boost/loader']);
-require(['theme_boost/drawer'], function(mod) {
+M.util.js_pending('theme_boost/loader');
+require(['theme_boost/loader'], function() {
+    M.util.js_complete('theme_boost/loader');
+});
+
+M.util.js_pending('theme_boost/drawer');
+require(['theme_boost/drawer'], function(drawer) {
+    drawer.init();
+    M.util.js_complete('theme_boost/drawer');
+});
+{{#bcbttbutton}}
+require(['theme_urcourses_default/backtotop'], function(mod) {
     mod.init();
 });
+{{/bcbttbutton}}
 require(['theme_urcourses_default/backtotop'], function(mod) {
     mod.init();
 });
 require(['theme_urcourses_default/catchshortcuts'], function(mod) {
     mod.init({{{catchshortcuts}}});
 });
-
 require(['theme_urcourses_default/nav_toggle'], function(mod) {
     mod.init();
 });
@@ -130,4 +159,9 @@ require(['theme_urcourses_default/nav_toggle'], function(mod) {
     mod.init();
     });
 {{/incoursesettings}}
+{{#perpinfobannershowonselectedpage}}
+    require(['theme_urcourses_default/infobanner'], function(mod) {
+    mod.init({{{perbibconfirmdialogue}}});
+    });
+{{/perpinfobannershowonselectedpage}}
 {{/js}}
