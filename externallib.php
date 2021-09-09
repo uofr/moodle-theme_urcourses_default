@@ -1110,9 +1110,19 @@ class theme_urcourses_default_external extends external_api {
             if ($USER->id == $admin->id) 
             { $isadmin = true; break; } } 
 
-        // ensure user has permissions to change image
+        //check if user has Instructional Designer role in course
         $context = \context_course::instance($params['courseid']);
+        // ensure user has permissions to duplicate
         self::validate_context($context);
+        $roles = get_user_roles($context, $USER->id, true);
+        $role = key($roles);
+        $rolename = $roles[$role]->shortname;
+            
+        $isid = false; 
+
+        if($rolename == "instdesigner"  ){
+            $isid=true;
+        }
 
         //split dates and get appropriate timestamp
         $start =  explode("-", $params['startdate']);
@@ -1152,7 +1162,7 @@ class theme_urcourses_default_external extends external_api {
             }
 
             //check for proper ownership before continuing
-            if($USER->username != $name && !$isadmin){
+            if($USER->username != $name && !$isadmin && !$isid){
                 $sql = "SELECT * FROM mdl_user as u WHERE u.username ='{$name}'";
                 $owner = $DB->get_record_sql($sql);
                 return array('courseid'=>0, 'url'=>"", 'error'=>"Please request a copy of this course from owner ",'user'=>fullname($owner));
@@ -1192,9 +1202,11 @@ class theme_urcourses_default_external extends external_api {
         $adminuser = get_admin();
 
         // The backup controller check for this currently, this may be redundant.
-        require_capability('moodle/course:create', $context);
-        require_capability('moodle/restore:restorecourse', $context);
-        require_capability('moodle/backup:backupcourse', $context);
+        if(!$isid && !$isadmin){
+            require_capability('moodle/course:create', $context);
+            require_capability('moodle/restore:restorecourse', $context);
+            require_capability('moodle/backup:backupcourse', $context);
+        }
 
         // Check if the shortname is used.
         if ($foundcourses = $DB->get_records('course', array('shortname'=>$params['shortname']))) {
