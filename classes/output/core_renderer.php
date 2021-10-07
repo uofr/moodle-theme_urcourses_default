@@ -188,7 +188,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
         // @codingStandardsIgnoreEnd
     }
 
-
     /**
      * Override to display switched role information beneath the course header instead of the user menu.
      * We change this because the switch role function is course related and therefore it should be placed in the course context.
@@ -243,7 +242,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
         if($this->page->pagelayout=="mydashboard"){
             $headertext = $sitecontextheader;
         }
-
+		
+		if($this->page->pagelayout=="mydashboard"){
+			// declaration hack
+			$header->declaration_notice = $this->check_declaration_notice();
+		}
+		
         $header->contextheader = '<a href="'.$CFG->wwwroot.'/course/view.php?id='.$COURSE->id.'">'.$headertext.'</a>';  
 
         // JL EDIT: If user is editing a course, overwrite $header->contextheader with inplace editable
@@ -1141,6 +1145,63 @@ class core_renderer extends \theme_boost\output\core_renderer {
     return $output;
 }
 
+function check_declaration_notice() {
+	global $USER;
+	
+	$mysqli = new mysqli('host', 'user', 'password', 'table');
+	
+	$result = $mysqli->query("SELECT * FROM `students` WHERE username=".$USER->username);
+	$row = $result->fetch_assoc();
+	
+	if ($USER->username == 'urstudent4') {
+					$declaration_notice = '<div id="myDeclarationModal" class="modal" tabindex="-1" role="dialog" data-backdrop="static">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+ <b>Vaccination Information and Declaration Required</b></h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			        <p>The University of Regina continues to prioritize the health and safety of our students, faculty, staff, and broader community. As such, <b>the University requires that all students, faculty, and staff provide proof of full vaccination effective October 1, 2021</b>.</p>
+
+<p>Students, faculty, and staff who are not fully vaccinated for any reason, or who choose not to disclose their vaccination status, will be required to undergo regular, rapid antigen testing and receive ongoing negative test results to attend any University of Regina campus in person.</p>
+
+<p>For more information on providing proof of vaccination, please visit the University\'s page on <a href="https://www.uregina.ca/term-updates/vaccination.html" target="_blank">Vaccination Information & Declaration</a></p>
+					<p><label><input type="checkbox" checked="checked" /> Remind me later</label></p>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-primary">I understand</button>
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Remind me later</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>';
+	
+			error_log('added declaration_notice modal');
+
+			$cm = get_coursemodule_from_id('', 1, 0, false, MUST_EXIST);
+			$context = context_course::instance(1);
+
+			$params = array(
+			    'context' => $context,
+			    'objectid' => $USER->id
+			);
+			$event = \theme_urcourses_default\event\declaration_notice_updated::create($params);
+			$event->add_record_snapshot('course_modules', $cm);
+			$event->add_record_snapshot('course', 1);
+			//$event->add_record_snapshot('', $mail);
+			$event->trigger();
+	} else {
+		$declaration_notice = '';
+	}
+	
+	$declaration_notice = var_dump($row);
+	
+	return $declaration_notice;
+}
 
 function ur_check_course_cat() {
     global $CFG,$DB,$COURSE;
