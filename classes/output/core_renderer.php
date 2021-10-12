@@ -243,10 +243,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $headertext = $sitecontextheader;
         }
 		
-		if($this->page->pagelayout=="mydashboard"){
+		//if($this->page->pagelayout=="mydashboard"){
 			// declaration hack
 			$header->declaration_notice = $this->check_declaration_notice();
-		}
+			//}
 		
         $header->contextheader = '<a href="'.$CFG->wwwroot.'/course/view.php?id='.$COURSE->id.'">'.$headertext.'</a>';  
 
@@ -1146,41 +1146,57 @@ class core_renderer extends \theme_boost\output\core_renderer {
 }
 
 function check_declaration_notice() {
-	global $USER;
+	global $USER,$CFG,$SESSION;
+        
+       /*
+       $DB = \moodle_database::get_driver_instance($CFG->dbtype, $CFG->dblibrary);
+
+       try { 
+               $DB->connect('host','user','password','database',false);
+       } catch (\moodle_exception $e) {
+               $declaration_notice = 'Failed to connect to db';
+       }
+       */
+	   
+       //$rs = $DB->get_records('students', null, $sort='', $fields='*', $limitfrom=0, $limitnum=3);
+               
+       //$declaration_notice .= var_dump($rs);
 	
-	$mysqli = new mysqli('host', 'user', 'password', 'table');
-	
-	$result = $mysqli->query("SELECT * FROM `students` WHERE username=".$USER->username);
-	$row = $result->fetch_assoc();
-	
-	if ($USER->username == 'urstudent4') {
+	//if ($record = $DB->get_record('students', array('username'=> $USER->username))&&!isset($SESSION->declaration_shown)) {
+	if ($USER->username == 'urstudent4'&&!isset($SESSION->declaration_shown)) {
 					$declaration_notice = '<div id="myDeclarationModal" class="modal" tabindex="-1" role="dialog" data-backdrop="static">
 			  <div class="modal-dialog" role="document">
 			    <div class="modal-content">
-			      <div class="modal-header">
+			      <div class="modal-header bg-warning">
 			        <h5 class="modal-title"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
- <b>Vaccination Information and Declaration Required</b></h5>
+ <b>Vaccination Declaration Required</b></h5>
 			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 			          <span aria-hidden="true">&times;</span>
 			        </button>
 			      </div>
 			      <div class="modal-body">
-			        <p>The University of Regina continues to prioritize the health and safety of our students, faculty, staff, and broader community. As such, <b>the University requires that all students, faculty, and staff provide proof of full vaccination effective October 1, 2021</b>.</p>
+				  
+				  <h4><b>Vaccination declaration non-compliance: consequences for non-compliance</b></h4>
+				  
+				  <p>Our records indicate that you are registered in a course with an in-person component and therefore are required to either submit proof of vaccination or participate in the Rapid Antigen Testing Program.</p>
 
-<p>Students, faculty, and staff who are not fully vaccinated for any reason, or who choose not to disclose their vaccination status, will be required to undergo regular, rapid antigen testing and receive ongoing negative test results to attend any University of Regina campus in person.</p>
-
-<p>For more information on providing proof of vaccination, please visit the University\'s page on <a href="https://www.uregina.ca/term-updates/vaccination.html" target="_blank">Vaccination Information & Declaration</a></p>
-					<p><label><input type="checkbox" checked="checked" /> Remind me later</label></p>
+				  <p><b>You are now considered non-compliant for not declaring</b> your vaccination status, resulting in the initiation of the following consequences:</p>
+				  <ul>
+				  				  <li><p>You may not attend class in-person or come to campus for any reason. This <b>may result in negative academic consequences</b> related to your course as per the instructor’s policies for participation and submission of course work. </p></li>
+				  				  				  				  <li><p>Your access to UR Courses will be suspended and <b>may result in negative academic consequences</b> related to your course as per the instructor’s policies for participation and submission of course work. </p></li>
+				  				  				  				  <li><p>Continued non-compliance <b>may result in de-registration from your in-person courses</b> including the forfeiture of tuition and fees related to that course.</p></li>
+				  </ul>
+				  
+				  <div class="alert alert-success"><p>To become compliant you can complete your declaration in <a href="https://banner.uregina.ca:17023/ssbprod/twbkwbis.P_WWWLogin" target="_blank">UR Self-Service</a> by logging in with your University credentials (student ID# and password) and selecting the &ldquo;Vaccination Declaration&rdquo; option.</p></div>
 			      </div>
 			      <div class="modal-footer">
-			        <button type="button" class="btn btn-primary">I understand</button>
-			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Remind me later</button>
+			        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
 			      </div>
 			    </div>
 			  </div>
 			</div>';
 	
-			error_log('added declaration_notice modal');
+			//error_log('added declaration_notice modal');
 
 			$cm = get_coursemodule_from_id('', 1, 0, false, MUST_EXIST);
 			$context = context_course::instance(1);
@@ -1192,13 +1208,15 @@ function check_declaration_notice() {
 			$event = \theme_urcourses_default\event\declaration_notice_updated::create($params);
 			$event->add_record_snapshot('course_modules', $cm);
 			$event->add_record_snapshot('course', 1);
-			//$event->add_record_snapshot('', $mail);
 			$event->trigger();
+			
+			$SESSION->declaration_shown = 1;
+			
 	} else {
 		$declaration_notice = '';
 	}
 	
-	$declaration_notice = var_dump($row);
+	//$declaration_notice = var_dump($row);
 	
 	return $declaration_notice;
 }
