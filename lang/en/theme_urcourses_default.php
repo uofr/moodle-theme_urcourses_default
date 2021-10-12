@@ -384,3 +384,5 @@ Cheers from the \'{$a->sitename}\' administrator,
 // CAPABILITIES.
 $string['boost_campus:viewhintcourseselfenrol'] = 'To be able to see a hint for unrestricted self enrolment in a visible course.';
 $string['boost_campus:viewhintinhiddencourse'] = 'To be able to see a hint in a hidden course.';
+
+$string['eventdeclarationnoticeupdated'] = 'Declaration notice displayed';
