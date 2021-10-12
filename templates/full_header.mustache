@@ -97,6 +97,6 @@
         Lightboxes.init();
         ModalHelpSetup.init({{context_id}}, '{{local_url}}');
 		var dcExists = document.getElementById("myDeclarationModal");
-		if (typeof(dcExists) != 'undefined' && dcExists != null) $('#myDeclarationModal').modal('show');
+		if (typeof(dcExists) != 'undefined' && dcExists != null) setTimeout(function() { $('#myDeclarationModal').modal('show'); },500);
     });
 {{/js}}
