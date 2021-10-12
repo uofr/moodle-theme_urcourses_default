@@ -1154,7 +1154,7 @@ function check_declaration_notice() {
        try { 
                $DB->connect('host','user','password','database',false);
        } catch (\moodle_exception $e) {
-               $declaration_notice = 'Failed to connect to db';
+               error_log('declaration notice - failed to connect to db');
        }
        */
 	   
