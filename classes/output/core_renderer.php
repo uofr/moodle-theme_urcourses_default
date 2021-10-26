@@ -762,8 +762,18 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $sql = "SELECT a.name FROM {$CFG->prefix}course_categories a, {$CFG->prefix}course b WHERE a.id = b.category AND b.id = {$COURSE->id}";
         $checkcategory = $DB->get_record_sql($sql);
 
-        $nursing = array("nursing","cnpp","cns","special sites","scbscn");
-        $isnursing = in_array(strtolower($checkcategory->name), $nursing);
+        $sql = "SELECT id FROM {$CFG->prefix}course_categories cat WHERE cat.name LIKE 'Nursing'";
+        $catid = $DB->get_record_sql($sql);
+
+        $sql = "SELECT cat.name FROM {$CFG->prefix}course_categories cat  WHERE cat.path LIKE '%/".$catid->id."/%' OR cat.path LIKE '%/".$catid->id."'";
+        $nursing = $DB->get_records_sql($sql);
+        $ncats =[];
+
+        foreach( $nursing as $ncat){
+            $ncats[] = $ncat->name;
+        }
+       
+        $isnursing = in_array($checkcategory->name, $ncats);
 
         $context = [
             'courseid' => $COURSE->id,
