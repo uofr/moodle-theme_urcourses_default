@@ -327,7 +327,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
 		
 		$header->courseimage = $cobits->courseimage;
 		if ($COURSE->id == 1) $header->courseimage = $CFG->wwwroot.'/theme/uofr_conservatory/pix/siteheader.jpg';
-		
+        
+        // modal_help edit
+        $header->context_id = $this->page->context->id;
+        $header->local_url = $this->page->url->out_as_local_url();
 		
         // MODIFICATION START:
         // Change this to add the result in the html variable to be able to add further features below the header.

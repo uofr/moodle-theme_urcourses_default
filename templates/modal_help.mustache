@@ -1,0 +1,47 @@
+{{< core/modal }}
+
+    {{$classes}} modal-dialog-scrollable modal-xl {{/classes}}
+
+    {{$header}}
+        <div class="modal-help-header">
+            {{! This title isn't currently used, but needs to be here to avoid a JS error. }}
+            <h5 id="{{uniqid}}-modal-title" class="modal-title" data-region="title">
+                {{$title}} {{title}} {{/title}}
+            </h5>
+            {{! Search Form }}
+            <div class="form-group modal-help-search-form mb-0">
+               {{! Label }}
+               <label for="modal_help_search">{{#str}}search, core{{/str}}</label>
+               {{! Search Box }}
+               <div class="input-group">
+                   <input id="modal_help_search" type="text" class="form-control" aria-describedby="modal_help_search_desc" autocomplete="off">
+                   <div class="input-group-append">
+                       <button id="modal_help_search_btn" type="button" class="btn btn-primary">
+                        {{#pix}} i/search, core {{/pix}}
+                        </button>
+                   </div>
+                   <div id="modal_help_search_clear" class="modal-help-search-clear d-none">
+                        {{#pix}} i/times, theme_urcourses_default {{/pix}}
+                   </div>
+               </div>
+               {{! Suggestion Box}}
+               <div id="modal_help_search_suggestions" class="modal-help-search-suggestions d-none">
+               </div>
+            </div>
+            {{! Search Box Help Text}}
+            <small id="modal_help_search_desc" class="text-muted">
+                {{#str}} modal_help_search_desc, theme_urcourses_default {{/str}}
+            </small>
+            <ol class="breadcrumb" id="breadcrumb_trail">
+            </ol>
+        </div>
+    {{/header}}
+
+    {{$body}}
+        <div data-region="modal-help-main" style="position: relative;"></div>
+    {{/body}}
+
+    {{$footer}}
+    {{/footer}}
+
+{{/ core/modal }}

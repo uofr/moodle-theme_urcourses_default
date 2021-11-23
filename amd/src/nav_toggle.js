@@ -25,22 +25,21 @@ define(['jquery'], function($) {
                 removeToggles();
             }
         }
-    }
+    };
 
     var setToggles = function(){
         messageButton.click(closeDrawer);
         drawerButton.click(closeDrawer);
 
         eventSet = true;
-    }
+    };
 
     var removeToggles = function(){
-        console.log("remove toggles");
         messageButton.off("click");
         drawerButton.off("click");
 
         eventSet = false;
-    }
+    };
 
     var closeDrawer = function(e){
         if($(this).attr('id') == 'message-drawer-toggle-nav'){
@@ -54,7 +53,7 @@ define(['jquery'], function($) {
                 messageButton.click();
             }
         }
-    }
+    };
 
     return {
         init: init

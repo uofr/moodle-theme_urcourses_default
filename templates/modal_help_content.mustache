@@ -1,0 +1,22 @@
+</div>
+<div id="breadcrumbs"> 
+    <ol class="breadcrumb bg-secondary modal-help-breadcrumbs d-flex">
+    
+        {{#breadcrumbs}}
+            <li class="p-1 breadcrumb-item {{#active}}active{{/active}}">
+                {{^active}} <a href="{{{url}}}" data-target="{{{target}}}">{{name}}</a> {{/active}}
+                {{#active}} {{{name}}} {{/active}}
+            </li>
+        {{/breadcrumbs}}
+        {{#back}}
+            <a href="#" class="ml-auto p-1" data-action="go-back">
+                <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
+            </a>
+        {{/back}}
+    </ol>   
+</div>
+{{$content}} {{/content}}
+
+<span id="modal-help-back-to-top" href="#" class="btn btn-primary btn-lg modal-help-back-to-top float-right position-sticky mb-2" role="button">
+    <i class="fa fa-chevron-up fa-2x"></i>
+</span>

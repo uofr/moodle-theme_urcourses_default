@@ -46,5 +46,44 @@ $functions = array(
         'type'          => 'write',
         'ajax'          => 'true',
     ),
-
+    'theme_uofr_conservatory_get_landing_page' => array(
+        'classname'     => 'theme_uofr_conservatory_external',
+        'methodname'    => 'get_landing_page',
+        'classpath'     => 'theme/uofr_conservatory/externallib.php',
+        'description'   => 'Gets landing page data for help modal.',
+        'type'          => 'read',
+        'ajax'          => 'true'
+    ),
+    'theme_uofr_conservatory_get_topic_list' => array(
+        'classname'     => 'theme_uofr_conservatory_external',
+        'methodname'    => 'get_topic_list',
+        'classpath'     => 'theme/uofr_conservatory/externallib.php',
+        'description'   => 'Gets topic list for help menu.',
+        'type'          => 'read',
+        'ajax'          => 'true'
+	),
+	'theme_uofr_conservatory_get_guide_page' => array(
+		'classname'     => 'theme_uofr_conservatory_external',
+        'methodname'    => 'get_guide_page',
+        'classpath'     => 'theme/uofr_conservatory/externallib.php',
+        'description'   => 'Gets a page from the guides.',
+        'type'          => 'read',
+        'ajax'          => 'true'
+    ),
+    'theme_uofr_conservatory_modal_help_search' => array(
+        'classname'     => 'theme_uofr_conservatory_external',
+        'methodname'    => 'modal_help_search',
+        'classpath'     => 'theme/uofr_conservatory/externallib.php',
+        'description'   => 'Searches the guides.',
+        'type'          => 'read',
+        'ajax'          => 'true'
+    ),
+    'theme_uofr_conservatory_user_is_instructor' => array(
+        'classname'     => 'theme_urcourses_default_external',
+        'methodname'    => 'user_is_instructor',
+        'classpath'     => 'theme/urcourses_default/externallib.php',
+        'description'   => 'Checks if current user is instructor.',
+        'type'          => 'write',
+        'ajax'          => 'true'
+    )
 );
