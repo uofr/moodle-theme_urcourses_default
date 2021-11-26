@@ -79,9 +79,9 @@ $functions = array(
         'ajax'          => 'true'
     ),
     'theme_uofr_conservatory_user_is_instructor' => array(
-        'classname'     => 'theme_urcourses_default_external',
+        'classname'     => 'theme_uofr_conservatory_external',
         'methodname'    => 'user_is_instructor',
-        'classpath'     => 'theme/urcourses_default/externallib.php',
+        'classpath'     => 'theme/uofr_conservatory/externallib.php',
         'description'   => 'Checks if current user is instructor.',
         'type'          => 'write',
         'ajax'          => 'true'

@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'theme_uofr_conservatory';
-$plugin->version = 2021110802;
+$plugin->version = 2021110803;
 $plugin->release = 'v3.6-r2';
 $plugin->requires = 2018120300;
 $plugin->maturity = MATURITY_STABLE;
