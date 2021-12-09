@@ -757,39 +757,22 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }  	
     
     function get_course_tools() {
-        global $USER,$COURSE, $DB,$CFG;
-
-        $sql = "SELECT a.name FROM {$CFG->prefix}course_categories a, {$CFG->prefix}course b WHERE a.id = b.category AND b.id = {$COURSE->id}";
-        $checkcategory = $DB->get_record_sql($sql);
-
-        $sql = "SELECT id FROM {$CFG->prefix}course_categories cat WHERE cat.name LIKE 'Nursing'";
-        $catid = $DB->get_record_sql($sql);
-
-        $sql = "SELECT cat.name FROM {$CFG->prefix}course_categories cat  WHERE cat.path LIKE '%/".$catid->id."/%' OR cat.path LIKE '%/".$catid->id."'";
-        $nursing = $DB->get_records_sql($sql);
-        $ncats =[];
-
-        foreach( $nursing as $ncat){
-            $ncats[] = $ncat->name;
-        }
-       
-        $isnursing = in_array($checkcategory->name, $ncats);
+        global $COURSE;
 
         $context = [
             'courseid' => $COURSE->id,
             'availability' => $COURSE->visible,
-            'enrolment_state' => $this->get_course_enrolment($isnursing),
-            'course_state' => $this->get_course_request($isnursing),
+            'enrolment_state' => $this->get_course_enrolment(),
+            'course_state' => $this->get_course_request(),
         ];
         return $this->render_from_template('theme_urcourses_default/header_course_tools', $context);
     }
     
-    function get_course_request($isnursing) {
+    function get_course_request() {
         global $USER,$COURSE;
 
         $context = [
             'availability' => $COURSE->visible,
-            'isnursing' => $isnursing,
             'username'=> $USER->username,
             'studentaccount'=> theme_urcourses_default_check_test_account($USER->username),
             'studentenrolled'=> theme_urcourses_default_test_account_enrollment($USER->username, $COURSE->id),
@@ -807,10 +790,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $this->render_from_template('theme_urcourses_default/header_course_request', $context);
     }
     
-    function get_course_enrolment($isnursing) {
+    function get_course_enrolment() {
         global $COURSE, $CFG;
 
-        if(URCOURSEREQUEST && !$isnursing){
+        if(URCOURSEREQUEST){
             $context = [
                 'availability' => $COURSE->visible,
                 'semesters' => theme_urcourses_default_get_semesters(),

@@ -1089,6 +1089,7 @@ class theme_urcourses_default_external extends external_api {
         global $USER, $DB, $CFG;
         require_once($CFG->dirroot . '/backup/util/includes/backup_includes.php');
         require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
+        require_once($CFG->dirroot . '/backup/moodle2/restore_final_task.class.php');
 
         // get params
         $params = self::validate_parameters(
@@ -1110,7 +1111,7 @@ class theme_urcourses_default_external extends external_api {
             if ($USER->id == $admin->id) 
             { $isadmin = true; break; } } 
 
-        //check if user has Instructional Designer role in course
+        //check if user has Manager role in course
         $context = \context_course::instance($params['courseid']);
         // ensure user has permissions to duplicate
         self::validate_context($context);
@@ -1120,7 +1121,7 @@ class theme_urcourses_default_external extends external_api {
             
         $isid = false; 
 
-        if($rolename == "instdesigner"  ){
+        if($rolename == "manager"  ){
             $isid=true;
         }
 
@@ -1206,6 +1207,7 @@ class theme_urcourses_default_external extends external_api {
             require_capability('moodle/course:create', $context);
             require_capability('moodle/restore:restorecourse', $context);
             require_capability('moodle/backup:backupcourse', $context);
+
         }
 
         // Check if the shortname is used.
@@ -1279,6 +1281,12 @@ class theme_urcourses_default_external extends external_api {
                 throw new moodle_exception('backupprecheckerrors', 'webservice', '', $errorinfo);
             }
         }
+
+        $plan = $rc->get_plan();
+        //error_log(print_r("TESTERERERERE", TRUE));
+        //error_log(print_r($plan, TRUE));
+
+        //$plan->add_task(new restore_final_task('final_task'));
 
         $rc->execute_plan();
         $rc->destroy();
@@ -1727,7 +1735,7 @@ class theme_urcourses_default_external extends external_api {
         }
 
         $isavailable = true;
-        if ($courseinfo) {
+        if ($courseinfo && $course->idnumber != "" ) {
             //check if course is already activated in a different semester
              $activecourse = "select * from ur_crn_map where courseid='$course->idnumber' AND archived = '0' ORDER BY semester";
              $active = $DB->get_records_sql($activecourse);
@@ -1870,6 +1878,13 @@ class theme_urcourses_default_external extends external_api {
             )
         );
 
+        $course = $DB->get_record('course', array('id'=>$courseid));
+        if (!$course) {
+            return array("result"=>"This course could not be found", "value"=>false, "semester"=>block_urcourserequest_semester_string($semester));
+        }
+        if($course->idnumber == ""){
+            return array("result"=>"This course needs an idnumber in order for enrollment to be added.", "value"=>false, "semester"=>block_urcourserequest_semester_string($semester));
+        }
         // ensure user has permissions to change image
         $context = \context_course::instance($params['courseid']);
         self::validate_context($context);

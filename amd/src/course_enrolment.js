@@ -580,7 +580,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str',
 
             var title= "ERROR:";
             var info = '<div class="alert alert-warning" role="alert">'+response.result+'<br></div>';
-            if(response.result!=""){
+            if(response.value!=""){
                 title = "Enrolment assigned successfully";
                 info = '<div class="alert alert-success" role="alert">'+response.result+'<br></div>';
             }
