@@ -644,6 +644,11 @@ table.dataTable tr.odd td.sorting_1 {
     background: #585856;
 }
 
+body.path-mod-quiz .gradedattempt, body.path-mod-quiz table tbody tr.gradedattempt>td{
+    border-color: #585856 !important;;
+    background-color: #585856 !important;;
+}
+
 .path-mod-quiz #mod_quiz_navblock .qnbutton.notyetanswered .trafficlight, 
 .path-mod-quiz #mod_quiz_navblock .qnbutton {
     background-color: #dad8ce;
