@@ -111,7 +111,19 @@
                     </div>
                     {{/maintenance}}
                     
-                    
+					{{! EMERGENCY MESSAGES:
+						Login panel message:
+						paste the html below this comment
+						<div class="card mb-2">
+						  <h5 class="card-header alert alert-danger"><b>Notice</b></h5>
+						  <div class="card-body mt-0 pt-0">
+						    <h5 class="card-title">Insert emergency message here</h5>
+						    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+						    <!-- <a href="#" class="btn btn-primary">Go somewhere</a>-->
+						  </div>
+						</div>
+					}}
+						
                     {{#cansignup}}
                         <div class="sr-only">
                             <a href="{{signupurl}}">{{#str}} tocreatenewaccount {{/str}}</a>
