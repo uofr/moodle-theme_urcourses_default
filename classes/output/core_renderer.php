@@ -1155,33 +1155,28 @@ function check_declaration_notice() {
                
        //$declaration_notice .= var_dump($rs);
 	
-	//if ($record = $DB->get_record('students', array('username'=> $USER->username))&&!isset($SESSION->declaration_shown)) {
-	if ($USER->username == 'urstudent4'&&!isset($SESSION->declaration_shown)) {
-					$declaration_notice = '<div id="myDeclarationModal" class="modal" tabindex="-1" role="dialog" data-backdrop="static">
+	   if ($record = $DB->get_record('student_list', array('username'=> $USER->username))) {
+       //if ($USER->username == 'urstudent4'&&!isset($SESSION->declaration_shown)) {
+               
+               $rs = $DB->get_record('student_msg', array('msg_id'=> $record->msg_id));
+
+               $declaration_notice = '';
+               $declaration_notice = '<div id="myDeclarationModal" class="modal" tabindex="-1" role="dialog" data-backdrop="static">
 			  <div class="modal-dialog" role="document">
 			    <div class="modal-content">
 			      <div class="modal-header bg-warning">
 			        <h5 class="modal-title"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
- <b>Vaccination Declaration Required</b></h5>
+ <b>'.$rs->msg_label.'</b></h5>
 			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 			          <span aria-hidden="true">&times;</span>
 			        </button>
 			      </div>
-			      <div class="modal-body">
+                  <div class="modal-body">';
 				  
-				  <h4><b>Vaccination declaration non-compliance: consequences for non-compliance</b></h4>
-				  
-				  <p>Our records indicate that you are registered in a course with an in-person component and therefore are required to either submit proof of vaccination or participate in the Rapid Antigen Testing Program.</p>
+               $declaration_notice .= $rs->msg_text;     
 
-				  <p><b>You are now considered non-compliant for not declaring</b> your vaccination status, resulting in the initiation of the following consequences:</p>
-				  <ul>
-				  				  <li><p>You may not attend class in-person or come to campus for any reason. This <b>may result in negative academic consequences</b> related to your course as per the instructor’s policies for participation and submission of course work. </p></li>
-				  				  				  				  <li><p>Your access to UR Courses will be suspended and <b>may result in negative academic consequences</b> related to your course as per the instructor’s policies for participation and submission of course work. </p></li>
-				  				  				  				  <li><p>Continued non-compliance <b>may result in de-registration from your in-person courses</b> including the forfeiture of tuition and fees related to that course.</p></li>
-				  </ul>
-				  
-				  <div class="alert alert-success"><p>To become compliant you can complete your declaration in <a href="https://banner.uregina.ca:17023/ssbprod/twbkwbis.P_WWWLogin" target="_blank">UR Self-Service</a> by logging in with your University credentials (student ID# and password) and selecting the &ldquo;Vaccination Declaration&rdquo; option.</p></div>
-			      </div>
+       
+               $declaration_notice .= '</div>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
 			      </div>
@@ -1190,7 +1185,15 @@ function check_declaration_notice() {
 			</div>';
 	
 			//error_log('added declaration_notice modal');
-
+			
+                       if ($record->action_code == 'LO') {
+                           redirect($CFG->wwwroot."/login/logout.php?sesskey=".sesskey(), $rs->msg_text, 10); 
+                        } else if (!isset($SESSION->declaration_shown)) {
+                            $SESSION->declaration_shown = 1;
+                        } else {
+                            $declaration_notice = '';
+                        }
+/*
 			$cm = get_coursemodule_from_id('', 1, 0, false, MUST_EXIST);
 			$context = context_course::instance(1);
 
@@ -1202,9 +1205,9 @@ function check_declaration_notice() {
 			$event->add_record_snapshot('course_modules', $cm);
 			$event->add_record_snapshot('course', 1);
 			$event->trigger();
-			
-			$SESSION->declaration_shown = 1;
-			
+*/
+
+
 	} else {
 		$declaration_notice = '';
 	}
