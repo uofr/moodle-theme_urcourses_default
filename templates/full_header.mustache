@@ -66,12 +66,14 @@
                     {{/hasnavbar}}
                     <div class="pageheadingbutton ml-auto d-flex">
                         <div class="ml-auto d-flex">
-                           <span class="modal-help-trigger" id="modal_help_trigger">
-                                <i  class="fa fa-question-circle text-light fa-2x fa-fw align-middle mt-1"
-                                    title="Help with Remote Teaching & Learning"
-                                    aria-label="Help with Remote Teaching & Learning">
-                                </i>
-                            </span>
+                            {{^guest}}
+                                <span class="modal-help-trigger" id="modal_help_trigger">
+                                        <i  class="fa fa-question-circle text-light fa-2x fa-fw align-middle mt-1"
+                                            title="Help with Remote Teaching & Learning"
+                                            aria-label="Help with Remote Teaching & Learning">
+                                        </i>
+                                    </span>
+                            {{/guest}}
                             {{{pageheadingbutton}}}
                         </div>
                         {{#settingsmenu}}
@@ -92,9 +94,18 @@
     </div>
 </header>
 
+{{^guest}}
 {{#js}}
     require(['theme_uofr_conservatory/lightboxes', 'theme_uofr_conservatory/modal_help_setup'], function(Lightboxes, ModalHelpSetup) {
         Lightboxes.init();
         ModalHelpSetup.init({{context_id}}, '{{local_url}}');
     });
 {{/js}}
+{{/guest}}
+{{#guest}}
+    {{#js}}
+        require(['theme_uofr_conservatory/lightboxes'], function(Lightboxes) {
+                Lightboxes.init();
+            });
+    {{/js}}
+{{/guest}}

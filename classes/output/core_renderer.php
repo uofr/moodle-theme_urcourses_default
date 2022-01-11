@@ -253,6 +253,13 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         $header->hasnavbar = empty($this->page->layout_options['nonavbar']);
         $header->navbar = $this->navbar();
+
+        //CCE Community HACK Need to remove guides for pages where there does not need to have user session
+        $header->guest =  true;
+        if (isloggedin() || isguestuser()) {
+            $header->guest =  false;
+        }
+        //END of HACK
         
         // TODO: Show notice if course is hidden AND editing is turned on OR on course edit page
         $header->toggle_course_availability = $this->get_course_toggle_availability();
