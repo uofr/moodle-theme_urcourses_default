@@ -674,10 +674,13 @@ function theme_urcourses_default_get_course_templates() {
 function theme_urcourses_default_get_catergories(){
     global $CFG, $DB;
 
-    //get category for Template Course
-    $sql = "SELECT * FROM mdl_course_categories;";
-    $categories = $DB->get_records_sql($sql, null, IGNORE_MISSING);
-    return $categories;
+    $displaylist = core_course_category::make_categories_list('moodle/course:changecategory');
+ 
+    $temp = array();
+    foreach($displaylist as $key=>$val){
+        $temp[] = Array("id" => $key, "name" => $val);
+    }
+    return $temp;
 }
 
 /**
