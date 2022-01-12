@@ -1116,13 +1116,12 @@ class theme_urcourses_default_external extends external_api {
         // ensure user has permissions to duplicate
         self::validate_context($context);
         $roles = get_user_roles($context, $USER->id, true);
-        $role = key($roles);
-        $rolename = $roles[$role]->shortname;
-            
         $isid = false; 
 
-        if($rolename == "manager"  ){
-            $isid=true;
+        foreach($roles as $role){
+            if($role->shortname == "manager"  ){
+                $isid=true;
+            }
         }
 
         //split dates and get appropriate timestamp
