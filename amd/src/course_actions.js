@@ -30,6 +30,7 @@ import ModalFactory from 'core/modal_factory';
 import ModalEvents from 'core/modal_events';
 import notification from 'core/notification';
 import Templates from 'core/templates';
+import module from 'core/form-autocomplete';
 
 const TEMPLATES = {
     MODAL_COURSE_ACTION_CONTENT: 'theme_urcourses_default/modal_course_action_content'
@@ -90,6 +91,7 @@ export default class courseActionsLib {
         var istemplatelist = (self._templatelist.length>0) ? true : "";
         var template =  await self.render(TEMPLATES.MODAL_COURSE_ACTION_CONTENT, templatenew,istemplatelist);
 
+
         //adding in confirmation modal in case buttons accidentally clicked
         ModalFactory.create({
             type: ModalFactory.types.SAVE_CANCEL,
@@ -146,6 +148,9 @@ export default class courseActionsLib {
             }
 
             self.populateDateSelects(selectstart,selectend);
+
+        // Render autocomplete for categories
+        module.enhance("#course_tools_category",[],"","Search",false,true,"No Selection");
 
             //change category to that of course
             $(SELECTORS.CATEGORY).val(selectcatergory);
