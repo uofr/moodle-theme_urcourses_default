@@ -25,10 +25,10 @@
 <a class="btn btn-link p-0" role="button" data-toggle="modal"
     data-placement="{{#ltr}}right{{/ltr}}{{^ltr}}left{{/ltr}}" {{completedoclink}}
     data-target="#{{linkid}}-modal-dialogue" data-html="true">
-    {{#pix}}help, core, {{alt}}{{/pix}}
+    {{#pix}}help, core, {{{alt}}}{{/pix}}
 </a>
 
-<div class="modal moodle-has-zindex" {{#linkid}}id="{{linkid}}-modal-dialogue"{{/linkid}} data-region="modal-container" aria-hidden="true" role="dialog">
+<div class="modal moodle-has-zindex urcourses_default-modal-help-dialog" {{#linkid}}id="{{linkid}}-modal-dialogue"{{/linkid}} data-region="modal-container" aria-hidden="true" role="dialog">
     <div class="modal-dialog {{$classes}}{{/classes}}" role="document" data-region="modal" aria-labelledby="{{uniqid}}-modal-title" tabindex="0">
         <div class="modal-content">
             <div class="modal-header {{$headerclasses}}{{headerclasses}}{{/headerclasses}}" data-region="header">
@@ -36,7 +36,7 @@
             {{$header}}
             <h5 id="{{uniqid}}-modal-title" class="modal-title" data-region="title">{{$title}}{{title}}{{/title}}</h5>
             {{/header}}
-            <button type="button" class="close" data-action="hide" data-dismiss="modal" aria-label={{#quote}}{{#str}}closebuttontitle{{/str}}{{/quote}}>
+            <button type="button" class="close" data-action="hide" data-dismiss="modal" aria-label="{{#cleanstr}}closebuttontitle{{/cleanstr}}">
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>

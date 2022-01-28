@@ -188,6 +188,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         // @codingStandardsIgnoreEnd
     }
 
+
     /**
      * Override to display switched role information beneath the course header instead of the user menu.
      * We change this because the switch role function is course related and therefore it should be placed in the course context.
@@ -245,7 +246,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 		
 		//if($this->page->pagelayout=="mydashboard"){
 			// declaration hack
-			$header->declaration_notice = $this->check_declaration_notice();
+			//$header->declaration_notice = $this->check_declaration_notice();
 			//}
 		
         $header->contextheader = '<a href="'.$CFG->wwwroot.'/course/view.php?id='.$COURSE->id.'">'.$headertext.'</a>';  
@@ -275,7 +276,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $userid = optional_param('id', $USER->id, PARAM_INT);
             // Check if the shown and the operating user are identical.
             $currentuser = $USER->id == $userid;
-            if (($currentuser || is_siteadmin($USER)) &&
+            if (($currentuser || is_siteadmin($USER) || !is_siteadmin($userid)) &&
                 has_capability('moodle/user:update', \context_system::instance())) {
                 $url = new moodle_url('/user/editadvanced.php', array('id'       => $userid, 'course' => $COURSE->id,
                                                                       'returnto' => 'profile'));

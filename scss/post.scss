@@ -322,6 +322,65 @@ body.loginbackgroundimage, body .loginbackgroundimage {
     border: 1px solid rgba(0, 0, 0, .125);
 }
 
+/* This will only be needed if the setting "loginform" is checked */
+@if variable-exists(loginform) {
+    @if $loginform == 'yes' {
+        /* Make background of login panel slightly transparent */
+        #page-login-index #region-main-box {
+            div.card {
+                background-color: rgba(255, 255, 255, 0.8);
+                border-radius: 3px;
+            }
+            .card-header > img {
+                width: auto;
+                height: auto;
+            }
+        }
+        #page-login-index #page {
+            margin-top: 0;
+        }
+        /* Adjust the design for the loginbackgroundimagetext. */
+        #loginbackgroundimagetext span {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 3px;
+        }
+    }
+}
+
+/*------------------------------------
+  Page header
+  -------------------------------------*/
+
+/*
+ * Navbar
+ */
+/* Make page navbar dark if setting "darknavabr" is set to yes. */
+@if variable-exists(darknavbar) {
+    @if $darknavbar == 'yes' {
+        .navbar {
+            .navbar-nav .nav-link .icon,
+            .navbar-nav .nav-link,
+            .usertext,
+            .dropdown-toggle,
+            .site-name,
+            .login,
+            .login a {
+                color: #fff;
+            }
+            .navbar-nav .nav-link .icon:hover,
+            .usertext:hover,
+            .dropdown-toggle:hover,
+            .site-name:hover {
+                color: $primary;
+            }
+            .navbar-brand:not(.has-logo) .site-name:hover {
+                color: #fff;
+            }
+        }
+    }
+}
+
+
 
 /*
 .site-name {
@@ -920,6 +979,10 @@ body.pagelayout-secure nav {
         /* Remove spacer from regular sections. */
         img.icon.spacer {
             display: none;
+        }
+          /* Make the summary aligned the same way as with option all section on one page. */
+          .summarytext {
+            margin-left: 25px;
         }
         /* Increase space from section title (edit mode off) to left border. */
         h3.sectionname {
@@ -1526,33 +1589,60 @@ body.scrolled #goto-top-link {
 }
 
 /* In-course settings. */
+@if (variable-exists(showsettingsincourse)) {
 #boost-campus-course-settings,
 #boost-campus-activity-settings {
     /* Initially do not display the settings. Visibility will be changed on click with incoursesettings.js. */
     display: none;
     padding: 1rem;
     padding-top: 0;
-    margin-bottom: 3rem;
+    /*margin-bottom: 3rem; 3.11 change*/
     margin-top: 1rem;
     border: none;
+      /* Improve layout and look of the settings as they are now placed within the page header. */
+      margin-bottom: 1rem;
+    .tab-content .card {
+        border: none;
+    }
 
+/* Improve styling of the tabs so that they look more like real tabs. */
     .nav-tabs {
         border: none;
-        .active {
-            background-color: darken($body-bg, 5%);
-            border-color: darken($body-bg, 5%);
-        }
     }
-    /* Improve color of tab content so it looks more like a real tab. */
     .tab-content .card {
         background-color: darken($body-bg, 5%);
         border: none;
     }
-}
 
-/* As this is already placed within the activity content card, the border around the settings card should be removed. */
-#boost-campus-activity-settings {
-    border: none;
+    /* Do some more tweaks on smaller screens and bigger screens differently as Moodle uses different styles. */
+    @include media-breakpoint-up(md) {
+        /* Add some space. */
+        padding: 0 1rem 1.3rem 1rem;
+
+        /* Highlight the active tab. */
+        .nav-tabs {
+            .active {
+                background-color: darken($body-bg, 5%);
+                border-color: darken($body-bg, 5%);
+            }
+        }
+    }
+    @include media-breakpoint-down(sm) {
+            /* Add some space. */
+            padding: 1rem 0 1.3rem 0;
+
+            /* Remove the border around the course settings card as it would be incomplete. */
+            &.card {
+                border: none;
+            }
+        }
+    
+    }
+
+    /* As this is already placed within the activity content card, the border around the settings card should be removed. */
+    #boost-campus-activity-settings {
+        border: none;
+    }
 }
 
 /* Setting to move 'Switch role to...' menu item to the course settings - but only if
@@ -1618,7 +1708,7 @@ body.scrolled #goto-top-link {
 @if variable-exists(helptextmodal) {
     @if $helptextmodal == 'yes' {
 
-        th .boost-campus-modal-help-dialog .modal-body {
+        th .urcourses_default-modal-help-dialog .modal-body {
             text-align: left;
             font-weight: $font-weight-base;
         }
@@ -1824,6 +1914,24 @@ body.scrolled #goto-top-link {
         border-top: none;
     }
 }
+/* Special styles for plugin mod_attendance to fix problems with positioning of the table headers in editing mode when
+   the add a block widget is placed in the blocks column. */
+   @if variable-exists(addablockposition) {
+    @if $addablockposition == 'positionblockregion' {
+        #page-mod-attendance-report .attendancereporttable .headcol {
+            margin: unset;
+            left: 20px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        #page-mod-attendance-report.has-region-side-pre:not(.empty-region-side-pre) .attendancereporttable .headcol {
+            left: 20px;
+            width: 300px;
+        }
+    }
+}
+    
+
 
 
 div[data-region="drawer-toggle"] button.btn-light {
@@ -1990,12 +2098,7 @@ body.format-topcoll .course-content ul.ctopics li.section .summary {
 .path-mod-attendance .row-fluid.spand4 {
     margin-right: 15px;
 }
-#page-mod-attendance-report .attendancereporttable .headcol {
-    margin: unset;
-    left: 16px;
-    white-space: nowrap;
-    overflow: hidden;
-}
+
 
 
 

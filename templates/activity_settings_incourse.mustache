@@ -24,11 +24,13 @@
         "activitynode": {
             "text": "Root of menu",
             "key": "test0",
+            "action": "https://mymoodle.org/action",
             "display": true,
             "children": [
                 {
                     "text": "Child of menu",
                     "key": "test1",
+                    "action": "https://mymoodle.org/action",
                     "display": true,
                     "children": []
                 }
@@ -43,20 +45,20 @@
     * Removed check for !is_short_branch to display all children of the course settings within an own tab.
 }}
 
-<div id="boost-campus-activity-settings" class="card" >
+<div id="boost-campus-activity-settings" class="card">
     <h2>{{incourse_activitynode_heading}}</h2>
     <div class="mx-2 pt-2">
         <ul class="nav nav-tabs" role="tablist">
         <!-- First the top most activitynode and immediate children -->
             <li class="nav-item">
-                <a class="nav-link active" href="#activity-settings-{{key}}" data-toggle="tab" role="tab">{{activitynode.text}}</a>
+                <a class="nav-link active" href="#activity-settings-{{key}}" data-toggle="tab" role="tab" aria-selected="true">{{activitynode.text}}</a>
             </li>
         <!-- Now the first level children with sub activitynodes -->
         {{#activitynode.children}}
             {{#children.count}}
                 {{#display}}
                     <li class="nav-item">
-                        <a class="nav-link" href="#activity-settings-{{key}}" data-toggle="tab" role="tab">{{text}}</a>
+                        <a class="nav-link" href="#activity-settings-{{key}}" data-toggle="tab" role="tab" aria-selected="false" tabindex="-1">{{text}}</a>
                     </li>
                 {{/display}}
             {{/children.count}}
@@ -72,7 +74,7 @@
                                 {{#action}}<h4><a href="{{action}}">{{text}}</a></h4>{{/action}}
                                 {{^action}}<h4>{{text}}</h4>{{/action}}
                             </div>
-                            <div class="table">
+                            <div class="col-sm-8">
                                 <ul class="list-unstyled">
                                     {{#activitynode.children}}
                                         {{^children.count}}
@@ -124,7 +126,7 @@
                                                     {{#action}}<h4><a href="{{action}}">{{text}}</a></h4>{{/action}}
                                                     {{^action}}<h4>{{text}}</h4>{{/action}}
                                                 </div>
-                                                <div class="table">
+                                                <div class="col-sm-8">
                                                     <ul class="list-unstyled">
                                                         {{#children}}
                                                             {{> core/settings_link_page_single }}

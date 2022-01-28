@@ -42,16 +42,16 @@
     * Add class bg-white or bg-dark to the navbar dependent on the setting darknavbar.
 }}
 
-<nav class="fixed-top navbar navbar-light navbar-expand moodle-has-zindex" aria-label="{{#str}}sitemenubar, admin{{/str}}">
+<nav class="fixed-top navbar navbar-light {{#darknavbar}}bg-dark{{/darknavbar}} {{^darknavbar}}bg-white{{/darknavbar}} navbar-expand moodle-has-zindex" aria-label="{{#str}}sitemenubar, admin{{/str}}">
 
         <div data-region="drawer-toggle" class="d-inline-block mr-3">
             <button aria-expanded="{{#navdraweropen}}true{{/navdraweropen}}{{^navdraweropen}}false{{/navdraweropen}}" aria-controls="nav-drawer" type="button" class="btn nav-link float-sm-left mr-1 btn-light bg-gray" data-action="toggle-drawer" data-side="left" data-preference="drawer-open-nav">{{#pix}}i/menubars{{/pix}}<span class="sr-only">{{#str}}sidepanel, core{{/str}}</span></button>
         </div>
 
-       <a href="{{{ config.wwwroot }}}" class="navbar-brand {{# output.should_display_navbar_logo }}has-logo{{/ output.should_display_navbar_logo }}
+        <a href="{{{ config.wwwroot }}}" class="navbar-brand aabtn {{# output.should_display_navbar_logo }}has-logo{{/ output.should_display_navbar_logo }}
             {{^ output.should_display_navbar_logo }}
                 d-none d-sm-inline
-            {{/ output.should_display_navbar_logo }} 
+            {{/ output.should_display_navbar_logo }}
                 ">
             {{# output.should_display_navbar_logo }}
                 <span class="logo logo-compact d-none">
@@ -74,15 +74,9 @@
             {{{ output.search_box }}}
         </div>
         <ul class="nav navbar-nav usernav">
-            <!--<div class="d-none d-lg-block">
-            {{{ output.search_box }}}
-            </div>
-            <li class="d-lg-none nav-search">
-            {{{ output.search_small }}}
-            </li>-->
             <!-- navbar_plugin_output -->
             <li class="nav-item">
-            {{{ output.navbar_plugin_output }}}
+                {{{ output.navbar_plugin_output }}}
             </li>
             <!-- user_menu -->
             <li class="nav-item align-items-center pl-2">

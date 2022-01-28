@@ -57,6 +57,7 @@
 {{> core/local/toast/wrapper}}
 
 <div id="page-wrapper" class="loginbackgroundimage">
+
     {{{ output.standard_top_of_body_html }}}
 
     {{#timedinfobannershowonselectedpage}}
@@ -119,12 +120,11 @@
     {{{ pagebottomelements }}}
 </div>
 
-
 </body>
 </html>
 {{#js}}
-require(['theme_boost/loader']);
-require(['theme_urcourses_default/bgloader'], function(mod) {
-    mod.init();
+M.util.js_pending('theme_boost/loader');
+require(['theme_boost/loader'], function() {
+  M.util.js_complete('theme_boost/loader');
 });
 {{/js}}

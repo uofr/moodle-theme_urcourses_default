@@ -24,11 +24,13 @@
         "node": {
             "text": "Root of menu",
             "key": "test0",
+            "action": "https://mymoodle.org/action",
             "display": true,
             "children": [
                 {
                     "text": "Child of menu",
                     "key": "test1",
+                    "action": "https://mymoodle.org/action",
                     "display": true,
                     "children": []
                 }
@@ -43,20 +45,20 @@
     * Removed check for !is_short_branch to display all children of the course settings within an own tab.
 }}
 
-<div id="boost-campus-course-settings" class="card" >
+<div id="boost-campus-course-settings" class="card">
     <h2>{{incourse_node_heading}}</h2>
     <div class="mx-2 pt-2">
         <ul class="nav nav-tabs" role="tablist">
         <!-- First the top most node and immediate children -->
             <li class="nav-item">
-                <a class="nav-link active" href="#course-settings-{{node.key}}" data-toggle="tab" role="tab">{{node.text}}</a>
+                <a class="nav-link active" href="#course-settings-{{node.key}}" data-toggle="tab" role="tab" aria-selected="true">{{node.text}}</a>
             </li>
         <!-- Now the first level children with sub nodes -->
         {{#node.children}}
             {{#children.count}}
                 {{#display}}
                     <li class="nav-item">
-                        <a class="nav-link" href="#course-settings-{{key}}" data-toggle="tab" role="tab">{{text}}</a>
+                        <a class="nav-link" href="#course-settings-{{key}}" data-toggle="tab" role="tab" aria-selected="false" tabindex="-1">{{text}}</a>
                     </li>
                 {{/display}}
             {{/children.count}}
