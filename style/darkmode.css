@@ -1241,6 +1241,16 @@ body.path-mod-mail .mm-message .quote {
 	background-color: transparent;
 }
 
+.hsuforum-form .hsuforum-textarea{
+    border: solid 1px #333;
+    background-color: #3a3a38;
+}
+.forumsearch input[type=text]{
+    border: solid 1px #333;
+    background-color: #3a3a38;
+    color: #f5f5f5;
+}
+
 /*Scheduler plugin */
 .path-mod-scheduler div.commandbar {
     background-color: #757575;
