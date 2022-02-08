@@ -3059,3 +3059,107 @@ div.card.dashboard-card.urhiddendash .course-fav-icon.text-primary {
 .block_people .teachers .image {
 	border: 0;
 }
+
+// 3.11 overrides
+
+// activity completion
+
+.automatic-completion-conditions .badge {
+	padding: 0.85em 1em;
+}
+
+.automatic-completion-conditions .badge,
+.activity .activity-information .btn {
+	font-size: 0.85em;
+}
+
+.activity .activityinstance,
+.activity .contentwithoutlink {
+	margin-bottom: 0.35em;
+}
+
+
+.activity .activityinstance .alert-warning {
+	padding: 0.85em 1em;
+	font-size: 0.85em;
+    border-radius: 0.5em;
+}
+
+.activity .activity-information .btn-outline-secondary,
+.activity .activity-information .btn-outline-success {
+    border-radius: 0.5em;
+}
+
+.automatic-completion-conditions .badge.badge-secondary {
+	color: #004085;
+	background-color: #ecf5ff;
+	border-color: #b8daff;
+}
+
+.automatic-completion-conditions .badge.badge-success,
+.activity .activity-information .btn-outline-success {
+	color: #155724;
+	background-color: #d4edda;
+	border-color: #c3e6cb;
+}
+
+.activity .activity-information .btn-outline-secondary {
+	border-color: #999;
+    color: #666;
+}
+
+.activity .activity-information .btn-outline-secondary:hover {
+	color: #155724;
+	background-color: #d4edda;
+	border-color: #c3e6cb;
+}
+.activity .activity-information .btn-outline-secondary:disabled {
+    background-color: transparent;
+	border-color: #999;
+    color: #666;
+}
+
+// activity availability
+
+.activity .availabilityinfo .badge {
+	border-radius: 0.5em;
+	padding: 0.5em;
+	color: #fcfcfc;
+	background-color: #aaa;
+}
+
+// mail icon on course pages
+
+.activity .activityinstance span.unread {
+	border-radius: 0.5em;
+	color: #856404;
+	background-color: #fff3cd;
+	border-color: #ffeeba;
+	font-size: 0.85em;
+	display: inline-block;
+	padding: 0 0.5em 0 0;
+}
+
+.activity .activityinstance span.unread .badge {
+	font-size: 1em;
+	color: #fff;
+	background-color: #ca3120;
+	border-radius: 0.25em;
+	margin-right: 0.15em;
+}
+
+// mailnotificationcount in navbar
+
+.navbar .count-container {
+    border-radius: 0.25em;
+}
+
+.path-course-view .unread {
+    margin-left: 1.25em;
+}
+
+// course edit menu
+
+.dropdown-menu.show {
+    border-radius: 0.25em;
+}
