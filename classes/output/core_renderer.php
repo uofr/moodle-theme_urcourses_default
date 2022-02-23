@@ -254,7 +254,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $header->hasnavbar = empty($this->page->layout_options['nonavbar']);
         $header->navbar = $this->navbar();
 
-        //CCE Community HACK Need to remove guides for pages where there does not need to have user session
+        //UR Community HACK Need to remove guides for pages where there does not need to have user session
         $header->guest =  true;
         if (isloggedin() || isguestuser()) {
             $header->guest =  false;

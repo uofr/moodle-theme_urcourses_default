@@ -34,10 +34,27 @@
   -------------------------------------*/
 
 body.loginbackgroundimage, body .loginbackgroundimage {
+    -webkit-background-size: cover;
     background-size: cover;
-    background-position: center;
+    background-position: 60% bottom;
     background-repeat: repeat-x;
+  
+
 }
+
+@include media-breakpoint-down(sm) {
+
+    body.loginbackgroundimage, body .loginbackgroundimage {
+        background-size: auto;
+        background-position: left top;
+        background-repeat: repeat-x;
+
+        
+    
+    }
+}
+
+
 
 #page-login-index #region-main {
     overflow-x: hidden;
@@ -2013,19 +2030,19 @@ li.inline-nav-admin icon, li.inline-na icon {
         display: initial!important;
     }
 
-    body.loginbackgroundimage {
+   /* body.loginbackgroundimage {
         background-size: initial;
         height:auto;
-    }
+    }*/
 }
 
-body.loginbackgroundimage,
+/*body.loginbackgroundimage,
 body .loginbackgroundimage {
 	-webkit-background-size: cover;
 	background-size: cover;
     background-position: 60% bottom;
     background-repeat: repeat-x;
-}
+}*/
 
 /*Default link colour override. Would be the brand colour otherwise*/ 
 a {
