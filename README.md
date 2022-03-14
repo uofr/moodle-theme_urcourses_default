@@ -1,7 +1,7 @@
 moodle-theme_boost_campus
 =========================
 
-[![Moodle Plugin CI](https://github.com/moodleuulm/moodle-theme_boost_campus/workflows/Moodle%20Plugin%20CI/badge.svg?branch=MOODLE_310_STABLE)](https://github.com/moodleuulm/moodle-theme_boost_campus/actions?query=workflow%3A%22Moodle+Plugin+CI%22+branch%3AMOODLE_310_STABLE)
+[![Moodle Plugin CI](https://github.com/moodleuulm/moodle-theme_boost_campus/workflows/Moodle%20Plugin%20CI/badge.svg?branch=MOODLE_311_STABLE)](https://github.com/moodleuulm/moodle-theme_boost_campus/actions?query=workflow%3A%22Moodle+Plugin+CI%22+branch%3AMOODLE_311_STABLE)
 
 Moodle Boost child theme which is intended to meet the needs of university campuses and adds several features and improvements
 
@@ -9,7 +9,7 @@ Moodle Boost child theme which is intended to meet the needs of university campu
 Requirements
 ------------
 
-This plugin requires Moodle 3.10+
+This plugin requires Moodle 3.11+
 
 
 Motivation for this theme
@@ -150,9 +150,9 @@ With this setting a hint will appear in the course header as long as the visibil
 
 With this setting a hint will appear in the course header when a user is accessing it with the guest access feature. If the course provides an active self enrolment, a link to that page is also presented to the user.
 
-##### Show hint for unrestricted self enrolment
+##### Show hint for self enrolment without enrolment key
 
-With this setting a hint will appear in the course header when the course is visible and a unrestricted (no enrolment key or end date is set) self enrolment is active.
+With this setting a hint will appear in the course header if the course is visible and an enrolment without enrolment key is currently possible.
 
 #### Course settings
 
@@ -559,10 +559,18 @@ PHP7 Support
 Since Moodle 3.4 core, PHP7 is mandatory. We are developing and testing this plugin for PHP7 only.
 
 
+Maintainers
+-----------
+
+Ulm University\
+Communication and Information Centre (kiz)\
+Alexander Bias
+
+
 Copyright
 ---------
 
-Ulm University
-Communication and Information Centre (kiz)
+Ulm University\
+Communication and Information Centre (kiz)\
 Kathrin Osswald
 

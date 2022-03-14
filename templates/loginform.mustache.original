@@ -101,10 +101,13 @@
 <div class="card">
     <div class="card-block">
         {{#logourl}}
-            <h2 class="card-header text-center" ><img src="{{logourl}}" class="img-fluid" title="{{sitename}}" alt="{{sitename}}"/></h2>
+            <h1 class="h2 card-header text-center" >
+                <span class="sr-only">{{sitename}}: {{#str}} login {{/str}}</span>
+                <img src="{{logourl}}" class="img-fluid" alt=""/>
+            </h1>
         {{/logourl}}
         {{^logourl}}
-            <h2 class="card-header text-center">{{sitename}}</h2>
+            <h1 class="h2 card-header text-center" aria-label="{{sitename}}: {{#str}} login {{/str}}">{{sitename}}</h1>
         {{/logourl}}
         <div class="card-body">
             {{#cansignup}}
@@ -138,14 +141,14 @@
                             <input type="text" name="username" id="username"
                                 class="form-control"
                                 value="{{username}}"
-                                placeholder={{#quote}}{{^canloginbyemail}}{{#str}}username{{/str}}{{/canloginbyemail}}{{#canloginbyemail}}{{#str}}usernameemail{{/str}}{{/canloginbyemail}}{{/quote}}
+                                placeholder="{{^canloginbyemail}}{{#cleanstr}}username{{/cleanstr}}{{/canloginbyemail}}{{#canloginbyemail}}{{#cleanstr}}usernameemail{{/cleanstr}}{{/canloginbyemail}}"
                                 autocomplete="username">
                         </div>
                         <div class="form-group">
                             <label for="password" class="sr-only">{{#str}} password {{/str}}</label>
                             <input type="password" name="password" id="password" value=""
                                 class="form-control"
-                                placeholder={{#quote}}{{#str}}password{{/str}}{{/quote}}
+                                placeholder="{{#cleanstr}}password{{/cleanstr}}"
                                 autocomplete="current-password">
                         </div>
                         {{#rememberusername}}
@@ -181,11 +184,11 @@
                     {{/canloginasguest}}
 
                 {{#hasidentityproviders}}
-                    <h6 class="mt-2">{{#str}} potentialidps, auth {{/str}}</h6>
-                    <div class="potentialidplist" class="mt-3">
+                    <h2 class="h6 mt-2">{{#str}} potentialidps, auth {{/str}}</h2>
+                    <div class="potentialidplist mt-3">
                         {{#identityproviders}}
                             <div class="potentialidp">
-                                <a href="{{url}}" title={{#quote}}{{name}}{{/quote}} class="btn btn-secondary btn-block">
+                                <a href="{{url}}" title="{{name}}" class="btn btn-secondary btn-block">
                                     {{#iconurl}}
                                         <img src="{{iconurl}}" alt="" width="24" height="24"/>
                                     {{/iconurl}}

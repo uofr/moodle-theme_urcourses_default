@@ -94,7 +94,7 @@
     <div id="page" class="container-fluid d-print-block">
 
         {{#timedinfobannershowonselectedpage}}
-        <div id="themeboostcampusitimedinfobanner" class="alert {{#timedibcss}}alert-{{{ timedibcss }}}{{/timedibcss}} mt-3" role="alert">
+        <div id="themeboostcampustimedinfobanner" class="alert {{#timedibcss}}alert-{{{ timedibcss }}}{{/timedibcss}} mt-3" role="alert">
           {{{ timedibcontent }}}
         </div>
         {{/timedinfobannershowonselectedpage}}
@@ -114,23 +114,28 @@
 
         <div id="page-content" class="row pb-3 d-print-block">
             <div id="region-main-box" class="col-12">
-                {{#node}}
-                    {{> theme_boost_campus/settings_link_page }}
-                {{/node}}
+                {{#incoursesettings}}
+                    {{#node}}
+                        {{> theme_boost_campus/settings_link_page }}
+                    {{/node}}
+                {{/incoursesettings}}
                 {{#hasregionmainsettingsmenu}}
                 <div id="region-main-settings-menu" class="d-print-none {{#hasblocks}}has-blocks{{/hasblocks}}">
                     <div> {{{ output.region_main_settings_menu }}} </div>
                 </div>
                 {{/hasregionmainsettingsmenu}}
+                {{{coursepageinformationbanners}}}
                 <section id="region-main" {{#hasblocks}}class="has-blocks mb-3"{{/hasblocks}} aria-label="{{#str}}content{{/str}}">
 
                     {{#hasregionmainsettingsmenu}}
                         <div class="region_main_settings_menu_proxy"></div>
                     {{/hasregionmainsettingsmenu}}
                     {{{ output.course_content_header }}}
-                    {{#activitynode}}
-                        {{> theme_boost_campus/activity_settings_incourse }}
-                    {{/activitynode}}
+                    {{#incoursesettings}}
+                        {{#activitynode}}
+                            {{> theme_boost_campus/activity_settings_incourse }}
+                        {{/activitynode}}
+                    {{/incoursesettings}}
                     {{{ output.main_content }}}
                     {{{ output.activity_navigation }}}
                     {{{ output.course_content_footer }}}

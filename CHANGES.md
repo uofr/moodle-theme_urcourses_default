@@ -4,6 +4,48 @@ moodle-theme_boost_campus
 Changes
 -------
 
+### v3.11-r2
+
+* 2022-01-06 - Improvement: Add frontpage support for infobanner - Thanks to Melanie Treitinger.
+* 2022-01-06 - Improvement: Profile button with "editadvanced" link for users with capability 'moodle/user:update' - Thanks to Melanie Treitinger.
+
+### v3.11-r1
+
+* 2021-12-28 - Adjust loginform.mustache and help_icon.mustache templates after upstream changes in MDL-70721.
+* 2021-12-08 - Prepare compatibility for Moodle 3.11.
+
+### v3.10-r9
+
+* 2021-09-16 - Regression: The switch role functionality caused a fatal error with some theme configurations - Thanks to Klaus Steitz.
+
+### v3.10-r8
+
+* 2021-08-17 - Bugfix: The timed info banner had a wrong CSS ID - Credits to Tim Schroeder.
+
+### v3.10-r7
+
+* 2021-08-16 - Bugfix: Fix Behat test which checks the 'Hide link to the Moodle docs' feature which broke since the last release.
+* 2021-08-16 - Bugfix: In-course settings have been shown below course information banners instead of above them.
+* 2021-08-16 - Improvement: Add in-course settings only to HTML tree of the setting is enabled.
+* 2021-08-16 - Adjust activity_settings_incourse.mustache template based on changes in settings_link_page.mustache
+* 2021-08-16 - Improvement: Adjusted tab appearance for in-course settings.
+* 2021-08-16 - Adjusted settings_link_page.mustache template due to upstream changes in theme Boost.
+* 2021-08-16 - Adjusted loginform.mustache template due to upstream changes in theme Boost.
+* 2021-08-16 - Bugfix: Remove overwritten template full_header.mustache. If the setting showsettingsincourse is enabled, this will place the cog icon _over_ instead of _near_ the edit button. This will fix a presentation issue with the in-course settings menu on smaller screens.  
+* 2021-08-16 - Improvement: Re-add the margin below the breadcrumb as this does not need to differ between theme_boost and theme_boost_campus anymore
+
+### v3.10-r6
+
+* 2021-04-20 - Adjusted footer.mustache due to upstream changes in theme Boost core (MDL-70173).
+
+### v3.10-r5
+
+* 2021-04-14 - Bugfix: Help Icon content in the modal dialog versions sometimes inherited unwanted CSS layout - Credits to @danowar2k
+* 2021-04-14 - Improvement: Improve floating icons in information / hint banners
+* 2021-04-12 - Improvement: Modify the hint for unrestricted self enrolment in a way that it is more understandable if enrolment end dates are set or not.
+* 2021-04-11 - Fix Behat test for random login background image
+* 2021-03-14 - Fix Behat test for unrestricted self enrolment hint
+
 ### v3.10-r4
 
 * 2021-03-13 - Bugfix: Option to output the information banner without any particular Bootstrap color was broken on the login page.

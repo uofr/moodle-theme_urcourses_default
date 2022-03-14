@@ -390,14 +390,6 @@ body.loginbackgroundimage #page {
   Course header
   -------------------------------------*/
 
-/* Remove margin from the pageheadingbuttons in the course header. */
-#page-header {
-    .breadcrumb,
-    .singlebutton form {
-        margin: 0;
-    }
-}
-
 /*
  * If set in showswitchedroleincourse, the switched role information will be displayed
  * in the course header instead of next to the user name.
@@ -956,30 +948,55 @@ body.scrolled #goto-top-link {
 }
 
 /* In-course settings. */
-#boost-campus-course-settings,
-#boost-campus-activity-settings {
-    /* Initially do not display the settings. Visibility will be changed on click with incoursesettings.js. */
-    display: none;
-    margin-bottom: 1rem;
-    padding: 0 1rem 1.3rem 1rem;
+@if (variable-exists(showsettingsincourse)) {
+    #boost-campus-course-settings,
+    #boost-campus-activity-settings {
+        /* Initially do not display the settings. Visibility will be changed on click with incoursesettings.js. */
+        display: none;
 
-    .nav-tabs {
-        border: none;
-        .active {
-            background-color: darken($body-bg, 5%);
-            border-color: darken($body-bg, 5%);
+        /* Improve layout and look of the settings as they are now placed within the page header. */
+        margin-bottom: 1rem;
+        .tab-content .card {
+            border: none;
         }
+
+        /* Improve styling of the tabs so that they look more like real tabs. */
+        .nav-tabs {
+            border: none;
+        }
+        .tab-content .card {
+            background-color: darken($body-bg, 5%);
+        }
+
+        /* Do some more tweaks on smaller screens and bigger screens differently as Moodle uses different styles. */
+        @include media-breakpoint-up(md) {
+            /* Add some space. */
+            padding: 0 1rem 1.3rem 1rem;
+
+            /* Highlight the active tab. */
+            .nav-tabs {
+                .active {
+                    background-color: darken($body-bg, 5%);
+                    border-color: darken($body-bg, 5%);
+                }
+            }
+        }
+        @include media-breakpoint-down(sm) {
+            /* Add some space. */
+            padding: 1rem 0 1.3rem 0;
+
+            /* Remove the border around the course settings card as it would be incomplete. */
+            &.card {
+                border: none;
+            }
+        }
+
     }
-    /* Improve color of tab content so it looks more like a real tab. */
-    .tab-content .card {
-        background-color: darken($body-bg, 5%);
+
+    /* As this is already placed within the activity content card, the border around the settings card should be removed. */
+    #boost-campus-activity-settings {
         border: none;
     }
-}
-
-/* As this is already placed within the activity content card, the border around the settings card should be removed. */
-#boost-campus-activity-settings {
-    border: none;
 }
 
 /* Setting to move 'Switch role to...' menu item to the course settings - but only if
@@ -1044,6 +1061,12 @@ body.scrolled #goto-top-link {
 
 @if variable-exists(helptextmodal) {
     @if $helptextmodal == 'yes' {
+
+        th .boost-campus-modal-help-dialog .modal-body {
+            text-align: left;
+            font-weight: $font-weight-base;
+        }
+
         .modal {
             /* Set font-size to normal size as the modals inherit the font size from the element they are placed in.
              * This is not intended and so we force the font size to be the normal size. */
