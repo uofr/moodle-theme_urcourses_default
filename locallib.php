@@ -671,10 +671,14 @@ function theme_urcourses_default_get_course_templates() {
  * @return array
  */
 
-function theme_urcourses_default_get_catergories(){
+function theme_urcourses_default_get_catergories($course){
     global $CFG, $DB;
 
     $displaylist = core_course_category::make_categories_list('moodle/course:changecategory');
+    if (!isset($displaylist[$course->category])) {
+        // Always keep current category.
+        $displaylist[$course->category] = \core_course_category::get($course->category, MUST_EXIST, true)->get_formatted_name();
+    }
  
     $temp = array();
     foreach($displaylist as $key=>$val){

@@ -777,7 +777,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
             'studentaccount'=> theme_urcourses_default_check_test_account($USER->username),
             'studentenrolled'=> theme_urcourses_default_test_account_enrollment($USER->username, $COURSE->id),
             'templatelist'=> json_encode(theme_urcourses_default_get_course_templates()),
-            'categories'=> json_encode(theme_urcourses_default_get_catergories()),
+            'categories'=> json_encode(theme_urcourses_default_get_catergories($COURSE)),
             'course'=> json_encode(array("id"=>$COURSE->id,
                                 "coursename"=>$COURSE->fullname,
                                 "shortname"=>$COURSE->shortname,
@@ -806,7 +806,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
                                 "enddate"=>usergetdate($COURSE->enddate),
                 )),
                 'semesterdates' => json_encode(theme_urcourses_default_get_semesterdates()),
-                'categories'=> json_encode(theme_urcourses_default_get_catergories()),
+                'categories'=> json_encode(theme_urcourses_default_get_catergories($COURSE)),
                 'templatelist'=> json_encode(theme_urcourses_default_get_course_templates()),
                 "homeurl"=>$CFG->wwwroot,
                 
