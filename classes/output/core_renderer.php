@@ -126,7 +126,7 @@ class core_renderer extends \core_renderer {
      */
     public function full_header() {
         // MODIFICATION START.
-        global $USER, $COURSE;
+        global $CFG, $USER, $COURSE;
         // MODIFICATION END.
 
         if ($this->page->include_region_main_settings_in_header_actions() &&
@@ -141,7 +141,7 @@ class core_renderer extends \core_renderer {
             ));
         }
 		
-        // Get course overview files.
+		// Get course overview files.
         if (empty($CFG->courseoverviewfileslimit)) {
             return array();
         }
@@ -229,7 +229,11 @@ class core_renderer extends \core_renderer {
         // @codingStandardsIgnoreEnd
         $header->courseheader = $this->course_header();
         $header->headeractions = $this->page->get_header_actions();
-        return $this->render_from_template('core/full_header', $header);
+		
+		$header->course_id = $COURSE->id;
+        
+		//return $this->render_from_template('core/full_header', $header);
+		return $this->render_from_template('theme_boost_campus/full_header', $header);
     }
 
     /**
