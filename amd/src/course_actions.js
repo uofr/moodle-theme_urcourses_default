@@ -327,6 +327,7 @@ export default class courseActionsLib {
         var endyear = $(SELECTORS.ENDYEAR).val();
         var endday = $(SELECTORS.ENDDAY).val();
         var endmonth = $(SELECTORS.ENDMONTH).val();
+        var category = $(SELECTORS.CATEGORY).val();
         var test =true;
 
         if(coursename.length ==0){
@@ -345,6 +346,15 @@ export default class courseActionsLib {
             test = false;
         }else{
             $(SELECTORS.ERR_SHORTNAME).text("");
+        }
+
+        if(category ==0 || category =="" ){
+            $(SELECTORS.ERR_CATEGORY).text("Please select a category");
+            $(SELECTORS.ERR_CATEGORY).attr("display", "block");
+            $(SELECTORS.ERR_CATEGORY).show();
+            test = false;
+        }else{
+            $(SELECTORS.ERR_CATEGORY).text("");
         }
 
         var startdate = new Date(startyear+"."+startmonth+"."+startday).getTime()/1000;

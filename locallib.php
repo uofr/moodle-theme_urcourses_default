@@ -925,11 +925,32 @@ function theme_urcourses_default_get_course_templates() {
  * @return array
  */
 
-function theme_urcourses_default_get_catergories(){
+function theme_urcourses_default_get_catergories($course){
     global $CFG, $DB;
 
     $displaylist = core_course_category::make_categories_list('moodle/course:changecategory');
- 
+
+    if (!isset($displaylist[$course->category])) {
+        // Always keep current category.
+        $currentcat = \core_course_category::get($course->category, MUST_EXIST, true)->get_formatted_name();
+
+        //check if semester category
+        if (preg_match('/\bWinter\b/', $currentcat) || preg_match('/\bSpring\b/', $currentcat) || preg_match('/\bFall\b/', $currentcat)) {
+            //if so get parent
+            $cat = $DB->get_record("course_categories", array("id"=>$course->category), '*', IGNORE_MISSING);
+
+            if($cat->parent != 0){
+                $parent  = $DB->get_record("course_categories", array("id"=>$cat->parent), '*', IGNORE_MISSING);
+                $displaylist[$course->category] = $parent->name;
+            }else{
+                $displaylist[$course->category] = $currentcat;
+            }
+        }else{
+            //else just assign
+            $displaylist[$course->category] = $currentcat;
+        }
+    }
+
     $temp = array();
     foreach($displaylist as $key=>$val){
         $temp[] = Array("id" => $key, "name" => $val);
