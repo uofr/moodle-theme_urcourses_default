@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1"
+	 id="svg6008" sodipodi:docname="icon.svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" inkscape:version="0.92.2 5c3e80d, 2017-08-06" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px" height="24px"
+	 viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+<g id="final">
+	<g id="attendance">
+		<g id="g3211">
+			<g id="g3201">
+				<g id="g3199" transform="matrix(0.8389304,0,0,0.8389304,2.0323979,-0.15927535)">
+					<linearGradient id="path3180_1_" gradientUnits="userSpaceOnUse" x1="10.2284" y1="13.8041" x2="49.5941" y2="12.4515">
+						<stop  offset="0" style="stop-color:#FFFFFF"/>
+						<stop  offset="1" style="stop-color:#000000"/>
+					</linearGradient>
+					
+						<path id="path3180" inkscape:connector-curvature="0" sodipodi:nodetypes="sscssscss" fill="url(#path3180_1_)" stroke="#999999" stroke-width="0.75" d="
+						M11.445,1.951c-3.252,0-5.892,2.638-5.892,5.895c0,2.193,1.2,4.103,2.977,5.119c-3.516,1.161-6.055,4.468-6.055,8.377
+						c0,4.869,3.848,4.059,8.721,4.059c4.877,0,8.928,0.81,8.928-4.059c0-3.84-2.452-7.095-5.873-8.311
+						c1.84-0.998,3.089-2.946,3.089-5.185C17.34,4.588,14.703,1.951,11.445,1.951z"/>
+				</g>
+			</g>
+			<g id="g3209" transform="matrix(0.8389304,0,0,0.8389304,2.0323979,-0.15927535)">
+				
+					<linearGradient id="path4368_1_" gradientUnits="userSpaceOnUse" x1="-46.3466" y1="1733.1917" x2="-51.3657" y2="1754.156" gradientTransform="matrix(0.5419 -0.1289 0.1297 0.5386 -183.1705 -930.6898)">
+					<stop  offset="0.0056" style="stop-color:#FFFF66"/>
+					<stop  offset="1" style="stop-color:#33CC66"/>
+				</linearGradient>
+				
+					<path id="path4368_2_" inkscape:connector-curvature="0" fill="url(#path4368_1_)" stroke="#006A00" stroke-width="1.0327" stroke-miterlimit="10" d="
+					M20.381,9.523c-0.208-0.019-0.419,0.083-0.528,0.279l-4.61,8.388l-2.965-2.343c-0.267-0.143-0.593-0.051-0.738,0.212
+					l-1.332,1.697c-0.143,0.264-0.047,0.59,0.219,0.733c0,0,5.415,4.444,5.422,4.447c0.062,0.035,0.125,0.051,0.191,0.059
+					c0.217,0.027,0.435-0.072,0.547-0.274l6.221-11.311c0.144-0.265,0.044-0.591-0.219-0.735l-1.995-1.086
+					C20.526,9.552,20.452,9.531,20.381,9.523z"/>
+			</g>
+		</g>
+	</g>
+</g>
+</svg>
