@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 // MODIFICATION START.
-global $PAGE;
+global $PAGE, $COURSE;
 // MODIFICATION END.
 
 user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
@@ -46,7 +46,13 @@ $extraclasses = [];
 if ($navdraweropen) {
     $extraclasses[] = 'drawer-open-left';
 }
+
+if ($COURSE->shortname == 'Research 101') {
+	$extraclasses[] = 'research101';
+}
+
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
+
 $blockshtml = $OUTPUT->blocks('side-pre');
 $hasblocks = strpos($blockshtml, 'data-block=') !== false;
 $regionmainsettingsmenu = $OUTPUT->region_main_settings_menu();
