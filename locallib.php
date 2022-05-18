@@ -1119,3 +1119,28 @@ function theme_urcourses_default_test_account_enrollment($username, $courseid){
         
         return $DB->record_exists_select('role_assignments', $roleassign_query_cond, $roleassign_query_arr);
     }
+
+  function theme_urcourses_get_course_image($course) {
+        global $CFG;
+        $courseinlist = new \core_course_list_element($course);
+        foreach ($courseinlist->get_course_overviewfiles() as $file) {
+            if ($file->is_valid_image()) {
+                $pathcomponents = [
+                    '/pluginfile.php',
+                    $file->get_contextid(),
+                    $file->get_component(),
+                    $file->get_filearea() . $file->get_filepath() . $file->get_filename()
+                ];
+                $path = implode('/', $pathcomponents);
+                return (new moodle_url($path))->out();
+            }
+        $image = \cache::make('core', 'course_image')->get($course->id);
+
+        if (is_null($image)) {
+            $image = false;
+        }
+        return false;
+
+        return $image;
+    }
+  }
