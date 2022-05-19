@@ -198,7 +198,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
      */
     public function full_header() {
         // MODIFICATION START.
-        global $USER, $COURSE, $CFG, $DB;
+        global $USER, $COURSE, $CFG, $DB, $OUTPUT;
         // MODIFICATION END.
 
         if ($this->page->include_region_main_settings_in_header_actions() && !$this->page->blocks->is_block_present('settings')) {
