@@ -1126,7 +1126,7 @@ function theme_urcourses_default_test_account_enrollment($username, $courseid){
      * @param object $course
      * @return string url of course image
      */
-    function theme_urcourses_get_course_image($course) {
+    function theme_urcourses_default_get_course_image($course) {
         global $CFG;
         $courseinlist = new \core_course_list_element($course);
         foreach ($courseinlist->get_course_overviewfiles() as $file) {
