@@ -198,7 +198,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
      */
     public function full_header() {
         // MODIFICATION START.
-        global $USER, $COURSE, $CFG, $DB;
+        global $USER, $COURSE, $CFG, $DB, $OUTPUT;
         // MODIFICATION END.
 
         if ($this->page->include_region_main_settings_in_header_actions() && !$this->page->blocks->is_block_present('settings')) {
@@ -332,7 +332,14 @@ class core_renderer extends \theme_boost\output\core_renderer {
 		$exporter = new course_summary_exporter($COURSE, ['context' => $context]);
 		$cobits = $exporter->export($urenderer);
 		
-		$header->courseimage = $cobits->courseimage;
+        //$header->courseimage = $cobits->courseimage;
+
+        $header->courseimage = theme_uofr_conservatory_get_course_image($COURSE);
+
+        if (!$header->courseimage) {
+            $header->courseimage = $OUTPUT->get_generated_image_for_id($COURSE->id);
+        }
+
 		if ($COURSE->id == 1) $header->courseimage = $CFG->wwwroot.'/theme/uofr_conservatory/pix/siteheader.jpg';
         
         // modal_help edit
