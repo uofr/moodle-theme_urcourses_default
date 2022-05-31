@@ -105,6 +105,10 @@ a, #boost-campus-course-settings .card-body a, .ui-widget-content a, .btn-link,
     background-color: rgba(10,10,10,.5);
 }
 
+.page{
+    background-color: #f5f5f5 !important;
+}
+
 .path-grade-report-grader .gradeparent table, .page-link, .generaltable th, .generaltable td {
     border-color: rgba(10, 10, 10, 0.5)!important;
 }
@@ -505,7 +509,11 @@ div.editor_atto_toolbar div.atto_group button:only-child {
 }
 
 .form-control:disabled, .form-control[readonly]{
-    color: #9e9e9e;
+    /*color: #9e9e9e;*/
+}
+
+.form-control:disabled {
+    background-color: #aaa !important;
 }
 
 .form-control {
@@ -613,6 +621,14 @@ table.dataTable tr.odd, .path-mod-workshop .userplan dd,
 table.dataTable tr.odd td.sorting_1, .courses .coursebox.even,
 .mod_turnitintooltwo .top.listbar.clearfix {
     background-color: #3c3934 !important;
+}
+
+#mod_turnitintooltwo_course_browser_table .even, .mod_turnitintooltwo_submissions_data_table .even{
+    background-color: #4d4d4f !important;
+}
+
+.mod_turnitintooltwo_listbar {
+    background-color: #4d4d4f !important;
 }
 .submissionsDataTable .odd {
     background: #3c3934!important;
@@ -862,6 +878,10 @@ ul.oublog-accordion li {
     background-color: #383736;
     letter-spacing: 0.5px;
     border-left-color: #f5f5f5;
+}
+
+.path-mod-mediagallery .focus_selector, .path-mod-mediagallery .mediasize_selector{
+    background-color: #424242;
 }
 
 #page-wrapper {
@@ -1276,4 +1296,9 @@ body.path-mod-mail .mm-message .quote {
 
 .path-mod-scheduler .maildisplay {
     background: #757575;
+}
+
+/* mail icon on course pages*/
+.activity .activityinstance span.unread {
+    background-color: #3a3936;
 }
