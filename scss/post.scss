@@ -1667,19 +1667,46 @@ pre {
 .R2MR_Callout {
 	padding: 20px 20px 10px 80px; border: 2px solid #737cb3; border-radius: 1em; min-height: 6em; display: inline-block; margin: 1em 0em 0em 0em;
 }
+.r2mr_blank {
+	padding: 20px 20px 10px 20px; border: 2px solid #737cb3; border-radius: 1em; min-height: 6em; display: inline-block;
+}
+.r2mr_blank_colour {
+	background-color: #d6dbe8; padding: 20px 20px 10px 20px; border: 2px solid #737cb3; border-radius: 1em; min-height: 6em; display: inline-block;
+}
 .r2mr_video,
 .R2MR_Callout.Video {
 	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/Icons-R2MR-Video.png'); background-repeat: no-repeat; background-position: 20px 20px;
 }
+.r2mr_audio,
+.R2MR_Callout.Audio {
+	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/Icons-R2MR-Audio.png'); background-repeat: no-repeat; background-position: 20px 20px; padding: 20px 20px 10px 80px; border: 2px solid #737cb3; border-radius: 1em; min-height: 6em; display: inline-block;
+}
+.r2mr_pdf,
 .R2MR_Callout.PDF {
 	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/Icons-R2MR-PDF.png'); background-repeat: no-repeat; background-position: 20px 20px;
 }
+.r2mr_question,
 .R2MR_Callout.Question {
 	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/Icons-R2MR-Question.png'); background-repeat: no-repeat; background-position: 20px 20px; padding: 20px 20px 10px 80px; margin: 1em 0em 1em 0em; border: 2px solid #737cb3; border-radius: 1em; min-height: 6em; width: 50%;
 }
 .r2mr_activity {
 	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/Icons-R2MR-Activity.png'); background-repeat: no-repeat; background-position: 20px 20px; padding: 20px 20px 10px 80px; border: 2px solid #737cb3; border-radius: 1em; min-height: 6em; display: inline-block;
 }
+.r2mr_important {
+	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/Icons-R2MR-Important.png'); background-repeat: no-repeat; background-position: 20px 20px; padding: 20px 20px 10px 80px; border: 2px solid #737cb3; border-radius: 1em; min-height: 6em; display: inline-block;
+}
 .r2mr_very_important {
 	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/Icons-R2MR-Very-Important.png'); background-repeat: no-repeat; background-position: 20px 20px; background-color: #fee6ac; padding: 20px 20px 10px 80px; border: 2px solid #000000; border-radius: 1em; min-height: 6em; display: inline-block; margin-bottom: 1em;
+}
+.r2mr_practice {
+	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/Icons-R2MR-Practice.png'); background-repeat: no-repeat; background-position: 20px 20px; padding: 20px 20px 10px 80px; border: 2px solid #737cb3; border-radius: 1em; min-height: 6em; display: inline-block;
+}
+.r2mr_info {
+	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/Icons-R2MR-Info.png'); background-repeat: no-repeat; background-position: 20px 20px; padding: 20px 20px 10px 80px; border: 2px solid #737cb3; border-radius: 1em; min-height: 6em; display: inline-block;
+}
+.r2mr_discussion {
+	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/Icons-R2MR-Discussion.png'); background-repeat: no-repeat; background-position: 20px 20px; padding: 20px 20px 10px 80px; border: 2px solid #737cb3; border-radius: 1em; min-height: 6em; display: inline-block;
+}
+.r2mr_zoomroom {
+	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/Zoom-Icon.png'); background-repeat: no-repeat; background-position: 20px 20px;  padding: 20px 20px 10px 80px; background-color: #ffffff; border: 4px solid #737CB2; border-radius: 1em; min-height: 6em; display: inline-block;
 }
