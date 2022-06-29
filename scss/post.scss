@@ -1644,6 +1644,25 @@ pre {
   border-radius: 4px;
 }
 
+#region-main ul,
+#region-main ol {
+       margin-top: 0.5em;
+}
+
+#region-main ul li,
+#region-main ol li {
+        margin-bottom: 0.75em;
+}
+
+#region-main h1,
+#region-main h2,
+#region-main h3,
+#region-main h4,
+#region-main h5,
+#region-main h6 {
+       margin-bottom: 0.75em;
+}
+
 .r2mr_callout,
 .R2MR_Callout {
 	padding: 20px 20px 10px 80px; border: 2px solid #737cb3; border-radius: 1em; min-height: 6em; display: inline-block; margin: 1em 0em 0em 0em;
