@@ -1710,3 +1710,25 @@ pre {
 .r2mr_zoomroom {
 	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/Zoom-Icon.png'); background-repeat: no-repeat; background-position: 20px 20px;  padding: 20px 20px 10px 90px; background-color: #ffffff; border: 4px solid #737CB2; border-radius: 1em; min-height: 6em; display: inline-block;
 }
+
+.r2mr_callout h2,
+.R2MR_Callout h2,
+.r2mr_blank h2,
+.r2mr_blank_colour h2,
+.r2mr_video h2,
+.R2MR_Callout.Video h2, 
+.r2mr_audio h2,
+.R2MR_Callout.Audio h2, 
+.r2mr_pdf h2,
+.R2MR_Callout.PDF h2,
+.r2mr_question h2,
+.R2MR_Callout.Question h2,
+.r2mr_activity h2,
+.r2mr_important h2,
+.r2mr_very_important h2,
+.r2mr_practice h2,
+.r2mr_info h2,
+.r2mr_discussion h2,
+.r2mr_zoomroom h2 {
+     font-weight: bold;
+}
