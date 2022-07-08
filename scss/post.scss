@@ -1729,7 +1729,11 @@ pre {
 .r2mr_practice h2,
 .r2mr_info h2,
 .r2mr_discussion h2,
-.r2mr_zoomroom h2 {
+.r2mr_zoomroom h2,
+.r2mr_example h2,
+.r2mr_ideas h2,
+.r2mr_links h2,
+.r2mr_research h2 {
      font-weight: bold;
 }
 
@@ -1776,6 +1780,33 @@ pre {
 	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/Zoom-Icon.png'); background-repeat: no-repeat; background-position: 20px 20px;  padding: 20px 20px 10px 90px; background-color: #ffffff; border: 4px solid #faa53f; border-radius: 1em; min-height: 6em; display: inline-block;
 }
 
+.r2mr_example {
+	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/icons-example.png'); background-repeat: no-repeat; background-position: 20px 20px; padding: 20px 20px 10px 80px; border: 2px solid #737cb3; border-radius: 1em; min-height: 6em; display: inline-block;
+}
+.r2mr_ideas {
+	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/icons-ideas.png'); background-repeat: no-repeat; background-position: 20px 20px; padding: 20px 20px 10px 80px; border: 2px solid #737cb3; border-radius: 1em; min-height: 6em; display: inline-block;
+}
+.r2mr_links {
+	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/icons-links.png'); background-repeat: no-repeat; background-position: 20px 20px; padding: 20px 20px 10px 80px; border: 2px solid #737cb3; border-radius: 1em; min-height: 6em; display: inline-block;
+}
+.r2mr_research {
+	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/icons-research.png'); background-repeat: no-repeat; background-position: 20px 20px; padding: 20px 20px 10px 80px; border: 2px solid #737cb3; border-radius: 1em; min-height: 6em; display: inline-block;
+}
+
+.cipsrt_example {
+	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/icons-example.png'); background-repeat: no-repeat; background-position: 20px 20px; padding: 20px 20px 10px 80px; border: 2px solid #faa53f; border-radius: 1em; min-height: 6em; display: inline-block;
+}
+.cipsrt_ideas {
+	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/icons-ideas.png'); background-repeat: no-repeat; background-position: 20px 20px; padding: 20px 20px 10px 80px; border: 2px solid #faa53f; border-radius: 1em; min-height: 6em; display: inline-block;
+}
+.cipsrt_links {
+	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/icons-links.png'); background-repeat: no-repeat; background-position: 20px 20px; padding: 20px 20px 10px 80px; border: 2px solid #faa53f; border-radius: 1em; min-height: 6em; display: inline-block;
+}
+.cipsrt_research {
+	background-image: url('https://moodle.uregina.ca/cipsrt-icrtsp/theme/boost_campus/course-files/icons-research.png'); background-repeat: no-repeat; background-position: 20px 20px; padding: 20px 20px 10px 80px; border: 2px solid #faa53f; border-radius: 1em; min-height: 6em; display: inline-block;
+}
+
+
 .cipsrt_callout h2,
 .cipsrt_blank h2,
 .cipsrt_blank_colour h2,
@@ -1789,6 +1820,10 @@ pre {
 .cipsrt_practice h2,
 .cipsrt_info h2,
 .cipsrt_discussion h2,
-.cipsrt_zoomroom h2 {
+.cipsrt_zoomroom h2,
+.cipsrt_example h2,
+.cipsrt_ideas h2,
+.cipsrt_links h2,
+.cipsrt_research h2 {
      font-weight: bold;
 }
