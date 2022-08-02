@@ -117,14 +117,16 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * Override to display an edit button again by calling the parent function
      * in core/core_renderer because theme_boost's function returns an empty
      * string and therefore displays nothing.
-     * @param moodle_url $url The current course url.
+     * @param moodle_url $url The URL + params to send through when clicking the button
+     * @param string $method
+     * @return string HTML the button
      * @return \core_renderer::edit_button Moodle edit button.
      */
-    public function edit_button(moodle_url $url) {
+    public function edit_button(moodle_url $url, string $method = 'post') {
         // MODIFICATION START.
         // If setting editbuttonincourseheader ist checked give out the edit on / off button in course header.
         if (get_config('theme_urcourses_default', 'courseeditbutton') == '1') {
-            return \core_renderer::edit_button($url);
+            return \core_renderer::edit_button($url,$method);
         }
         // MODIFICATION END.
         /* ORIGINAL START.
@@ -1489,7 +1491,7 @@ function search_small() {
      * This renders the navbar.
      * Uses bootstrap compatible html.
      */
-     public function navbar() {
+     public function navbar(): string {
         if(strpos($this->page->bodyid, 'admin')){
             return $this->render_from_template('core/navbar', $this->page->navbar);
 
