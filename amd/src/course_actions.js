@@ -278,11 +278,18 @@ export default class courseActionsLib {
         $.each(self._categories, function(key,val) {
             categories.push({"id":val.id,"name":val.name});
         });
+
+        showcategories =false;
+        if(categories.length>1){
+            showcategories=true;
+        }
+
         const renderData = {
             templatenew: templatenew,
             templatelist:templatelist,
             istemplatelist:istemplatelist,
-            categories: categories
+            categories: categories,
+            showcategories: showcategories
         };
         const renderPromise = await Templates.render(template, renderData);
         return renderPromise;

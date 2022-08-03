@@ -1282,9 +1282,6 @@ class theme_urcourses_default_external extends external_api {
         }
 
         $plan = $rc->get_plan();
-        //error_log(print_r("TESTERERERERE", TRUE));
-        //error_log(print_r($plan, TRUE));
-
         //$plan->add_task(new restore_final_task('final_task'));
 
         $rc->execute_plan();
