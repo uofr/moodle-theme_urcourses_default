@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 $footnotesetting = get_config('theme_boost_campus', 'footnote');
 
 // Only proceed if text area does not only contains empty tags.
-if (!html_is_blank($footnotesetting)) {
+if (!html_is_blank($footnotesetting)&&(substr($COURSE->fullname,0,4)=='R2MR')) {
     // Use format_string function to enable multilanguage filtering.
     $footnotesetting = format_text($footnotesetting);
 
