@@ -3164,6 +3164,12 @@ div.card.dashboard-card.urhiddendash .course-fav-icon.text-primary {
     border-radius: 0.25em;
 }
 
+//
+@media (max-width: 767.98px) {
+  .breadcrumb:not(:empty) {
+    border: 0;
+  }
+}
 // toggles
 .custom-switch .custom-control-label::after {
 	background-color: #fff;
