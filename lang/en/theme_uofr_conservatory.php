@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme UR Courses Default - Language pack
+ * Theme UR Community Default - Language pack
  *
  * @package    theme_uofr_conservatory
  * @copyright  2017 Kathrin Osswald, Ulm University <kathrin.osswald@uni-ulm.de>
