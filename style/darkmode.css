@@ -1345,3 +1345,7 @@ body.path-mod-mail .mm-message .quote {
 	border-color: #98e873;
 	background-color: #98e873;
 }
+
+#quiz-timer-wrapper #quiz-timer {
+    background-color: #848889;
+}
