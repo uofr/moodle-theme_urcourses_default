@@ -1308,6 +1308,37 @@ class theme_urcourses_default_external extends external_api {
         //update id number and date of course
         $DB->update_record("course", $newcourse, false);
 
+
+        //Turnitintwo fix for duplication
+        //check if assignment exist for course
+        if ($turnitintooltwos = $DB->get_records('turnitintooltwo', array('course' => $newcourseid))) {
+           //call function to reset turnit in assignments 
+           //WILL HAVE TO KEEP EYE ON THIS INCASE FUNCTION CHANGES OVER UPDATES.
+
+            $modfile = $CFG->dirroot.'/mod/turnitintooltwo/lib.php';
+            $moddeleteuserdata = 'turnitintooltwo_reset_userdata';   // Function to delete user data.
+            if (file_exists($modfile)) {
+                include_once($modfile);
+                if (function_exists($moddeleteuserdata)) {
+                    $data = new stdClass;
+                    $data->courseid = $newcourseid;
+                    $data->reset_turnitintooltwo = "NEWCLASS";
+                    $modstatus = $moddeleteuserdata($data);
+                    if (is_array($modstatus)) {
+                        $status = array_merge($status, $modstatus);
+                    } else {
+                        debugging('Module turnitintooltwo returned incorrect status - must be an array!');
+                    }
+                } else {
+                    $unsupportedmods[] = $mod;
+                }
+            } else {
+                debugging('Missing lib.php in turnitintooltwo module!');
+            }
+            // Update calendar events for all modules.
+            course_module_bulk_update_calendar_events('turnitintooltwo', $newcourseid);
+        }
+
         //check if instructor is enrolled in the template
         $newcontext = \context_course::instance($newcourse->id);
         
