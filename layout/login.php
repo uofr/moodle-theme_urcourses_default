@@ -15,97 +15,41 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Campus Login - Layout file.
+ * Theme Boost Campus Login - Login page layout.
  *
- * @package   theme_urcourses_default
- * @copyright 2017 Kathrin Osswald, Ulm University kathrin.osswald@uni-ulm.de
+ * This layoutfile is based on theme/boost/layout/login.php
+ *
+ * Modifications compared to this layout file:
+ * * Include footnote
+ * * Render theme_boost_union/login instead of theme_boost/login template
+ *
+ * @package   theme_boost_union
+ * @copyright 2022 Luca Bösch, BFH Bern University of Applied Sciences luca.boesch@bfh.ch
  * @copyright based on code from theme_boost by Damyon Wiese
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
-
 $bodyattributes = $OUTPUT->body_attributes();
-$loginbackgroundimagetext = theme_urcourses_default_get_loginbackgroundimage_text();
-
-// MODIFICATION START: Set these variables in any case as it's needed in the columns2.mustache file.
-$perpinfobannershowonselectedpage = false;
-$timedinfobannershowonselectedpage = false;
-// MODIFICATION END.
+list($loginbackgroundimagetext, $loginbackgroundimagetextcolor) = theme_boost_union_get_loginbackgroundimage_text();
 
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
     'output' => $OUTPUT,
     'bodyattributes' => $bodyattributes,
-    'loginlogourl' => $OUTPUT->image_url('uofr_logo_primary_blk', 'theme'),
     'loginbackgroundimagetext' => $loginbackgroundimagetext,
-    'perpinfobannershowonselectedpage' => $perpinfobannershowonselectedpage,
-    'timedinfobannershowonselectedpage' => $timedinfobannershowonselectedpage
+    'loginbackgroundimagetextcolor' => $loginbackgroundimagetextcolor
 ];
 
-// MODIFICATION START: Settings for information banner.
-$perpibenable = get_config('theme_urcourses_default', 'perpibenable');
-
-if ($perpibenable) {
-    $formatoptions = array('noclean' => true, 'newlines' => false);
-    $perpibcontent = format_text(get_config('theme_urcourses_default', 'perpibcontent'), FORMAT_HTML, $formatoptions);
-    // Result of multiselect is a string divided by a comma, so exploding into an array.
-    $perpibshowonpages = explode(",", get_config('theme_urcourses_default', 'perpibshowonpages'));
-    $perpibcss = get_config('theme_urcourses_default', 'perpibcss');
-
-    $perpinfobannershowonselectedpage = theme_urcourses_default_show_banner_on_selected_page($perpibshowonpages,
-            $perpibcontent, $PAGE->pagelayout, false);
-
-    // Add the variables to the templatecontext array.
-    $templatecontext['perpibcontent'] = $perpibcontent;
-    if ($perpibcss != 'none') {
-        $templatecontext['perpibcss'] = $perpibcss;
-    }
-    $templatecontext['perpinfobannershowonselectedpage'] = $perpinfobannershowonselectedpage;
-}
-// MODIFICATION END.
-
-// MODIFICATION START: Settings for time controlled information banner.
-$timedibenable = get_config('theme_urcourses_default', 'timedibenable');
-
-if ($timedibenable) {
-    $formatoptions = array('noclean' => true, 'newlines' => false);
-    $timedibcontent = format_text(get_config('theme_urcourses_default', 'timedibcontent'), FORMAT_HTML, $formatoptions);
-    // Result of multiselect is a string divided by a comma, so exploding into an array.
-    $timedibshowonpages = explode(",", get_config('theme_urcourses_default', 'timedibshowonpages'));
-    $timedibcss = get_config('theme_urcourses_default', 'timedibcss');
-    $timedibstartsetting = get_config('theme_urcourses_default', 'timedibstart');
-    $timedibendsetting = get_config('theme_urcourses_default', 'timedibend');
-    // Get the current server time.
-    $now = (new DateTime("now", core_date::get_server_timezone_object()))->getTimestamp();
-
-    $timedinfobannershowonselectedpage = theme_urcourses_default_show_timed_banner_on_selected_page($now, $timedibshowonpages,
-            $timedibcontent, $timedibstartsetting, $timedibendsetting, $PAGE->pagelayout);
-
-    // Add the variables to the templatecontext array.
-    $templatecontext['timedibcontent'] = $timedibcontent;
-    if ($timedibcss != 'none') {
-        $templatecontext['timedibcss'] = $timedibcss;
-    }
-    $templatecontext['timedinfobannershowonselectedpage'] = $timedinfobannershowonselectedpage;
-}
-// MODIFICATION END.
-
-// MODIFICATION START: Handle additional layout elements.
-// The theme_boost/login template already renders the standard footer.
-// The footer blocks and the image area are currently not shown on the login page.
-// Here, we will add the footnote only.
+// Include the template content for the footnote.
 require_once(__DIR__ . '/includes/footnote.php');
-// MODIFICATION END.
 
-// MODIFICATION START.
-// Render own template.
-echo $OUTPUT->render_from_template('theme_urcourses_default/login', $templatecontext);
-// MODIFICATION END.
-// @codingStandardsIgnoreStart
-/* ORIGINAL START.
-echo $OUTPUT->render_from_template('theme_boost/login', $templatecontext);
-ORIGINAL END. */
-// @codingStandardsIgnoreEnd
+// Include the template content for the static pages.
+require_once(__DIR__ . '/includes/staticpages.php');
+
+// Include the template content for the info banners.
+require_once(__DIR__ . '/includes/infobanners.php');
+
+// Render login.mustache from boost_union.
+echo $OUTPUT->render_from_template('theme_boost_union/login', $templatecontext);

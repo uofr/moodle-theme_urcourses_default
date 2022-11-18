@@ -15,101 +15,66 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Campus - Layout file.
+ * Theme Boost Union - Columns2 page layout.
  *
- * @package   theme_urcourses_default
- * @copyright 2017 Kathrin Osswald, Ulm University kathrin.osswald@uni-ulm.de
+ * This layoutfile is based on theme/boost/layout/columns2.php
+ *
+ * Modifications compared to this layout file:
+ * * Include footnote
+ * * Render theme_boost_union/columns2 instead of theme_boost/colums2 template
+ * * Include course related hints
+ * * Include back to top button
+ * * Include activity navigation
+ *
+ * @package   theme_boost_union
+ * @copyright 2022 Luca Bösch, BFH Bern University of Applied Sciences luca.boesch@bfh.ch
  * @copyright based on code from theme_boost by Damyon Wiese
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
-// MODIFICATION START.
-global $CFG,$PAGE,$DB,$COURSE;
-// MODIFICATION END.
 
-user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
-// MODIFICATION START: Allow own user preference to be set via Javascript.
-user_preference_allow_ajax_update('theme_urcourses_default_infobanner_dismissed', PARAM_BOOL);
-// MODIFICATION END.
 require_once($CFG->libdir . '/behat/lib.php');
-// MODIFICATION Start: Require own locallib.php.
-require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
-// MODIFICATION END.
 
-if (isloggedin()) {
-    $navdraweropen = (get_user_preferences('drawer-open-nav', 'true') == 'true');
-} else {
-    $navdraweropen = false;
+// Require own locallib.php.
+require_once($CFG->dirroot . '/theme/boost_union/locallib.php');
+
+// Add activity navigation if the feature is enabled.
+$activitynavigation = get_config('theme_boost_union', 'activitynavigation');
+if ($activitynavigation == THEME_BOOST_UNION_SETTING_SELECT_YES) {
+    $PAGE->theme->usescourseindex = false;
 }
+
+// Add block button in editing mode.
+$addblockbutton = $OUTPUT->addblockbutton();
+
 $extraclasses = [];
-if ($navdraweropen) {
-    $extraclasses[] = 'drawer-open-left';
-}
-
-$noblockpg = array(
-    'page-course-edit',
-    'page-mod-mail-view',
-    'page-course-resources',
-    'page-mod-data-view',
-    'page-mymedia-index'
-);
-
-/*page-mod is a common page for editing. If it contains view then it's viewing the page not adding elements but if in editing mode
-*can still have add a block
-*/
-if(in_array($PAGE->bodyid, $noblockpg) || (strpos($PAGE->bodyid, 'page-mod') !== false && strpos($PAGE->bodyid, 'view') === false)) {
-
-    $PAGE->theme->addblockposition = BLOCK_ADDBLOCK_POSITION_FLATNAV;
-}
-// get the UR Cateogry class, if one exists
-$extraclasses[] = theme_urcourses_default_get_ur_category_class($COURSE->id);
-
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $blockshtml = $OUTPUT->blocks('side-pre');
-$hasblocks = strpos($blockshtml, 'data-block=') !== false;
-$regionmainsettingsmenu = $OUTPUT->region_main_settings_menu();
-// MODIFICATION START: Setting 'catchshortcuts'.
-// Initialize array.
-$catchshortcuts = array();
-// If setting is enabled then add the parameter to the array.
-if (get_config('theme_urcourses_default', 'catchendkey') == true) {
-    $catchshortcuts[] = 'end';
-}
-// If setting is enabled then add the parameter to the array.
-if (get_config('theme_urcourses_default', 'catchcmdarrowdown') == true) {
-    $catchshortcuts[] = 'cmdarrowdown';
-}
-// If setting is enabled then add the parameter to the array.
-if (get_config('theme_urcourses_default', 'catchctrlarrowdown') == true) {
-    $catchshortcuts[] = 'ctrlarrowdown';
-}
-// MODIFICATION END.
+$hasblocks = (strpos($blockshtml, 'data-block=') !== false || !empty($addblockbutton));
 
-// MODIFICATION START: Setting 'darknavbar'.
-if (get_config('theme_urcourses_default', 'darknavbar') == 'yes') {
-    $darknavbar = true;
-} else {
-    $darknavbar = false;
+$secondarynavigation = false;
+$overflow = '';
+if ($PAGE->has_secondary_navigation()) {
+    $tablistnav = $PAGE->has_tablist_secondary_navigation();
+    $moremenu = new \core\navigation\output\more_menu($PAGE->secondarynav, 'nav-tabs', true, $tablistnav);
+    $secondarynavigation = $moremenu->export_for_template($OUTPUT);
+    $overflowdata = $PAGE->secondarynav->get_overflow_menu_data();
+    if (!is_null($overflowdata)) {
+        $overflow = $overflowdata->export_for_template($OUTPUT);
+    }
 }
-// MODIFICATION END.
+
+$primary = new core\navigation\output\primary($PAGE);
+$renderer = $PAGE->get_renderer('core');
+$primarymenu = $primary->export_for_template($renderer);
+$buildregionmainsettings = !$PAGE->include_region_main_settings_in_header_actions()  && !$PAGE->has_secondary_navigation();
+// If the settings menu will be included in the header then don't add it here.
+$regionmainsettingsmenu = $buildregionmainsettings ? $OUTPUT->region_main_settings_menu() : false;
 
 //including Dark Mode css if darkmode==1 if query string is set
 //darkmode toggle code
 $setdarkmode = optional_param('darkmode', -1, PARAM_INT);
-
-// MODIFICATION START: Setting 'navdrawerfullwidth'.
-$navdrawerfullwidth = get_config('theme_urcourses_default', 'navdrawerfullwidth');
-// MODIFICATION END.
-
-// MODIFICATION START: Setting 'bcbttbutton'.
-$bcbttbutton = get_config('theme_urcourses_default', 'bcbttbutton');
-// MODIFICATION END.
-
-// MODIFICATION START: Set these variables in any case as it's needed in the columns2.mustache file.
-$perpinfobannershowonselectedpage = false;
-$timedinfobannershowonselectedpage = false;
-
 
 if ($setdarkmode > -1) {
     $userid = $USER->id;
@@ -134,15 +99,15 @@ if ($setdarkmode > -1) {
     
  }
 
-
+ $darkmodecheck = $DB->get_record('theme_urcourses_darkmode', array('userid'=>$USER->id, 'darkmode'=>1));
+ error_log('darkmode:'.print_r($darkmodecheck,1));
 //check if user has darkmode on in database and include if so
-if($DB->get_record('theme_urcourses_darkmode', array('userid'=>$USER->id, 'darkmode'=>1))){
-   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css');
+if($darkmodecheck){
+   $PAGE->requires->css('/theme/boost_union/style/darkmode.css');
 }
 
-// MODIFICATION START: Setting 'navdrawerfullwidth'.
-$navdrawerfullwidth = get_config('theme_urcourses_default', 'navdrawerfullwidth');
-// MODIFICATION END.
+$header = $PAGE->activityheader;
+$headercontent = $header->export_for_template($renderer);
 
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
@@ -150,114 +115,38 @@ $templatecontext = [
     'sidepreblocks' => $blockshtml,
     'hasblocks' => $hasblocks,
     'bodyattributes' => $bodyattributes,
-    'navdraweropen' => $navdraweropen,
+    'primarymoremenu' => $primarymenu['moremenu'],
+    'secondarymoremenu' => $secondarynavigation ?: false,
+    'mobileprimarynav' => $primarymenu['mobileprimarynav'],
+    'usermenu' => $primarymenu['user'],
+    'langmenu' => $primarymenu['lang'],
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
-    // MODIFICATION START: Add Boost Campus related values to the template context.
-    'catchshortcuts' => json_encode($catchshortcuts),
-    'navdrawerfullwidth' => $navdrawerfullwidth,
-    'darknavbar' => $darknavbar,
-    'perpinfobannershowonselectedpage' => $perpinfobannershowonselectedpage,
-    'timedinfobannershowonselectedpage' => $timedinfobannershowonselectedpage,
-    'bcbttbutton' => $bcbttbutton
-    // MODIFICATION END.
+    'headercontent' => $headercontent,
+    'overflow' => $overflow,
+    'addblockbutton' => $addblockbutton,
 ];
 
-// MODIFICATION START: Settings for perpetual information banner.
-$perpibenable = get_config('theme_urcourses_default', 'perpibenable');
+// Include the template content for the course related hints.
+require_once(__DIR__ . '/includes/courserelatedhints.php');
 
-if ($perpibenable) {
-    $formatoptions = array('noclean' => true, 'newlines' => false);
-    $perpibcontent = format_text(get_config('theme_urcourses_default', 'perpibcontent'), FORMAT_HTML, $formatoptions);
-    // Result of multiselect is a string divided by a comma, so exploding into an array.
-    $perpibshowonpages = explode(",", get_config('theme_urcourses_default', 'perpibshowonpages'));
-    $perpibcss = get_config('theme_urcourses_default', 'perpibcss');
-    $perpibdismiss = get_config('theme_urcourses_default', 'perpibdismiss');
-    $perbibconfirmdialogue = get_config('theme_urcourses_default', 'perpibconfirm');
-    $perbibuserprefdialdismissed = get_user_preferences('theme_urcourses_default_infobanner_dismissed');
+// Include the content for the back to top button.
+require_once(__DIR__ . '/includes/backtotopbutton.php');
 
-    $perpinfobannershowonselectedpage = theme_urcourses_default_show_banner_on_selected_page($perpibshowonpages,
-            $perpibcontent, $PAGE->pagelayout, $perbibuserprefdialdismissed);
+// Include the content for the scrollspy.
+require_once(__DIR__ . '/includes/scrollspy.php');
 
-    // Add the variables to the templatecontext array.
-    $templatecontext['perpibcontent'] = $perpibcontent;
-    if ($perpibcss != 'none') {
-        $templatecontext['perpibcss'] = $perpibcss;
-    }
-    $templatecontext['perpibdismiss'] = $perpibdismiss;
-    $templatecontext['perpinfobannershowonselectedpage'] = $perpinfobannershowonselectedpage;
-    $templatecontext['perbibconfirmdialogue'] = $perbibconfirmdialogue;
-}
-// MODIFICATION END.
-
-// MODIFICATION START: Settings for time controlled information banner.
-$timedibenable = get_config('theme_urcourses_default', 'timedibenable');
-
-if ($timedibenable) {
-    $formatoptions = array('noclean' => true, 'newlines' => false);
-    $timedibcontent = format_text(get_config('theme_urcourses_default', 'timedibcontent'), FORMAT_HTML, $formatoptions);
-    // Result of multiselect is a string divided by a comma, so exploding into an array.
-    $timedibshowonpages = explode(",", get_config('theme_urcourses_default', 'timedibshowonpages'));
-    $timedibcss = get_config('theme_urcourses_default', 'timedibcss');
-    $timedibstartsetting = get_config('theme_urcourses_default', 'timedibstart');
-    $timedibendsetting = get_config('theme_urcourses_default', 'timedibend');
-    // Get the current server time.
-    $now = (new DateTime("now", core_date::get_server_timezone_object()))->getTimestamp();
-
-    $timedinfobannershowonselectedpage = theme_urcourses_default_show_timed_banner_on_selected_page($now, $timedibshowonpages,
-            $timedibcontent, $timedibstartsetting, $timedibendsetting, $PAGE->pagelayout);
-
-    // Add the variables to the templatecontext array.
-    $templatecontext['timedibcontent'] = $timedibcontent;
-    if ($timedibcss != 'none') {
-        $templatecontext['timedibcss'] = $timedibcss;
-    }
-    $templatecontext['timedinfobannershowonselectedpage'] = $timedinfobannershowonselectedpage;
-}
-// MODIFICATION END.
-
-// MODIFICATION START: Get and use the course page information banners HTML code, if any course page hints are configured.
-$coursepageinformationbannershtml = theme_urcourses_default_get_course_information_banners();
-if ($coursepageinformationbannershtml) {
-    $templatecontext['coursepageinformationbanners'] = $coursepageinformationbannershtml;
-}
-// MODIFICATION END.
-
-$nav = $PAGE->flatnav;
-// MODIDFICATION START.
-// Use the returned value from theme_urcourses_default_get_modified_flatnav_defaulthomepageontop as the template context.
-$templatecontext['flatnavigation'] = theme_urcourses_default_process_flatnav($PAGE->flatnav);
-// If setting showsettingsincourse is enabled.
-if (get_config('theme_urcourses_default', 'showsettingsincourse') == 'yes' && $PAGE->bodyid != 'page-contentbank') {
-    // Context value for requiring incoursesettings.js.
-    $templatecontext['incoursesettings'] = true;
-    // Add the returned value from theme_urcourses_default_get_incourse_settings to the template context.
-    $templatecontext['node'] = theme_urcourses_default_get_incourse_settings();
-    // Add the returned value from theme_urcourses_default_get_incourse_activity_settings to the template context.
-    $templatecontext['activitynode'] = theme_urcourses_default_get_incourse_activity_settings();
-}
-// MODIFICATION END.
-// @codingStandardsIgnoreStart
-/* ORIGINAL START.
-$templatecontext['flatnavigation'] = $nav;
-ORIGINAL END. */
-// @codingStandardsIgnoreEnd
-
-$templatecontext['firstcollectionlabel'] = $nav->get_collectionlabel();
-
-// MODIFICATION START.
-// Set the template context for the footer and additional layouts.
-require_once(__DIR__ . '/includes/footer.php');
-require_once(__DIR__ . '/includes/imagearea.php');
+// Include the template content for the footnote.
 require_once(__DIR__ . '/includes/footnote.php');
-// MODIFICATION END.
 
-// MODIFICATION START.
-// Render columns2.mustache from urcourses_default.
-echo $OUTPUT->render_from_template('theme_urcourses_default/columns2', $templatecontext);
-// MODIFICATION END.
-// @codingStandardsIgnoreStart
-/* ORIGINAL START.
-echo $OUTPUT->render_from_template('theme_boost/columns2', $templatecontext);
-ORIGINAL END. */
-// @codingStandardsIgnoreEnd
+// Include the template content for the static pages.
+require_once(__DIR__ . '/includes/staticpages.php');
+
+// Include the template content for the JavaScript disabled hint.
+require_once(__DIR__ . '/includes/javascriptdisabledhint.php');
+
+// Include the template content for the info banners.
+require_once(__DIR__ . '/includes/infobanners.php');
+
+// Render columns2.mustache from boost_union.
+echo $OUTPUT->render_from_template('theme_boost_union/columns2', $templatecontext);

@@ -93,7 +93,7 @@
                                 </ul>
                             </div>
                         {{/sections}}
-                        
+
                         <div id="modchooser_help" class="tab-pane fade row" role="tabpanel">
                             {{#sections}}
                                 {{#items}}
@@ -102,7 +102,7 @@
                                             {{#icon}}
                                                 {{>core/pix_icon}}
                                             {{/icon}}
-                                        </div>  
+                                        </div>
                                         <div class="col-11">
                                             <span class="typename">{{label}}</span>
                                             <span class="type-summary">
@@ -127,7 +127,7 @@
 </div>
 
 {{#js}}
-   require(['theme_urcourses_default/modchooser'], function(mod) {
+   require(['theme_boost_union/modchooser'], function(mod) {
       mod.init();
     });
 {{/js}}
