@@ -99,7 +99,7 @@ a {
 }
 	
 .text-info {
-  color: #56595b !important;
+  color: #26809b !important;
 }
 
 .custom-control-label::before {
@@ -116,7 +116,7 @@ a {
 }
 .badge-info {
   color: #fff;
-  background-color: #56595b;
+  background-color: #26809b;
 }
 .badge-success {
   color: #fff;
@@ -223,4 +223,23 @@ a {
 	display: inline-block;
 	margin-left: 0.5em;
 	margin-right: 1em;
+}
+
+.btn-sm, .btn-group-sm > .btn {
+	border-radius: 0.5em;
+}
+.btn-outline-secondary:hover {
+	border-color: transparent;
+}
+
+div.activity-information div[data-region="completion-info"] .btn.btn-success {
+	color: #1c3f1a;
+    background-color: #d7e4d6;
+    border-color: #c6dac6;
+	font-weight: bolder;
+}
+
+body.path-mod h2 img.iconlarge {
+	height: 32px;
+	width: 32px;
 }
