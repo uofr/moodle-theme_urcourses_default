@@ -237,7 +237,7 @@ function ttheme_urcourses_default_pluginfile($course, $cm, $context, $filearea, 
 }
 
 
-function theme_urcourses_default_extend_navigation_user_settings($navigation, $user, $usercontext, $course, $coursecontext) {
+/*function theme_urcourses_default_extend_navigation_user_settings($navigation, $user, $usercontext, $course, $coursecontext) {
     global $USER, $PAGE;
 	
 	error_log('darkmode pref');
@@ -267,4 +267,4 @@ function theme_urcourses_default_extend_navigation_user_settings($navigation, $u
         }
 		//}
 }
-
+*/
