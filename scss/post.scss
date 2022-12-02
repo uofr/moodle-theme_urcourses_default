@@ -243,3 +243,22 @@ body.path-mod h2 img.iconlarge {
 	height: 32px;
 	width: 32px;
 }
+
+.modtype_hvp .activityiconcontainer.content .activityicon, 
+.modtype_hvp .activityiconcontainer.content .icon,
+.modtype_resource .activityiconcontainer.content .activityicon,
+.modtype_resource .activityiconcontainer.content .icon {
+	filter: none;
+} 
+.modtype_hvp .activityiconcontainer .activityicon,
+.modtype_hvp .activityiconcontainer .icon{
+  margin: 0;
+  height: 40px;
+  width: 40px;
+}
+.modtype_resource .activityiconcontainer .activityicon,
+.modtype_resource .activityiconcontainer .icon {
+  margin: 0;
+  height: 32px;
+  width: 32px;
+}
