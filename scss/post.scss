@@ -247,7 +247,9 @@ body.path-mod h2 img.iconlarge {
 .modtype_hvp .activityiconcontainer.content .activityicon, 
 .modtype_hvp .activityiconcontainer.content .icon,
 .modtype_resource .activityiconcontainer.content .activityicon,
-.modtype_resource .activityiconcontainer.content .icon {
+.modtype_resource .activityiconcontainer.content .icon,
+.modtype_syllabus .activityiconcontainer.administration .activityicon, 
+.modtype_syllabus .activityiconcontainer.administration .icon {
 	filter: none;
 } 
 .modtype_hvp .activityiconcontainer .activityicon,
@@ -257,8 +259,32 @@ body.path-mod h2 img.iconlarge {
   width: 40px;
 }
 .modtype_resource .activityiconcontainer .activityicon,
-.modtype_resource .activityiconcontainer .icon {
+.modtype_resource .activityiconcontainer .icon,
+.modtype_syllabus .activityiconcontainer .activityicon,
+.modtype_syllabus .activityiconcontainer .icon {
   margin: 0;
   height: 32px;
   width: 32px;
 }
+
+/* alignment for single activity page header */
+
+.page-header-headings h1, .page-header-headings .h1,
+.page-header-headings h2, .page-header-headings .h2,
+.page-header-headings h3, .page-header-headings .h3,
+.page-header-headings h4, .page-header-headings .h4,
+.page-header-headings h5, .page-header-headings .h5,
+.page-header-headings h6, .page-header-headings .h6 {
+	margin-bottom: 0.25rem;
+	line-height: 1.1em;
+}
+
+.page-context-header {
+	padding: 0.25rem 0;
+}
+
+.page-context-header .activityiconcontainer {
+	margin: 0.3em 0;
+}
+
+#page-header a { display: inline-block; padding-right: 0.5em;}
