@@ -15,19 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Union - Version file
+ * Theme Boost Union - back to top button include.
  *
- * @package    theme_boost_union
- * @copyright  2022 Moodle an Hochschulen e.V. <kontakt@moodle-an-hochschulen.de>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   theme_boost_union
+ * @copyright 2022 Moodle an Hochschulen e.V. <kontakt@moodle-an-hochschulen.de>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'theme_uofr_conservatory';
-$plugin->version = 2021110804;
-$plugin->release = 'v1.0-r1';
-$plugin->requires = 2022041900;
-$plugin->supported = [400, 400];
-$plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = array('theme_boost' => 2022041900,'theme_boost_union' => 2022080909);
+$backtotopbutton = get_config('theme_boost_union', 'backtotopbutton');
+
+// Add back to top AMC module if the feature is enabled.
+if ($backtotopbutton == THEME_BOOST_UNION_SETTING_SELECT_YES) {
+    $PAGE->requires->js_call_amd('theme_boost_union/backtotopbutton', 'init');
+}

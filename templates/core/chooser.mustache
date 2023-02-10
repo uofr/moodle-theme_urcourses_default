@@ -36,6 +36,7 @@
         }]
     }
 }}
+
 <div class="hd choosertitle">
     {{title}}
 </div>
@@ -66,12 +67,13 @@
                             </a>
                         </li>
                     </ul>
-                    <div class="tab-content alloptions">
+
+                    <div class="tab-content alloptions" style="padding: 1%;">
                         {{#sections}}
                             <div id="modchooser_{{id}}" class="tab-pane row text-center fade" role="tabpanel">
                                 <ul>
                                 {{#items}}
-                                    <li class="mod-option">
+                                    <div class="mod-option">
                                         <div class="option">
                                             <label for="item_{{id}}">
                                                 <input type="radio" name="{{paramname}}" id="item_{{id}}" value="{{value}}">
@@ -80,14 +82,18 @@
                                                         {{>core/pix_icon}}
                                                     {{/icon}}
                                                 </span>
-                                                <span class="typename mx-auto">{{label}}</span>
+                                                 <span class="typename">{{label}}</span>
+                                                    <span class="typesummary" style="display:none">
+                                                    {{{description}}}
+                                                    </span>
                                             </label>
                                         </div>
-                                    </li>
+                                    </div>
                                 {{/items}}
                                 </ul>
                             </div>
-                        {{/sections}}    
+                        {{/sections}} 
+
                         <div id="modchooser_help" class="tab-pane fade row" role="tabpanel">
                             {{#sections}}
                                 {{#items}}
@@ -110,18 +116,18 @@
                     </div>
                 </div>
 
-
                 <div class="submitbuttons">
                     <input type="submit" name="submitbutton" class="submitbutton btn btn-primary" value={{#quote}}{{#str}}add{{/str}}{{/quote}}>
                     <input type="submit" name="addcancel" class="addcancel btn btn-secondary" value={{#quote}}{{#str}}cancel{{/str}}{{/quote}}>
                 </div>
+
             </form>
         </div>
     </div>
 </div>
 
 {{#js}}
-    require(['theme_uofr_conservatory/modchooser'], function(mod) {
+    require(['theme_boost_union/modchooser'], function(mod) {
         mod.init();
     });
 {{/js}}

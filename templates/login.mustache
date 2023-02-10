@@ -15,9 +15,9 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template theme_boost/login
+    @template theme_boost_union/login
 
-    Login page template
+    Boost Union Login page template
 
     Example context (json):
     {
@@ -27,73 +27,58 @@
             "favicon": "favicon.ico",
             "main_content": "<h1>Headers keep HTML validators happy</h1>"
         }
-        * pagebottomelements - HTML for all additional layout elements: the footnote.
     }
 }}
-{{! MODIFICATION:
-    * Add own additional layout elements: the footnote.
+{{!
+    This template is based on theme_boost/login
+
+    Modifications compared to this template:
+    * Include theme_boost_union/footnote template
+    * Include theme_boost_union/footer template instead of theme_boost/footer
+    * Added the possibility to show info banners.
+    * Added the login background image text.
 }}
 {{> theme_boost/head }}
 
-<body {{{ bodyattributes }}} style="background-image:url({{output.get_login_bg_url}});">
+<body {{{ bodyattributes }}}>
+{{> core/local/toast/wrapper}}
 
-<div id="page-wrapper" class="loginbackgroundimage">
+<div id="page-wrapper">
+
     {{{ output.standard_top_of_body_html }}}
 
-    <div id="page" class="container-fluid mt-0">
+    <div id="page" class="container-fluid pt-5 mt-0">
+        {{> theme_boost_union/infobanners }}
         <div id="page-content" class="row">
             <div id="region-main-box" class="col-12">
-                <section id="region-main" class="col-12">
-                    {{{ output.course_content_header }}}
-{{! EMERGENCY MESSAGES:
-	Top Banner message:
-	paste the html below this comment
-	<div class="card">
-	  <h5 class="card-header alert alert-danger"><b>Notice</b></h5>
-	  <div class="card-body mt-0 pt-0">
-	    <h5 class="card-title">Insert emergency message here</h5>
-	    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-	    <!-- <a href="#" class="btn btn-primary">Go somewhere</a>-->
-	  </div>
-	</div>
-}}
+                <section id="region-main" class="col-12 h-100" aria-label="{{#str}}content{{/str}}">
+                <!--<div class="login-wrapper"> -->
+                    <!--<div class="login-container">-->
                     {{{ output.main_content }}}
-                    {{{ output.course_content_footer }}}
+                   <!-- </div> -->
+                <!--</div>-->
                 </section>
             </div>
         </div>
     </div>
-    <footer id="page-footer" class="py-3 bg-dark text-light">
-        <div class="container">
-            <div id="course-footer">{{{ output.course_footer }}}</div>
-
-            {{# output.page_doc_link }}
-                <p class="helplink">{{{ output.page_doc_link }}}</p>
-            {{/ output.page_doc_link }}
-
-            {{! { output.login_info } }}
-            {{! { output.home_link } }}
-			
-			<div class="row">
-				<div class="col-6"><p style="margin-left: 1.5rem;">&copy; 2021 University of Regina</p></div>
-				<div class="col-6" style="text-align: right;">
-					<div style="padding-right: 1.25rem"><p><a href="http://www.uregina.ca/urcourses/about/terms-of-use/index.html">Terms of use</a> | <a href="http://www.uregina.ca/copyright/index.html">Copyright Information</a></p></div>
-				</div>
-			</div>
-			
-            {{{ output.standard_footer_html }}}
-            {{{ output.standard_end_of_body_html }}}
+    {{# loginbackgroundimagetext }}
+        <div class="container-fluid">
+            <div class="row justify-content-end no-gutters my-2" id="loginbackgroundimagetext">
+                <span class="small d-none d-md-inline text-{{loginbackgroundimagetextcolor}}">
+                    {{loginbackgroundimagetext}}
+                </span>
+            </div>
         </div>
-    </footer>
-    {{{ pagebottomelements }}}
+    {{/ loginbackgroundimagetext }}
+    {{> theme_boost_union/footer }}
+    {{> theme_boost_union/footnote }}
 </div>
-
 
 </body>
 </html>
 {{#js}}
-/*require(['theme_boost/loader']);
-require(['theme_uofr_conservatory/bgloader'], function(mod) {
-    mod.init();
-});*/
+M.util.js_pending('theme_boost/loader');
+require(['theme_boost/loader'], function() {
+  M.util.js_complete('theme_boost/loader');
+});
 {{/js}}

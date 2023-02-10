@@ -15,26 +15,29 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Union - Columns2 page layout.
+ * Theme Boost Union - Drawers page layout.
  *
- * This layoutfile is based on theme/boost/layout/columns2.php
+ * This layoutfile is based on theme/boost/layout/drawers.php
  *
  * Modifications compared to this layout file:
  * * Include footnote
- * * Render theme_boost_union/columns2 instead of theme_boost/colums2 template
+ * * Render theme_boost_union/drawers instead of theme_boost/drawers template
  * * Include course related hints
  * * Include back to top button
  * * Include activity navigation
  *
  * @package   theme_boost_union
  * @copyright 2022 Luca Bösch, BFH Bern University of Applied Sciences luca.boesch@bfh.ch
- * @copyright based on code from theme_boost by Damyon Wiese
+ * @copyright based on code from theme_boost by Bas Brands
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
+global $CFG,$PAGE,$DB,$COURSE;
+
 require_once($CFG->libdir . '/behat/lib.php');
+require_once($CFG->dirroot . '/course/lib.php');
 
 // Require own locallib.php.
 require_once($CFG->dirroot . '/theme/boost_union/locallib.php');
@@ -48,10 +51,38 @@ if ($activitynavigation == THEME_BOOST_UNION_SETTING_SELECT_YES) {
 // Add block button in editing mode.
 $addblockbutton = $OUTPUT->addblockbutton();
 
-$extraclasses = [];
-$bodyattributes = $OUTPUT->body_attributes($extraclasses);
+user_preference_allow_ajax_update('drawer-open-index', PARAM_BOOL);
+user_preference_allow_ajax_update('drawer-open-block', PARAM_BOOL);
+
+if (isloggedin()) {
+    $courseindexopen = (get_user_preferences('drawer-open-index', true) == true);
+    $blockdraweropen = (get_user_preferences('drawer-open-block') == true);
+} else {
+    $courseindexopen = false;
+    $blockdraweropen = false;
+}
+
+if (defined('BEHAT_SITE_RUNNING')) {
+    $blockdraweropen = true;
+}
+
+$extraclasses = ['uses-drawers'];
+if ($courseindexopen) {
+    $extraclasses[] = 'drawer-open-index';
+}
+
 $blockshtml = $OUTPUT->blocks('side-pre');
 $hasblocks = (strpos($blockshtml, 'data-block=') !== false || !empty($addblockbutton));
+if (!$hasblocks) {
+    $blockdraweropen = false;
+}
+$courseindex = core_course_drawer();
+if (!$courseindex) {
+    $courseindexopen = false;
+}
+
+$bodyattributes = $OUTPUT->body_attributes($extraclasses);
+$forceblockdraweropen = $OUTPUT->firstview_fakeblocks();
 
 $secondarynavigation = false;
 $overflow = '';
@@ -68,10 +99,9 @@ if ($PAGE->has_secondary_navigation()) {
 $primary = new core\navigation\output\primary($PAGE);
 $renderer = $PAGE->get_renderer('core');
 $primarymenu = $primary->export_for_template($renderer);
-$buildregionmainsettings = !$PAGE->include_region_main_settings_in_header_actions()  && !$PAGE->has_secondary_navigation();
+$buildregionmainsettings = !$PAGE->include_region_main_settings_in_header_actions() && !$PAGE->has_secondary_navigation();
 // If the settings menu will be included in the header then don't add it here.
 $regionmainsettingsmenu = $buildregionmainsettings ? $OUTPUT->region_main_settings_menu() : false;
-
 
 $PAGE->requires->css('/theme/boost_union/style/callout.css');
 //including Dark Mode css if darkmode==1 if query string is set
@@ -88,6 +118,7 @@ if ($setdarkmode > -1) {
     //database check if user has a record, insert if not
     if ($record = $DB->get_record($table, array('userid'=>$userid))) {
      //if has a record, update record to $setdarkmode
+     
      $newrecord->darkmode = $setdarkmode;
      $newrecord->id = $record->id;
      $DB->update_record($table, $newrecord);
@@ -101,32 +132,42 @@ if ($setdarkmode > -1) {
  }
 
  $darkmodecheck = $DB->get_record('theme_conservatory_darkmode', array('userid'=>$USER->id, 'darkmode'=>1));
-
+ error_log('darkmode:'.print_r($darkmodecheck,1));
 //check if user has darkmode on in database and include if so
 if($darkmodecheck){
-    $PAGE->requires->css('/theme/uofr_conservatory/style/darkmode.css');
- }
- 
- $header = $PAGE->activityheader;
- $headercontent = $header->export_for_template($renderer);
- 
+   $PAGE->requires->css('/theme/uofr_conservatory/style/darkmode.css');
+}
+
+$header = $PAGE->activityheader;
+$headercontent = $header->export_for_template($renderer);
+
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
     'output' => $OUTPUT,
     'sidepreblocks' => $blockshtml,
     'hasblocks' => $hasblocks,
     'bodyattributes' => $bodyattributes,
+    'courseindexopen' => $courseindexopen,
+    'blockdraweropen' => $blockdraweropen,
+    'courseindex' => $courseindex,
     'primarymoremenu' => $primarymenu['moremenu'],
     'secondarymoremenu' => $secondarynavigation ?: false,
     'mobileprimarynav' => $primarymenu['mobileprimarynav'],
     'usermenu' => $primarymenu['user'],
     'langmenu' => $primarymenu['lang'],
+    'forceblockdraweropen' => $forceblockdraweropen,
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
-    'headercontent' => $headercontent,
     'overflow' => $overflow,
-    'addblockbutton' => $addblockbutton,
+    'headercontent' => $headercontent,
+    'addblockbutton' => $addblockbutton
 ];
+
+// Get and use the course related hints HTML code, if any hints are configured.
+$courserelatedhintshtml = theme_boost_union_get_course_related_hints();
+if ($courserelatedhintshtml) {
+    $templatecontext['courserelatedhints'] = $courserelatedhintshtml;
+}
 
 // Include the template content for the course related hints.
 require_once(__DIR__ . '/includes/courserelatedhints.php');
@@ -149,5 +190,5 @@ require_once(__DIR__ . '/includes/javascriptdisabledhint.php');
 // Include the template content for the info banners.
 require_once(__DIR__ . '/includes/infobanners.php');
 
-// Render columns2.mustache from boost_union.
-echo $OUTPUT->render_from_template('theme_uofr_conservatory/columns2', $templatecontext);
+// Render drawers.mustache from boost_union.
+echo $OUTPUT->render_from_template('theme_uofr_conservatory/drawers', $templatecontext);

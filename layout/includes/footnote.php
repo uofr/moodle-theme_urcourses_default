@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Campus - Layout file for footnote.
+ * Theme Boost Union - Footnote layout include.
  *
- * @package   theme_uofr_conservatory
- * @copyright 2017 Kathrin Osswald, Ulm University kathrin.osswald@uni-ulm.de
+ * @package   theme_boost_union
+ * @copyright 2022 Luca Bösch, BFH Bern University of Applied Sciences luca.boesch@bfh.ch
  * @copyright based on code from theme_boost by Damyon Wiese
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -29,10 +29,12 @@ $footnotesetting = get_config('theme_uofr_conservatory', 'footnote');
 
 // Only proceed if text area does not only contains empty tags.
 if (!html_is_blank($footnotesetting)) {
-    // Use format_string function to enable multilanguage filtering.
+    // Use format_text function to enable multilanguage filtering.
     $footnotesetting = format_text($footnotesetting);
 
-    $templatecontext['footnotesetting'] = $footnotesetting;
+      // Add marker to show the footnote to templatecontext.
+      $templatecontext['showfootnote'] = true;
 
-    echo $OUTPUT->render_from_template('theme_uofr_conservatory/footnote', $templatecontext);
+      // Add footnote to templatecontext.
+    $templatecontext['footnotesetting'] = $footnotesetting;
 }

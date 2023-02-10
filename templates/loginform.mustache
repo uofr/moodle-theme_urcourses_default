@@ -33,13 +33,12 @@
     * instructions - Instructions,
     * instructionsformat - Format of instructions,
     * loginurl - Login url,
-    * rememberusername - Remeber username?,
     * signupurl - Signup url,
-    * cookieshelpiconformatted - Formatted html of cookies help icon,
     * errorformatted - Formatted error,
     * logourl - Flag, logo url,
-    * sitename - Name of site.
-    * logintoken - Random token to protect login request.
+    * sitename - Name of site.,
+    * logintoken - Random token to protect login request.,
+    * maintenance - Maintenance message
 
     Example context (json):
     {
@@ -83,260 +82,175 @@
         "instructions": "For full access to this site, you first need to create an account.",
         "instructionsformat": "1",
         "loginurl": "http://localhost/stable_master/login/index.php",
-        "rememberusername": true,
         "signupurl": "http://localhost/stable_master/login/signup.php",
         "cookieshelpiconformatted": "",
         "errorformatted": "",
         "logourl": false,
         "sitename": "Beer & Chips",
-        "logintoken": "randomstring"
+        "logintoken": "randomstring",
+        "maintenance": "For full access to this site, you need to login in as an admin.",
+        "languagemenu": "Choose language"
     }
 }}
-{{! MODIFICATION:
-    * Changed col- definitions for login form container
-    * Removed justify content center for row to be able to place the login in another position than centered.
-}}
 
-<div class="my-1 my-sm-5"></div>
 <div class="row justify-content-between">
     <div class="col-sm-12 col-md-6 col-lg-5">
         <div class="card mb-1">
             <div class="card-block">
                 <h2 class="card-header text-center" >
-					<p><img src="{{loginlogourl}}" title="{{sitename}}" alt="{{sitename}}" /></p>
+					   {{#logourl}}
+                            <div id="loginlogo" class="login-logo">
+                                <img id="logoimage" src="{{logourl}}" class="img-fluid" alt="{{sitename}}"/>
+                                <h1 class="login-heading sr-only">{{#str}} loginto, core, {{sitename}} {{/str}}</h1>
+                            </div>
+                        {{/logourl}}
 
-
-					<div class="row">
-						<div class="col-sm-1"></div>
-						{{!<div class="col-sm-1 align-right"><img src="../theme/uofr_conservatory/pix/conservatory_logo.jpg" height="65" class="rounded-circle align-middle mr-0" /></div>}}
-						<div class="col-lg-10 text-center"><h2>Welcome to UR Community</h2></div>
-                        
-						<div class="col-sm-1"></div>
-					</div></h2>
+					<div class="mt-2">
+					    <h2>Welcome to {{sitename}}</h2>
+					</div>
+                </h2>
                 <div class="card-body">
 					{{#maintenance}}
-                    <div class="alert alert-info">
-                        <h5>The <b>Centre for Continuing Education</b> is currently in maintenance mode.</h5>
-						<p><small>{{#str}}sitemaintenance, core_admin{{/str}}</small></p>
-                    </div>
+                        <div class="alert alert-danger login-maintenance">
+                            <h5><b>UR Community</b> is currently in maintenance mode.</h5>
+                            {{{maintenance}}}
+                        </div>
 					{{/maintenance}}
-					{{! EMERGENCY MESSAGES:
-											Login panel message:
-											paste the html below this comment
-											<div class="card mb-2">
-											  <h5 class="card-header alert alert-danger"><b>Notice</b></h5>
-											  <div class="card-body mt-0 pt-0">
-											    <h5 class="card-title">Insert emergency message here</h5>
-											    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-											    <!-- <a href="#" class="btn btn-primary">Go somewhere</a>-->
-											  </div>
-											</div>
-										}}
+				
                     {{#cansignup}}
                         <div class="sr-only">
                             <a href="{{signupurl}}">{{#str}} tocreatenewaccount {{/str}}</a>
                         </div>
                     {{/cansignup}}
 					
-					<div class="mt-3">
-					If you have an existing account, please login below<br />
-					<span>{{#str}} cookiesenabled {{/str}}
-					{{{cookieshelpiconformatted}}}</span>
+					<div class="mt-2 mb-2">
+                        If you have an existing account, please login below<br />
+                        <span>
+                            {{#str}} cookiesenabled {{/str}}
+                            {{{cookieshelpiconformatted}}}
+                        </span>
 					</div>
 					
                     {{#error}}
-                        <div class="loginerrors mt-3">
-                            <a href="#" id="loginerrormessage" class="accesshide">{{error}}</a>
-                            <div class="alert alert-danger" role="alert" data-aria-autofocus="true">{{error}}</div>
-                        </div>
+                        <a href="#" id="loginerrormessage" class="sr-only">{{error}}</a>
+                        <div class="alert alert-danger" role="alert">{{error}}</div>
                     {{/error}}
-
-                    <div class="row justify-content-md-center">
-                        <div class="col-12">
-                            <form class="mt-3" action="{{loginurl}}" method="post" id="login">
-                                <input id="anchor" type="hidden" name="anchor" value="">
-                                <script>document.getElementById('anchor').value = location.hash;</script>
-                                <input type="hidden" name="logintoken" value="{{logintoken}}">
-                                <div class="form-group">
-                                    <label for="username" class="sr-only">
-                                        {{^canloginbyemail}}
-                                            {{#str}} username {{/str}}
-                                        {{/canloginbyemail}}
-                                        {{#canloginbyemail}}
-                                            {{#str}} usernameemail {{/str}}
-                                        {{/canloginbyemail}}
-                                    </label>
-                                    <input type="text" name="username" id="username"
-                                           class="form-control"
-                                           value="{{username}}"
-                                            placeholder={{#quote}}{{^canloginbyemail}}{{#str}}username{{/str}}{{/canloginbyemail}}{{#canloginbyemail}}{{#str}}usernameemail{{/str}}{{/canloginbyemail}}{{/quote}}>
-                                </div>
-                                <div class="form-group">
-                                    <label for="password" class="sr-only">{{#str}} password {{/str}}</label>
-                                    <input type="password" name="password" id="password" value=""
-                                           class="form-control"
-                                            placeholder={{#quote}}{{#str}}password{{/str}}{{/quote}}>
-                                </div>
-                                {{#rememberusername}}
-                                    <div class="rememberpass mt-3">
-                                        <input type="checkbox" name="rememberusername" id="rememberusername" value="1" {{#username}}checked="checked"{{/username}} />
-                                        <label for="rememberusername">{{#str}} rememberusername, admin {{/str}}</label>
-                                    </div>
-                                {{/rememberusername}}
-
-                                <button type="submit" class="btn btn-primary btn-block mt-3" id="loginbtn">Login<!--{{#str}}login{{/str}}--></button>
-                            </form>
+                    {{#cansignup}}
+                        <a href="{{signupurl}}" class="sr-only">{{#str}} tocreatenewaccount {{/str}}</a>
+                    {{/cansignup}}
+                    <form class="login-form" action="{{loginurl}}" method="post" id="login">
+                        <input type="hidden" name="logintoken" value="{{logintoken}}">
+                        <div class="login-form-username form-group">
+                            <label for="username" class="sr-only">
+                                {{^canloginbyemail}}
+                                    {{#str}} username {{/str}}
+                                {{/canloginbyemail}}
+                                {{#canloginbyemail}}
+                                    {{#str}} usernameemail {{/str}}
+                                {{/canloginbyemail}}
+                            </label>
+                            <input type="text" name="username" id="username" {{!
+                                                !}}class="form-control form-control-lg" {{!
+                                                !}}value="{{username}}" {{!
+                                                !}}placeholder="{{^canloginbyemail}}{{#cleanstr}}username{{/cleanstr}}{{/canloginbyemail}}{{!
+                                                !}}{{#canloginbyemail}}{{#cleanstr}}usernameemail{{/cleanstr}}{{/canloginbyemail}}" {{!
+                                                !}}autocomplete="username">
                         </div>
+                        <div class="login-form-password form-group">
+                            <label for="password" class="sr-only">{{#str}} password {{/str}}</label>
+                            <input type="password" name="password" id="password" value="" {{!
+                                !}}class="form-control form-control-lg" {{!
+                                !}}placeholder="{{#cleanstr}}password{{/cleanstr}}" {{!
+                                !}}autocomplete="current-password">
+                        </div>
+                        <div class="login-form-submit form-group">
+                            <button class="btn btn-primary btn" type="submit" id="loginbtn">{{#str}}login{{/str}}</button>
+                        </div>
+                         <div class="login-form-forgotpassword form-group">
+                            <a href="{{forgotpasswordurl}}">Forgot your username or password?</a>
+                        </div>
+                    </form>
+              
+					{{#hasinstructions}}
+                        <div class="login-divider"></div>
+                        <div class="login-instructions {{#cansignup}}mb-3{{/cansignup}}">
+                            <h2 class="login-heading">{{#str}}firsttime{{/str}}</h2>
+                            {{{instructions}}}
+                        </div>
+                    {{/hasinstructions}}
 
-                        <div class="col-12">
-						    <div class="forgetpass mt-2">
-						        <p><a href="{{forgotpasswordurl}}">Forgot your username or password?<!--{{#str}}forgotten{{/str}}--></a></p>
-						    </div>
-							
-                           {{#canloginasguest}}
-                                <div class="mt-2">
-                                    <p>{{#str}}someallowguest{{/str}}</p>
-                                    <form action="{{loginurl}}" method="post" id="guestlogin">
-                                        <input type="hidden" name="logintoken" value="{{logintoken}}">
-                                        <input type="hidden" name="username" value="guest" />
-                                        <input type="hidden" name="password" value="guest" />
-                                        <button class="btn btn-secondary btn-block" type="submit">{{#str}}loginguest{{/str}}</button>
-                                    </form>
-                                </div>
-                            {{/canloginasguest}}
+                    {{#cansignup}}
+                        <div class="login-signup">
+                            <a class="btn btn-secondary" href="{{signupurl}}">{{#str}}startsignup{{/str}}</a>
+                        </div>
+                    {{/cansignup}}
 
-                            {{#hasidentityproviders}}
-                                <h6 class="mt-2">{{#str}} potentialidps, auth {{/str}}</h6>
-                                <div class="potentialidplist" class="mt-3">
-                                    {{#identityproviders}}
-                                        <div class="potentialidp">
-                                            <a href="{{url}}" title={{#quote}}{{name}}{{/quote}} class="btn btn-secondary btn-block">
-                                            {{#iconurl}}
-                                                <img src="{{iconurl}}" alt="" width="24" height="24"/>
-                                            {{/iconurl}}
-                                            {{name}}
-                                            </a>
-                                        </div>
-                                    {{/identityproviders}}
+                     <div class="login-divider mt-2 mb-2 border-top"></div>
+
+                    {{#canloginasguest}}
+                        <p>{{#str}}someallowguest{{/str}}</p>
+                        <form action="{{loginurl}}" method="post" id="guestlogin">
+                            <input type="hidden" name="logintoken" value="{{logintoken}}">
+                            <input type="hidden" name="username" value="guest" />
+                            <input type="hidden" name="password" value="guest" />
+                            <button class="btn btn-secondary" type="submit" id="loginguestbtn">{{#str}}loginguest{{/str}}</button>
+                        </form>
+                    {{/canloginasguest}}
+
+                    <div class="login-divider mt-2 mb-2 border-top"></div>
+                        <div class="d-flex">
+                            {{#languagemenu}}
+                                <div class="login-languagemenu">
+                                    {{>core/action_menu}}
                                 </div>
-                            {{/hasidentityproviders}}
+                                <div class="divider border-left align-self-center mx-3"></div>
+                            {{/languagemenu}}
+                            <button type="button" class="btn btn-secondary" {{!
+                            }} data-modal="alert"{{!
+                            }} data-modal-title-str='["cookiesenabled", "core"]' {{!
+                            }} data-modal-content-str='["cookiesenabled_help_html", "core"]'{{!
+                            }}>{{#str}}cookiesnotice{{/str}}</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-	<!--<div class="col-sm-12 col-md-6 col-lg-5">
-        <div class="card">
-            <div class="card-block">-->
-               <!-- <h2 class="card-header text-center" >
-                    <div class="row">
-						<div class="col-lg-12 "><h3>UR Community Support</h3></div>
-					</div>
-				</h2>-->
-              <!--  <div class="card-body">
-                    <h3>
-                        Welcome to the Winter 2022 Term
-                    </h3>
-                   
-                    <div class="section-border-main mt-3"></div>
-                    <div class="embed-responsive embed-responsive-16by9">
-                           <iframe id="kaltura_player" src="https://api.ca.kaltura.com/p/103/sp/10300/embedIframeJs/uiconf_id/23448539/partner_id/103?iframeembed=true&playerId=kaltura_player&entry_id=0_l7mk81tz&flashvars[streamerType]=auto&amp;flashvars[localizationCode]=en&amp;flashvars[leadWithHTML5]=true&amp;flashvars[sideBarContainer.plugin]=true&amp;flashvars[sideBarContainer.position]=left&amp;flashvars[sideBarContainer.clickToClose]=true&amp;flashvars[chapters.plugin]=true&amp;flashvars[chapters.layout]=vertical&amp;flashvars[chapters.thumbnailRotator]=false&amp;flashvars[streamSelector.plugin]=true&amp;flashvars[EmbedPlayer.SpinnerTarget]=videoHolder&amp;flashvars[dualScreen.plugin]=true&amp;flashvars[hotspots.plugin]=1&amp;flashvars[Kaltura.addCrossoriginToIframe]=true&amp;&wid=0_lwwtu4xc" width="400" height="285" allowfullscreen webkitallowfullscreen mozAllowFullScreen allow="autoplay *; fullscreen *; encrypted-media *" sandbox="allow-forms allow-same-origin allow-scripts allow-top-navigation allow-pointer-lock allow-popups allow-modals allow-orientation-lock allow-popups-to-escape-sandbox allow-presentation allow-top-navigation-by-user-activation" frameborder="0" title="Kaltura Player"></iframe>
-                    </div>
-                    <br><br>
-                    <h3>    
-                    UR Community Support
-                    </h3>
-                  
-                    <div class="section-border-main mt-3"></div>
-                    <button  class="btn btn-primary btn-block mt-1 mb-2"><a target="_blank" href="https://www.uregina.ca/cce/student-services/contact-us/" style="color:#FFF" > Contact Us </a></button>
-                </div>
-            </div>
-		</div>
-        <br>
-	</div>	-->
 
 
 	<div class="col-sm-12 col-md-6 col-lg-5"> 
         <div class="card">
             <div class="card-block">
-                <!--<h2 class="card-header text-center" >
-                    <div class="row">
-						<div class="col-lg-12 "><h3>UR Community Support</h3></div>
-					</div>
-				</h2> -->
                 <div class="card-body">
-
-               
-
-                <h3>
-                UR Community Support
-                </h3>
-                    <div class="section-border-main"></div>
+                    <h3>UR Community Support</h3>
                     <br>
                     <div class="embed-responsive embed-responsive-16by9">
                         <iframe class="embed-responsive-item" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="allowfullscreen" src="https://www.youtube.com/embed/P_ZUqZL9Jfk" width="365" height="197" frameborder="0"></iframe>
                     </div>
             
-            
-                    <button  class="btn btn-primary btn-block mt-3"><a href="https://moodle.uregina.ca/urcommunity/local/staticpage/view.php?page=FAQ" target="_blank" style="color:#FFF" > Frequently Asked Questions </a></button>
-                 
-                    <button  class="btn btn-primary btn-block mt-1 mb-2"><a target="_blank" href="https://www.uregina.ca/cce/student-services/contact-us/" style="color:#FFF" > Contact Us </a></button>
+                    <button  class="btn btn-primary btn-block mt-3"><a href="https://moodle.uregina.ca/urcommunity/local/staticpage/view.php?page=FAQ" target="_blank" style="color:#000" > Frequently Asked Questions </a></button>
+                    <button  class="btn btn-primary btn-block mt-2 mb-2"><a target="_blank" href="https://www.uregina.ca/cce/student-services/contact-us/" style="color:#000" > Contact Us </a></button>
                 </div>
             </div>
 		</div>
 	</div>	
-
-
-
-    {{#hasinstructions}}
-        <div class=" ">
-            <div class="col-sm-12 col-md-6 col-lg-4">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">
-                            <h2>{{#str}}firsttime{{/str}}</h2>
-                        </div>
-                        <div>
-                            {{{instructions}}}
-                            {{#cansignup}}
-                                <form class="mt-3" action="{{signupurl}}" method="get" id="signup">
-                                    <button type="submit" class="btn btn-secondary">{{#str}}startsignup{{/str}}</button>
-                                </form>
-                            {{/cansignup}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {{/hasinstructions}}
 </div>
 
-<br><br>
-
-<script type="text/javascript">
-//<![CDATA[
-var campusImg = document.createElement('img');campusImg.setAttribute('src','//'+'ww'+'w'+'2.ureg'+'ina.ca/ima'+'ges/urcos'+'urse.gif');campusImg.style.display = 'none';document.body.appendChild(campusImg); 
-//]]>
-</script>
-
 {{#js}}
-    {{#error}}
-        require(['jquery'], function($) {
-        $('#loginerrormessage').focus();
-        });
-    {{/error}}
     {{^error}}
         {{#autofocusform}}
-            require(['jquery'], function($) {
-            if ($('#username').val()) {
-            $('#password').focus();
+            var userNameField = document.getElementById('username');
+            if (userNameField.value.length == 0) {
+                userNameField.focus();
             } else {
-            $('#username').focus();
+                document.getElementById('password').focus();
             }
-            });
         {{/autofocusform}}
     {{/error}}
-
+    {{#error}}
+        document.getElementById('loginerrormessage').focus();
+    {{/error}}
+    require(['core_form/submit'], function(Submit) {
+        Submit.init("loginbtn");
+        Submit.init("loginguestbtn");
+    });
 {{/js}}
