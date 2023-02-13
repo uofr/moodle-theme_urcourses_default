@@ -174,34 +174,6 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
 	    $mynode->title = "Darkmode is " . $darkstate;
 	    $mynode->titleidentifier = "darkmode, theme_uofr_conservatory";
 		$mynode->pix = $mynodelabel;
-		
-
-		//For Test student user account
-		//check if not student user
-		$troleid = $DB->get_field('role', 'id', ['shortname' => 'editingteacher']);
-		$mroleid = $DB->get_field('role', 'id', ['shortname' => 'manager']);
-		$iroleid = $DB->get_field('role', 'id', ['shortname' => 'instdesigner']);
-		$isteacher = $DB->record_exists('role_assignments', ['userid' => $USER->id, 'roleid' => $troleid]);
-		$ismanager = $DB->record_exists('role_assignments', ['userid' => $USER->id, 'roleid' => $mroleid]);
-		$isdesigner = $DB->record_exists('role_assignments', ['userid' => $USER->id, 'roleid' => $iroleid]);
-
-		if($isteacher|| $ismanager || $isdesigner || is_siteadmin() ){
-			$saccountnode = new stdClass();
-			$saccountnode->itemtype = "link";
-			$saccountnode->url = new moodle_url($this->page->url);
-			$saccountnode->pix =     "i/user";
-			$saccountnode->titleidentifier = "studentaccount,theme_urcourses_default";
-			$saccountnode->useridentifier = $USER->username;
-			
-			$isaccount= theme_boost_union_check_test_account($USER->username);
-			$saccountnode->account = $isaccount;
-			
-			if($isaccount){
-				$saccountnode->title = "Modify test student";
-			}else{
-				$saccountnode->title = "Create test student";
-			}	
-		}
 	    
 		$allnodes = $opts->navitems; //get logout node
 		

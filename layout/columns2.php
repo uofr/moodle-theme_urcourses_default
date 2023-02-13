@@ -39,6 +39,8 @@ require_once($CFG->libdir . '/behat/lib.php');
 // Require own locallib.php.
 require_once($CFG->dirroot . '/theme/boost_union/locallib.php');
 
+global $DB;
+
 // Add activity navigation if the feature is enabled.
 $activitynavigation = get_config('theme_boost_union', 'activitynavigation');
 if ($activitynavigation == THEME_BOOST_UNION_SETTING_SELECT_YES) {
