@@ -310,11 +310,14 @@ pre {
   .form-control:focus {
     color: #e4e6eb;
     background-color: #3a3b3c;
-    border-color: #5babf2; }
+    border-color: #3a7a57; }
   .form-control::placeholder {
     color: #6a737b; }
   .form-control:disabled, .form-control[readonly] {
-    background-color: #e9ecef; }
+    background-color: #e9ecef;
+    color: #6a737b;
+  
+  }
 
 select.form-control:focus::-ms-value {
   color: #495057;
@@ -422,7 +425,7 @@ select.form-control:focus::-ms-value {
   .btn:hover {
     color: #e4e6eb; }
   .btn:focus, .btn.focus {
-    box-shadow: 0 0 0 0.2rem rgba(15, 108, 191, 0.75); }
+    box-shadow: 0 0 0 0.2rem rgba(58, 122, 87, 0.75); }
 
 .btn-primary {
   color: #fff;
@@ -1621,7 +1624,7 @@ tr.flagged-tag a {
   background-color: #495057; }
 
 .moodle-dialogue-base .moodle-dialogue-wrap {
-  background-color: #fff;
+  background-color: #242526;
   border: 1px solid #ccc; }
 
 .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd {
@@ -2349,7 +2352,7 @@ span.editinstructions {
   border-color: #8f959e;}
 
 .file-picker .fp-content {
-  background: #fff; }
+  background: #242526; }
 
 .file-picker .fp-list .fp-repo.active {
   background: #f2f2f2; }
@@ -2434,7 +2437,7 @@ span.editinstructions {
         color: #666; }
 
 .message-app {
-  background-color: #eff1f3; }
+  background-color: #242526; }
       .message-app .list-group .list-group-item:hover {
         color: #fff;
         background-color: #3a7a57; }
@@ -3006,7 +3009,7 @@ a#hidebankcmd {
 
 .popover-region-container {
   border: 1px solid #ddd;
-  background-color: #fff; }
+  background-color: #242526; }
 
 .popover-region-header-container {
   border-bottom: 1px solid #ddd;
@@ -3014,11 +3017,19 @@ a#hidebankcmd {
 
 .popover-region-footer-container {
   border-top: 1px solid #ddd;
-  background-color: #fff; }
+  background-color: #242526; }
 
 .navbar .count-container {
   background-color: #ca3120;
   color: white; }
+
+.navbartext {
+    color: #3a7a57;
+}
+
+body, h1, h2 {
+  color: #e4e6eb;
+}
 
 .content-item-container {
   border-bottom: 1px solid #ddd;}
@@ -3270,7 +3281,7 @@ div.editor_atto_toolbar button .icon {
     .courseindex .courseindex-item.pageitem a {
       color: #fff; }
     .courseindex .courseindex-item.pageitem:hover, .courseindex .courseindex-item.pageitem:focus {
-      background-color: #0c589c;
+      background-color: #004f2e;
       color: #e6e5e5; }
       .courseindex .courseindex-item.pageitem:hover .courseindex-link,
       .courseindex .courseindex-item.pageitem:hover .courseindex-chevron, .courseindex .courseindex-item.pageitem:focus .courseindex-link,
@@ -3565,6 +3576,11 @@ table.quizreviewsummary th.cell {
 .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd,
 .choosercontainer #chooseform .submitbuttons, .form-control {
     background-color: #3a3a38;
+    color:#f5f5f5;
+}
+
+.yui3-button{
+  color:#f5f5f5;
 }
 
 .checklistreport .header, .bs-popover-right, .bs-popover-top, .bs-popover-left, .bs-popover-bottom{
@@ -3592,5 +3608,9 @@ ul.oublog-accordion li {
 }
 
 .format-tiles #page .course-content ul li.section.main{
+  background-color: #242526;
+}
+
+[data-fieldtype="modgrade"] {
   background-color: #242526;
 }

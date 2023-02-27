@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace theme_boost_union\output\darkmodeprefs;
+ namespace theme_uofr_conservatory\output\darkmodeprefs;
 
 defined('MOODLE_INTERNAL') || die;
 
