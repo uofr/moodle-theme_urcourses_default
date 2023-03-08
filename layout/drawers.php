@@ -134,8 +134,11 @@ if ($setdarkmode > -1) {
  error_log('darkmode:'.print_r($darkmodecheck,1));
 //check if user has darkmode on in database and include if so
 if($darkmodecheck){
-   $PAGE->requires->css('/theme/boost_union/style/darkmode.css');
+   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css');
 }
+
+// include callouts css
+$PAGE->requires->css('/theme/urcourses_default/style/callout.css');
 
 $header = $PAGE->activityheader;
 $headercontent = $header->export_for_template($renderer);
