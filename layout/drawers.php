@@ -40,7 +40,8 @@ require_once($CFG->libdir . '/behat/lib.php');
 require_once($CFG->dirroot . '/course/lib.php');
 
 // Require own locallib.php.
-require_once($CFG->dirroot . '/theme/boost_union/locallib.php');
+//require_once($CFG->dirroot . '/theme/boost_union/locallib.php');
+require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
 
 // Add activity navigation if the feature is enabled.
 $activitynavigation = get_config('theme_boost_union', 'activitynavigation');
@@ -134,8 +135,11 @@ if ($setdarkmode > -1) {
  error_log('darkmode:'.print_r($darkmodecheck,1));
 //check if user has darkmode on in database and include if so
 if($darkmodecheck){
-   $PAGE->requires->css('/theme/boost_union/style/darkmode.css');
+   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css');
 }
+
+
+$PAGE->requires->css('/theme/urcourses_default/style/callout.css');
 
 $header = $PAGE->activityheader;
 $headercontent = $header->export_for_template($renderer);
@@ -190,4 +194,4 @@ require_once(__DIR__ . '/includes/javascriptdisabledhint.php');
 require_once(__DIR__ . '/includes/infobanners.php');
 
 // Render drawers.mustache from boost_union.
-echo $OUTPUT->render_from_template('theme_boost_union/drawers', $templatecontext);
+echo $OUTPUT->render_from_template('theme_urcourses_default/drawers', $templatecontext);

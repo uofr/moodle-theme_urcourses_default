@@ -192,6 +192,48 @@ function theme_urcourses_default_register_webfonts_filetypes() {
  * @param object $course
  * @return string url of course image
  */
-function theme_urcourses_default_get_course_image($course) {
-	return theme_boost_union_get_course_image($course);
+function theme_urcourses_default_get_course_image() {
+	return theme_boost_union_get_course_header_image_url();
+}
+
+
+function theme_urcourses_default_get_course_image_old($course) {
+    global $CFG;
+    $courseinlist = new \core_course_list_element($course);
+    foreach ($courseinlist->get_course_overviewfiles() as $file) {
+        if ($file->is_valid_image()) {
+            $pathcomponents = [
+                '/pluginfile.php',
+                $file->get_contextid(),
+                $file->get_component(),
+                $file->get_filearea() . $file->get_filepath() . $file->get_filename()
+            ];
+            $path = implode('/', $pathcomponents);
+            return (new moodle_url($path))->out();
+        }
+    }
+    return false;
+}
+/**
+* UR HACK
+* Return true or false if current user has a test account
+* for course
+* @return bool
+*/
+function theme_urcourses_default_check_test_account($username){
+    global $DB;
+
+    //get username to create email
+    $email = $username."+urstudent@uregina.ca";
+    //check if test user account has already been created
+    $select = 'SELECT * FROM mdl_user WHERE email ='.$email.';';
+    $sql = "SELECT * FROM mdl_user as u WHERE u.email ='{$email}'";  
+    $user = $DB->get_record_sql($sql);
+    
+    //if created
+    if($user){
+        return true;
+    }
+
+    return false;
 }

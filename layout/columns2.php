@@ -37,7 +37,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/behat/lib.php');
 
 // Require own locallib.php.
-require_once($CFG->dirroot . '/theme/boost_union/locallib.php');
+require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
 
 // Add activity navigation if the feature is enabled.
 $activitynavigation = get_config('theme_boost_union', 'activitynavigation');
@@ -103,7 +103,7 @@ if ($setdarkmode > -1) {
  error_log('darkmode:'.print_r($darkmodecheck,1));
 //check if user has darkmode on in database and include if so
 if($darkmodecheck){
-   $PAGE->requires->css('/theme/boost_union/style/darkmode.css');
+   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css');
 }
 
 $header = $PAGE->activityheader;

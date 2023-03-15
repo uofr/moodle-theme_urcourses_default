@@ -27,3 +27,8 @@ defined('MOODLE_INTERNAL') || die();
 // General.
 $string['pluginname'] = 'UR Courses: Default';
 $string['choosereadme'] = 'UR Courses: Default is a child theme of Boost Union, used for University of Regina courses.';
+
+// UofR Customizations
+    
+$string['darkmode'] = 'Darkmode';
+$string['darkmodepref'] = 'Darkmode preferences';
