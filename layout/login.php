@@ -32,7 +32,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $bodyattributes = $OUTPUT->body_attributes();
-list($loginbackgroundimagetext, $loginbackgroundimagetextcolor) = theme_boost_union_get_loginbackgroundimage_text();
+list($loginbackgroundimagetext, $loginbackgroundimagetextcolor) = theme_urcourses_default_get_loginbackgroundimage_text();
 
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
@@ -52,4 +52,4 @@ require_once(__DIR__ . '/includes/staticpages.php');
 require_once(__DIR__ . '/includes/infobanners.php');
 
 // Render login.mustache from boost_union.
-echo $OUTPUT->render_from_template('theme_boost_union/login', $templatecontext);
+echo $OUTPUT->render_from_template('theme_urcourses_default/login', $templatecontext);

@@ -23,6 +23,7 @@
  */
 
 require_once($CFG->dirroot.'/theme/boost_union/locallib.php');
+require_once($CFG->dirroot.'/theme/urcourses_default/locallib.php');
 
 /**
  * Returns the main SCSS content.
@@ -66,6 +67,7 @@ function theme_urcourses_default_get_pre_scss($theme) {
     global $CFG;
     // MODIFICATION START.
     require_once($CFG->dirroot . '/theme/boost_union/locallib.php');
+	require_once($CFG->dirroot.'/theme/urcourses_default/locallib.php');
     // MODIFICATION END.
 
 	$parentconfig = theme_config::load('boost_union');
