@@ -1,0 +1,149 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <style>
+
+        input {
+            display: none;
+        }
+
+        label {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            text-align: left;
+            border: 1px solid rgba(0,0,0,.125);
+            border-radius: 0;
+            overflow-anchor: none;
+            margin-bottom: 0px;
+            transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out,border-radius .15s ease;
+            cursor: pointer;
+            z-index: 3;
+            outline: 0;
+            font-weight: 400;
+            color: #848889;
+            text-decoration: none;
+            background-color: rgba(0,0,0,.03);
+            border-bottom: 1px solid rgba(0,0,0,.125);
+
+        }
+
+        input:checked + label{
+            z-index: 3;
+            outline: 0;
+            /*box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);*/
+            font-weight: 400;
+            color: #848889;
+            text-decoration: none;
+            background-color: rgba(0,0,0,.03);
+            border-bottom: 1px solid rgba(0,0,0,.125);
+        }
+
+        .content {
+        
+            padding: 1rem 1.25rem;
+            border: solid rgba(0,0,0,.125);
+            border-width: 0 1px;
+        }
+
+        input + label + .content {
+            display: none;
+        }
+
+        input:checked + label + .content {
+            display: block;
+        }
+
+        label::after {
+            content: "\f105";
+            font-family: "FontAwesome";
+            font-weight: bold;
+            font-size: 22px;
+            position: absolute;
+            right: 10px;
+            top: 6px;
+        }
+
+        input:checked + label::after {
+            content: '\f107';
+        }
+    </style>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>
+       Frequently Asked Questions
+    </title>
+</head>
+
+<body>
+    <h1 style="display:none">Frequently Asked Questions</h1>
+    
+    <input type="checkbox" id="title1" />
+    <label for="title1">I don’t have login credentials. How do I receive this information?</label>
+
+    <div class="content">
+        <p>
+        You will receive your UR Community login credentials through an email the next business day following registration.  If you have registered for the course and still have not received your credentials, please contact Student & Instructor Services Non-Credit at sis.noncredit@uregina.ca or 306-585-5748.
+        </p>
+    </div>
+
+    <input type="checkbox" id="title2" />
+    <label for="title2">How do I access my courses? </label>
+
+    <div class="content">
+        <p>All of your non-credit courses for the current term can be found in UR Community on the dashboard. Courses are available for participants to see and access two business days before the course start date.
+        </p>
+    </div>
+
+    <input type="checkbox" id="title3" />
+    <label for="title3">How do I login to Zoom?</label>
+
+    <div class="content">
+        <p>Once you login to UR Community all of your current courses will appear on the dashboard. Click on the course you want to access and the Zoom link will appear near the top of the page next to the Zoom icon.</p>
+    </div>
+
+    <input type="checkbox" id="title4" />
+    <label for="title4">Where do I find the instructor’s email?  </label>
+
+    <div class="content">
+        <p>In the UR Community page of each course there is a “Course Email” button on the left hand side. Participants will be able to access this button once the instructor has enabled student access. You can also find the instructor’s email in the description of each course.
+        </p>
+    </div>
+
+    <input type="checkbox" id="title6" />
+    <label for="title6"> How do I manage course emails?  </label>
+
+    <div class="content">
+        <p>In the UR Community page of each course there is a “Course Email” button on the left hand side. Once clicked, you can create a new message, check your inbox and manage your email folders. If you choose the “New Message” option, you will be able to select which course participants you would like to email, set the subject as well as write the content of your email.  When you’re ready to send your email, simply click the “Send” button at the bottom of the page.
+        </p>
+    </div>
+
+    <input type="checkbox" id="title5" />
+    <label for="title5">How do I register for additional courses?</label>
+
+    <div class="content">
+        <p>The University of Regina offers a variety of different non-credit courses, including Lifelong Learning, Conservatory of Performing Arts, Career Development and UR Camps. You can browse Centre for Continuing Eduation course offerings and register at <a href="https://www.uregina.ca/cce/">https://www.uregina.ca/cce/  </a></a>. For UR Camps find schedules, and register at <a href="https://www.uregina.ca/recservices/children/summer-sports/index.html">https://www.uregina.ca/recservices/children/summer-sports/index.html </a>
+        </p>
+    </div>
+
+
+    <input type="checkbox" id="title7" />
+    <label for="title7">How do I turn off my camera and microphone in Zoom? </label>
+
+    <div class="content">
+        <p>To turn off your camera on a Zoom call, click the “Stop Video” button on the toolbar near the bottom-left corner of the Zoom call window. While Zoom isn’t sending your video to other people, you’ll see a camera icon with a red slash through it. Other people won’t be able to see you. To mute yourself on a Zoom call, move your mouse to the lower-left corner of the Zoom call window and click the “Mute” button. While Zoom is muted, you’ll see a microphone icon with a red slash through it. Other people will not be able to hear you.</p>
+    </div>
+
+</body>
+</html>
+
+
+
+
+
+
