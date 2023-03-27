@@ -237,3 +237,85 @@ function theme_urcourses_default_check_test_account($username){
 
     return false;
 }
+
+/**
+ * Return the UR Category class for a given course id.
+ * @param int $courseid
+ * @return string
+ */
+
+ function theme_urcourses_default_get_ur_category_class($courseid) {
+	global $CFG, $DB;
+	
+	$ur_css_class = '';
+	
+	$ur_categories = array('','misc'=>'',
+		'khs'=>'Faculty of Kinesiology and Health Studies',
+		'edu'=>'Faculty of Education',
+		'sci'=>'Faculty of Science',
+		'map'=>'Faculty of Media, Art, and Performance',
+		'engg'=>'Faculty of Engineering',
+		'bus'=>'Business Administration',
+		'arts'=>'Faculty of Arts',
+		'sw'=>'Faculty of Social Work',
+		'nur'=>'Faculty of Nursing',
+		'scbscn'=>'Saskatchewan Collaborative Bachelor of Science in Nursing',
+		'luther'=>'Luther College',
+		'campion'=>'Campion College',
+		'cnpp'=>'Collaborative Nurse Practitioner Program',
+		'lacite'=>'La Cité universitaire francophone',
+		'fnuniv'=>'First Nations University of Canada',
+		'gbus'=>'Kenneth Levene Graduate School of Business',
+		'jsgspp'=>'Johnson-Shoyama Graduate School of Public Policy',
+		'misc'=>'Custom Themes');
+
+	
+	// Check theme first
+	
+	if (!is_numeric($courseid)) { $courseid=0; } // some IDs not numeric? check...
+		
+	$sql = "SELECT `theme` FROM mdl_course WHERE id={$courseid}";	
+	
+    $check_course_theme = $DB->get_record_sql($sql);
+    //debugging("Themes: " . $check_course_theme->theme  . "Course ID: " . $courseid, DEBUG_DEVELOPER);
+	
+	if (!empty($check_course_theme->theme)) {
+		$clean_theme_key = substr($check_course_theme->theme, 0, 16); //'urcourses_clean_'
+        $default_theme_key = substr($check_course_theme->theme, 0, 10); //'urcourses_'
+        
+        if ($clean_theme_key == 'urcourses_clean_') {
+            $theme_val = substr($check_course_theme->theme, 16);
+        }
+        else if ($default_theme_key == 'urcourses_') {
+            $theme_val = substr($check_course_theme->theme, 10);
+        } else {
+        	$theme_val = '';
+        }
+		
+		
+		$exc_themes = array('sw'=>'socialwork',
+			'map'=>'finearts',
+			'edu'=>'education',
+			'bus'=>'business',
+			'nur'=>'nursing',
+			'sci'=>'science');
+		
+		$key = array_search($theme_val,$exc_themes);
+		if (!empty($key)) $theme_val = $key;	
+		
+        return $theme_val;
+	}
+	
+		
+	//if default theme, then check category
+	
+	$sql = "SELECT a.name FROM {$CFG->prefix}course_categories a, {$CFG->prefix}course b WHERE a.id = b.category AND b.id = {$courseid}";
+	
+	$check_course_category = $DB->get_record_sql($sql);
+	if ($check_course_category) {
+		$key = array_search($check_course_category->name,$ur_categories);
+		if (!empty($key)) $ur_css_class = $key;
+	}
+	
+	return $ur_css_class;
+}
