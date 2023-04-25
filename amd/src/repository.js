@@ -1,4 +1,3 @@
-<?php
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,19 +14,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Union - Version file
+ * External functions repository for theme_urcourses_default.
  *
- * @package    theme_boost_union
- * @copyright  2022 Moodle an Hochschulen e.V. <kontakt@moodle-an-hochschulen.de>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @module  theme_urcourses_default/toggle_course_visibility
+ * @author  2023 John Lane
  */
 
-defined('MOODLE_INTERNAL') || die();
+import Ajax from 'core/ajax';
 
-$plugin->component = 'theme_urcourses_default';
-$plugin->version = 2023042100;
-$plugin->release = 'v1.0-r1';
-$plugin->requires = 2022041900;
-$plugin->supported = [400, 400];
-$plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = array('theme_boost' => 2022041900,'theme_boost_union' => 2022080909);
+export const toggleCourseVisibility = (courseid) => {
+    const request = {
+        methodname: 'theme_urcourses_default_toggle_course_visibility',
+        args: {
+            courseid: courseid
+        }
+    };
+
+    return Ajax.call([request])[0];
+};

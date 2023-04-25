@@ -144,6 +144,20 @@ $PAGE->requires->css('/theme/urcourses_default/style/callout.css');
 $header = $PAGE->activityheader;
 $headercontent = $header->export_for_template($renderer);
 
+$course_visibility_toggle = array();
+if (theme_urcourses_default_is_show_visibility_toggle()) {
+    $courseid = $COURSE->id;
+    $startdate = $COURSE->startdate;
+    $enddate = $COURSE->enddate;
+    $is_visible = $COURSE->visible;
+    $enrollment = theme_urcourses_default_get_course_enrollment($COURSE->id);
+    
+    $course_visibility_toggle_renderable = new \theme_urcourses_default\renderable\course_visibility_toggle(
+        $courseid, $startdate, $enddate, $is_visible, $enrollment);
+    
+    $course_visibility_toggle = $course_visibility_toggle_renderable->export_for_template($renderer);
+}
+
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
     'output' => $OUTPUT,
@@ -163,7 +177,8 @@ $templatecontext = [
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
     'overflow' => $overflow,
     'headercontent' => $headercontent,
-    'addblockbutton' => $addblockbutton
+    'addblockbutton' => $addblockbutton,
+    'visibilitytoggle' => $course_visibility_toggle
 ];
 
 // Get and use the course related hints HTML code, if any hints are configured.

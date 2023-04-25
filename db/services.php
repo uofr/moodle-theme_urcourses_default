@@ -15,19 +15,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Union - Version file
+ * Services for theme_urcourses_default.
  *
- * @package    theme_boost_union
- * @copyright  2022 Moodle an Hochschulen e.V. <kontakt@moodle-an-hochschulen.de>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author  John Lane
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->component = 'theme_urcourses_default';
-$plugin->version = 2023042100;
-$plugin->release = 'v1.0-r1';
-$plugin->requires = 2022041900;
-$plugin->supported = [400, 400];
-$plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = array('theme_boost' => 2022041900,'theme_boost_union' => 2022080909);
+ $functions = array(
+    'theme_urcourses_default_toggle_course_visibility' => array(
+        'classname'     => 'theme_urcourses_default\external\course_visibility_toggle',
+        'methodname'    => 'execute',
+        'description'   => 'Toggle course visibility between Show and Hide.',
+        'type'          => 'write',
+        'ajax'          => true
+    )
+);
