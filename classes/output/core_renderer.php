@@ -281,7 +281,7 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
        
        
        //$preheader = $header->courseimage = theme_boost_union_get_course_image($COURSE);
-       $preheader = $header->courseimage = theme_urcourses_default_get_course_image();
+       //$preheader = $header->courseimage = theme_urcourses_default_get_course_image($COURSE);
        //$preheader = $header->courseimage = theme_urcourses_default_get_course_image_old($COURSE);
 		   
 	$header->courselink = $CFG->wwwroot.'/course/view.php?id='.$COURSE->id;

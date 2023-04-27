@@ -23,7 +23,7 @@
 
  
  function theme_urcourses_default_get_course_related_hints() {
-	 return theme_boost_union_get_course_related_hints();
+	return theme_boost_union_get_course_related_hints();
  }
 
 
@@ -33,7 +33,7 @@
   * @return string.
   */
  function theme_urcourses_default_get_imprint_link() {
-	 return theme_boost_union_get_imprint_link();
+	return theme_boost_union_get_imprint_link();
  }
 
  /**
@@ -42,7 +42,7 @@
   * @return string.
   */
  function theme_urcourses_default_get_imprint_pagetitle() {
-	 return theme_boost_union_get_imprint_pagetitle();
+    return theme_boost_union_get_imprint_pagetitle();
  }
  
  /**
@@ -61,7 +61,7 @@
   * @return boolean.
   */
  function theme_urcourses_default_infobanner_is_shown_on_page($bannerno) {
-	 return theme_boost_union_infobanner_is_shown_on_page($bannerno);
+	return theme_boost_union_infobanner_is_shown_on_page($bannerno);
  }
  
  
@@ -74,7 +74,7 @@
   * @return boolean.
   */
  function theme_urcourses_default_infobanner_compare_order($a, $b) {
-	 return theme_boost_union_infobanner_compare_order($a, $b);
+	return theme_boost_union_infobanner_compare_order($a, $b);
  }
  
   
@@ -86,7 +86,7 @@
   * @return bool True if everything went fine, false if at least one user couldn't be resetted.
   */
  function theme_urcourses_default_infobanner_reset_visibility($no) {
-	 return theme_boost_union_infobanner_reset_visibility($no);
+	return theme_boost_union_infobanner_reset_visibility($no);
 } 
   
   
@@ -192,8 +192,8 @@ function theme_urcourses_default_register_webfonts_filetypes() {
  * @param object $course
  * @return string url of course image
  */
-function theme_urcourses_default_get_course_image() {
-	return theme_boost_union_get_course_header_image_url();
+function theme_urcourses_default_get_course_image($course) {
+	return theme_boost_union_get_course_image($course);
 }
 
 
@@ -318,4 +318,55 @@ function theme_urcourses_default_check_test_account($username){
 	}
 	
 	return $ur_css_class;
+}
+
+/**
+ * Check whether or not the course visibility toggle should be shown.
+ * The toggle is shown when the user is editing a course page, or if the user is looking at a hidden course.
+ * 
+ * @return bool True if tool should be shown. Otherwise, False.
+ */
+function theme_urcourses_default_is_show_visibility_toggle() {
+    global $COURSE, $PAGE;
+
+    $context = \context_course::instance($COURSE->id, IGNORE_MISSING);
+    $canviewhidden = has_capability('moodle/course:viewhiddencourses', $context);
+
+    $courseid = $COURSE->id;
+    $pageurl = $PAGE->url;
+    $course_viewurl = new moodle_url('/course/view.php', array('id' => $courseid));
+    $course_editurl = new moodle_url('/course/edit.php', array('id' => $courseid));
+
+    $is_on_course_view = $pageurl->compare($course_viewurl, URL_MATCH_BASE);
+    $is_on_course_edit = $pageurl->compare($course_editurl, URL_MATCH_BASE);
+
+    $is_on_course_page = $is_on_course_view || $is_on_course_edit;
+    $is_user_editing = $PAGE->user_is_editing() || $is_on_course_edit;
+    $is_course_visible = $canviewhidden && $COURSE->visible == 0;
+
+    return ($is_on_course_page && ($is_user_editing || $is_course_visible));
+}
+
+/**
+ * Gets enrollment information for the course specified by $courseid.
+ * 
+ * @return array
+ */
+function theme_urcourses_default_get_course_enrollment(int $courseid) {
+    global $CFG, $DB;
+    
+    $is_urcourserequest_exist = is_file($CFG->dirroot.'/admin/tool/urcourserequest/lib.php');
+    $course_exists = $DB->record_exists('course', array('id' => $courseid));
+
+    if ($is_urcourserequest_exist && $course_exists) {
+        require_once($CFG->dirroot.'/admin/tool/urcourserequest/lib.php');
+
+        $course = get_course($courseid);
+        $enrollment = tool_urcourserequest_get_course_state($course->idnumber);
+
+        return $enrollment === false ? array() : $enrollment;
+    }
+    else {
+        return array();
+    }
 }
