@@ -129,7 +129,20 @@ if ($setdarkmode > -1) {
         $DB->insert_record($table, $newrecord);
     }  
     
- }
+}
+
+// load additional css
+$PAGE->requires->css('/theme/urcourses_default/style/legacy.css');
+//$PAGE->requires->css('/theme/urcourses_default/style/card.css');
+//$PAGE->requires->css('/theme/urcourses_default/style/carousel.css');
+//$PAGE->requires->css('/theme/urcourses_default/style/editor.css');
+//$PAGE->requires->css('/theme/urcourses_default/style/image.css');
+$PAGE->requires->css('/theme/urcourses_default/style/callout.css');
+$PAGE->requires->css('/theme/urcourses_default/style/alert.css');
+//$PAGE->requires->css('/theme/urcourses_default/style/button.css');
+$PAGE->requires->css('/theme/urcourses_default/style/pullquote.css');
+$PAGE->requires->css('/theme/urcourses_default/style/c4l.css');
+
 
  $darkmodecheck = $DB->get_record('theme_urcourses_darkmode', array('userid'=>$USER->id, 'darkmode'=>1));
  error_log('darkmode:'.print_r($darkmodecheck,1));
@@ -138,8 +151,6 @@ if($darkmodecheck){
    $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css');
 }
 
-
-$PAGE->requires->css('/theme/urcourses_default/style/callout.css');
 
 $header = $PAGE->activityheader;
 $headercontent = $header->export_for_template($renderer);
