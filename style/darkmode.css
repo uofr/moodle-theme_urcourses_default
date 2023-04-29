@@ -54,7 +54,7 @@ body {
   background-color: #18191A; }
 
 a {
-  color: #3a7a57; }
+  color: #32c875; }
   a:hover {
     color: #3a7a57;
   }
@@ -72,6 +72,10 @@ a:not([href]):not([class]) {
 
 caption {
   color: #6a737b; }
+
+h2 {
+	color: #8c8c8c;
+}
 
 hr {
   border-top: 1px solid rgba(0, 0, 0, 0.1); }
@@ -940,7 +944,8 @@ select.form-control:focus::-ms-value {
     color: #6a737b; }
 
 .moremenu .nav-link{
-  color: #3a7a57;
+  /*color: #3a7a57;*/
+  color: #32c875;
 }
 .nav-tabs {
   color: #e4e6eb;
@@ -1037,7 +1042,7 @@ select.form-control:focus::-ms-value {
   color: #6a737b; }
 
 .page-link {
-  color: #3a7a57;
+  color: #0a2b19;
   background-color: #b0b3b8;
   border: 1px solid #949598; }
   .page-link:hover {
@@ -1416,7 +1421,7 @@ button.bg-dark:focus {
   background-color: #1d2124 !important; }
 
 .bg-white {
-  background-color: #18191a !important; }
+  background-color: #000 !important; }
 
 .border {
   border: 1px solid #484a4c !important; }
@@ -3326,7 +3331,7 @@ div.editor_atto_toolbar button .icon {
     border-top: 1px solid #dee2e6;
     border-bottom: 1px solid #dee2e6;
     height: calc(60px + 2px);
-    background-color: #fff; }
+    background-color: #242526; }
 
 .tertiary-navigation{
   background-color: #242526;
@@ -3593,4 +3598,18 @@ ul.oublog-accordion li {
 
 .format-tiles #page .course-content ul li.section.main{
   background-color: #242526;
+}
+
+.block_activity_modules .icon, 
+.gradeitemheader .icon.itemicon,
+.path-report-outline #outlinetable .icon {
+	filter: brightness(0) invert(1);
+}
+
+.navbar.fixed-top {
+	border-bottom-color: #333;
+}
+
+.generaltable h3 {
+	color: #c5c5c6;
 }
