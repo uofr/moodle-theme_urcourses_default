@@ -20,6 +20,8 @@
  * @author  John Lane
  */
 
+defined('MOODLE_INTERNAL') || die();
+
  $functions = array(
     'theme_urcourses_default_toggle_course_visibility' => array(
         'classname'     => 'theme_urcourses_default\external\course_visibility_toggle',
@@ -27,5 +29,37 @@
         'description'   => 'Toggle course visibility between Show and Hide.',
         'type'          => 'write',
         'ajax'          => true
+    ),
+    'theme_urcourses_default_create_test_account' => array(
+       'classname'     => 'theme_urcourses_default_external',
+       'methodname'    => 'create_test_account',
+       'classpath'     => 'theme/urcourses_default/externallib.php',
+       'description'   => 'Creates and enrolls a test student account based on username.',
+       'type'          => 'write',
+       'ajax'          => 'true'
+    ),
+    'theme_urcourses_default_unenroll_test_account' => array(
+       'classname'     => 'theme_urcourses_default_external',
+       'methodname'    => 'unenroll_test_account',
+       'classpath'     => 'theme/urcourses_default/externallib.php',
+       'description'   => 'Removes user test student account from course',
+       'type'          => 'write',
+       'ajax'          => 'true'
+    ),
+    'theme_urcourses_default_test_account_info' => array(
+       'classname'     => 'theme_urcourses_default_external',
+       'methodname'    => 'test_account_info',
+       'classpath'     => 'theme/urcourses_default/externallib.php',
+       'description'   => 'Returns info on test account',
+       'type'          => 'read',
+       'ajax'          => 'true'
+    ),
+    'theme_urcourses_default_reset_test_account' => array(
+       'classname'     => 'theme_urcourses_default_external',
+       'methodname'    => 'reset_test_account',
+       'classpath'     => 'theme/urcourses_default/externallib.php',
+       'description'   => 'Reset password for student test account',
+       'type'          => 'write',
+       'ajax'          => 'true'
     )
 );

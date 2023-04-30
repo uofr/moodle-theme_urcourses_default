@@ -105,3 +105,9 @@
 </nav>
 
 {{> theme_boost/primary-drawer-mobile }}
+
+{{#js}}
+    require(['theme_urcourses_default/studentaccount'], function(mod) {
+        mod.init();
+    });
+{{/js}}
