@@ -63,7 +63,12 @@ class course_visibility_toggle implements \renderable, \templatable {
             $timestatus_msg = get_string('timestatus_current', 'theme_urcourses_default');
         }
         else if ($timestatus === 'past') {
-            $str_enddate = date('F j, Y', $this->enddate);
+            if ($this->enddate != 0) {
+                $str_enddate = date('F j, Y', $this->enddate);
+            } else {
+                $termend = strtotime('4 months', $this->startdate);
+                $str_enddate = date('F j, Y', $termend);
+            }
             $timestatus_msg = get_string('timestatus_past', 'theme_urcourses_default', $str_enddate);
         }
         else if ($timestatus === 'future') {
