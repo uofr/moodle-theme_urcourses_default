@@ -59,16 +59,19 @@ class course_visibility_toggle implements \renderable, \templatable {
 
         $timestatus = self::get_course_time_status();
         $timestatus_msg = '';
-        if ($timestatus === 'ongoing' || $timestatus === 'current') {
+        if ($timestatus === 'ongoing') {
             $timestatus_msg = get_string('timestatus_current', 'theme_urcourses_default');
         }
-        else if ($timestatus === 'past') {
-            if ($this->enddate != 0) {
-                $str_enddate = date('F j, Y', $this->enddate);
-            } else {
-                $termend = strtotime('4 months', $this->startdate);
-                $str_enddate = date('F j, Y', $termend);
+        else if ($timestatus === 'current') {
+            if ($this->enddate == 0) {
+                $timestatus_msg = get_string('timestatus_current_noenddate', 'theme_urcourses_default');
             }
+            else {
+                $timestatus_msg = get_string('timestatus_current', 'theme_urcourses_default');
+            }
+        }
+        else if ($timestatus === 'past' && $this->enddate != 0) {
+            $str_enddate = date('F j, Y', $this->enddate);
             $timestatus_msg = get_string('timestatus_past', 'theme_urcourses_default', $str_enddate);
         }
         else if ($timestatus === 'future') {
@@ -143,7 +146,6 @@ class course_visibility_toggle implements \renderable, \templatable {
      */
     private function get_course_time_status() {
         $currenttime = time();
-        $termend = strtotime('4 months', $this->startdate); // Courses without a set enddate end 4 months after the startdate.
         $ongoingdate = 946706400; // Jan 01, 2000, 06:00 (date for ongoing courses)
 
         // Check if the start date is set to the 'ongoing courses' date.
@@ -156,10 +158,6 @@ class course_visibility_toggle implements \renderable, \templatable {
         }
         // If the enddate is set, and the currenttime is after the enddate, the course is in the past.
         if ((isset($this->enddate) && $this->enddate != 0) && $this->enddate < $currenttime) {
-            return 'past';
-        }
-        // If the enddate is not set, and currenttime is after the termend, the course is in the past.
-        if ($termend < $currenttime) {
             return 'past';
         }
 
