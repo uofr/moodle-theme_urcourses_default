@@ -127,6 +127,8 @@ if($user){
     $nourl = new moodle_url('/course/view.php', array('id'=>$course->id));
 
     if($action){
+        $continueurl = new moodle_url('/course/view.php', array('id' => $courseid));
+        $continuebutton = html_writer::link($continueurl, 'Continue', array('class' => 'btn btn-primary'));
 
         echo html_writer::start_tag('div', array('class' => 'alert alert-success modal-dialog'));
      
@@ -138,9 +140,14 @@ if($user){
         }  
 
         echo html_writer::end_tag('div');
+
+        echo html_writer::div($continuebutton, 'd-flex justify-content-center');
+
+    }
+    else {
+        echo $OUTPUT->confirm($message, $yesurl, $nourl);
     }
 
     
-    echo $OUTPUT->confirm($message, $yesurl, $nourl);
     echo $OUTPUT->footer();
 }
