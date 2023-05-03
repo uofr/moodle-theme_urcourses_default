@@ -34,6 +34,7 @@ $string['darkmodepref'] = 'Darkmode preferences';
 
 // Course Availability Toggle
 $string['timestatus_current'] = 'This course is in progress.';
+$string['timestatus_current_noenddate'] = 'This course is in progress (end date not set).';
 $string['timestatus_past'] = 'This course ended {$a}.';
 $string['timestatus_future'] = 'This course begins {$a}.';
 $string['hasenrollment'] = 'There is active enrollment ({$a}).';

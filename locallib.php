@@ -341,7 +341,7 @@ function theme_urcourses_default_is_show_visibility_toggle() {
     $is_on_course_edit = $pageurl->compare($course_editurl, URL_MATCH_BASE);
 
     $is_on_course_page = $is_on_course_view || $is_on_course_edit;
-    $is_user_editing = $PAGE->user_is_editing() || $is_on_course_edit;
+    $is_user_editing = $PAGE->user_is_editing();
     $is_course_visible = $canviewhidden && $COURSE->visible == 0;
 
     return ($is_on_course_page && ($is_user_editing || $is_course_visible));
