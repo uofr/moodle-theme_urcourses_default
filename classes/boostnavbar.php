@@ -50,11 +50,11 @@ class boostnavbar implements \renderable {
 		
         foreach ($this->page->navbar->get_items() as $item) {
             $this->items[] = $item;
-		error_log('navbar node:'.print_r($item->text,1));
+		//error_log('navbar node:'.print_r($item->text,1));
         }
 		$navbar = $this->items;
         $this->prepare_nodes_for_boost();
-		error_log('boost navbar construct');
+		//error_log('boost navbar construct');
     }
 
     /**
@@ -127,7 +127,7 @@ class boostnavbar implements \renderable {
             }
 			
 			
-			error_log('navbar contextlevel is module');
+			//error_log('navbar contextlevel is module');
 			
 			
 			
@@ -165,7 +165,7 @@ class boostnavbar implements \renderable {
             $this->clear_items();
             return;
         }
-		error_log('boost union: context => '.$this->page->context->contextlevel);
+		//error_log('boost union: context => '.$this->page->context->contextlevel);
         // Make sure that the last item is not a link. Not sure if this is always a good idea.
         $this->remove_last_item_action();
     }
