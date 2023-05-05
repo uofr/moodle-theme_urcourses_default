@@ -215,6 +215,7 @@ li {
     margin: 0;
 	margin-bottom: 1em;
 	background-repeat: no-repeat;
+	background-size: 48px;
 }
 
 @media screen and (min-width: 540px) {
