@@ -278,14 +278,9 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
        else  $header->instructnum = "smalllist";
        
        $header->navbar = $this->navbar();
-       
-       
-       //$preheader = $header->courseimage = theme_boost_union_get_course_image($COURSE);
-       //$preheader = $header->courseimage = theme_urcourses_default_get_course_image($COURSE);
-       //$preheader = $header->courseimage = theme_urcourses_default_get_course_image_old($COURSE);
-		   
+
 	$header->courselink = $CFG->wwwroot.'/course/view.php?id='.$COURSE->id;
-	
+    $header->courseimage = theme_urcourses_default_get_course_image_old($COURSE);
        if (!$header->courseimage) {
            $header->courseimage = $OUTPUT->get_generated_image_for_id($COURSE->id);
        }
