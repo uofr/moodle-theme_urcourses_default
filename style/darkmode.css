@@ -73,8 +73,23 @@ a:not([href]):not([class]) {
 caption {
   color: #6a737b; }
 
+.btn, h1, h2{
+  color: #8c8c8c;
+}
+
+h1.h2  {
+  color: #8c8c8c;
+}
+
 h2 {
 	color: #8c8c8c;
+}
+h3, .h3{
+  color: #8c8c8c
+}
+
+.h-100{
+  background-color: #3a3b3c;
 }
 
 hr {
@@ -109,7 +124,7 @@ pre {
   color: #1d2125; }
 
 .table {
-  color: #1d2125; }
+  color: #E4E6EB; }
   .table th,
   .table td {
     border-top: 1px solid #dee2e6; }
@@ -128,8 +143,8 @@ pre {
   background-color: rgba(0, 0, 0, 0.03); }
 
 .table-hover tbody tr:hover {
-  color: #1d2125;
-  background-color: rgba(0, 0, 0, 0.075); }
+  color: #8d8d8d;
+  background-color: rgba(90, 90, 90, 0.823); }
 
 .table-primary,
 .table-primary > th,
@@ -289,7 +304,7 @@ pre {
   border-color: #dee2e6; }
 
 .table-dark {
-  color: #fff;
+  color: #ffffff;
   background-color: #343a40; }
   .table-dark th,
   .table-dark td,
@@ -987,6 +1002,10 @@ select.form-control:focus::-ms-value {
   color: #e4e6eb;
   border-color: rgba(0, 0, 0, 0.1); }
 
+.navbar-light .navbar-toggler-icon{
+  filter: invert(98%) sepia(8%) saturate(534%) hue-rotate(179deg) brightness(96%) contrast(91%);
+}
+
 .navbar-light .navbar-text {
   color: #e4e6eb; }
   .navbar-light .navbar-text a {
@@ -1303,9 +1322,9 @@ select.form-control:focus::-ms-value {
     border-color: #1b1e21; }
 
 .close {
-  color: #000; }
+  color: #E4E6EB; }
   .close:hover {
-    color: #000; }
+    color: white; }
 
 .toast {
   color: #fff;
@@ -1508,10 +1527,10 @@ a.text-light:hover, a.text-light:focus {
   color: #cbd3da !important; }
 
 .text-dark {
-  color: #343a40 !important; }
+  color: #e4e6eb !important; }
 
 a.text-dark:hover, a.text-dark:focus {
-  color: #121416 !important; }
+  color: #8c8c8c !important; }
 
 .text-body {
   color: #1d2125 !important; }
@@ -1632,8 +1651,19 @@ tr.flagged-tag a {
 .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd {
   border-bottom: 1px solid #dee2e6; }
 
+  .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd h5 {
+    color: #E4E6EB; }
+
+  .moodle-dialogue-base .moodle-dialogue .moodle-dialogue-bd{
+    background-color: #242526;
+  }
+
   .moodle-dialogue-base .moodle-dialogue .moodle-dialogue-bd body {
     background-color: #fff; }
+
+  .moodle-dialogue-base .closebutton{
+    color: #E4E6EB; 
+  }
 
 .moodle-dialogue-exception .param-stacktrace label {
   background-color: #eee;
@@ -1664,7 +1694,7 @@ tr.flagged-tag a {
  */
 /* Hide the dialog and it's title */
 .chooserdialogue .moodle-dialogue-wrap .moodle-dialogue-bd {
-  background: #f2f2f2; }
+  background: #3a3b3c; }
 
 /* Various settings for the options area */
 .choosercontainer #chooseform .options {
@@ -1973,7 +2003,7 @@ body.dragging .drop-down {
 
 .block .block-controls .dropdown-toggle {
   /* So that the caret takes the colour of the icon. */
-  color: #1d2125; }
+  color: #E4E6EB; }
 
 /* We put an absolutely positioned div in a relatively positioned div so it takes up no space */
 @media (min-width: 576px) {
@@ -2331,6 +2361,10 @@ span.editinstructions {
 .drawer {
   background-color: #242526; }
 
+.drawer .message-app{
+  background-color: #3a3b3c;
+}
+
 @media (max-width: 991.98px) {
   .drawer-md {
     background-color: #f8f9fa;} }
@@ -2355,6 +2389,14 @@ span.editinstructions {
 
 .file-picker .fp-content {
   background: #fff; }
+
+.file-picker .fp-content-error{
+  background-color: #242526;
+}
+
+.fp-content-center{
+  background-color: #242526;
+}
 
 .file-picker .fp-list .fp-repo.active {
   background: #f2f2f2; }
@@ -2462,6 +2504,9 @@ span.editinstructions {
       border-bottom-color: #fff; }
   .message-app .day {
     color: #1d2125; }
+    .message-app .header-container{
+      background-color: #3a3b3c;
+    }
 
 #chooseqtype .fakeqtypes {
   border-top: 1px solid silver; }
@@ -3011,7 +3056,7 @@ a#hidebankcmd {
 
 .popover-region-container {
   border: 1px solid #ddd;
-  background-color: #fff; }
+  background-color: #373636; }
 
 .popover-region-header-container {
   border-bottom: 1px solid #ddd;
@@ -3019,7 +3064,7 @@ a#hidebankcmd {
 
 .popover-region-footer-container {
   border-top: 1px solid #ddd;
-  background-color: #fff; }
+  background-color: #373636; }
 
 .navbar .count-container {
   background-color: #ca3120;
@@ -3404,6 +3449,11 @@ body.path-mod-mail #mail_container .btn-outline-primary {
   background-color: #3a3b3c;
   border-color: #8f959e;
 }
+
+.body-container .position-relative{
+  background-color: #3a3a38;
+}
+
 .selectize-dropdown, .selectize-dropdown.form-control {
   border: 1px solid #333 !important;
   -webkit-box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
@@ -3569,7 +3619,7 @@ table.quizreviewsummary th.cell {
 .checklistreport .cell.level0,
 .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd,
 .choosercontainer #chooseform .submitbuttons, .form-control {
-    background-color: #3a3a38;
+    background-color: #242526;
 }
 
 .checklistreport .header, .bs-popover-right, .bs-popover-top, .bs-popover-left, .bs-popover-bottom{
@@ -3613,3 +3663,25 @@ ul.oublog-accordion li {
 .generaltable h3 {
 	color: #c5c5c6;
 }
+
+dt{
+  color: #E4E6EB;
+}
+
+img.activityicon{
+  filter: invert(98%) sepia(8%) saturate(534%) hue-rotate(179deg) brightness(96%) contrast(91%);
+}
+
+.fp-pathbar .fp-path-folder{
+  filter: invert(98%) sepia(8%) saturate(534%) hue-rotate(179deg) brightness(96%) contrast(91%);
+}
+
+.navbar.fixed-top .navbar-brand .logo{
+  padding: 45px 155px 0px 0px;; background-color:#E4E6EB;
+  background: url(http://localhost/UofRthings/The_Cooler_Moodle/moodle2/theme/image.php/urcourses_default/theme_urcourses_default/1683578419/Reverse_White) no-repeat;
+  background-size: 100% 100%;
+  vertical-align: middle;
+  width:0px; height: 0px;
+}
+
+/*Reverse_White  One_Colour_Green_Pantone  2Colour_Pantone
