@@ -3678,10 +3678,8 @@ img.activityicon{
 
 .navbar.fixed-top .navbar-brand .logo{
   padding: 45px 155px 0px 0px;; background-color:#E4E6EB;
-  background: url(http://localhost/UofRthings/The_Cooler_Moodle/moodle2/theme/image.php/urcourses_default/theme_urcourses_default/1683578419/Reverse_White) no-repeat;
+  background: url(../pix/Reverse_White.svg) no-repeat;
   background-size: 100% 100%;
   vertical-align: middle;
   width:0px; height: 0px;
 }
-
-/*Reverse_White  One_Colour_Green_Pantone  2Colour_Pantone
