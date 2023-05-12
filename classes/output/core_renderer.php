@@ -460,13 +460,13 @@ public function user_menu($user = null, $withlinks = null) {
     $usedarkmodeurl = ($darkchk == 1) ? 0 : 1;
     //dark mode variable for if on/off to swap icon
     $mynodelabel = ($darkchk == 1) ? "i/item" : "i/marker";
-    $darkstate = ($darkchk == 1) ? "on" : "off";
+    $darkstate = ($darkchk == 1) ? "Disable" : "Enable";
 
     //creating dark mode object 
     $mynode = new stdClass();
     $mynode->itemtype = "link";
     $mynode->url = new moodle_url($this->page->url,array("darkmode"=>$usedarkmodeurl));
-    $mynode->title = "Darkmode is " . $darkstate;
+    $mynode->title = $darkstate . " dark mode";
     $mynode->titleidentifier = "darkmode, theme_urcourses_default";
 	$mynode->pix = $mynodelabel;
 	
