@@ -50,8 +50,9 @@
   --dark: #343a40;}
 
 body {
-  color: #E4E6EB;
-  background-color: #18191A; }
+  color: #e0e1e4;
+  background-color: #18191A;
+  }
 
 a {
   color: #32c875; }
@@ -1703,13 +1704,18 @@ tr.flagged-tag a {
 .choosercontainer #chooseform .option label {
   border-bottom: 1px solid #fff; }
 
+.choosercontainer #chooseform .option .icon{
+  filter: invert(98%) sepia(8%) saturate(534%) hue-rotate(179deg) brightness(96%) contrast(91%);
+}
+
 /* The instruction/help area */
 .jschooser .choosercontainer #chooseform .instruction,
 .jschooser .choosercontainer #chooseform .typesummary {
   background-color: #fff; }
 
 .choosercontainer #chooseform .selected {
-  background-color: #fff; }
+  background-color: #242526;
+  }
 
 /**
  * Module chooser dialogue (moodle-core-chooserdialogue)
@@ -1718,7 +1724,7 @@ tr.flagged-tag a {
  * without javascript enabled
  */
 .modchooser .modal-footer {
-  background: #fff; }
+  background: #242526; }
 
     .modchoosercontainer .optionscontainer .option .optionactions .optionaction,
     .modchoosercontainer .searchresultitemscontainer .option .optionactions .optionaction {
@@ -1726,9 +1732,13 @@ tr.flagged-tag a {
     .modchoosercontainer .optionscontainer .option .optioninfo a,
     .modchoosercontainer .searchresultitemscontainer .option .optioninfo a {
       color: #495057; }
+      .modchoosercontainer .optionscontainer .option .optioninfo a, 
+      .modchoosercontainer .searchresultitemscontainer .option .optioninfo a{
+        color: #e4e6eb;
+      }
 
 .modchooser .modal-body .optionsummary {
-  background-color: #fff; }
+  background-color: #242526; }
   .modchooser .modal-body .optionsummary .actions {
     border-top: 1px solid #dee2e6;
     background: #fff; }
@@ -2634,6 +2644,18 @@ span.editinstructions {
   background-color: #fff;
   border: 1px solid #ddd; }
 
+  #page-mod-attendance-report .attendancereporttable tr:first-of-type th, #page-mod-attendance-manage 
+  .attsessions_manage_table tr:first-of-type th, #page-mod-attendance-preferences #preferencesform tr:first-of-type th, 
+  #page-mod-attendance-index tr:first-of-type th{
+    background: #242526;
+  }
+
+  #page-mod-attendance-report .attendancereporttable tbody tr:nth-of-type(odd), #page-mod-attendance-manage 
+  .attsessions_manage_table tbody tr:nth-of-type(odd), #page-mod-attendance-preferences #preferencesform tbody tr:nth-of-type(odd), 
+  #page-mod-attendance-index tbody tr:nth-of-type(odd){
+    background-color: #3a3b3c;
+  }
+
 a#hidebankcmd {
   color: #3a7a57; }
 
@@ -2923,7 +2945,7 @@ a#hidebankcmd {
     background-color: rgba(0, 0, 0, 0.03); }
   .path-backup .mform .root_setting:nth-of-type(even),
   .path-backup .mform .grouped_settings:nth-of-type(even) {
-    background-color: #fff; }
+    background-color: #3a3b3c; }
 
 .path-backup .backup-section {
   background-color: #242526; }
@@ -2991,6 +3013,10 @@ a#hidebankcmd {
 .path-grade-report-grader .gradefail,
 .path-grade-report-user .gradefail {
   color: #ca3120; }
+
+.path-grade-report-singleview div.reporttable{
+  background-color: #3a3b3c;
+}
 
   .gradingform_rubric.evaluate .criterion .levels .level:hover, .gradingform_rubric.evaluate .criterion .levels .level.checked {
     background: #dff0d8; }
@@ -3450,6 +3476,10 @@ body.path-mod-mail #mail_container .btn-outline-primary {
   border-color: #8f959e;
 }
 
+body.path-mod h2 img.iconlarge{
+  filter: invert(98%) sepia(8%) saturate(534%) hue-rotate(179deg) brightness(96%) contrast(91%);
+}
+
 .body-container .position-relative{
   background-color: #3a3a38;
 }
@@ -3620,6 +3650,7 @@ table.quizreviewsummary th.cell {
 .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd,
 .choosercontainer #chooseform .submitbuttons, .form-control {
     background-color: #242526;
+    color: #E4E6EB ;
 }
 
 .checklistreport .header, .bs-popover-right, .bs-popover-top, .bs-popover-left, .bs-popover-bottom{
@@ -3662,6 +3693,9 @@ ul.oublog-accordion li {
 
 .generaltable h3 {
 	color: #c5c5c6;
+}
+
+.icon{
 }
 
 dt{
