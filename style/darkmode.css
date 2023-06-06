@@ -58,6 +58,7 @@ a {
   color: #32c875; }
   a:hover {
     color: #3a7a57;
+	background-color: #ffc82e;
   }
 
 .mycourseheader a{
@@ -1123,8 +1124,8 @@ select.form-control:focus::-ms-value {
     background-color: #9e2619; }
 
 .badge-light {
-  color: #1d2125;
-  background-color: #f8f9fa; }
+	color: #e4e6eb;
+	background-color: #666c71; }
   a.badge-light:hover, a.badge-light:focus {
     color: #1d2125;
     background-color: #dae0e5; }
@@ -2347,7 +2348,7 @@ span.editinstructions {
       background-color: #fff; }
 
 .description .course-description-item {
-  background-color: #f8f9fa; }
+  background-color: #181818; }
   .description .course-description-item .description-inner {
     border-bottom: 1px solid #dee2e6; }
 
@@ -2356,7 +2357,7 @@ span.editinstructions {
   border-radius: 0.5rem;
   /* Prevent bootstrap strech-link from covering the inplace editable button using z-index. */ }
   .activity-item:not(.activityinline) {
-    border: 1px solid #dee2e6; }
+    border: 1px solid #666666; }
   .activity-item.hiddenactivity {
     background-color: #3a3b3c; }
   .editing .activity-item:hover {
@@ -3416,8 +3417,6 @@ div.editor_atto_toolbar button .icon {
     color: #fff;
     background-color: #6a737b;
     border-color: #6a737b; }
-  .btn-outline-secondary.disabled, .btn-outline-secondary:disabled {
-    color: #6a737b; }
   .btn-outline-secondary:not(:disabled):not(.disabled):active, .btn-outline-secondary:not(:disabled):not(.disabled).active,
   .show > .btn-outline-secondary.dropdown-toggle {
     color: #fff;
@@ -3716,4 +3715,8 @@ img.activityicon{
   background-size: 100% 100%;
   vertical-align: middle;
   width:0px; height: 0px;
+}
+
+.syllabuslinkdetails {
+  color: #e0e1e4;
 }
