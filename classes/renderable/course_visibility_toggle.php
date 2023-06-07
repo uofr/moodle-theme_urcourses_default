@@ -80,12 +80,13 @@ class course_visibility_toggle implements \renderable, \templatable {
         }
 
         $enrollment_msg = '';
+		/*
         if (empty($this->enrollment)) {
             $enrollment_msg = get_string('noenrollment', 'theme_urcourses_default');
         }
         else {
             $enrollment_msg = get_string('hasenrollment', 'theme_urcourses_default', $this->enrollment['name']);
-        }
+        }*/
 
         $availability_button_msg = '';
         if ($this->is_visible) {
@@ -96,20 +97,14 @@ class course_visibility_toggle implements \renderable, \templatable {
         }
 
         $availability_msg = '';
-        if (empty($this->enrollment) && $this->is_visible) {
-            $availability_msg = get_string('visible_noenrollment', 'theme_urcourses_default');
-        }
-        else if (empty($this->enrollment) && !$this->is_visible) {
-            $availability_msg = get_string('notvisible_noenrollment', 'theme_urcourses_default');
-        }
-        else if ($this->is_visible) {
+        if ($this->is_visible) {
             $availability_msg = get_string('visible', 'theme_urcourses_default', $this->enrollment['name']);
         }
         else {
             $availability_msg = get_string('notvisible', 'theme_urcourses_default', $this->enrollment['name']);
         }
 
-        if (empty($this->enrollment)) {
+        
             $modalstrings = array(
                 'showtitle' => get_string('showtitle', 'theme_urcourses_default'),
                 'showbody' => get_string('showbody_noenrollment', 'theme_urcourses_default'),
@@ -117,16 +112,7 @@ class course_visibility_toggle implements \renderable, \templatable {
                 'hidebody' => get_string('hidebody_noenrollment', 'theme_urcourses_default'),
                 'confirmbutton' => get_string('confirmbutton', 'theme_urcourses_default')
             );
-        }
-        else {
-            $modalstrings = array(
-                'showtitle' => get_string('showtitle', 'theme_urcourses_default'),
-                'showbody' => get_string('showbody', 'theme_urcourses_default', $this->enrollment['name']),
-                'hidetitle' => get_string('hidetitle', 'theme_urcourses_default'),
-                'hidebody' => get_string('hidebody', 'theme_urcourses_default', $this->enrollment['name']),
-                'confirmbutton' => get_string('confirmbutton', 'theme_urcourses_default')
-            );
-        }
+        
 
         $data->timestatus_msg = $timestatus_msg;
         $data->enrollment_msg = $enrollment_msg;

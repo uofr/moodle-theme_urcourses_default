@@ -451,6 +451,7 @@ public function user_menu($user = null, $withlinks = null) {
     // Get some navigation opts.
     $opts = user_get_user_navigation_info($user, $this->page);
 	//error_log('opts:'.print_r($opts,1));
+	/*
     if ($usedarkmode = $DB->get_record('theme_urcourses_darkmode', array('userid'=>$USER->id, 'darkmode'=>1))) {
         //changes url to opposite of whatever the toggle currently is to set dark mode in db under columns2.php
         $darkchk = $usedarkmode->darkmode;
@@ -533,7 +534,7 @@ public function user_menu($user = null, $withlinks = null) {
 	}
 	
     //$opts->navitems[] = $lnode; //placing log out back in at the end
-	
+	*/
 	
     $avatarclasses = "avatars";
     $avatarcontents = html_writer::span($opts->metadata['useravatar'], 'avatar current');
