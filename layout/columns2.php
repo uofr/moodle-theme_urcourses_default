@@ -102,7 +102,7 @@ if ($setdarkmode > -1) {
     
  }
 
- $darkmodecheck = $DB->get_record('theme_conservatory_darkmode', array('userid'=>$USER->id, 'darkmode'=>1));
+ $darkmodecheck = false; //$DB->get_record('theme_conservatory_darkmode', array('userid'=>$USER->id, 'darkmode'=>1));
 
 //check if user has darkmode on in database and include if so
 if($darkmodecheck){

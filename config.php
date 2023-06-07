@@ -35,11 +35,11 @@ $THEME->scss = function($theme) {
 
 // The $THEME->layouts setting is not duplicated here as they are properly inherited from theme_boost.
 
-$THEME->parents = ['boost','boost_union'];
+$THEME->parents = ['boost','boost_union','urcourses_default'];
 $THEME->enable_dock = false;
-$THEME->extrascsscallback = 'theme_boost_union_get_extra_scss';
-$THEME->prescsscallback = 'theme_boost_union_get_pre_scss';
-$THEME->precompiledcsscallback = 'theme_boost_union_get_precompiled_css';
+$THEME->extrascsscallback = 'theme_urcourses_default_get_extra_scss';
+$THEME->prescsscallback = 'theme_urcourses_default_get_pre_scss';
+$THEME->precompiledcsscallback = 'theme_urcourses_default_get_precompiled_css';
 $THEME->yuicssmodules = array();
 $THEME->rendererfactory = 'theme_overridden_renderer_factory';
 $THEME->requiredblocks = '';

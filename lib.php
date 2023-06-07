@@ -32,8 +32,8 @@ require_once($CFG->dirroot.'/theme/boost_union/locallib.php');
  */
 function theme_uofr_conservatory_get_main_scss_content($theme) {
     global $CFG;
-
-    $parentconfig = theme_config::load('boost_union');
+	
+	$parentconfig = theme_config::load('boost_union');
 	
     $scss = '';
     $filename = !empty($parentconfig->settings->preset) ? $parentconfig->settings->preset : null;
@@ -48,6 +48,8 @@ function theme_uofr_conservatory_get_main_scss_content($theme) {
         $scss .= file_get_contents($CFG->dirroot . '/theme/boost_union/scss/preset/default.scss');
     }
     $scss .= file_get_contents($CFG->dirroot . '/theme/boost_union/scss/boost_union/post.scss');
+	
+    $scss .= file_get_contents($CFG->dirroot . '/theme/urcourses_default/scss/post.scss');
     $scss .= file_get_contents($CFG->dirroot . '/theme/uofr_conservatory/scss/post.scss');
 
     return $scss;
@@ -235,7 +237,7 @@ function theme_uofr_conservatory_pluginfile($course, $cm, $context, $filearea, $
         send_file_not_found();
     }
 }
-
+/*
 function theme_uofr_conservatory_extend_navigation_user_settings($navigation, $user, $usercontext, $course, $coursecontext) {
     global $USER, $PAGE;
 	
@@ -258,3 +260,4 @@ function theme_uofr_conservatory_extend_navigation_user_settings($navigation, $u
         }
 		//}
 }
+*/

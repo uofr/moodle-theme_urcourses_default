@@ -16,324 +16,182 @@
 /**
  * Theme Boost Campus - Locallib file
  *
- * @package   theme_uofr_conservatory
+ * @package   theme_urcourses_default
  * @copyright 2017 Kathrin Osswald, Ulm University kathrin.osswald@uni-ulm.de
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- defined('MOODLE_INTERNAL') || die();
  
-/**
- * Create information needed for the imagearea.mustache file.
- *
- * @return array
- */
-function theme_uofr_conservatory_get_imageareacontent() {
-    // Get cache.
-    $themeboostcampuscache = cache::make('theme_uofr_conservatory', 'imagearea');
-    // If cache is filled, return the cache.
-    $cachecontent = $themeboostcampuscache->get('imageareadata');
-    if (!empty($cachecontent)) {
-        return $cachecontent;
-    } else { // Create cache.
-        // Fetch context.
-        $systemcontext = \context_system::instance();
-        // Get filearea.
-        $fs = get_file_storage();
-        // Get all files from filearea.
-        $files = $fs->get_area_files($systemcontext->id, 'theme_uofr_conservatory', 'imageareaitems', false, 'itemid', false);
+ function theme_uofr_conservatory_get_course_related_hints() {
+	 return theme_boost_union_get_course_related_hints();
+ }
 
-        // Only continue processing if there are files in the filearea.
-        if (!empty($files)) {
-            // Get the content from the setting imageareaitemslink and explode it to an array by the delimiter "new line".
-            // The string contains: the image identifier (uploaded file name) and the corresponding link URL.
-            $lines = explode("\n", get_config('theme_uofr_conservatory', 'imageareaitemslink'));
-            // Parse item settings.
-            foreach ($lines as $line) {
-                $line = trim($line);
-                // If the setting is empty.
-                if (strlen($line) == 0) {
-                    // Create an array with a dummy entry because the function array_key_exists need a
-                    // not empty array for parameter 2.
-                    $links = array('foo');
-                    continue;
-                } else {
-                    $settings = explode("|", $line);
-                    // Check if both parameters are set.
-                    if (!empty($settings[1])) {
-                        // The name of the image is the key for the URL that will be set.
-                        $links[$settings[0]] = $settings[1];
-                    }
-                }
-            }
-            // Traverse the files.
-            foreach ($files as $file) {
-                // Get the Moodle url for each file.
-                $url = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(),
-                    $file->get_itemid(), $file->get_filepath(), $file->get_filename());
-                // Get the path to the file.
-                $filepath = $url->get_path();
-                // Get the filename.
-                $filename = $file->get_filename();
-                // If filename and key value from the imageareaitemslink setting entry match.
-                if (array_key_exists($filename, $links)) {
-                    // Set the file and the corresponding link.
-                    $imageareacache[] = array('filepath' => $filepath, 'linkpath' => $links[$filename]);
-                    // Fill the cache.
-                    $themeboostcampuscache->set('imageareadata', $imageareacache);
-                } else { // Just add the file without a link.
-                    $imageareacache[] = array('filepath' => $filepath);
-                    // Fill the cache.
-                    $themeboostcampuscache->set('imageareadata', $imageareacache);
-                }
-            }
-            // Sort array alphabetically ascending to the key "filepath".
-            usort($imageareacache, function($a, $b) {
-                return strcmp($a["filepath"], $b["filepath"]);
-            });
-            return $imageareacache;
-        } else { // If no images are uploaded, then cache an empty array.
-            return $themeboostcampuscache->set('imageareadata', array());
-        }
-    }
+
+ /**
+  * Build the link to the imprint page.
+  *
+  * @return string.
+  */
+ function theme_uofr_conservatory_get_imprint_link() {
+	 return theme_boost_union_get_imprint_link();
+ }
+
+ /**
+  * Build the page title of the imprint page.
+  *
+  * @return string.
+  */
+ function theme_uofr_conservatory_get_imprint_pagetitle() {
+	 return theme_boost_union_get_imprint_pagetitle();
+ }
+ 
+ /**
+  * Helper function to check if a given info banner should be shown on this page.
+  * This function checks
+  * a) if the banner is enabled at all
+  * b) if the banner has any content (i.e. is not empty)
+  * b) if the banner is configured to be shown on the given page
+  * c) if the banner is configured to be shown now (in case it is a time-based banner)
+  *
+  * @copyright  2022 Moodle an Hochschulen e.V. <kontakt@moodle-an-hochschulen.de>
+  * @copyright  based on code from theme_boost_campus by Kathrin Osswald.
+  *
+  * @param int $bannerno The counting number of the info banner.
+  *
+  * @return boolean.
+  */
+ function theme_uofr_conservatory_infobanner_is_shown_on_page($bannerno) {
+	 return theme_boost_union_infobanner_is_shown_on_page($bannerno);
+ }
+ 
+ 
+ /**
+  * Helper function to compare two infobanner orders.
+  *
+  * @param int $a The first value
+  * @param int $b The second value
+  *
+  * @return boolean.
+  */
+ function theme_uofr_conservatory_infobanner_compare_order($a, $b) {
+	 return theme_boost_union_infobanner_compare_order($a, $b);
+ }
+ 
+  
+ /**
+  * Helper function to reset the visibility of a given info banner.
+  *
+  * @param int $no The number of the info banner.
+  *
+  * @return bool True if everything went fine, false if at least one user couldn't be resetted.
+  */
+ function theme_uofr_conservatory_infobanner_reset_visibility($no) {
+	 return theme_boost_union_infobanner_reset_visibility($no);
+} 
+  
+  
+/**
+ * Get the random number for displaying the background image on the login page randomly.
+ *
+ * @return int|null
+ * @throws coding_exception
+ * @throws dml_exception
+ */
+function theme_uofr_conservatory_get_random_loginbackgroundimage_number() {
+	return theme_boost_union_get_random_loginbackgroundimage_number();
+}
+  
+  
+/**
+ * Get a random class for body tag for the background image of the login page.
+ *
+ * @return string
+ */
+function theme_uofr_conservatory_get_random_loginbackgroundimage_class() {
+	return theme_boost_union_get_random_loginbackgroundimage_class();
+}	
+	
+/**
+ * Return the files from the loginbackgroundimage file area.
+ * This function always loads the files from the filearea which is not really performant.
+ * However, we accept this at the moment as it is only invoked on the login page.
+ *
+ * @return array|null
+ * @throws coding_exception
+ * @throws dml_exception
+ */
+function theme_uofr_conservatory_get_loginbackgroundimage_files() {
+	return theme_boost_union_get_loginbackgroundimage_files();
+}	
+
+
+
+/**
+ * Add background images from setting 'loginbackgroundimage' to SCSS.
+ *
+ * @return string
+ */
+function theme_uofr_conservatory_get_loginbackgroundimage_scss() {
+	return theme_boost_union_get_loginbackgroundimage_scss();
 }
 
 
 /**
- * Returns a modified flat_navigation object.
+ * Get the text that should be displayed for the randomly displayed background image on the login page.
  *
- * @param flat_navigation $flatnav The flat navigation object.
- * @return flat_navigation.
+ * @return array (of two strings, holding the text and the text color)
+ * @throws coding_exception
+ * @throws dml_exception
  */
-function theme_uofr_conservatory_process_flatnav(flat_navigation $flatnav) {
-    global $USER;
-    // If the setting defaulthomepageontop is enabled.
-    if (get_config('theme_uofr_conservatory', 'defaulthomepageontop') == 'yes') {
-        // Only proceed processing if we are in a course context.
-        if (($coursehomenode = $flatnav->find('coursehome', global_navigation::TYPE_CUSTOM)) != false) {
-            // If the site home is set as the default homepage by the admin.
-            if (get_config('core', 'defaulthomepage') == HOMEPAGE_SITE) {
-                // Return the modified flat_navigation.
-                $flatnavreturn = theme_uofr_conservatory_set_node_on_top($flatnav, 'home', $coursehomenode);
-            } else if (get_config('core', 'defaulthomepage') == HOMEPAGE_MY) { // If the dashboard is set as the default homepage
-                // by the admin.
-                // Return the modified flat_navigation.
-                $flatnavreturn = theme_uofr_conservatory_set_node_on_top($flatnav, 'myhome', $coursehomenode);
-            } else if (get_config('core', 'defaulthomepage') == HOMEPAGE_USER) { // If the admin defined that the user can set
-                // the default homepage for himself.
-                // Site home.
-                if (get_user_preferences('user_home_page_preference') == 0) {
-                    // Return the modified flat_navigtation.
-                    $flatnavreturn = theme_uofr_conservatory_set_node_on_top($flatnav, 'home', $coursehomenode);
-                } else if (get_user_preferences('user_home_page_preference') == 1 || // Dashboard.
-                    get_user_preferences('user_home_page_preference') === false) { // If no user preference is set,
-                    // use the default value of core setting default homepage (Dashboard).
-                    // Return the modified flat_navigtation.
-                    $flatnavreturn = theme_uofr_conservatory_set_node_on_top($flatnav, 'myhome', $coursehomenode);
-                } else { // Should not happen.
-                    // Return the passed flat navigation without changes.
-                    $flatnavreturn = $flatnav;
-                }
-            } else { // Should not happen.
-                // Return the passed flat navigation without changes.
-                $flatnavreturn = $flatnav;
-            }
-        } else { // Not in course context.
-            // Return the passed flat navigation without changes.
-            $flatnavreturn = $flatnav;
-        }
-    } else { // Defaulthomepageontop not enabled.
-        // Return the passed flat navigation without changes.
-        $flatnavreturn = $flatnav;
-    }
-
-    return $flatnavreturn;
+function theme_uofr_conservatory_get_loginbackgroundimage_text() {
+	return theme_boost_union_get_loginbackgroundimage_text();
 }
 
 /**
- * Modifies the flat_navigation to add the node on top.
+ * Return the files from the additionalresources file area as templatecontext structure.
+ * It was designed to compose the files for the settings-additionalresources-filelist.mustache template.
+ * This function always loads the files from the filearea which is not really performant.
+ * Thus, you have to take care where and how often you use it (or add some caching).
  *
- * @param flat_navigation $flatnav The flat navigation object.
- * @param string $nodename The name of the node that is to modify.
- * @param navigation_node $beforenode The node before which the to be modified node shall be added.
- * @return flat_navigation.
+ * @return array|null
+ * @throws coding_exception
+ * @throws dml_exception
  */
-function theme_uofr_conservatory_set_node_on_top(flat_navigation $flatnav, $nodename, $beforenode) {
-    // Get the node for which the sorting shall be changed.
-    $pageflatnav = $flatnav->find($nodename, global_navigation::TYPE_SYSTEM);
-
-    // If user is logged in as a guest pageflatnav is false. Only proceed here if the result is true.
-    if (!empty($pageflatnav)) {
-        // Set the showdivider of the new top node to false that no empty nav-element will be created.
-        $pageflatnav->set_showdivider(false);
-        // Add the showdivider to the coursehome node as this is the next one and this will add a margin top to it.
-        $beforenode->set_showdivider(true);
-        // Remove the site home navigation node that it does not appear twice in the menu.
-        $flatnav->remove($nodename);
-        // Add the saved site home node before the $beforenode.
-        $flatnav->add($pageflatnav, $beforenode->key);
-    }
-
-    // Return the modified changes.
-    return $flatnav;
-}
-
+function theme_uofr_conservatory_get_additionalresources_templatecontext() {
+	return theme_boost_union_get_additionalresources_templatecontext();
+}	
 
 /**
- * Provides the node for the in-course course or activity settings.
+ * Return the files from the customfonts file area as templatecontext structure.
+ * It was designed to compose the files for the settings-customfonts-filelist.mustache template.
+ * This function always loads the files from the filearea which is not really performant.
+ * Thus, you have to take care where and how often you use it (or add some caching).
  *
- * @return navigation_node.
+ * @return array|null
+ * @throws coding_exception
+ * @throws dml_exception
  */
-function theme_uofr_conservatory_get_incourse_settings() {
-    global $COURSE, $PAGE;
-    // Initialize the node with false to prevent problems on pages that do not have a courseadmin node.
-    $node = false;
-    // If setting showsettingsincourse is enabled.
-    if (get_config('theme_uofr_conservatory', 'showsettingsincourse') == 'yes') {
-        // Only search for the courseadmin node if we are within a course or a module context.
-        if ($PAGE->context->contextlevel == CONTEXT_COURSE || $PAGE->context->contextlevel == CONTEXT_MODULE) {
-            // Get the courseadmin node for the current page.
-            $node = $PAGE->settingsnav->find('courseadmin', navigation_node::TYPE_COURSE);
-            // Check if $node is not empty for other pages like for example the langauge customization page.
-            if (!empty($node)) {
-                // If the setting 'incoursesettingsswitchtoroleposition' is set either set to the option 'yes'
-                // or to the option 'both', then add these to the $node.
-                if (((get_config('theme_uofr_conservatory', 'incoursesettingsswitchtoroleposition') == 'yes') ||
-                    (get_config('theme_uofr_conservatory', 'incoursesettingsswitchtoroleposition') == 'both'))
-                    && !is_role_switched($COURSE->id)) {
-                    // Build switch role link
-                    // We could only access the existing menu item by creating the user menu and traversing it.
-                    // So we decided to create this node from scratch with the values copied from Moodle core.
-                    $roles = get_switchable_roles($PAGE->context);
-                    if (is_array($roles) && (count($roles) > 0)) {
-                        // Define the properties for a new tab.
-                        $properties = array('text' => get_string('switchroleto', 'theme_uofr_conservatory'),
-                                            'type' => navigation_node::TYPE_CONTAINER,
-                                            'key'  => 'switchroletotab');
-                        // Create the node.
-                        $switchroletabnode = new navigation_node($properties);
-                        // Add the tab to the course administration node.
-                        $node->add_node($switchroletabnode);
-                        // Add the available roles as children nodes to the tab content.
-                        foreach ($roles as $key => $role) {
-                            $properties = array('action' => new moodle_url('/course/switchrole.php',
-                                array('id'         => $COURSE->id,
-                                      'switchrole' => $key,
-                                      'returnurl'  => $PAGE->url->out_as_local_url(false),
-                                      'sesskey'    => sesskey())),
-                                                'type'   => navigation_node::TYPE_CUSTOM,
-                                                'text'   => $role);
-                            $switchroletabnode->add_node(new navigation_node($properties));
-                        }
-                    }
-                }
-            }
-        }
-        return $node;
-    }
+function theme_uofr_conservatory_get_customfonts_templatecontext() {
+	return theme_boost_union_get_customfonts_templatecontext();
 }
 
 /**
- * Provides the node for the in-course settings for other contexts.
+ * Helper function which makes sure that all webfont file types are registered in the system.
+ * The webfont file types need to be registered in the system, otherwise the admin settings filepicker wouldn't allow restricting
+ * the uploadable file types to webfonts only.
  *
- * @return navigation_node.
+ * @return void
+ * @throws coding_exception
  */
-function theme_uofr_conservatory_get_incourse_activity_settings() {
-    global $PAGE;
-    $context = $PAGE->context;
-    $node = false;
-    // If setting showsettingsincourse is enabled.
-    if (get_config('theme_uofr_conservatory', 'showsettingsincourse') == 'yes') {
-        // Settings belonging to activity or resources.
-        if ($context->contextlevel == CONTEXT_MODULE) {
-            $node = $PAGE->settingsnav->find('modulesettings', navigation_node::TYPE_SETTING);
-        } else if ($context->contextlevel == CONTEXT_COURSECAT) {
-            // For course category context, show category settings menu, if we're on the course category page.
-            if ($PAGE->pagetype === 'course-index-category') {
-                $node = $PAGE->settingsnav->find('categorysettings', navigation_node::TYPE_CONTAINER);
-            }
-        } else {
-            $node = false;
-        }
-    }
-    return $node;
-}
+function theme_uofr_conservatory_register_webfonts_filetypes() {
+	return theme_boost_union_register_webfonts_filetypes();
+}	
 
-/**
- * Build the guest access hint HTML code.
+/* Get the course image if added to course.
  *
- * @param int $courseid The course ID.
- * @return string.
+ * @param object $course
+ * @return string url of course image
  */
-function theme_uofr_conservatory_get_course_guest_access_hint($courseid) {
-    global $CFG;
-    require_once($CFG->dirroot . '/enrol/self/lib.php');
-
-    $html = '';
-    $instances = enrol_get_instances($courseid, true);
-    $plugins = enrol_get_plugins(true);
-    foreach ($instances as $instance) {
-        if (!isset($plugins[$instance->enrol])) {
-            continue;
-        }
-        $plugin = $plugins[$instance->enrol];
-        if ($plugin->show_enrolme_link($instance)) {
-            $html = html_writer::tag('div', get_string('showhintcourseguestaccesslink',
-                'theme_uofr_conservatory', array('url' => $CFG->wwwroot . '/enrol/index.php?id=' . $courseid)));
-            break;
-        }
-    }
-
-    return $html;
+function theme_uofr_conservatory_get_course_image($course) {
+	return theme_boost_union_get_course_image($course);
 }
-
-
-    /**
-     * Checks if the current user is an instructor.
-     * Users with the teacher, editingteacher, manager, and coursecreator roles are considered instructors.
-     * If we are in the site context, check if the user is an instructor anywhere.
-     * Otherwiser, check if the user is an instructor in the given context.
-     *
-     * @return bool
-     */
-    function theme_uofr_conservatory_user_is_instructor() {
-        global $USER, $DB;
-        
-        $role_query_cond = 'shortname = :a OR shortname = :b OR shortname = :c OR shortname = :d';
-        $role_query_arr = ['a' => 'editingteacher', 'b' => 'teacher', 'c' => 'manager', 'd' => 'coursecreator'];
-        $instructor_roles = $DB->get_fieldset_select('role', 'id', $role_query_cond, $role_query_arr);
-        $roleassign_query_cond = 'userid = :uid AND (roleid = :r0 OR roleid = :r1 OR roleid = :r2 OR roleid = :r3)';
-        $roleassign_query_arr = [
-        'uid' => $USER->id,
-        'r0' => $instructor_roles[0],
-        'r1' => $instructor_roles[1],
-        'r2' => $instructor_roles[2],
-        'r3' => $instructor_roles[3]
-        ];
-        
-        return $DB->record_exists_select('role_assignments', $roleassign_query_cond, $roleassign_query_arr);
-    }
-
-
-    /* Get the course image if added to course.
-     *
-     * @param object $course
-     * @return string url of course image
-     */
-    function theme_uofr_conservatory_get_course_image($course) {
-        global $CFG;
-        $courseinlist = new \core_course_list_element($course);
-        foreach ($courseinlist->get_course_overviewfiles() as $file) {
-            if ($file->is_valid_image()) {
-                $pathcomponents = [
-                    '/pluginfile.php',
-                    $file->get_contextid(),
-                    $file->get_component(),
-                    $file->get_filearea() . $file->get_filepath() . $file->get_filename()
-                ];
-                $path = implode('/', $pathcomponents);
-                return (new moodle_url($path))->out();
-            }
-        }
-        return false;
-    }
