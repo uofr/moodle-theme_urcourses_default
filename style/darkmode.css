@@ -2022,7 +2022,7 @@ body.dragging .drop-down {
 
 .block .block-cards .course-summaryitem {
   border: 1px solid #dee2e6;
-  background-color: #fff; }
+  background-color: #242526; }
 
 .block .block-cards span.categoryname,
 .block .block-cards .btn-link {
@@ -2347,7 +2347,7 @@ span.editinstructions {
       background-color: #fff; }
 
 .description .course-description-item {
-  background-color: #f8f9fa; }
+  background-color: #3a3b3c; }
   .description .course-description-item .description-inner {
     border-bottom: 1px solid #dee2e6; }
 
@@ -3708,6 +3708,18 @@ img.activityicon{
 
 .fp-pathbar .fp-path-folder{
   filter: invert(98%) sepia(8%) saturate(534%) hue-rotate(179deg) brightness(96%) contrast(91%);
+}
+
+.h5p-hub .h5p-hub-panel{
+  background-color:#242526;
+}
+
+.h5p-hub .h5p-hub-client-drop-down{
+  background-color: #242526;
+}
+
+.h5p-hub .h5p-hub-navbar{
+  color: white;
 }
 
 .navbar.fixed-top .navbar-brand .logo{
