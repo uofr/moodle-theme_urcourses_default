@@ -2746,7 +2746,10 @@ a#hidebankcmd {
   border-bottom: 1px solid #dee2e6; }
 
   .path-mod .automatic-completion-conditions .badge.badge-light {
-    background-color: #e9ecef !important; }
+	color: #e4e6eb;
+	background-color: #666c71 !important;
+	mix-blend-mode: normal;
+ }
 
 .forumpost {
   border: 1px solid #dee2e6; }
