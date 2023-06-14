@@ -197,7 +197,9 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
        
        $headertext = (!empty($this->context_header())) ? $this->context_header() : $sitecontextheader;
 
-       
+	   // try to avoid problems with special characters in titles ( & )
+       $headertext = html_entity_decode($headertext);
+	   
        //Little hack to add back missing header for dashboard
        //The context header the comes through is not formated properly
        if($this->page->pagelayout=="mydashboard"&&strpos($PAGE->url,'my/indexsys.php')===false){
