@@ -60,6 +60,10 @@ a {
     color: #3a7a57;
   }
 
+  a:not([class]):focus{
+    color: #3a7a57;
+  }
+
 .mycourseheader a{
   color: #e4e6eb;
 }
@@ -334,7 +338,7 @@ pre {
   .form-control::placeholder {
     color: #6a737b; }
   .form-control:disabled, .form-control[readonly] {
-    background-color: #e9ecef; }
+    background-color: #161310; }
 
 select.form-control:focus::-ms-value {
   color: #495057;
@@ -895,7 +899,7 @@ select.form-control:focus::-ms-value {
 .custom-select {
   color: #e4e6eb;
   border: 1px solid #8f959e; 
-  background: #3a3b3c url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") right .75rem center / 8px 10px no-repeat;
+  background: #3a3b3c url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3e%3cpath fill='%23cbc5bf' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") right .75rem center / 8px 10px no-repeat;
 }
   .custom-select:focus {
     border-color: #5babf2;
@@ -1590,7 +1594,7 @@ a:not([class]).focus,
 a:not([class]):focus,
 .activityinstance > a.focus,
 .activityinstance > a:focus {
-  color: #1d2125;
+  color: #3a7a57;
   background-color: #d2e8fb; }
 
 .red,
@@ -2014,6 +2018,10 @@ body.dragging .drop-down {
 .block .block-controls .dropdown-toggle {
   /* So that the caret takes the colour of the icon. */
   color: #E4E6EB; }
+
+.block_writinghelp .card-text a h4{
+  color: #32c875;
+}
 
 /* We put an absolutely positioned div in a relatively positioned div so it takes up no space */
 @media (min-width: 576px) {
@@ -2752,6 +2760,10 @@ a#hidebankcmd {
 
 .format-topcoll #region-main {
   background-color: #242526;
+}
+
+.format-designer .designer .section .content .section li.activity .activityinstance .aalink{
+  color: #c4c4c4;
 }
  
 .path-mod .activity-information .activity-dates {
@@ -3776,6 +3788,10 @@ img.activityicon{
   background-size: 100% 100%;
   vertical-align: middle;
   width:0px; height: 0px;  
+}
+
+.link-layout .img-element .activityiconcontainer.img-block .activityicon, .link-layout .img-element .activityiconcontainer.img-block .icon{
+  filter: invert(98%) sepia(8%) saturate(534%) hue-rotate(179deg) brightness(96%) contrast(91%);
 }
 
 /*Reverse_White  One_Colour_Green_Pantone  2Colour_Pantone
