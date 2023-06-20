@@ -3783,11 +3783,26 @@ img.activityicon{
 }
 
 .navbar.fixed-top .navbar-brand .logo{
-  padding: 45px 155px 0px 0px;; background-color:#E4E6EB;
+  /*filter: invert(1) grayscale(100%) contrast(170%) brightness(100%) hue-rotate(180deg);
+  /* padding: 45px 155px 0px 0px;; background-color:#E4E6EB; 
   background: url(https://urcourses.uregina.ca/theme/urcourses_default/pix/Reverse_White.svg) no-repeat;
   background-size: 100% 100%;
   vertical-align: middle;
-  width:0px; height: 0px;  
+  width:0px; height: 0px;  */
+}
+
+img[src*="http://localhost/UofRthings/Moodle_darkmode_fixes/moodle2/theme/image.php?theme=urcourses_default&amp;component=theme_urcourses_default&amp;image=logo"]{
+    background: url(https://urcourses.uregina.ca/theme/urcourses_default/pix/Reverse_White.svg) no-repeat;
+    background-size: 92% auto; 
+    background-position: center center;
+    object-position: -99999px 99999px;
+}
+
+img[src*="https://urcourses.uregina.ca/theme/image.php/urcourses_default/theme_urcourses_default/1686233937/logo"]{
+  background: url(https://urcourses.uregina.ca/theme/urcourses_default/pix/Reverse_White.svg) no-repeat;
+  background-size: 92% auto; 
+  background-position: center center;
+  object-position: -99999px 99999px;
 }
 
 .link-layout .img-element .activityiconcontainer.img-block .activityicon, .link-layout .img-element .activityiconcontainer.img-block .icon{
