@@ -2571,7 +2571,7 @@ span.editinstructions {
     border: 1px solid #008196; }
 
 .que .info {
-  background-color: #f8f9fa;
+  background-color: #3a3b3c;
   border: 1px solid #cad0d7; }
 
 .que .outcome,
@@ -2821,7 +2821,7 @@ a#hidebankcmd {
   color: #343a40; }
 
 .path-mod-quiz #mod_quiz_navblock .qnbutton {
-  background-color: #fff; }
+  background-color: #18191A; }
 
 .path-mod-quiz #mod_quiz_navblock span.qnbutton {
   background-color: #e9ecef;
@@ -2832,7 +2832,7 @@ a#hidebankcmd {
 
 .path-mod-quiz #mod_quiz_navblock .qnbutton.notyetanswered .trafficlight,
 .path-mod-quiz #mod_quiz_navblock .qnbutton.invalidanswer .trafficlight {
-  background-color: #fff; }
+  background-color: #18191A; }
 
 .path-mod-quiz #mod_quiz_navblock .qnbutton.correct .trafficlight {
   background-color: #357a32; }
@@ -2854,7 +2854,7 @@ a#hidebankcmd {
 
   #quiz-timer-wrapper #quiz-timer {
     border: 1px solid #ca3120;
-    background-color: #fff; }
+    background-color: #18191A; }
 
 #quiz-timer-wrapper #quiz-timer.timeleft0 {
   background-color: #ca3120;
@@ -3782,6 +3782,14 @@ img.activityicon{
 
 .h5p-hub .h5p-hub-navbar{
   color: white;
+}
+
+.h5p-hub .h5p-hub-content-type-section{
+  background-color: #000;
+}
+
+.h5p-joubelui-button {
+  background-color: #000;
 }
 
 .navbar.fixed-top .navbar-brand .logo{
