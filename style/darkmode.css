@@ -129,7 +129,8 @@ pre {
   color: #1d2125; }
 
 .table {
-  color: #E4E6EB; }
+  color: #E4E6EB;
+  background-color: #242526; }
   .table th,
   .table td {
     border-top: 1px solid #dee2e6; }
@@ -3193,10 +3194,10 @@ div.editor_atto_toolbar div.atto_group {
 
 .editor_atto_notification .atto_info,
 .editor_atto_notification .atto_warning {
-  background-color: #f2f2f2; }
+  background-color: #3a3b3c; }
 
 .editor_atto_notification .atto_info {
-  background-color: #f2f2f2; }
+  background-color: #3a3b3c; }
 
 .editor_atto_notification .atto_warning {
   background-color: #ffd700; }
@@ -3788,6 +3789,41 @@ img.activityicon{
 
 .h5p-joubelui-button {
   background-color: #000;
+}
+
+.bs-example{
+  background-color: #242526;
+}
+
+.bs-example>.table-responsive>.table{
+  background-color: #242526;
+}
+
+.bd-toc-item.active>.bd-toc-link{
+  color: #e0e1e4;
+}
+
+.bd-sidebar .nav>.active:hover>a, .bd-sidebar .nav>.active>a{
+  color: #e0e1e4;
+}
+.bd-sidebar .nav>li>a{
+  color: #e0e1e4;
+}
+
+.bd-toc-link{
+  color: #e0e1e4;
+}
+
+.bs-glyphicons li{
+  background-color: #3a3b3c;
+}
+
+[data-fieldtype="modgrade"]{
+  background-color: #242526;
+}
+
+.jumbotron{
+  background-color: #3a3b3c;
 }
 
 .navbar.fixed-top .navbar-brand .logo{
