@@ -3828,6 +3828,61 @@ img.activityicon{
   background-color: #3a3b3c;
 }
 
+.path-mod-assign [data-region="grade-panel"].fullwidth{
+  background-color: #18191A;
+}
+
+.path-mod-assign [data-region="grade-panel"] .fitem.has-popout{
+  background-color: #3a3b3c !important;
+}
+
+.path-mod-assign [data-region="grading-navigation-panel"]{
+  background-color: black;
+  border-bottom: 1px solid #333 !important;
+}
+
+.path-mod-assign [data-region="grade-actions-panel"]{
+  border-top: 1px solid #333 !important;
+}
+
+.path-mod-assign [data-region="review-panel"].collapsed + [data-region="grade-panel"] [data-region="grade"], 
+.path-mod-assign [data-region="grade-panel"].fullwidth [data-region="grade"]{
+  color: #e0e1e4;
+}
+
+.path-mod-assign [data-region="grade-panel"] fieldset, .path-mod-assign [data-region="grade-panel"] .fitem.row{
+  border-bottom: 1px solid #333 !important;
+}
+
+.path-mod-assign [data-region="user-selector"] .alignment{
+  color: #e0e1e4;
+}
+
+.path-mod-assign [data-region="grade-actions"]{
+  background-color: #343a40 !important;
+}
+
+.path-mod-assign div.fileuploadsubmissiontime{
+  color: #e0e1e4;
+}
+
+.path-mod-assign [data-region="grading-actions-form"] label{
+  color: #e0e1e4;
+}
+
+.form-control{
+  background-color: #242526 !important;
+  color: #E4E6EB !important;
+}
+
+#page-mod-assign-grader a {
+  color: #32C877 !important;
+}
+
+a:hover{
+  color: #E4E6EB !important;
+}
+
 .navbar.fixed-top .navbar-brand .logo{
   padding: 45px 155px 0px 0px;; background-color:#E4E6EB;
   background: url(https://urcourses.uregina.ca/theme/urcourses_default/pix/Reverse_White.svg) no-repeat;
