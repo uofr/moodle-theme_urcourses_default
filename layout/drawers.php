@@ -151,7 +151,6 @@ if($darkmodecheck){
    $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css?v=2023061301');
 }
 
-
 $header = $PAGE->activityheader;
 $headercontent = $header->export_for_template($renderer);
 
@@ -167,6 +166,16 @@ if (theme_urcourses_default_is_show_visibility_toggle()) {
         $courseid, $startdate, $enddate, $is_visible, $enrollment);
     
     $course_visibility_toggle = $course_visibility_toggle_renderable->export_for_template($renderer);
+}
+
+$pendingbanner = '';
+$haspendingduplications = \local_duplicate_course\duplicator::has_pending_duplications($COURSE->id);
+$pageurl = $PAGE->url;
+$course_viewurl = new moodle_url('/course/view.php', array('id' => $courseid));
+$is_on_course_view = $pageurl->compare($course_viewurl, URL_MATCH_BASE);
+if ($haspendingduplications && $is_on_course_view) {
+    $progressurl = new \moodle_url('/local/duplicate_course/duplicate_status.php', array('id' => $COURSE->id));
+    $pendingbanner = $OUTPUT->render_from_template('local_duplicate_course/pending_banner', array('link' => $progressurl));
 }
 
 $templatecontext = [
@@ -189,7 +198,8 @@ $templatecontext = [
     'overflow' => $overflow,
     'headercontent' => $headercontent,
     'addblockbutton' => $addblockbutton,
-    'visibilitytoggle' => $course_visibility_toggle
+    'visibilitytoggle' => $course_visibility_toggle,
+    'pendingbanner' => $pendingbanner
 ];
 
 // Get and use the course related hints HTML code, if any hints are configured.
