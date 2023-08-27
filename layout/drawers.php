@@ -171,7 +171,7 @@ if (theme_urcourses_default_is_show_visibility_toggle()) {
 $pendingbanner = '';
 $haspendingduplications = \local_duplicate_course\duplicator::has_pending_duplications($COURSE->id);
 $pageurl = $PAGE->url;
-$course_viewurl = new moodle_url('/course/view.php', array('id' => $courseid));
+$course_viewurl = new moodle_url('/course/view.php', array('id' => $COURSE->id));
 $is_on_course_view = $pageurl->compare($course_viewurl, URL_MATCH_BASE);
 if ($haspendingduplications && $is_on_course_view) {
     $progressurl = new \moodle_url('/local/duplicate_course/duplicate_status.php', array('id' => $COURSE->id));
