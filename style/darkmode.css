@@ -2043,7 +2043,7 @@ body.dragging .drop-down {
 
 .block .block-cards span.categoryname,
 .block .block-cards .btn-link {
-  color: #1d2125; }
+  color: #e4e6eb; }
 
 .block .block-cards .progress-text {
   color: #6a737b; }
@@ -2549,9 +2549,15 @@ span.editinstructions {
     .message-app .message.received .tail {
       border-bottom-color: #fff; }
   .message-app .day {
-    color: #1d2125; }
+    color: #e0e1e4; }
     .message-app .header-container{
       background-color: #3a3b3c;
+    }
+    .message-app a, .message-app .btn-link{
+      color: #e4e6eb;
+    }
+    .message-app .btn.btn-link.btn-icon:hover, .message-app .btn.btn-link.btn-icon:focus{
+      color: #1d2125;
     }
 
 #chooseqtype .fakeqtypes {
@@ -3955,6 +3961,10 @@ body#page-question-type-calculated div[id^=fitem_id_][id*=feedback_]{
 
 a:hover{
   color: #E4E6EB !important;
+}
+
+.c4l-attention{
+  color: #000;
 }
 
 .navbar.fixed-top .navbar-brand .logo{
