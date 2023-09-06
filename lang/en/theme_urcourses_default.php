@@ -37,8 +37,8 @@ $string['timestatus_current'] = 'This course is in progress.';
 $string['timestatus_current_noenddate'] = 'This course is in progress (end date not set).';
 $string['timestatus_past'] = 'This course ended {$a}.';
 $string['timestatus_future'] = 'This course begins {$a}.';
-$string['hasenrollment'] = 'There is active enrollment ({$a}).';
-$string['noenrollment'] = 'There is no active enrollment.';
+$string['hasenrollment'] = 'There is active enrolment ({$a}).';
+$string['noenrollment'] = 'There is no active enrolment.';
 $string['visible'] = 'The course is visible to students.';
 $string['notvisible'] = 'The course is hidden from students.';
 $string['visible_noenrollment'] = 'The course is visible.';
@@ -54,3 +54,25 @@ $string['hidetitle'] = 'Hide Course?';
 $string['hidebody'] = 'Are you sure you want to hide this course? This course will be hidden from students enrolled in the {$a} semester.';
 $string['hidebody_noenrollment'] = 'Are you sure you want to hide this course? If students are enrolled, the course will be hidden from them.';
 $string['confirmbutton'] = 'Confirm';
+
+//Create Test Student Account
+$string['newtestuser'] = 'New test student account';
+$string['newtestaccount'] = 'Hi {$a->firstname},
+
+Your new test student account at \'{$a->sitename}\' has been created,
+and you have been issued with a new temporary password.
+
+Your current login information is:
+   username: {$a->username}
+   password: {$a->newpassword}
+
+Please login to \'{$a->sitename}\' to test the new account:
+   {$a->link}
+
+In most mail programs, this should appear as a blue link
+which you can just click on.  If that doesn\'t work,
+then cut and paste the address into the address
+line at the top of your web browser window.
+
+Cheers from the \'{$a->sitename}\' administrator,
+{$a->signoff}';

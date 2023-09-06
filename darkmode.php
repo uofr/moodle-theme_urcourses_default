@@ -63,19 +63,19 @@ if (!empty($action)) {
     require_sesskey();
     switch ($action) {
         case 'auto' :
-			error_log('darkmode: auto');
+			//error_log('darkmode: auto');
 			
 			echo $OUTPUT->header();
             echo $OUTPUT->notification(get_string('darkmodeautosuccess', 'theme_urcourses_default'), 'notifysuccess');
             break;
         case 'enable' :
-			error_log('darkmode: enable');
+			//error_log('darkmode: enable');
 			
             echo $OUTPUT->header();
             echo $OUTPUT->notification(get_string('darkmodeenablesuccess', 'theme_urcourses_default'), 'notifysuccess');
             break;
         case 'disable' :
-			error_log('darkmode: disable');
+			//error_log('darkmode: disable');
 			
             // If the subscription does not exist, then redirect back as the subscription must have already been deleted.
             //if (!$subscription = $DB->record_exists('tool_monitor_subscriptions', array('id' => $subscriptionid))) {

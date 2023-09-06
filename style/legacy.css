@@ -90,109 +90,109 @@ li {
 }
 
 .question_block, div[class*="question_block"] { 
-	background: url(../pix/icons/48/30.png) no-repeat;
+	background: url(../callouts/question.png) no-repeat;
 }
 
 .important_block, div[class*="important_block"] { 
-	background: url(../pix/icons/48/10.png) no-repeat;
+	background: url(../callouts/important.png) no-repeat;
 }
 
 .links_block, div[class*="links_block"] { 
-	background: url(../pix/icons/48/156.png) no-repeat;
+	background: url(../callouts/links.png) no-repeat;
 }
 
 .reading_block, div[class*="reading_block"] { 
-	background: url(../pix/icons/48/158.png) no-repeat;
+	background: url(../callouts/reading.png) no-repeat;
 }
 
 .audio_block, div[class*="audio_block"] { 
-	background: url(../pix/icons/48/58.png) no-repeat;
+	background: url(../callouts/audio.png) no-repeat;
 }
 
 .ideas_block, div[class*="ideas_block"] { 
-	background: url(../pix/icons/48/11.png) no-repeat;
+	background: url(../callouts/ideas.png) no-repeat;
 }
 
 .notes_block, div[class*="notes_block"] { 
-	background: url(../pix/icons/48/145.png) no-repeat;
+	background: url(../callouts/notes.png) no-repeat;
 }
 
 .quiz_block, div[class*="quiz_block"] { 
-	background: url(../pix/icons/48/155.png) no-repeat;
+	background: url(../callouts/quiz.png) no-repeat;
 }
 
 .task_block, div[class*="task_block"] { 
-	background: url(../pix/icons/48/141.png) no-repeat;
+	background: url(../callouts/task.png) no-repeat;
 }
 
 .blog_block, div[class*="blog_block"] { 
-	background: url(../pix/icons/48/157.png) no-repeat;
+	background: url(../callouts/blog.png) no-repeat;
 }
 
 .assignment_block, div[class*="assign_block"], div[class*="assignment_block"] { 
-	background: url(../pix/icons/48/153.png) no-repeat;
+	background: url(../callouts/assignment.png) no-repeat;
 }
 
 .discussion_block, div[class*="discussion_block"] { 
-	background: url(../pix/icons/48/73.png) no-repeat;
+	background: url(../callouts/discussion.png) no-repeat;
 }
 
 .video_block, div[class*="video_block"], table[class*="video_block"] { 
-	background: url(../pix/icons/48/51.png) no-repeat;
+	background: url(../callouts/video.png) no-repeat;
 }
 
 .elder_block, div[class*="elder_block"] { 
-	background: url(../pix/icons/48/144.png) no-repeat;
+	background: url(../callouts/elder.png) no-repeat;
 }
 
 /* Begin Additions */
 
 .fact_block, div[class*="fact_block"] { 
-	background: url(../pix/icons/48/159.png) no-repeat;
+	background: url(../callouts/fact.png) no-repeat;
 }
 
 .labs_block, div[class*="labs_block"] { 
-	background: url(../pix/icons/48/148.png) no-repeat;
+	background: url(../callouts/labs.png) no-repeat;
 }
 
 .reflect_block, div[class*="reflect_block"] { 
-	background: url(../pix/icons/48/160.png) no-repeat;
+	background: url(../callouts/reflect.png) no-repeat;
 }
 
 .fyi_block, div[class*="fyi_block"] { 
-	background: url(../pix/icons/48/161.png) no-repeat;
+	background: url(../callouts/fyi.png) no-repeat;
 }
 
 .aims_block, div[class*="aims_block"] { 
-	background: url(../pix/icons/48/147.png) no-repeat;
+	background: url(../callouts/aims.png) no-repeat;
 }
 
 .start_block, div[class*="start_block"] { 
-	background: url(../pix/icons/48/166.png) no-repeat;
+	background: url(../callouts/start.png) no-repeat;
 }
 
 .resources_block, div[class*="resources_block"] { 
-	background: url(../pix/icons/48/105.png) no-repeat;
+	background: url(../callouts/resources.png) no-repeat;
 }
 
 .example_block, div[class*="example_block"] {
-	background: url(../pix/icons/48/162.png) no-repeat;
+	background: url(../callouts/example.png) no-repeat;
 }
 
 .activity_block, div[class*="activity_block"] {
-	background: url(../pix/icons/48/163.png) no-repeat;
+	background: url(../callouts/activity.png) no-repeat;
 }
 
 .feedback_block, div[class*="feedback_block"] {
-	background: url(../pix/icons/48/164.png) no-repeat;
+	background: url(../callouts/feedback.png) no-repeat;
 }
 
 .objectives_block, div[class*="objectives_block"] {
-	background: url(../pix/icons/48/165.png) no-repeat;
+	background: url(../callouts/objectives.png) no-repeat;
 }
 
 .chat_block, div[class*="chat_block"] {
-	background: url(../pix/icons/48/154.png) no-repeat;
+	background: url(../callouts/chat.png) no-repeat;
 }
 
 .forum_block, div[class*="forum_block"] {
@@ -215,6 +215,7 @@ li {
     margin: 0;
 	margin-bottom: 1em;
 	background-repeat: no-repeat;
+	background-size: 48px;
 }
 
 @media screen and (min-width: 540px) {

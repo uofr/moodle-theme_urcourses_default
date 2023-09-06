@@ -100,7 +100,7 @@ if ($setdarkmode > -1) {
  }
 
  $darkmodecheck = $DB->get_record('theme_urcourses_darkmode', array('userid'=>$USER->id, 'darkmode'=>1));
- error_log('darkmode:'.print_r($darkmodecheck,1));
+ //error_log('darkmode:'.print_r($darkmodecheck,1));
 //check if user has darkmode on in database and include if so
 if($darkmodecheck){
    $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css');

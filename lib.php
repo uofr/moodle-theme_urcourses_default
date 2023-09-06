@@ -49,7 +49,7 @@ function theme_urcourses_default_get_main_scss_content($theme) {
         $scss .= file_get_contents($CFG->dirroot . '/theme/boost_union/scss/preset/default.scss');
     }
     $scss .= file_get_contents($CFG->dirroot . '/theme/boost_union/scss/boost_union/post.scss');
-	error_log('load urcourses_default scss');
+	//error_log('load urcourses_default scss');
     $scss .= file_get_contents($CFG->dirroot . '/theme/urcourses_default/scss/post.scss');
 
     return $scss;
@@ -211,7 +211,7 @@ function theme_urcourses_default_get_precompiled_css() {
     //return file_get_contents($CFG->dirroot . '/theme/boost_union/style/moodle.css');
 	$precss = file_get_contents($CFG->dirroot . '/theme/boost_union/style/moodle.css');
 	$precss .= "\n".file_get_contents($CFG->dirroot . '/theme/boost_union/style/callout.css');
-	error_log('precss:'.print_r($precss,1));
+	//error_log('precss:'.print_r($precss,1));
     return $precss;
 }
 
@@ -279,14 +279,14 @@ function theme_urcourses_default_pluginfile($course, $cm, $context, $filearea, $
 function theme_urcourses_default_extend_navigation_user_settings($navigation, $user, $usercontext, $course, $coursecontext) {
     global $USER, $PAGE;
 	
-	error_log('darkmode pref - urcourses_default');
+	//error_log('darkmode pref - urcourses_default');
 	
     // Don't bother doing needless calculations unless we are on the relevant pages.
     $onpreferencepage = $PAGE->url->compare(new moodle_url('/user/preferences.php'), URL_MATCH_BASE);
     $ondarkmodepage = $PAGE->url->compare(new moodle_url('/theme/urcourses_default/darkmode.php'), URL_MATCH_BASE);
     if (!$onpreferencepage && !$ondarkmodepage) {
 	
-		error_log('not on pref page');
+		//error_log('not on pref page');
         //return null;
     }
 
@@ -297,12 +297,12 @@ function theme_urcourses_default_extend_navigation_user_settings($navigation, $u
         $darkmodenode = navigation_node::create(get_string('darkmodepref', 'theme_urcourses_default'), $url,
                 navigation_node::TYPE_SETTING, null, 'darkmode', new pix_icon('i/settings', ''));
 		
-		error_log('$darkmodenode: '.print_r($darkmodenode,1));
+		//error_log('$darkmodenode: '.print_r($darkmodenode,1));
 		
         if (isset($darkmodenode) && !empty($navigation)) {
             $navigation->add_node($darkmodenode);
 	
-			error_log('darkmodenode added');
+			//error_log('darkmodenode added');
         }
 		//}
 }

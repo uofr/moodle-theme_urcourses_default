@@ -234,7 +234,9 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
        
        $headertext = (!empty($this->context_header())) ? $this->context_header() : $sitecontextheader;
 
-       
+	   // try to avoid problems with special characters in titles ( & )
+       $headertext = html_entity_decode($headertext);
+	   
        //Little hack to add back missing header for dashboard
        //The context header the comes through is not formated properly
        if($this->page->pagelayout=="mydashboard"&&strpos($PAGE->url,'my/indexsys.php')===false){
@@ -322,6 +324,8 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
        //$preheader = $header->courseimage = theme_urcourses_default_get_course_image_old($COURSE);
 		   
 	$header->courselink = $CFG->wwwroot.'/course/view.php?id='.$COURSE->id;
+	
+	$header->courseimage = theme_urcourses_default_get_course_image_old($COURSE);
 	
        if (!$header->courseimage) {
            $header->courseimage = $OUTPUT->get_generated_image_for_id($COURSE->id);
@@ -495,13 +499,13 @@ public function user_menu($user = null, $withlinks = null) {
     $usedarkmodeurl = ($darkchk == 1) ? 0 : 1;
     //dark mode variable for if on/off to swap icon
     $mynodelabel = ($darkchk == 1) ? "i/item" : "i/marker";
-    $darkstate = ($darkchk == 1) ? "on" : "off";
+    $darkstate = ($darkchk == 1) ? "Disable" : "Enable";
 
     //creating dark mode object 
     $mynode = new stdClass();
     $mynode->itemtype = "link";
     $mynode->url = new moodle_url($this->page->url,array("darkmode"=>$usedarkmodeurl));
-    $mynode->title = "Darkmode is " . $darkstate;
+    $mynode->title = $darkstate . " dark mode";
     $mynode->titleidentifier = "darkmode, theme_urcourses_default";
 	$mynode->pix = $mynodelabel;
 	
