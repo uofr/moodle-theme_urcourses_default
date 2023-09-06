@@ -130,7 +130,8 @@ pre {
   color: #1d2125; }
 
 .table {
-  color: #E4E6EB; }
+  color: #E4E6EB;
+  background-color: #242526; }
   .table th,
   .table td {
     border-top: 1px solid #dee2e6; }
@@ -824,6 +825,14 @@ select.form-control:focus::-ms-value {
     color: #3a7a57; }
   .btn-link:disabled, .btn-link.disabled {
     color: #6a737b; }
+
+.qtype_multichoice_clearchoice .btn-link{
+  color: #32c875;
+}
+
+.qtype_multichoice_clearchoice .btn-link:hover{
+  background-color: #3a7a57 !important;
+}
 
 
 .dropdown-menu {
@@ -2035,7 +2044,7 @@ body.dragging .drop-down {
 
 .block .block-cards span.categoryname,
 .block .block-cards .btn-link {
-  color: #1d2125; }
+  color: #e4e6eb; }
 
 .block .block-cards .progress-text {
   color: #6a737b; }
@@ -2423,7 +2432,7 @@ span.editinstructions {
   border-color: #8f959e;}
 
 .file-picker .fp-content {
-  background: #fff; }
+  background: #242526; }
 
 .file-picker .fp-content-error{
   background-color: #242526;
@@ -2441,11 +2450,14 @@ span.editinstructions {
   color: #1d2125;
   border-color: #aab4bf; }
 
+.fp-iconview .fp-thumbnail{
+  border: 1px solid #242526}
+
 .fp-iconview .fp-thumbnail:hover {
   background: #fff; }
 
 .fp-iconview .fp-filename-field .fp-filename {
-  background: #fff; }
+  background: #242526; }
 
 .file-picker .ygtvfocus,
 .filemanager .ygtvfocus {
@@ -2538,9 +2550,15 @@ span.editinstructions {
     .message-app .message.received .tail {
       border-bottom-color: #fff; }
   .message-app .day {
-    color: #1d2125; }
+    color: #e0e1e4; }
     .message-app .header-container{
       background-color: #3a3b3c;
+    }
+    .message-app a, .message-app .btn-link{
+      color: #e4e6eb;
+    }
+    .message-app .btn.btn-link.btn-icon:hover, .message-app .btn.btn-link.btn-icon:focus{
+      color: #1d2125;
     }
 
 #chooseqtype .fakeqtypes {
@@ -2571,7 +2589,7 @@ span.editinstructions {
     border: 1px solid #008196; }
 
 .que .info {
-  background-color: #f8f9fa;
+  background-color: #3a3b3c;
   border: 1px solid #cad0d7; }
 
 .que .outcome,
@@ -2591,8 +2609,8 @@ span.editinstructions {
     color: #041c31; }
 
 .que .formulation {
-  color: #001a1e;
-  background-color: #e7f3f5;
+  color: #e0e1e4;
+  background-color: #273139;
   border-color: #b8dce2;
   /* stylelint-disable-line max-line-length */ }
   .que .formulation hr {
@@ -2821,7 +2839,7 @@ a#hidebankcmd {
   color: #343a40; }
 
 .path-mod-quiz #mod_quiz_navblock .qnbutton {
-  background-color: #fff; }
+  background-color: #18191A; }
 
 .path-mod-quiz #mod_quiz_navblock span.qnbutton {
   background-color: #e9ecef;
@@ -2832,7 +2850,7 @@ a#hidebankcmd {
 
 .path-mod-quiz #mod_quiz_navblock .qnbutton.notyetanswered .trafficlight,
 .path-mod-quiz #mod_quiz_navblock .qnbutton.invalidanswer .trafficlight {
-  background-color: #fff; }
+  background-color: #18191A; }
 
 .path-mod-quiz #mod_quiz_navblock .qnbutton.correct .trafficlight {
   background-color: #357a32; }
@@ -2854,7 +2872,7 @@ a#hidebankcmd {
 
   #quiz-timer-wrapper #quiz-timer {
     border: 1px solid #ca3120;
-    background-color: #fff; }
+    background-color: #18191A; }
 
 #quiz-timer-wrapper #quiz-timer.timeleft0 {
   background-color: #ca3120;
@@ -3197,13 +3215,17 @@ div.editor_atto_toolbar div.atto_group {
 
 .editor_atto_notification .atto_info,
 .editor_atto_notification .atto_warning {
-  background-color: #f2f2f2; }
+  background-color: #3a3b3c; }
 
 .editor_atto_notification .atto_info {
-  background-color: #f2f2f2; }
+  background-color: #3a3b3c; }
 
 .editor_atto_notification .atto_warning {
   background-color: #ffd700; }
+
+#page-lib-editor-atto-plugins-poodll-dialog-poodll{
+  color: #E4E6EB !important;
+}
 
 .has-danger .editor_atto_content.form-control .invalid-feedback,
 .has-danger .editor_atto_content.form-control-danger .invalid-feedback {
@@ -3739,6 +3761,22 @@ ul.oublog-accordion li {
   background-color: #242526;
 }
 
+.format-tiles .course-content .section .activity:hover{
+  background-color: #3a3b3c;
+}
+
+.format-tiles .tiles-top-button{
+  background-color: #3a3b3c;
+}
+
+.format-tiles ul.tiles .tile h3{
+  color: #f8f9fa;
+}
+
+.format-tiles .course-content ul.tiles .tile{
+  background-color: #242526;
+}
+
 .block_activity_modules .icon, 
 .gradeitemheader .icon.itemicon,
 .path-report-outline #outlinetable .icon {
@@ -3773,29 +3811,216 @@ img.activityicon{
 }
 
 .h5p-hub .h5p-hub-panel{
-  background-color:#242526;
+  background-color:red;
 }
 
 .h5p-hub .h5p-hub-client-drop-down{
-  background-color: #242526;
+  background-color: red;
 }
 
 .h5p-hub .h5p-hub-navbar{
   color: white;
 }
 
-.navbar.fixed-top .navbar-brand .logo{
-  padding: 45px 155px 0px 0px;; background-color:#E4E6EB;
-  background: url(https://urcourses.uregina.ca/theme/urcourses_default/pix/Reverse_White.svg) no-repeat;
-  background-size: 100% 100%;
-  vertical-align: middle;
-  width:0px; height: 0px;  
+.h5p-hub .h5p-hub-content-type-section{
+  background-color: #000;
 }
 
-.syllabuslinkdetails {
+.h5p-joubelui-button {
+  background-color: #000;
+}
+
+.bs-example{
+  background-color: #242526;
+}
+
+.bs-example>.table-responsive>.table{
+  background-color: #242526;
+}
+
+.bd-toc-item.active>.bd-toc-link{
   color: #e0e1e4;
 }
 
-.link-layout .img-element .activityiconcontainer.img-block .activityicon, .link-layout .img-element .activityiconcontainer.img-block .icon{
-    filter: invert(98%) sepia(8%) saturate(534%) hue-rotate(179deg) brightness(96%) contrast(91%);
+.bd-sidebar .nav>.active:hover>a, .bd-sidebar .nav>.active>a{
+  color: #e0e1e4;
 }
+.bd-sidebar .nav>li>a{
+  color: #e0e1e4;
+}
+
+.bd-toc-link{
+  color: #e0e1e4;
+}
+
+.bs-glyphicons li{
+  background-color: #3a3b3c;
+}
+
+[data-fieldtype="modgrade"]{
+  background-color: #242526;
+}
+
+body#page-question-type-multichoice div[id^=fitem_id_][id*=answer_]{
+  background-color: #3a3b3c;
+}
+
+body#page-question-type-multichoice div[id^=fitem_id_][id*=feedback_]{
+  background-color: #3a3b3c;
+}
+
+body#page-question-type-multichoice div[id^=fitem_id_][id*=fraction_]{
+  background-color: #3a3b3c;
+}
+
+body#page-question-type-match div[id^=fitem_id_][id*=subquestions_]{
+  background-color: #3a3b3c;
+}
+
+body#page-question-type-match div[id^=fitem_id_][id*=subanswers_]{
+  background-color: #3a3b3c;
+}
+
+body#page-question-type-shortanswer div[id^=fgroup_id_][id*=answeroptions_]{
+  background-color: #3a3b3c;
+}
+
+body#page-question-type-shortanswer div[id^=fitem_id_][id*=feedback_]{
+  background-color: #3a3b3c;
+}
+
+body#page-question-type-numerical div[id^=fgroup_id_][id*=answeroptions_]{
+  background-color: #3a3b3c;
+}
+
+body#page-question-type-numerical div[id^=fitem_id_][id*=feedback_]{
+  background-color: #3a3b3c;
+}
+
+body#page-question-type-multichoiceset div[id^=fitem_id_][id*=answer_]{
+  background-color: #3a3b3c;
+}
+
+body#page-question-type-multichoiceset .correctanswer{
+  background-color: #3a3b3c;
+}
+
+body#page-question-type-multichoiceset div[id^=fitem_id_][id*=feedback_]{
+  background-color: #3a3b3c;
+}
+
+body#page-question-type-calculated div[id^=fgroup_id_][id*=answeroptions_], 
+body#page-question-type-calculatedmulti div[id^=fgroup_id_][id*=answeroptions_]{
+  background-color: #3a3b3c;
+}
+
+body#page-question-type-calculated div[id^=fgroup_id_][id*=answertolerance_]{
+  background-color: #3a3b3c;
+}
+
+body#page-question-type-calculated div[id^=fgroup_id_][id*=answerdisplay_]{
+  background-color: #3a3b3c;
+}
+
+body#page-question-type-calculated div[id^=fitem_id_][id*=feedback_]{
+  background-color: #3a3b3c;
+}
+
+.jumbotron{
+  background-color: #3a3b3c;
+}
+
+.path-mod-assign [data-region="grade-panel"].fullwidth{
+  background-color: #18191A;
+}
+
+.path-mod-assign [data-region="grade-panel"] .fitem.has-popout{
+  background-color: #3a3b3c !important;
+}
+
+.path-mod-assign [data-region="grading-navigation-panel"]{
+  background-color: black;
+  border-bottom: 1px solid #333 !important;
+}
+
+.path-mod-assign [data-region="grade-actions-panel"]{
+  border-top: 1px solid #333 !important;
+}
+
+.path-mod-assign [data-region="review-panel"].collapsed + [data-region="grade-panel"] [data-region="grade"], 
+.path-mod-assign [data-region="grade-panel"].fullwidth [data-region="grade"]{
+  color: #e0e1e4;
+}
+
+.path-mod-assign [data-region="grade-panel"] fieldset, .path-mod-assign [data-region="grade-panel"] .fitem.row{
+  border-bottom: 1px solid #333 !important;
+}
+
+.path-mod-assign [data-region="user-selector"] .alignment{
+  color: #e0e1e4;
+}
+
+.path-mod-assign [data-region="grade-actions"]{
+  background-color: #343a40 !important;
+}
+
+.path-mod-assign div.fileuploadsubmissiontime{
+  color: #e0e1e4;
+}
+
+.path-mod-assign [data-region="grading-actions-form"] label{
+  color: #e0e1e4;
+}
+
+.form-control{
+  background-color: #242526 !important;
+  color: #E4E6EB !important;
+}
+
+#page-mod-assign-grader a {
+  color: #32C877 !important;
+}
+
+a:hover{
+  color: #E4E6EB !important;
+}
+
+.c4l-attention{
+  color: #000;
+}
+
+.navbar.fixed-top .navbar-brand .logo{
+  /*filter: invert(1) grayscale(100%) contrast(170%) brightness(100%) hue-rotate(180deg);
+  /* padding: 45px 155px 0px 0px;; background-color:#E4E6EB; 
+  background: url(https://urcourses.uregina.ca/theme/urcourses_default/pix/Reverse_White.svg) no-repeat;
+  background-size: 100% 100%;
+  vertical-align: middle;
+  width:0px; height: 0px;  */
+}
+
+img[src*="http://localhost/UofRthings/Moodle_darkmode_fixes2/moodle2/theme/image.php?theme=urcourses_default&amp;component=theme_urcourses_default&amp;image=logo"]{
+    background: url(https://urcourses.uregina.ca/theme/urcourses_default/pix/Reverse_White.svg) no-repeat;
+    background-size: 92% auto; 
+    background-position: center center;
+    object-position: -99999px 99999px;
+}
+
+img[src*="https://urcourses.uregina.ca/theme/image.php/urcourses_default/theme_urcourses_default/1686233937/logo"]{
+  background: url(https://urcourses.uregina.ca/theme/urcourses_default/pix/Reverse_White.svg) no-repeat;
+  background-size: 92% auto; 
+  background-position: center center;
+  object-position: -99999px 99999px;
+}
+
+.link-layout .img-element .activityiconcontainer.img-block .activityicon, .link-layout .img-element .activityiconcontainer.img-block .icon{
+  filter: invert(98%) sepia(8%) saturate(534%) hue-rotate(179deg) brightness(96%) contrast(91%);
+}
+
+#categoryquestions .qtype{
+  filter: invert(98%) sepia(8%) saturate(534%) hue-rotate(179deg) brightness(96%) contrast(91%);
+}
+
+.list-group .icon{
+  filter: invert(98%) sepia(8%) saturate(534%) hue-rotate(179deg) brightness(96%) contrast(91%);
+}
+/*Reverse_White  One_Colour_Green_Pantone  2Colour_Pantone
