@@ -130,14 +130,15 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
      * @return string HTML for the header bar.
      */
    protected function render_context_header(\context_header $contextheader) {
+    global $USER, $CFG;
 
        // Generate the heading first and before everything else as we might have to do an early return.
        if (!isset($contextheader->heading)) {
            $heading = $this->heading($this->page->heading, $contextheader->headinglevel, 'h2');
+
        } else {
            $heading = $this->heading($contextheader->heading, $contextheader->headinglevel, 'h2');
        }
-
        // All the html stuff goes here.
        $html = html_writer::start_div('page-context-header');
 
@@ -147,6 +148,10 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
            $html .= html_writer::div($contextheader->imagedata, 'page-header-image mr-2');
        }
 
+    //    html_writer::empty_tag('style', array(
+    //     'display' => 'flex'
+    //    ));
+
        // Headings.
        if (isset($contextheader->prefix)) {
            $prefix = html_writer::div($contextheader->prefix, 'text-muted text-uppercase small line-height-3');
@@ -154,6 +159,29 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
 		   // Change order of activity type
            $heading = $heading . $prefix;
        }
+
+       
+        //Code to add pronouns and pronunciation to user profile - Brandon Piller
+        if(isset($contextheader->imagedata)){
+            $usercontextid = \context_user::instance($USER->id)->id;
+            $fields = profile_get_user_fields_with_data($USER->id);
+
+            foreach ($fields as $formfield) {
+                if($formfield->field->shortname == "Pronunciation"){
+                    $field = '<p><a href="'.$CFG->httpswwwroot.'/draftfile.php/'.$usercontextid.'/user/draft/'.$formfield->field->shortname.'/'.$formfield->data.'">'.$formfield->data.'</a></p>';
+                    $filter = new \filter_poodll(context_system::instance(), []);
+                    $newlink = $filter->filter($field);
+                    $pronunciation .= $newlink;
+                }else{
+                    $additional .= $formfield->data;
+                }
+            }
+
+            $heading .= $pronunciation;
+            $heading = html_writer::tag('div',  $heading, array('style' => 'display:flex'));
+            $heading .= $additional;
+        }
+
        $html .= html_writer::tag('div', $heading, array('class' => 'page-header-headings'));
 
        // Buttons.
@@ -181,12 +209,21 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
                }
                $html .= html_writer::link($button['url'], html_writer::tag('span', $image), $button['linkattributes']);
            }
-           $html .= html_writer::end_div();
+
+           $html .= html_writer::end_div(); // End of btn-group header-button-group
        }
-       $html .= html_writer::end_div();
+       $html .= html_writer::end_div(); // End of page-context-header
 
        return $html;
    }
+
+   function debug_to_console($data) {
+    $output = $data;
+    if (is_array($output))
+        $output = implode(',', $output);
+
+    echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
+}
    
    public function full_header() {
        // MODIFICATION START.
@@ -197,7 +234,9 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
        
        $headertext = (!empty($this->context_header())) ? $this->context_header() : $sitecontextheader;
 
-       
+	   // try to avoid problems with special characters in titles ( & )
+       $headertext = html_entity_decode($headertext);
+	   
        //Little hack to add back missing header for dashboard
        //The context header the comes through is not formated properly
        if($this->page->pagelayout=="mydashboard"&&strpos($PAGE->url,'my/indexsys.php')===false){
