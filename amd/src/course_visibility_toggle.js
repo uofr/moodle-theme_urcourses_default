@@ -58,7 +58,7 @@ export const init = (rootSelector, courseid, visible, strings) => {
 const registerEventListeners = () => {
     CustomEvents.define(_root, [
         CustomEvents.events.activate
-    ]);
+    ]); 
 
     _root.on(CustomEvents.events.activate, SELECTORS.TOGGLE_VISIBILITY_BUTTON, (e, data) => {
         showConfirmModal();

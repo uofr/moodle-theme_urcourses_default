@@ -2642,7 +2642,8 @@ h2, .h2 {
   font-size: 1.875rem; }
   @media (max-width: 1200px) {
     h2, .h2 {
-      font-size: calc(0.9975rem + 1.17vw) ; } }
+      font-size: calc(0.9975rem + 1.17vw) ;
+      display: flex; } }
 
 h3, .h3 {
   font-size: 1.640625rem; }
