@@ -46,7 +46,7 @@ class boostnavbar implements \renderable {
         $this->page = $page;
 		
 		// test to add node to navbar
-		$this->page->navbar->add(get_string('preview'), new moodle_url('/a/link/if/you/want/one.php'));
+		//$this->page->navbar->add(get_string('preview'), new moodle_url('/a/link/if/you/want/one.php'));
 		
         foreach ($this->page->navbar->get_items() as $item) {
             $this->items[] = $item;
