@@ -276,36 +276,36 @@ function theme_urcourses_default_pluginfile($course, $cm, $context, $filearea, $
 */
 
 
-function theme_urcourses_default_extend_navigation_user_settings($navigation, $user, $usercontext, $course, $coursecontext) {
-    global $USER, $PAGE;
+// function theme_urcourses_default_extend_navigation_user_settings($navigation, $user, $usercontext, $course, $coursecontext) {
+//     global $USER, $PAGE;
 	
-	//error_log('darkmode pref - urcourses_default');
+// 	//error_log('darkmode pref - urcourses_default');
 	
-    // Don't bother doing needless calculations unless we are on the relevant pages.
-    $onpreferencepage = $PAGE->url->compare(new moodle_url('/user/preferences.php'), URL_MATCH_BASE);
-    $ondarkmodepage = $PAGE->url->compare(new moodle_url('/theme/urcourses_default/darkmode.php'), URL_MATCH_BASE);
-    if (!$onpreferencepage && !$ondarkmodepage) {
+//     // Don't bother doing needless calculations unless we are on the relevant pages.
+//     $onpreferencepage = $PAGE->url->compare(new moodle_url('/user/preferences.php'), URL_MATCH_BASE);
+//     $ondarkmodepage = $PAGE->url->compare(new moodle_url('/theme/urcourses_default/darkmode.php'), URL_MATCH_BASE);
+//     if (!$onpreferencepage && !$ondarkmodepage) {
 	
-		//error_log('not on pref page');
-        //return null;
-    }
+// 		//error_log('not on pref page');
+//         //return null;
+//     }
 
-    // Don't show the setting if the event monitor isn't turned on. No access to other peoples subscriptions.
-    //if (get_config('theme_boost_union', 'enabledarkmode') && $USER->id == $user->id) {
-	//if (get_config('theme_boost_union', 'enabledarkmode')) {
-        $url = new moodle_url('/theme/urcourses_default/darkmode.php');
-        $darkmodenode = navigation_node::create(get_string('darkmodepref', 'theme_urcourses_default'), $url,
-                navigation_node::TYPE_SETTING, null, 'darkmode', new pix_icon('i/settings', ''));
+//     // Don't show the setting if the event monitor isn't turned on. No access to other peoples subscriptions.
+//     //if (get_config('theme_boost_union', 'enabledarkmode') && $USER->id == $user->id) {
+// 	//if (get_config('theme_boost_union', 'enabledarkmode')) {
+//         $url = new moodle_url('/theme/urcourses_default/darkmode.php');
+//         $darkmodenode = navigation_node::create(get_string('darkmodepref', 'theme_urcourses_default'), $url,
+//                 navigation_node::TYPE_SETTING, null, 'darkmode', new pix_icon('i/settings', ''));
 		
-		//error_log('$darkmodenode: '.print_r($darkmodenode,1));
+// 		//error_log('$darkmodenode: '.print_r($darkmodenode,1));
 		
-        if (isset($darkmodenode) && !empty($navigation)) {
-            $navigation->add_node($darkmodenode);
+//         if (isset($darkmodenode) && !empty($navigation)) {
+//             $navigation->add_node($darkmodenode);
 	
-			//error_log('darkmodenode added');
-        }
-		//}
-}
+// 			//error_log('darkmodenode added');
+//         }
+// 		//}
+// }
 
 //UR HACK to add Unenrol Test Student Account to Course More Menu
 /**
