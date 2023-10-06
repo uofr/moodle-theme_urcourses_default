@@ -288,7 +288,12 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
 		   
 	$header->courselink = $CFG->wwwroot.'/course/view.php?id='.$COURSE->id;
 	
-	$header->courseimage = theme_urcourses_default_get_course_image_old($COURSE);
+    //Default: not reliable way to get the course image
+	//$header->courseimage = theme_urcourses_default_get_course_image_old($COURSE);
+
+    //UOFR Hack dapiawej
+    //To avoid issue with spaces and other characters inside of a course image
+    $header->courseimage = theme_urcourses_default_get_course_image_url($COURSE);
 	
        if (!$header->courseimage) {
            $header->courseimage = $OUTPUT->get_generated_image_for_id($COURSE->id);

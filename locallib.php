@@ -193,7 +193,7 @@ function theme_urcourses_default_register_webfonts_filetypes() {
  * @return string url of course image
  */
 function theme_urcourses_default_get_course_image($course) {
-	return theme_boost_union_get_course_image($course);
+	return theme_urcourses_default_get_course_image_url($course);
 }
 
 
@@ -214,6 +214,44 @@ function theme_urcourses_default_get_course_image_old($course) {
     }
     return false;
 }
+
+// UOFR HACK dapiawej September 29, 2023
+// Retrieve course image and handle spaces, special characters in file names.
+function theme_urcourses_default_get_course_image_url() {
+    global $PAGE;
+
+    if (isset($PAGE->course->id) && $PAGE->course->id == SITEID) {
+        return null;
+    }
+    // Get the course image.
+    $courseimage = \core_course\external\course_summary_exporter::get_course_image($PAGE->course);
+
+    // If the course has a course image.
+    if ($courseimage) {
+        // Then return it.
+        return $courseimage;
+
+        // Otherwise, if a fallback image is configured.
+    } else if (get_config('theme_boost_union', 'courseheaderimagefallback')) {
+       
+        $systemcontext = \context_system::instance();
+
+        $fs = get_file_storage();
+
+        $files = $fs->get_area_files($systemcontext->id, 'theme_boost_union', 'courseheaderimagefallback',
+            false, 'itemid', false);
+
+        $file = reset($files);
+
+        return moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(),
+            $file->get_itemid(), $file->get_filepath(), $file->get_filename());
+    }
+
+    //As no image was found, return null.
+    return null;
+}
+
+
 /**
 * UR HACK
 * Return true or false if current user has a test account
