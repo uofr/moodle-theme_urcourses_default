@@ -577,3 +577,8 @@ pre {
     background-color: transparent;
     border: 0;
   }
+
+  /*This is to darken poodll icons. I don't know why this works here. I'd rather put it in moodle.css, but that doesn't work? - Brandon Piller*/
+  img.icon{
+	filter: brightness(50%);
+  }
