@@ -60,6 +60,8 @@ use core_text;
 
 
 use \core_course\external\course_summary_exporter;
+use assignsubmission_onlinepoodll\constants;
+require_once($CFG->dirroot.'/user/profile/lib.php'); 
 
 
 
@@ -129,64 +131,102 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
      * @param context_header $contextheader Header bar object.
      * @return string HTML for the header bar.
      */
-   protected function render_context_header(\context_header $contextheader) {
-
-       // Generate the heading first and before everything else as we might have to do an early return.
-       if (!isset($contextheader->heading)) {
-           $heading = $this->heading($this->page->heading, $contextheader->headinglevel, 'h2');
-       } else {
-           $heading = $this->heading($contextheader->heading, $contextheader->headinglevel, 'h2');
-       }
-
-       // All the html stuff goes here.
-       $html = html_writer::start_div('page-context-header');
-
-       // Image data.
-       if (isset($contextheader->imagedata)) {
-           // Header specific image.
-           $html .= html_writer::div($contextheader->imagedata, 'page-header-image mr-2');
-       }
-
-       // Headings.
-       if (isset($contextheader->prefix)) {
-           $prefix = html_writer::div($contextheader->prefix, 'text-muted text-uppercase small line-height-3');
-           //$heading = $prefix . $heading;
-		   // Change order of activity type
-           $heading = $heading . $prefix;
-       }
-       $html .= html_writer::tag('div', $heading, array('class' => 'page-header-headings'));
-
-       // Buttons.
-       if (isset($contextheader->additionalbuttons)) {
-           $html .= html_writer::start_div('btn-group header-button-group');
-           foreach ($contextheader->additionalbuttons as $button) {
-               if (!isset($button->page)) {
-                   // Include js for messaging.
-                   if ($button['buttontype'] === 'togglecontact') {
-                       \core_message\helper::togglecontact_requirejs();
-                   }
-                   if ($button['buttontype'] === 'message') {
-                       \core_message\helper::messageuser_requirejs();
-                   }
-                   $image = $this->pix_icon($button['formattedimage'], $button['title'], 'moodle', array(
-                       'class' => 'iconsmall',
-                       'role' => 'presentation'
-                   ));
-                   $image .= html_writer::span($button['title'], 'header-button-title');
-               } else {
-                   $image = html_writer::empty_tag('img', array(
-                       'src' => $button['formattedimage'],
-                       'role' => 'presentation'
-                   ));
-               }
-               $html .= html_writer::link($button['url'], html_writer::tag('span', $image), $button['linkattributes']);
+    protected function render_context_header(\context_header $contextheader) {
+        global $USER, $CFG, $DB, $PAGE;
+    
+           // Generate the heading first and before everything else as we might have to do an early return.
+           if (!isset($contextheader->heading)) {
+               $heading = $this->heading($this->page->heading, $contextheader->headinglevel, 'h2');
+    
+           } else {
+               $heading = $this->heading($contextheader->heading, $contextheader->headinglevel, 'h2');
            }
-           $html .= html_writer::end_div();
-       }
-       $html .= html_writer::end_div();
+           // All the html stuff goes here.
+           $html = html_writer::start_div('page-context-header');
 
-       return $html;
-   }
+           $usercontextid=\context_user::instance($USER->id)->id;
+           $fields = profile_get_user_fields_with_data($USER->id);
+
+           foreach ($fields as $formfield) {
+
+               if($formfield->field->shortname == "pronunciation"){
+                   $form = $formfield->display_data();
+               }else{
+                   $additional .= '('.$formfield->data.')';
+                   $heading .= $this->heading($additional , $contextheader->headinglevel, 'h6');
+               }
+           }
+    
+           // Image data.
+           if (isset($contextheader->imagedata)) {
+               // Header specific image.
+               $html .= html_writer::div($contextheader->imagedata, 'page-header-image mr-2');
+           }
+    
+        //    html_writer::empty_tag('style', array(
+        //     'display' => 'flex'
+        //    ));
+    
+           // Headings.
+           if (isset($contextheader->prefix)) {
+               $prefix = html_writer::div($contextheader->prefix, 'text-muted text-uppercase small line-height-3');
+               //$heading = $prefix . $heading;
+               // Change order of activity type
+               $heading = $heading . $prefix;
+           }
+    
+           
+            //Code to add pronouns and pronunciation to user profile - Brandon Piller
+            if(isset($contextheader->imagedata)){
+
+                //$heading .= $form;
+                $heading = html_writer::tag('div',  $heading, array('style' => 'display:flex'));
+            }
+    
+           $html .= html_writer::tag('div', $heading, array('class' => 'page-header-headings'));
+    
+           // Buttons.
+           if (isset($contextheader->additionalbuttons)) {
+               $html .= html_writer::start_div('btn-group header-button-group');
+               foreach ($contextheader->additionalbuttons as $button) {
+                   if (!isset($button->page)) {
+                       // Include js for messaging.
+                       if ($button['buttontype'] === 'togglecontact') {
+                           \core_message\helper::togglecontact_requirejs();
+                       }
+                       if ($button['buttontype'] === 'message') {
+                           \core_message\helper::messageuser_requirejs();
+                       }
+                       $image = $this->pix_icon($button['formattedimage'], $button['title'], 'moodle', array(
+                           'class' => 'iconsmall',
+                           'role' => 'presentation'
+                       ));
+                       $image .= html_writer::span($button['title'], 'header-button-title');
+                   } else {
+                       $image = html_writer::empty_tag('img', array(
+                           'src' => $button['formattedimage'],
+                           'role' => 'presentation'
+                       ));
+                   }
+                   $html .= html_writer::link($button['url'], html_writer::tag('span', $image), $button['linkattributes']);
+                   $html .= html_writer::span($form, 'title');
+               }
+    
+               $html .= html_writer::end_div(); // End of btn-group header-button-group
+               
+           }
+           $html .= html_writer::end_div(); // End of page-context-header
+           
+           return $html;
+       }
+    
+       function debug_to_console($data) {
+        $output = $data;
+        if (is_array($output))
+            $output = implode(',', $output);
+    
+        echo "<script>console.log('" . $output . "' );</script>";
+    }
    
    public function full_header() {
        // MODIFICATION START.
