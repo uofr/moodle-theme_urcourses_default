@@ -206,6 +206,7 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
                        $image = html_writer::empty_tag('img', array(
                            'src' => $button['formattedimage'],
                            'role' => 'presentation'
+                           
                        ));
                    }
                    $html .= html_writer::link($button['url'], html_writer::tag('span', $image), $button['linkattributes']);
