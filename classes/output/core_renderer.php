@@ -199,7 +199,7 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
 
 	   // try to avoid problems with special characters in titles ( & )
        $headertext = html_entity_decode($headertext);
-	   
+       
        //Little hack to add back missing header for dashboard
        //The context header the comes through is not formated properly
        if($this->page->pagelayout=="mydashboard"&&strpos($PAGE->url,'my/indexsys.php')===false){
@@ -212,8 +212,7 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
         $header->contextheader = '<h2><a href="'.$CFG->wwwroot.'/course/view.php?id='.$COURSE->id.'">'.$COURSE->fullname.'</a></h2>';
         }
         */
-	//error_log('pg url:'.$PAGE->url);
-	
+   
 	$activityheader = false;
 	
 	//error_log('$PAGE->url:'.$PAGE->url);
@@ -234,12 +233,38 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
 	} else if (strpos($PAGE->url,'grade/')===false&&strpos($PAGE->url,'backup/')===false&&strpos($PAGE->url,'reset.php')===false&&strpos($PAGE->url,'coursecompetencies.php')===false&&strpos($PAGE->url,'unenrolself.php')===false&&strpos($PAGE->url,'newbadge.php')===false&&strpos($PAGE->url,'report/')===false&&$PAGE->url->get_param('bui_editid')===null&&strpos($PAGE->url,'my/courses.php')===false&&strpos($PAGE->url,'admin/')===false&&strpos($PAGE->url,'my/indexsys.php')===false) {
 		$activityheader = true;
 	}
-	
-	
-	
+
+
 	if ($activityheader === true) {
-        $header->contextheader = '<a href="'.$CFG->wwwroot.'/mod/'.$this->page->activityname.'/view.php?id='.$this->page->context->instanceid.'" class="activity-header-link">'.$headertext.'</a>';
-       	
+       
+        /**
+         * UOFR Hack
+         * Joel Dapiawen
+         * November 22, 2023
+         * Override activity-header URL to macth the current Page URL..
+         */
+        $current_url = $PAGE->url;
+      
+        if (strpos($current_url, 'mymedia/mymedia.php') !== false || strpos($current_url, 'user/profile.php') !== false) {
+          
+            if (isset($header) && isset($headertext)) {
+                // Construct the header links based on URL conditions
+                if (strpos($current_url, 'mymedia/mymedia.php') !== false) {
+                    $header->contextheader = '<a href="' . $PAGE->url .'" class="activity-header-link">' . $headertext . '</a>';
+                   // $header->contextheader = '<a href="' . $CFG->wwwroot . '/local/mymedia/mymedia.php" class="activity-header-link">' . $headertext . '</a>';
+                  
+                }
+                
+                if (strpos($current_url, 'user/profile.php') !== false) {
+                    $header->contextheader = '<a href="' . $PAGE->url .'" class="activity-header-link">' . $headertext . '</a>';
+                   // $header->contextheader = '<a href="' . $CFG->wwwroot . '/user/profile.php" class="activity-header-link">' . $headertext . '</a>';
+                }
+            }
+        } else {
+            // default URL's for activity header..
+            $header->contextheader = '<a href="'.$CFG->wwwroot.'/mod/'.$this->page->activityname.'/view.php?id='.$this->page->context->instanceid.'" class="activity-header-link">'.$headertext.'</a>';
+        }
+        
 	} else {
 		
 		$headertext = $COURSE->fullname;
@@ -258,8 +283,8 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
            $header->contextheader = '<!-- hello -->';//'<h2><a href="'.$CFG->wwwroot.'/course/view.php?id='.$COURSE->id.'">'.$COURSE->fullname.'</a></h2>';
            $header->iscoursepage = true;
        }
-       
-       //error_log('Header actions:'.print_r($PAGE->get_header_actions(),1));
+
+    //error_log('Header actions:'.print_r($PAGE->get_header_actions(),1));
        
        $header->headeractions = $PAGE->get_header_actions();
        
