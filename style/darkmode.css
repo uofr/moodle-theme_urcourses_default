@@ -3771,6 +3771,11 @@ ul.oublog-accordion li {
 	border-bottom-color: #333;
 }
 
+.bg-pulse-grey {
+  filter: invert();
+}
+
+
 .generaltable h3 {
 	color: #c5c5c6;
 }
