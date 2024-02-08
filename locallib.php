@@ -386,6 +386,22 @@ function theme_urcourses_default_is_show_visibility_toggle() {
 }
 
 /**
+ * UR HACK
+ * Set the question list to active and show in quiz add button
+ */
+function theme_urcourses_add_quiz_question_edits(){
+    echo '<script>
+    const navLinks = document.querySelectorAll("a.moduletypetitle");
+    
+    const menu = document.querySelector("#modchooser_questions");
+    navLinks[0].classList.add("active");
+    menu.classList.add("active");
+    menu.classList.add("show");
+    
+    </script>';
+}
+
+/**
  * Gets enrollment information for the course specified by $courseid.
  * 
  * @return array

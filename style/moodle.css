@@ -2842,6 +2842,10 @@ pre {
   margin-right: -15px;
   margin-left: -15px; }
 
+#modchooser_help{
+  margin-left: 0px; 
+}
+
 .no-gutters {
   margin-right: 0;
   margin-left: 0; }

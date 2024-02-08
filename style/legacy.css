@@ -29,6 +29,19 @@ dd {
 	padding-left: 10px;
 }
 
+#modchooser_help{
+	margin-left: 0px !important; 
+  }
+
+  .nav-tabs:not(.more-nav), .nav-pills{
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+  }
+
+  .choosercontainer #chooseform .moduletypetitle{
+	padding-top:0.5em;
+  }
+
 /* @end */
 
 /* @end */
