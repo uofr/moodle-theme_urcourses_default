@@ -6563,6 +6563,14 @@ a.close.disabled {
 .toast-body {
   padding: 0.75rem; }
 
+  @media (min-height: 576px){
+  .modal-dialog {
+      /* max-width: 500px; */
+      max-height: 500px;
+      margin: 1.75rem auto;
+  }
+  }
+
 .modal-open {
   overflow: hidden; }
   .modal-open .modal {
@@ -6626,17 +6634,18 @@ a.close.disabled {
     .modal-dialog-centered.modal-dialog-scrollable::before {
       content: none; }
 
-.modal-content {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  pointer-events: auto;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 0.6rem;
-  outline: 0; }
+      .modal-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        pointer-events: auto;
+        background-color: #d90000 !important;
+        background-clip: padding-box;
+        border: 1px solid rgba(0,0,0,.2);
+        border-radius: 0.6rem;
+        outline: 0;
+      }
 
 .modal-backdrop {
   position: fixed;
@@ -10894,9 +10903,6 @@ body#page-lib-editor-tinymce-plugins-moodlemedia-preview {
   background-color: #fff;
   border: 1px solid #ccc; }
 
-.modal.show {
-  display: block; }
-
 .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd {
   display: flex;
   padding: 1rem 1rem;
@@ -13906,7 +13912,7 @@ body:not(.editing) .sitetopic ul.section {
 
 .editing .section .activity .contentwithoutlink,
 .editing .section .activity .activityinstance {
-  padding-right: 200px; }
+  /*padding-right: 200px; */}
 
 .editing .section .activity .editing_move {
   position: absolute;
