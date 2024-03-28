@@ -29,6 +29,23 @@ dd {
 	padding-left: 10px;
 }
 
+#modchooser_help{
+	margin-left: 0px !important; 
+  }
+
+  .nav-tabs:not(.more-nav), .nav-pills{
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+  }
+
+  .choosercontainer #chooseform .moduletypetitle{
+	padding-top:0.5em;
+  }
+
+  .editing .section .activity .contentwithoutlink,
+.editing .section .activity .activityinstance {
+  padding-right: 0px !important; }
+
 /* @end */
 
 /* @end */
@@ -565,7 +582,7 @@ pre {
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
-  }
+}
   pre.prettyprint {
     margin-bottom: 20px;
   }
@@ -577,3 +594,79 @@ pre {
     background-color: transparent;
     border: 0;
   }
+
+.modal.show {
+	display: block !important;
+	height: 100% !important;
+	width: 100% !important;
+	object-fit: contain !important;
+	display: flex !important; 
+    /*position: absolute !important;*/
+	left: 50% !important;
+	top: 50% !important;
+	transform: translate(-50%, -50%) !important;
+	padding-right: 0px !important;
+}
+
+#lbdialog .modal-content {
+	background-color: rgb(0, 0, 0) !important;
+	left: 0 !important;
+	top: 60px !important;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	pointer-events: auto;
+	background-clip: padding-box;
+	border: 1px solid rgba(0,0,0,.2);
+	border-radius: 0.6rem;
+	outline: 0;
+}
+
+#lbdialog{
+	max-width: 700px !important;
+    max-height: fit-content !important;
+    margin: 1.75rem auto !important;
+}
+
+#lbdialog .modal-header {
+	display: none !important;
+}
+
+#lbdialog .figure-caption{
+	color: white !important;
+}
+
+#lbdialog .figure {
+	display: inline-block !important;;
+	color: white !important;;
+	text-overflow: ellipsis !important;;
+	overflow: hidden !important;;
+	white-space: nowrap !important;;
+	margin: 0 !important;;
+	text-align: center !important;;
+}
+
+#lbdialog .modal-backdrop.show{
+	opacity: 0.75 !important;;
+}
+
+#lbdialog .modal-content .modal-footer .btn.btn-default{
+    color: white !important;
+  }
+	
+@media (min-width: 576px){
+#lbdialog .modal-dialog {
+	max-width: 700px !important;
+	max-height: fit-content !important;
+}
+}
+
+@media (min-height: 100px){
+	#lbdialog .modal-content {
+		min-width: auto !important;
+    	width: 100% !important;
+    	overflow-x: auto !important;
+		height: fit-content !important;
+	}
+	}
