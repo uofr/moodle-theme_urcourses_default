@@ -1,5 +1,5 @@
 .clearfix {
-    *zoom: 1;
+    zoom: 1;
   }
   .clearfix:before,
   .clearfix:after {
@@ -41,8 +41,8 @@
   canvas,
   video {
     display: inline-block;
-    *display: inline;
-    *zoom: 1;
+    display: inline;
+    zoom: 1;
   }
   audio:not([controls]) {
     display: none;
@@ -102,7 +102,7 @@
   }
   button,
   input {
-    *overflow: visible;
+    overflow: visible;
     line-height: normal;
   }
   button::-moz-focus-inner,
@@ -383,9 +383,9 @@
   ul.inline > li,
   ol.inline > li {
     display: inline-block;
-    *display: inline;
+    display: inline;
     /* IE7 inline-block hack */
-    *zoom: 1;
+    zoom: 1;
     padding-left: 5px;
     padding-right: 5px;
   }
@@ -403,7 +403,7 @@
     margin-left: 10px;
   }
   .dl-horizontal {
-    *zoom: 1;
+    zoom: 1;
   }
   .dl-horizontal:before,
   .dl-horizontal:after {
@@ -583,7 +583,7 @@
   .table-bordered {
     border: 1px solid #ddd;
     border-collapse: separate;
-    *border-collapse: collapse;
+    border-collapse: collapse;
     border-left: 0;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -779,7 +779,7 @@
     display: inline-block;
     width: 14px;
     height: 14px;
-    *margin-right: .3em;
+    margin-right: .3em;
     line-height: 14px;
     vertical-align: text-top;
     background-image: url("/theme/image.php/urcourses_clean/theme/1557010890/glyphicons-halflings");
@@ -1268,14 +1268,14 @@
   .btn[disabled] {
     color: #333;
     background-color: #e6e6e6;
-    *background-color: #d9d9d9;
+    background-color: #d9d9d9;
   }
   .btn:active,
   .btn.active {
     background-color: #cccccc \9;
   }
   .btn:first-child {
-    *margin-left: 0;
+    margin-left: 0;
   }
   .btn:hover,
   .btn:focus {
@@ -1432,7 +1432,7 @@
   .thumbnails {
     margin-left: -20px;
     list-style: none;
-    *zoom: 1;
+    zoom: 1;
   }
   .thumbnails:before,
   .thumbnails:after {
