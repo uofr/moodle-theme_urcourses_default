@@ -3707,7 +3707,7 @@ table.quizreviewsummary th.cell {
 }
 
 #page-mod-quiz-edit .statusdisplay{
-  background-color: #b0b3b8;
+  background-color: #535355;
 }
 /* Open Forum */
 .hsuforum-thread {
@@ -4039,16 +4039,19 @@ table.question-bank-table{
   color: #e4e6eb;
 }
 
-.dropdown-subpanel .icon{
-  filter: invert(1);
-}
-
 .dropdown-subpanel .icon .fa .fa-eye .fa-fw{
   color: white;
 } 
 
-.h-100 {
-  background: url(https://urcourses.uregina.ca/theme/urcourses_default/pix/Reverse_White.svg) no-repeat;
+.d-flex.flex-row.align-items-start.p-2.mb-1.position-relative.rounded.dropdown-item-outline {
+  color: white;
+}
+
+.d-flex.flex-row.align-items-start.p-2.mb-1.position-relative.rounded.dropdown-item-outline img.icon {
+  filter: invert(1);
+}
+
+.drawerheader .h-100 {
   padding: 45px 155px 0px 0px;
   background-color: #E4E6EB;
   background: url(https://urcourses.uregina.ca/theme/urcourses_default/pix/Reverse_White.svg) no-repeat;
@@ -4057,4 +4060,26 @@ table.question-bank-table{
   width: 0px;
   height: 0px;
 }
+
+.block-massaction-action>div:hover{
+  cursor: pointer;
+  background-color: var(--dark);
+}
+
+i.icon.fa.fa-eye.fa-fw{
+  filter: invert(0);
+
+}
+
+a.dropdown-item.dropdown-toggle .icon{
+  filter: invert(1);
+}
+
+h4.result-title .icon{
+  filter: invert(1);
+}
+
+/* .action-menu .dropdown-toggle .icon {
+  color: white;
+} */
 /*Reverse_White  One_Colour_Green_Pantone  2Colour_Pantone
