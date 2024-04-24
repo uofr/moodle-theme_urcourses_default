@@ -57,8 +57,8 @@ body {
 a {
   color: #32c875; }
   a:hover {
-    color: #3a7a57;
-	background-color: #ffc82e;
+  color: #3a7a57;
+	background-color: #3a7a57;
   }
 
   a:not([class]):focus{
@@ -113,7 +113,7 @@ mark,
 }
 
 .img-thumbnail {
-  background-color: #fff;
+  background-color: #3a3b3c;
   border: 1px solid #dee2e6; }
 
 .figure-caption {
@@ -1082,7 +1082,7 @@ select.form-control:focus::-ms-value {
   border: 1px solid #949598; }
   .page-link:hover {
     color: #094478;
-    background-color: #e9ecef;
+    background-color: #3a7a57;
     border-color: #dee2e6; }
 
 .page-item.active .page-link {
@@ -1237,7 +1237,7 @@ select.form-control:focus::-ms-value {
     background-color: #3a3b3c; }
   .list-group-item-action:active {
     color: #1d2125;
-    background-color: #e9ecef; }
+    background-color: #3a7a57; }
 
 .list-group-item {
   background-color: #242526; }
@@ -1606,7 +1606,7 @@ a:not([class]):focus,
 .activityinstance > a.focus,
 .activityinstance > a:focus {
   color: #3a7a57;
-  background-color: #d2e8fb; }
+  background-color: #636363; }
 
 .red,
 .notifyproblem {
@@ -1950,7 +1950,7 @@ body.dragging .drop-down {
   /* stylelint-disable-line declaration-no-important */ }
 
 .activityiconcontainer {
-  background-color: #f8f9fa;}
+  background-color: #3a3b3c;}
  
 .activityiconcontainer.administration {
   background-color: #5d63f6; }
@@ -2185,7 +2185,7 @@ body.dragging .drop-down {
 
 /* Display month name above the calendar */
     section:not(#region-main) .block.block_calendar_month .maincalendar .calendartable.calendarmonth td.clickable:not(.today):hover .day-number-circle {
-      background-color: #ededed; }
+      background-color: #004f2e; }
   section:not(#region-main) .block.block_calendar_month .bottom {
     border-top: 1px solid rgba(0, 0, 0, 0.125); } 
 
@@ -4077,6 +4077,10 @@ a.dropdown-item.dropdown-toggle .icon{
 
 h4.result-title .icon{
   filter: invert(1);
+}
+
+.format-tiles .course-content .section .activity:hover {
+  background-color: #3a3b3c;
 }
 
 /* .action-menu .dropdown-toggle .icon {
