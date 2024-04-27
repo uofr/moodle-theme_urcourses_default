@@ -307,3 +307,15 @@ body.path-mod h2 img.iconlarge {
 .block_people .teachers .image {
 	border: 0;
 }
+
+@media (min-width: 768px) {
+  .format-topcoll .ctopics .activity-item:not(.activityinline) {
+    padding: 1rem;
+  }
+}
+
+#lbdialog {
+  max-width: 200vw;
+  max-height: fit-content !important;
+  margin: 1.5em auto !important;
+}
