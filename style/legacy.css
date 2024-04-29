@@ -600,7 +600,6 @@ pre {
 	height: 100% !important;
 	width: 100% !important;
 	object-fit: contain !important;
-	display: flex !important; 
     /*position: absolute !important;*/
 	left: 50% !important;
 	top: 50% !important;
