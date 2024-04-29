@@ -1682,12 +1682,12 @@ tr.flagged-tag a {
   }
 
 .moodle-dialogue-exception .param-stacktrace label {
-  background-color: #eee;
+  background-color: #3a3b3c;
   border: 1px solid #ccc; }
 
 .moodle-dialogue-exception .param-stacktrace pre {
   border: 1px solid #ccc;
-  background-color: #fff; }
+  background-color: #3a3b3c; }
 
 .moodle-dialogue-exception .param-stacktrace .stacktrace-file {
   color: navy; }
@@ -2749,7 +2749,7 @@ a#hidebankcmd {
   border-bottom: 1px solid #e5e5e5; }
 
 .form-autocomplete-suggestions {
-  background-color: white;
+  background-color: #3a3b3c;
   border: 1px solid #8f959e; }
 
 .form-autocomplete-suggestions li {
@@ -4115,6 +4115,22 @@ h4.result-title .icon{
 
 #page-mod-quiz-view table.quizattemptsummary tr.bestrow td {
   background-color: #00434e;
+}
+
+.path-mod-assign [data-region="configure-filters"]{
+  background-color: #3a3b3c;
+}
+
+.qn-question{
+  background-color: #323639;
+}
+
+.qn-info {
+  background-color: #3a3b3c;
+}
+
+.defaultactivitycompletion-item a {
+  color: #32c875;
 }
 
 /* .action-menu .dropdown-toggle .icon {
