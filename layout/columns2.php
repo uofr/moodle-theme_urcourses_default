@@ -103,7 +103,7 @@ if ($setdarkmode > -1) {
  //error_log('darkmode:'.print_r($darkmodecheck,1));
 //check if user has darkmode on in database and include if so
 if($darkmodecheck){
-   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css');
+   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css?v=2024050201');
 }
 
 $header = $PAGE->activityheader;

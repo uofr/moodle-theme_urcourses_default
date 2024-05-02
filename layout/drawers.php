@@ -132,23 +132,23 @@ if ($setdarkmode > -1) {
 }
 
 // load additional css
-$PAGE->requires->css('/theme/urcourses_default/style/legacy.css?v=2023061301');
+$PAGE->requires->css('/theme/urcourses_default/style/legacy.css?v=2024050201');
 //$PAGE->requires->css('/theme/urcourses_default/style/card.css');
 //$PAGE->requires->css('/theme/urcourses_default/style/carousel.css');
 //$PAGE->requires->css('/theme/urcourses_default/style/editor.css');
 //$PAGE->requires->css('/theme/urcourses_default/style/image.css');
-$PAGE->requires->css('/theme/urcourses_default/style/callout.css?v=2023061301');
-$PAGE->requires->css('/theme/urcourses_default/style/alert.css?v=2023061301');
+$PAGE->requires->css('/theme/urcourses_default/style/callout.css?v=2024050201');
+$PAGE->requires->css('/theme/urcourses_default/style/alert.css?v=2024050201');
 //$PAGE->requires->css('/theme/urcourses_default/style/button.css');
-$PAGE->requires->css('/theme/urcourses_default/style/pullquote.css?v=2023061301');
-$PAGE->requires->css('/theme/urcourses_default/style/c4l.css?v=2023061301');
+$PAGE->requires->css('/theme/urcourses_default/style/pullquote.css?v=2024050201');
+$PAGE->requires->css('/theme/urcourses_default/style/c4l.css?v=2024050201');
 
 
  $darkmodecheck = $DB->get_record('theme_urcourses_darkmode', array('userid'=>$USER->id, 'darkmode'=>1));
  //error_log('darkmode:'.print_r($darkmodecheck,1));
 //check if user has darkmode on in database and include if so
 if($darkmodecheck){
-   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css?v=2023061301');
+   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css?v=2024050201');
 }
 
 $header = $PAGE->activityheader;
