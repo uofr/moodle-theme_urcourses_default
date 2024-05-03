@@ -5,13 +5,13 @@ require_once("../../../../config.php");
  <div id="carouselWithControls" class="carousel slide" data-ride="carousel" data-interval="10000">
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <img src="<?php echo $CFG->wwwroot; ?>/theme/urcourses_default/pix/imaginarium.jpg" class="d-block img-thumbnail mx-auto" alt="...">
+        <img src="<?php echo $CFG->wwwroot; ?>/theme/urcourses_default/callouts/imagetmpbkg.svg" class="d-block img-thumbnail mx-auto" alt="Image 1 alt">
       </div>
       <div class="carousel-item">
-        <img src="<?php echo $CFG->wwwroot; ?>/theme/urcourses_default/pix/imaginarium.jpg" class="d-block img-thumbnail mx-auto" alt="...">
+        <img src="<?php echo $CFG->wwwroot; ?>/theme/urcourses_default/callouts/imagetmpalt.svg" class="d-block img-thumbnail mx-auto" alt="...">
       </div>
       <div class="carousel-item">
-        <img src="<?php echo $CFG->wwwroot; ?>/theme/urcourses_default/pix/imaginarium.jpg" class="d-block img-thumbnail mx-auto" alt="...">
+        <img src="<?php echo $CFG->wwwroot; ?>/theme/urcourses_default/callouts/imagetmpalt2.svg" class="d-block img-thumbnail mx-auto" alt="...">
       </div>
     </div>
     <a class="carousel-control-prev" href="#carouselWithControls" role="button" data-slide="prev">
