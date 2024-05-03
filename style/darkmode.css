@@ -4133,6 +4133,39 @@ h4.result-title .icon{
   color: #32c875;
 }
 
+.poodll_mediarecorderholder_onetwothree {
+  background-color: #000 !important;
+}
+
+.poodll_mediarecorderholder_onetwothree .poodll_mediarecorderbox_onetwothree {
+  background-color: #000 !important;
+}
+
+.one-two-three-main-wrapper .one-two-three-wrap button i.fa {
+  color: #d6d6d6;
+  text-shadow: 1px 2px 1px #3a3a3a;
+}
+
+.hp_timer{
+  color: #e0e1e4;
+}
+
+.hp_slide {
+  color: 3px solid #e0e1e4;
+}
+
+.poodll_mediarecorder_button_onetwothree {
+  border: 3px solid #e0e1e4;
+}
+
+.audio-container {
+  background-color: #000 !important;
+}
+
+#play-button:hover, #pause-button:hover {
+  background-color: #e6f19d;
+}
+
 /* .action-menu .dropdown-toggle .icon {
   color: white;
 } */
