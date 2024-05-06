@@ -148,7 +148,7 @@ $PAGE->requires->css('/theme/urcourses_default/style/c4l.css?v=2024050201');
  //error_log('darkmode:'.print_r($darkmodecheck,1));
 //check if user has darkmode on in database and include if so
 if($darkmodecheck){
-   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css?v=2024050201');
+   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css?v=2024050601');
 }
 
 $header = $PAGE->activityheader;
