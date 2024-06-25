@@ -15,66 +15,99 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Campus - Layout file.
+ * Theme Boost Union - Columns2 page layout.
  *
- * @package   theme_boost_campus
- * @copyright 2017 Kathrin Osswald, Ulm University kathrin.osswald@uni-ulm.de
+ * This layoutfile is based on theme/boost/layout/columns2.php
+ *
+ * Modifications compared to this layout file:
+ * * Include footnote
+ * * Render theme_boost_union/columns2 instead of theme_boost/colums2 template
+ * * Include course related hints
+ * * Include back to top button
+ * * Include activity navigation
+ *
+ * @package   theme_boost_union
+ * @copyright 2022 Luca Bösch, BFH Bern University of Applied Sciences luca.boesch@bfh.ch
  * @copyright based on code from theme_boost by Damyon Wiese
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
-// MODIFICATION START.
-global $PAGE;
-// MODIFICATION END.
 
-user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
 require_once($CFG->libdir . '/behat/lib.php');
-// MODIFICATION Start: Require own locallib.php.
-require_once($CFG->dirroot . '/theme/boost_campus/locallib.php');
-// MODIFICATION END.
 
-if (isloggedin()) {
-    $navdraweropen = (get_user_preferences('drawer-open-nav', 'true') == 'true');
-} else {
-    $navdraweropen = false;
+// Require own locallib.php.
+require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
+
+// Add activity navigation if the feature is enabled.
+$activitynavigation = get_config('theme_boost_union', 'activitynavigation');
+if ($activitynavigation == THEME_BOOST_UNION_SETTING_SELECT_YES) {
+    $PAGE->theme->usescourseindex = false;
 }
+
+// Add block button in editing mode.
+$addblockbutton = $OUTPUT->addblockbutton();
+
 $extraclasses = [];
-if ($navdraweropen) {
-    $extraclasses[] = 'drawer-open-left';
-}
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $blockshtml = $OUTPUT->blocks('side-pre');
-$hasblocks = strpos($blockshtml, 'data-block=') !== false;
-$regionmainsettingsmenu = $OUTPUT->region_main_settings_menu();
-// MODIFICATION START: Setting 'catchshortcuts'.
-// Initialize array.
-$catchshortcuts = array();
-// If setting is enabled then add the parameter to the array.
-if (get_config('theme_boost_campus', 'catchendkey') == true) {
-    $catchshortcuts[] = 'end';
-}
-// If setting is enabled then add the parameter to the array.
-if (get_config('theme_boost_campus', 'catchcmdarrowdown') == true) {
-    $catchshortcuts[] = 'cmdarrowdown';
-}
-// If setting is enabled then add the parameter to the array.
-if (get_config('theme_boost_campus', 'catchctrlarrowdown') == true) {
-    $catchshortcuts[] = 'ctrlarrowdown';
-}
-// MODIFICATION END.
+$hasblocks = (strpos($blockshtml, 'data-block=') !== false || !empty($addblockbutton));
 
-// MODIFICATION START: Setting 'darknavbar'.
-if (get_config('theme_boost_campus', 'darknavbar') == 'yes') {
-    $darknavbar = true;
-} else {
-    $darknavbar = false;
+$secondarynavigation = false;
+$overflow = '';
+if ($PAGE->has_secondary_navigation()) {
+    $tablistnav = $PAGE->has_tablist_secondary_navigation();
+    $moremenu = new \core\navigation\output\more_menu($PAGE->secondarynav, 'nav-tabs', true, $tablistnav);
+    $secondarynavigation = $moremenu->export_for_template($OUTPUT);
+    $overflowdata = $PAGE->secondarynav->get_overflow_menu_data();
+    if (!is_null($overflowdata)) {
+        $overflow = $overflowdata->export_for_template($OUTPUT);
+    }
 }
-// MODIFICATION END.
 
-// MODIFICATION START: Setting 'navdrawerfullwidth'.
-$navdrawerfullwidth = get_config('theme_boost_campus', 'navdrawerfullwidth');
-// MODIFICATION END.
+$primary = new core\navigation\output\primary($PAGE);
+$renderer = $PAGE->get_renderer('core');
+$primarymenu = $primary->export_for_template($renderer);
+$buildregionmainsettings = !$PAGE->include_region_main_settings_in_header_actions()  && !$PAGE->has_secondary_navigation();
+// If the settings menu will be included in the header then don't add it here.
+$regionmainsettingsmenu = $buildregionmainsettings ? $OUTPUT->region_main_settings_menu() : false;
+
+//including Dark Mode css if darkmode==1 if query string is set
+//darkmode toggle code
+$setdarkmode = optional_param('darkmode', -1, PARAM_INT);
+
+if ($setdarkmode > -1) {
+    $userid = $USER->id;
+    $table = 'theme_urcourses_darkmode';
+
+    $newrecord = new stdClass();
+    $newrecord->userid = $userid;
+
+    //database check if user has a record, insert if not
+    if ($record = $DB->get_record($table, array('userid'=>$userid))) {
+     //if has a record, update record to $setdarkmode
+     
+     $newrecord->darkmode = $setdarkmode;
+     $newrecord->id = $record->id;
+     $DB->update_record($table, $newrecord);
+    }
+    else {
+        //create a record
+        $newrecord->darkmode = $setdarkmode;
+        $DB->insert_record($table, $newrecord);
+    }  
+    
+ }
+
+ $darkmodecheck = $DB->get_record('theme_urcourses_darkmode', array('userid'=>$USER->id, 'darkmode'=>1));
+ //error_log('darkmode:'.print_r($darkmodecheck,1));
+//check if user has darkmode on in database and include if so
+if($darkmodecheck){
+   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css');
+}
+
+$header = $PAGE->activityheader;
+$headercontent = $header->export_for_template($renderer);
 
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
@@ -82,62 +115,38 @@ $templatecontext = [
     'sidepreblocks' => $blockshtml,
     'hasblocks' => $hasblocks,
     'bodyattributes' => $bodyattributes,
-    'navdraweropen' => $navdraweropen,
+    'primarymoremenu' => $primarymenu['moremenu'],
+    'secondarymoremenu' => $secondarynavigation ?: false,
+    'mobileprimarynav' => $primarymenu['mobileprimarynav'],
+    'usermenu' => $primarymenu['user'],
+    'langmenu' => $primarymenu['lang'],
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
-    // MODIFICATION START: Add Boost Campus realated values to the template context.
-    'catchshortcuts' => json_encode($catchshortcuts),
-    'navdrawerfullwidth' => $navdrawerfullwidth,
-    'darknavbar' => $darknavbar
-    // MODIFICATION END.
+    'headercontent' => $headercontent,
+    'overflow' => $overflow,
+    'addblockbutton' => $addblockbutton,
 ];
 
-// MODIDFICATION START.
-// Use the returned value from theme_boost_campus_get_modified_flatnav_defaulthomepageontop as the template context.
-$templatecontext['flatnavigation'] = theme_boost_campus_process_flatnav($PAGE->flatnav);
-// If setting showsettingsincourse is enabled.
-if (get_config('theme_boost_campus', 'showsettingsincourse') == 'yes') {
-    // Context value for requiring incoursesettings.js.
-    $templatecontext['incoursesettings'] = true;
-    // Add the returned value from theme_boost_campus_get_incourse_settings to the template context.
-    $templatecontext['node'] = theme_boost_campus_get_incourse_settings();
-    // Add the returned value from theme_boost_campus_get_incourse_activity_settings to the template context.
-    $templatecontext['activitynode'] = theme_boost_campus_get_incourse_activity_settings();
-}
+// Include the template content for the course related hints.
+require_once(__DIR__ . '/includes/courserelatedhints.php');
 
-// MODIFICATION START: Handle additional layout elements.
-// The output buffer is needed to render the additional layout elements now without outputting them to the page directly.
-ob_start();
+// Include the content for the back to top button.
+require_once(__DIR__ . '/includes/backtotopbutton.php');
 
-// Require additional layout files.
-// Add footer blocks and standard footer.
-require_once(__DIR__ . '/includes/footer.php');
-// Get imageareaitems config.
-$imageareaitems = get_config('theme_boost_campus', 'imageareaitems');
-if (!empty($imageareaitems)) {
-    // Add imagearea layout file.
-    require_once(__DIR__ . '/includes/imagearea.php');
-}
-// Get footnote config.
-$footnote = get_config('theme_boost_campus', 'footnote');
-if (!empty($footnote)) {
-    // Add footnote layout file.
-    require_once(__DIR__ . '/includes/footnote.php');
-}
+// Include the content for the scrollspy.
+require_once(__DIR__ . '/includes/scrollspy.php');
 
-// Get output buffer.
-$pagebottomelements = ob_get_clean();
+// Include the template content for the footnote.
+require_once(__DIR__ . '/includes/footnote.php');
 
-// If there isn't anything in the buffer, set the additional layouts string to an empty string to avoid problems later on.
-if ($pagebottomelements == false) {
-    $pagebottomelements = '';
-}
-// Add the additional layouts to the template context.
-$templatecontext['pagebottomelements'] = $pagebottomelements;
+// Include the template content for the static pages.
+require_once(__DIR__ . '/includes/staticpages.php');
 
-// Render columns2.mustache from boost_campus.
-echo $OUTPUT->render_from_template('theme_boost_campus/columns2', $templatecontext);
-// MODIFICATION END.
-/* ORIGINAL START.
-echo $OUTPUT->render_from_template('theme_boost/columns2', $templatecontext);
-ORIGINAL END. */
+// Include the template content for the JavaScript disabled hint.
+require_once(__DIR__ . '/includes/javascriptdisabledhint.php');
+
+// Include the template content for the info banners.
+require_once(__DIR__ . '/includes/infobanners.php');
+
+// Render columns2.mustache from boost_union.
+echo $OUTPUT->render_from_template('theme_boost_union/columns2', $templatecontext);

@@ -15,10 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Campus Login - Layout file.
+ * Theme Boost Campus Login - Login page layout.
  *
- * @package   theme_boost_campus
- * @copyright 2017 Kathrin Osswald, Ulm University kathrin.osswald@uni-ulm.de
+ * This layoutfile is based on theme/boost/layout/login.php
+ *
+ * Modifications compared to this layout file:
+ * * Include footnote
+ * * Render theme_boost_union/login instead of theme_boost/login template
+ *
+ * @package   theme_boost_union
+ * @copyright 2022 Luca Bösch, BFH Bern University of Applied Sciences luca.boesch@bfh.ch
  * @copyright based on code from theme_boost by Damyon Wiese
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,41 +32,24 @@
 defined('MOODLE_INTERNAL') || die();
 
 $bodyattributes = $OUTPUT->body_attributes();
+list($loginbackgroundimagetext, $loginbackgroundimagetextcolor) = theme_urcourses_default_get_loginbackgroundimage_text();
 
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
     'output' => $OUTPUT,
-    'bodyattributes' => $bodyattributes
+    'bodyattributes' => $bodyattributes,
+    'loginbackgroundimagetext' => $loginbackgroundimagetext,
+    'loginbackgroundimagetextcolor' => $loginbackgroundimagetextcolor
 ];
 
-// MODIFICATION START: Handle additional layout elements.
-// The output buffer is needed to render the additional layout elements now without outputting them to the page directly.
-ob_start();
+// Include the template content for the footnote.
+require_once(__DIR__ . '/includes/footnote.php');
 
-// Include own layout file for the footnote region.
-// The theme_boost/login template already renders the standard footer.
-// The footer blocks and the image area are currently not shown on the login page.
-// Here, we will add the footnote only.
-// Get footnote config.
-$footnote = get_config('theme_boost_campus', 'footnote');
-if (!empty($footnote)) {
-    // Add footnote layout file.
-    require_once(__DIR__ . '/includes/footnote.php');
-}
+// Include the template content for the static pages.
+require_once(__DIR__ . '/includes/staticpages.php');
 
-// Get output buffer.
-$pagebottomelements = ob_get_clean();
+// Include the template content for the info banners.
+require_once(__DIR__ . '/includes/infobanners.php');
 
-// If there isn't anything in the buffer, set the additional layouts string to an empty string to avoid problems later on.
-if ($pagebottomelements == false) {
-    $pagebottomelements = '';
-}
-// Add the additional layouts to the template context.
-$templatecontext['pagebottomelements'] = $pagebottomelements;
-
-// Render own template.
-echo $OUTPUT->render_from_template('theme_boost_campus/login', $templatecontext);
-// MODIFICATION END.
-/* ORIGINAL START.
-echo $OUTPUT->render_from_template('theme_boost/login', $templatecontext);
-ORIGINAL END. */
+// Render login.mustache from boost_union.
+echo $OUTPUT->render_from_template('theme_urcourses_default/login', $templatecontext);

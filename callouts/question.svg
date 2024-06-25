@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with Vectornator (http://vectornator.io/) -->
+<svg height="100%" stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 512 512" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:vectornator="http://vectornator.io" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<path d="M174.491 203.101C174.491 190.271 184.892 179.871 197.722 179.871C210.552 179.871 220.953 190.271 220.953 203.101C220.953 215.931 210.552 226.332 197.722 226.332C184.892 226.332 174.491 215.931 174.491 203.101Z" id="Fill"/>
+<path d="M234.318 295.976C234.318 283.976 244.046 274.249 256.045 274.249C268.045 274.249 277.773 283.976 277.773 295.976C277.773 307.976 268.045 317.703 256.045 317.703C244.046 317.703 234.318 307.976 234.318 295.976Z" id="Fill_2"/>
+</defs>
+<g id="Untitled" vectornator:layerName="Untitled">
+<path d="M256 27.4062C129.746 27.4063 27.4063 129.746 27.4062 256C27.4063 382.254 129.746 484.594 256 484.594C382.254 484.594 484.594 382.254 484.594 256C484.594 129.746 382.254 27.4063 256 27.4062ZM256 70.25C358.581 70.25 441.75 153.419 441.75 256C441.75 358.581 358.581 441.75 256 441.75C153.419 441.75 70.25 358.581 70.25 256C70.25 153.419 153.419 70.25 256 70.25Z" fill="#000000" fill-rule="nonzero" opacity="1" stroke="none"/>
+<g opacity="1">
+<path d="M229.498 360.251C229.498 345.615 241.364 333.75 256 333.75C270.636 333.75 282.502 345.615 282.502 360.251C282.502 374.888 270.636 386.753 256 386.753C241.364 386.753 229.498 374.888 229.498 360.251Z" fill="#000000" fill-rule="nonzero" opacity="1" stroke="none"/>
+<path d="M174.465 202.44C175.751 171.885 186.419 150.228 206.468 137.469C219.119 129.321 234.665 125.247 253.105 125.247C277.335 125.247 297.465 131.037 313.493 142.616C329.521 154.195 337.535 171.349 337.535 194.078C337.535 208.015 334.051 219.755 327.082 229.297C323.008 235.087 315.181 242.484 303.602 251.49L292.184 260.335C285.966 265.16 281.838 270.789 279.801 277.221C278.515 281.295 277.818 287.621 277.711 296.198L234.289 296.198C234.933 278.079 236.648 265.562 239.436 258.647C242.223 251.731 249.406 243.771 260.985 234.765L272.725 225.598C276.585 222.704 279.694 219.541 282.053 216.11C286.341 210.213 288.485 203.727 288.485 196.651C288.485 188.503 286.1 181.078 281.329 174.377C276.558 167.677 267.847 164.326 255.196 164.326C242.759 164.326 233.941 168.454 228.741 176.709C223.541 184.965 220.941 193.542 220.941 202.44L174.465 202.44Z" fill="#000000" fill-rule="nonzero" opacity="1" stroke="none"/>
+<g opacity="1">
+<use fill="#000000" fill-rule="nonzero" stroke="none" xlink:href="#Fill"/>
+<mask height="46.4616" id="StrokeMask" maskUnits="userSpaceOnUse" width="46.4616" x="174.491" y="179.871">
+<rect fill="#000000" height="46.4616" stroke="none" width="46.4616" x="174.491" y="179.871"/>
+<use fill="#ffffff" fill-rule="evenodd" stroke="none" xlink:href="#Fill"/>
+</mask>
+<use fill="none" mask="url(#StrokeMask)" stroke="#000000" stroke-linecap="butt" stroke-linejoin="round" stroke-width="172" xlink:href="#Fill"/>
+</g>
+<g opacity="1">
+<use fill="#000000" fill-rule="nonzero" stroke="none" xlink:href="#Fill_2"/>
+<mask height="43.4544" id="StrokeMask_2" maskUnits="userSpaceOnUse" width="43.4544" x="234.318" y="274.249">
+<rect fill="#000000" height="43.4544" stroke="none" width="43.4544" x="234.318" y="274.249"/>
+<use fill="#ffffff" fill-rule="evenodd" stroke="none" xlink:href="#Fill_2"/>
+</mask>
+<use fill="none" mask="url(#StrokeMask_2)" stroke="#000000" stroke-linecap="butt" stroke-linejoin="round" stroke-width="160.868" xlink:href="#Fill_2"/>
+</g>
+</g>
+</g>
+</svg>
