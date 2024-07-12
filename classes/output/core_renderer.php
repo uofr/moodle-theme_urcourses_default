@@ -559,7 +559,9 @@ public function user_menu($user = null, $withlinks = null) {
 		}
 	}
 	$opts->navitems[$menukey] = $mynode;
-	$opts->navitems[$menukey+1] = $saccountnode;
+    if (!empty($saccountnode)) {
+        $opts->navitems[$menukey+1] = $saccountnode;
+    }
 	for ($i=$menukey+2; $i<count($allnodes)+2; $i++) {
 		$opts->navitems[$i] = $allnodes[$i-2];
 	}
