@@ -305,7 +305,7 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
        else  $header->instructnum = "smalllist";
        
        $header->navbar = $this->navbar();
-       
+       $header->pageheadingbutton = $this->page_heading_button();
        
        //$preheader = $header->courseimage = theme_boost_union_get_course_image($COURSE);
        //$preheader = $header->courseimage = theme_urcourses_default_get_course_image($COURSE);
