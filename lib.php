@@ -209,8 +209,8 @@ function theme_urcourses_default_get_extra_scss($theme) {
 function theme_urcourses_default_get_precompiled_css() {
     global $CFG;
     //return file_get_contents($CFG->dirroot . '/theme/boost_union/style/moodle.css');
-	$precss = file_get_contents($CFG->dirroot . '/theme/boost_union/style/moodle.css');
-	$precss .= "\n".file_get_contents($CFG->dirroot . '/theme/boost_union/style/callout.css');
+	$precss = file_get_contents($CFG->dirroot . '/theme/boost/style/moodle.css');
+	//$precss .= "\n".file_get_contents($CFG->dirroot . '/theme/boost_union/style/callout.css');
 	//error_log('precss:'.print_r($precss,1));
     return $precss;
 }
