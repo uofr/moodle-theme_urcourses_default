@@ -15,7 +15,7 @@
   border: solid 0.08em #eee; }
 
 .fa-inverse {
-  color: #fff; }
+  color: #1d2125; }
 
 
 
@@ -57,7 +57,7 @@ body {
 a {
   color: #32c875; }
   a:hover {
-  color: #3a7a57;
+  color: #32c875 !important;
 	background-color: #3a7a57;
   }
 
@@ -451,6 +451,10 @@ select.form-control:focus::-ms-value {
   .btn:focus, .btn.focus {
     box-shadow: 0 0 0 0.2rem rgba(15, 108, 191, 0.75); }
 
+.btn .btn-link .p-0:hover{
+  background-color: #32c875 !important;
+}
+
 .btn-primary {
   color: #fff;
   background-color: #3a7a57;
@@ -827,6 +831,10 @@ select.form-control:focus::-ms-value {
   .btn-link:disabled, .btn-link.disabled {
     color: #6a737b; }
 
+a.btn.btn-link.p-0:hover{
+  background-color: #32c875 !important;
+}
+
 .qtype_multichoice_clearchoice .btn-link{
   color: #32c875;
 }
@@ -1060,7 +1068,7 @@ select.form-control:focus::-ms-value {
 
 .card {
   background-color: #242526;
-  border: 1px solid rgba(0, 0, 0, 0.125); }
+  border: #e9ecef; }
 
 .card-header {
   background-color: rgba(0, 0, 0, 0.03);
@@ -1240,7 +1248,8 @@ select.form-control:focus::-ms-value {
     background-color: #3a7a57; }
 
 .list-group-item {
-  background-color: #242526; }
+  background-color: #242526;
+  border-color: #818182; }
   .list-group-item.disabled, .list-group-item:disabled {
     color: #6a737b;
     background-color: #fff; }
@@ -1348,7 +1357,8 @@ select.form-control:focus::-ms-value {
   background-clip: padding-box; }
 
 .modal-content {
-  background-color: #242526;}
+  background-color: #242526;
+  border-color: #ced4da;}
 
 .modal-backdrop {
   background-color: #000; }
@@ -1726,7 +1736,7 @@ tr.flagged-tag a {
 /* The instruction/help area */
 .jschooser .choosercontainer #chooseform .instruction,
 .jschooser .choosercontainer #chooseform .typesummary {
-  background-color: #fff; }
+  background-color: #3a3b3c; }
 
 .choosercontainer #chooseform .selected {
   background-color: #242526;
@@ -2206,13 +2216,13 @@ body.dragging .drop-down {
     color: #5babf2 !important;}
 
 .course-content .section.dropready.main.drop-down {
-  border-bottom: 1px solid #1d2125; }
+  border-bottom: 1px solid #fff; }
 
 .course-content .section.dropready li.activity.dropready.drop-down {
-  border-bottom: 1px solid #1d2125; }
+  border-bottom: 1px solid #fff; }
 
 .course-content .section.dropready li.activity.dropready.drop-up {
-  border-top: 1px solid #1d2125; }
+  border-top: 1px solid #fff; }
 
 .course-content .section-summary .section-summary-activities .activity-count {
   color: #6a737b; }
@@ -2451,6 +2461,9 @@ span.editinstructions {
   color: #1d2125;
   border-color: #aab4bf; }
 
+.fp-icon {
+filter: invert();}
+
 .fp-iconview .fp-thumbnail{
   border: 1px solid #242526}
 
@@ -2481,16 +2494,16 @@ span.editinstructions {
 /* Override YUI default styling */
 /* stylelint-disable declaration-no-important */
 .filemanager .yui3-datatable-header {
-  background: #fff !important;
-  border-bottom: 1px solid #ccc !important;
+  background: #000 !important;
+  border-bottom: 1px solid #555 !important;
   border-left: 0 solid #fff !important;
-  color: #555 !important; }
+  color: #ccc !important; }
 
 .filemanager .yui3-datatable-odd .yui3-datatable-cell {
-  background-color: #f6f6f6 !important; }
+  background-color: #575555 !important; }
 
 .filemanager .yui3-datatable-even .yui3-datatable-cell {
-  background-color: #fff !important; }
+  background-color: #000 !important; }
 
 .filepicker-filelist .dndupload-target,
 .filemanager-container .dndupload-target {
@@ -2753,7 +2766,7 @@ a#hidebankcmd {
   border: 1px solid #8f959e; }
 
 .form-autocomplete-suggestions li {
-  color: #1d2125; }
+  color: #fff; }
   .form-autocomplete-suggestions li:hover, .form-autocomplete-suggestions li:focus, .form-autocomplete-suggestions li[aria-selected="true"] {
     background-color: #3a7a57;
     color: #fff; }
@@ -2987,6 +3000,19 @@ a#hidebankcmd {
         color: #495057; }
     .yui-skin-sam .yui-layout.path-mod-chat-gui_ajax #chat-messages .chat-message.course-theme {
       background-color: #fff; }
+      .yui3-skin-sam .yui3-datatable-even .yui3-datatable-cell {
+        background-color: #242526 !important;
+      }
+      .yui3-skin-sam .yui3-datatable-odd .yui3-datatable-cell {
+        background-color: #646464;
+      }
+      .yui3-skin-sam .yui3-datatable-header {
+        color: #fff;
+        text-shadow: 0 1px 1px #000;
+      }
+      yui3-skin-sam .yui3-datatable-sortable-column:hover{
+        background-color: #8d8d8d;
+      }
 
     .path-backup .mform .grouped_settings.section_level {
       background-color: #fff;}
@@ -3545,6 +3571,10 @@ body.path-mod h2 img.iconlarge{
   filter: invert(98%) sepia(8%) saturate(534%) hue-rotate(179deg) brightness(96%) contrast(91%);
 }
 
+.path-mod-resource .resourcedetails {
+  color: #fff !important;
+}
+
 .body-container .position-relative{
   background-color: #3a3a38;
 }
@@ -3690,7 +3720,7 @@ table.dataTable tr.odd td.sorting_1, .courses .coursebox.even,
 }
 
 #page-mod-quiz-edit ul.slots li.section li.activity{
-  background-color: #6f6e6b;
+  background-color: #474747;
 }
 
 table.quizreviewsummary td.cell {
@@ -4021,6 +4051,10 @@ a:hover{
   border: solid #999 1px;
 }
 
+.book_content .caption {
+  color: #fff;
+}
+
 table.question-bank-table{
   background-color: #3a3b3c;
 }
@@ -4062,6 +4096,10 @@ table.question-bank-table{
 }
 
 .d-flex.flex-row.align-items-start.p-2.mb-1.position-relative.rounded.dropdown-item-outline img.icon {
+  filter: invert(1);
+}
+
+.r0 .qtype img.icon{
   filter: invert(1);
 }
 
@@ -4166,6 +4204,33 @@ h4.result-title .icon{
   background-color: #e6f19d;
 }
 
+.tox .tox-dialog__header{
+  background-color: #1d2125 !important;
+}
+
+.tox .tox-dialog__content-js {
+  background-color: #1d2125 !important;
+}
+
+#page-wrapper{
+  background-color: #18191A !important;
+}
+
+.d-print-block {
+  background-color: #1d2125 !important;
+}
+
+.resourcelinkdetails {
+  color: #fff !important;
+}
+
+.course-content .section.dropready li.activity.section.dropready.drop-up{
+  border-top: 1px solid #fff !important;
+}
+
+.que .outcome, .que .comment{
+  color: #000;
+}
 /* .action-menu .dropdown-toggle .icon {
   color: white;
 } */
