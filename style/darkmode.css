@@ -112,6 +112,10 @@ mark,
   background-color: #242526;;
 }
 
+#page-blocks-configurable_reports-viewreport .generaltable th.header {
+  background-color: #343a40;
+}
+
 .img-thumbnail {
   background-color: #3a3b3c;
   border: 1px solid #dee2e6; }
@@ -3666,6 +3670,11 @@ table.dataTable tr.odd td.sorting_1, .courses .coursebox.even,
   color: #dddddd;
 }
 
+.path-mod-board .mod_board_attachment_button {
+  background: #438296;
+  border: 3px solid #438296;
+}
+
 .icon .fa .fa-smile-o .fa-fw {
   color: #000;
 }
@@ -3888,6 +3897,7 @@ img.activityicon{
 
 [data-fieldtype="modgrade"]{
   background-color: #242526;
+  border: 1px solid rgb(255 255 255 / 13%);
 }
 
 body#page-question-type-multichoice div[id^=fitem_id_][id*=answer_]{
@@ -4087,6 +4097,10 @@ table.question-bank-table{
   color: #e4e6eb;
 }
 
+.availability-inner, .availability-plugincontrols {
+  border: 1px solid rgb(255 255 255 / 13%);
+}
+
 .dropdown-subpanel .icon .fa .fa-eye .fa-fw{
   color: white;
 } 
@@ -4217,7 +4231,7 @@ h4.result-title .icon{
 }
 
 .d-print-block {
-  background-color: #1d2125 !important;
+  /*background-color: #1d2125 !important;*/
 }
 
 .resourcelinkdetails {
@@ -4231,7 +4245,25 @@ h4.result-title .icon{
 .que .outcome, .que .comment{
   color: #000;
 }
+
+.mod_board_wrapper a img {
+  padding: 37px 135px 0px 0px;
+  background-color: #E4E6EB;
+  background: url(../pix/Brickfield-logo-white.svg) no-repeat;
+  background-size: 100% 100%;
+  vertical-align: middle;
+  width: 0px;
+  height: 0px;
+}
+
+#reportslist th.header{
+  background-color: #dbdad9;
+  color: #1b1914;
+  filter: invert(1);
+}
 /* .action-menu .dropdown-toggle .icon {
   color: white;
 } */
 /*Reverse_White  One_Colour_Green_Pantone  2Colour_Pantone
+
+"C:\xampp\htdocs\UofRthings\Moodle_Dev_darkmode\moodle2\theme\urcourses_default\pix\Brickfield-logo-white.svg"
