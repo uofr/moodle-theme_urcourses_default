@@ -600,10 +600,6 @@ pre {
 	height: 100% !important;
 	width: 100% !important;
 	object-fit: contain !important;
-    /*position: absolute !important;*/
-	left: 50% !important;
-	top: 50% !important;
-	transform: translate(-50%, -50%) !important;
 }
 
 #lbdialog .modal-content {
