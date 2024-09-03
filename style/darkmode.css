@@ -99,7 +99,7 @@ h3, .h3{
 }
 
 hr {
-  border-top: 1px solid rgba(0, 0, 0, 0.1); }
+  border-top: 1px solid #ffffe5; }
 
 mark,
 .mark {
@@ -1173,8 +1173,8 @@ a.btn.btn-link.p-0:hover{
     color: #041d34; }
 
 .alert-secondary {
-  color: #6b6e71;
-  background-color: #f5f6f8;
+  color: #94918e;
+  background-color: #0a0907;
   border-color: #f1f3f5; }
   .alert-secondary hr {
     border-top-color: #e2e6ea; }
@@ -2048,6 +2048,10 @@ body.dragging .drop-down {
   color: #32c875;
 }
 
+.block_sharing_cart .footer .header-commands {
+  border-top: 1px solid #ffffff
+}
+
 /* We put an absolutely positioned div in a relatively positioned div so it takes up no space */
 @media (min-width: 576px) {
   .region_main_settings_menu_proxy {
@@ -2099,6 +2103,9 @@ body.dragging .drop-down {
   .calendar_event_user .commands a {
     color: #0d5ca1; }
 
+.calendar_event_user .commands a .icon {
+  color: #32c875;
+}
 .calendar_event_other {
   background-color: #ced4da; }
   .calendar_event_other .commands a {
@@ -2201,7 +2208,7 @@ body.dragging .drop-down {
     section:not(#region-main) .block.block_calendar_month .maincalendar .calendartable.calendarmonth td.clickable:not(.today):hover .day-number-circle {
       background-color: #004f2e; }
   section:not(#region-main) .block.block_calendar_month .bottom {
-    border-top: 1px solid rgba(0, 0, 0, 0.125); } 
+    border-top: 1px solid #ffffff; } 
 
 .cal_courses_flt {
   color: #6a737b; }
@@ -2467,6 +2474,10 @@ span.editinstructions {
 
 .fp-icon {
 filter: invert();}
+
+.fp-filename-icon .fp-icon{
+  filter: invert(0);
+}
 
 .fp-iconview .fp-thumbnail{
   border: 1px solid #242526}
@@ -4138,7 +4149,7 @@ i.icon.fa.fa-eye.fa-fw{
 }
 
 a.dropdown-item.dropdown-toggle .icon{
-  filter: invert(1);
+  /*filter: invert(1);*/
 }
 
 h4.result-title .icon{
@@ -4249,11 +4260,21 @@ h4.result-title .icon{
 .mod_board_wrapper a img {
   padding: 37px 135px 0px 0px;
   background-color: #E4E6EB;
-  background: url(../pix/Brickfield-logo-white.svg) no-repeat;
+  background: url(https://urcourses.uregina.ca/theme/urcourses_default//pix/Brickfield-logo-white.svg) no-repeat;
   background-size: 100% 100%;
   vertical-align: middle;
   width: 0px;
   height: 0px;
+}
+
+#page-admin-tool-brickfield-registration #page-content #region-main div[role="main"] img {
+  padding: 48px 42px 0px 0px;
+  /* background-color: #E4E6EB; */
+  background: url(https://urcourses.uregina.ca/theme/urcourses_default//pix/Brickfield-logo-white.svg) no-repeat;
+  background-size: 100% 100%;
+  vertical-align: middle;
+  width: 203px;
+  height: 48px;
 }
 
 #reportslist th.header{
