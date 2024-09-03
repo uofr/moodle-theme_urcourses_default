@@ -113,6 +113,9 @@ if (!$courseindex) {
     $courseindexopen = false;
 }
 
+// Include the extra classes for the course index modification.
+require_once($CFG->dirroot . '/theme/boost_union/layout/includes/courseindex.php');
+
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $forceblockdraweropen = $OUTPUT->firstview_fakeblocks();
 

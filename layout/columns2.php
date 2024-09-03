@@ -84,6 +84,9 @@ if ($darkmodecheck) {
 	$extraclasses[] = 'ur-dark-mode';
 }
 
+// Include the extra classes for the course index modification.
+require_once($CFG->dirroot . '/theme/boost_union/layout/includes/courseindex.php');
+
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $blockshtml = $OUTPUT->blocks('side-pre');
 $hasblocks = (strpos($blockshtml, 'data-block=') !== false || !empty($addblockbutton));
