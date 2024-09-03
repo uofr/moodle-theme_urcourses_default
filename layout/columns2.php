@@ -109,7 +109,7 @@ $regionmainsettingsmenu = $buildregionmainsettings ? $OUTPUT->region_main_settin
 
 //check if user has darkmode on in database and include if so
 if($darkmodecheck){
-   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css?v=2024050601');
+   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css?v=2024090200');
 }
 
 $header = $PAGE->activityheader;

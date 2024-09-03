@@ -136,21 +136,21 @@ $buildregionmainsettings = !$PAGE->include_region_main_settings_in_header_action
 $regionmainsettingsmenu = $buildregionmainsettings ? $OUTPUT->region_main_settings_menu() : false;
 
 // load additional css
-$PAGE->requires->css('/theme/urcourses_default/style/legacy.css?v=2024050201');
+$PAGE->requires->css('/theme/urcourses_default/style/legacy.css?v=2024090200');
 //$PAGE->requires->css('/theme/urcourses_default/style/card.css');
 //$PAGE->requires->css('/theme/urcourses_default/style/carousel.css');
 //$PAGE->requires->css('/theme/urcourses_default/style/editor.css');
 //$PAGE->requires->css('/theme/urcourses_default/style/image.css');
-$PAGE->requires->css('/theme/urcourses_default/style/callout.css?v=2024050201');
-$PAGE->requires->css('/theme/urcourses_default/style/alert.css?v=2024050201');
+$PAGE->requires->css('/theme/urcourses_default/style/callout.css?v=2024090200');
+$PAGE->requires->css('/theme/urcourses_default/style/alert.css?v=2024090200');
 //$PAGE->requires->css('/theme/urcourses_default/style/button.css');
-$PAGE->requires->css('/theme/urcourses_default/style/pullquote.css?v=2024050201');
-$PAGE->requires->css('/theme/urcourses_default/style/c4l.css?v=2024050201');
+$PAGE->requires->css('/theme/urcourses_default/style/pullquote.css?v=2024090200');
+$PAGE->requires->css('/theme/urcourses_default/style/c4l.css?v=2024090200');
 
 
 // if user has darkmode on, include the CSS
 if($darkmodecheck){
-   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css?v=2024050601');
+   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css?v=2024090200');
    
 }
 
