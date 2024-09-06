@@ -1608,7 +1608,7 @@ a.dimmed_text:visited,
 .usersuspended a:visited,
 .dimmed_category,
 .dimmed_category a {
-  color: #6a737b; }
+  color: #a0a4a7; }
 
 .aalink.focus, a.focus.autolink, .aalink:focus, a.autolink:focus,
 #page-footer a:not([class]).focus,
@@ -3569,8 +3569,8 @@ button.bg-gray:focus {
   background-color: #cbd3da !important; }
 
 .tii_checkagainstnote, .tii_anonblindmarkingnote, .tii_genspeednote{
-  border: 1px solid #02649e;
-  background: #0582cb;
+  border: 1px solid #02649e !important;
+  background: #0582cb !important;
 }
 
 .nav-tabs:not(.more-nav) .nav-link, .nav-pills .nav-link{
@@ -3653,8 +3653,17 @@ body.path-mod h2 img.iconlarge{
 table.dataTable tr.odd, .path-mod-workshop .userplan dd,
 table.dataTable tr.odd td.sorting_1, .courses .coursebox.even,
 .mod_turnitintooltwo .top.listbar.clearfix {
-    background-color: #3c3934 !important;
-    color: #e4e6eb;
+    background-color: #272727 !important;
+    color: #e4e6eb !important;
+}
+
+.path-mod-workshop .userplan dt{
+  background-color: #272727;
+  color: #E4E6EB;
+}
+
+.path-mod-workshop .userplan dd a, .path-mod-workshop .userplan dd a:link {
+  color: #a8a8a9 !important;
 }
 
 .mod_board .board_column{
@@ -4277,11 +4286,63 @@ h4.result-title .icon{
   height: 48px;
 }
 
+.form-item.row .form-setting.col-sm-9 .form-description img {
+  padding: 48px 42px 0px 0px;
+  /* background-color: #E4E6EB; */
+  background: url(https://urcourses.uregina.ca/theme/urcourses_default//pix/Brickfield-logo-white.svg) no-repeat;
+  background-size: 100% 100%;
+  vertical-align: middle;
+  width: 203px;
+  height: 48px;
+}
+
+.form-item .form-setting .form-multicheckbox ul .icon.icon{
+  filter: invert(1);
+}
+
+.form-item .form-setting .form-multicheckbox ul  .icon.fa.fa-envelope.fa-fw.icon{
+  filter: invert(0);
+}
+
+
+.form-item .form-setting .form-multicheckbox ul 
+label[for=id_s_block_sharing_cart_userdata_copyable_modtypes_bigbluebuttonbn] .icon.icon,
+label[for=id_s_block_sharing_cart_userdata_copyable_modtypes_hotpot] .icon.icon,
+label[for=id_s_block_sharing_cart_workaround_qtypes_multianswerwiris] .icon.icon,
+label[for=id_s_block_sharing_cart_workaround_qtypes_essaywiris] .icon.icon,
+label[for=id_s_block_sharing_cart_workaround_qtypes_matchwiris] .icon.icon,
+label[for=id_s_block_sharing_cart_workaround_qtypes_multichoicewiris] .icon.icon,
+label[for=id_s_block_sharing_cart_workaround_qtypes_shortanswerwiris] .icon.icon,
+label[for=id_s_block_sharing_cart_workaround_qtypes_stack] .icon.icon,
+label[for=id_s_block_sharing_cart_workaround_qtypes_truefalsewiris] .icon.icon,
+label[for=id_s_block_sharing_cart_workaround_qtypes_wq] .icon.icon,
+label[for=id_s_block_sharing_cart_workaround_qtypes_poodllrecording] .icon.icon{
+  filter: invert(0) !important;
+}
 #reportslist th.header{
   background-color: #dbdad9;
   color: #1b1914;
   filter: invert(1);
 }
+
+#plugin_management_table-media_r3_c0 .icon.icon.pluginicon {
+  filter: invert(1);
+}
+
+#plugin_management_table-media_r4_c0 .icon.icon.pluginicon {
+  filter: invert(1);
+}
+
+#page-mod-data-view .whitebutton .btn-secondary, #page-mod-data-field- .whitebutton .btn-secondary,
+#page-mod-data-templates .whitebutton .btn-secondary {
+  background: #242526;
+}
+
+#page-mod-journal-report .journaluserentrywrapper {
+  background-color: #18191A;
+  box-shadow: 0 0 10px #2d2d2d;
+}
+
 /* .action-menu .dropdown-toggle .icon {
   color: white;
 } */
