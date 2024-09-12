@@ -17001,7 +17001,13 @@ body.path-question-type .mform fieldset.hidden {
 
 .userprofile .description {
   margin-top: 10px;
-  margin-bottom: 30px; }
+    margin-bottom: 30px;
+    padding: 0 1.25rem 0 1.25rem ;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .5rem;
+
+}
+
 
 .userprofile .profile_tree {
   column-count: 2; }

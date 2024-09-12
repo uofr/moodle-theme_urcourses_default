@@ -140,11 +140,18 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
 
        // All the html stuff goes here.
        $html = html_writer::start_div('page-context-header');
-
+      
        // Image data.
        if (isset($contextheader->imagedata)) {
            // Header specific image.
-           $html .= html_writer::div($contextheader->imagedata, 'page-header-image mr-2');
+          
+           //$html .= html_writer::div($contextheader->imagedata, ' page-header-image mr-2');
+           $html .= html_writer::start_div('d-flex align-items-center'); 
+
+            // Existing div for the image data
+            $html .= html_writer::div($contextheader->imagedata, 'page-header-image mr-2');
+
+
        }
 
        // Headings.
@@ -155,8 +162,9 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
            $heading = $heading . $prefix;
        }
        $html .= html_writer::tag('div', $heading, array('class' => 'page-header-headings'));
-
-       // Buttons.
+            // End the outer wrapper div
+            $html .= html_writer::end_div();
+                // Buttons.
        if (isset($contextheader->additionalbuttons)) {
            $html .= html_writer::start_div('btn-group header-button-group');
            foreach ($contextheader->additionalbuttons as $button) {
@@ -196,15 +204,17 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
        $sitecontextheader = '<div class="page-context-header"><div class="page-header-headings"><h1>'.$COURSE->fullname.'</h1></div></div>';
        
        $headertext = (!empty($this->context_header())) ? $this->context_header() : $sitecontextheader;
-
+    
 	   // try to avoid problems with special characters in titles ( & )
        $headertext = html_entity_decode($headertext);
-       
+      
        //Little hack to add back missing header for dashboard
        //The context header the comes through is not formated properly
        if($this->page->pagelayout=="mydashboard"&&strpos($PAGE->url,'my/indexsys.php')===false){
-           $headertext = $sitecontextheader;
+        $headertext = $sitecontextheader;
        }
+     
+      
        /*
         if (!empty($this->page->activityname)) {
         $header->contextheader = '<a href="'.$CFG->wwwroot.'/mod/'.$this->page->activityname.'/view.php?id='.$this->page->context->instanceid.'">'.$headertext.'</a>';
@@ -257,6 +267,7 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
                 
                 if (strpos($current_url, 'user/profile.php') !== false) {
                     $header->contextheader = '<a href="' . $PAGE->url .'" class="activity-header-link">' . $headertext . '</a>';
+
                    // $header->contextheader = '<a href="' . $CFG->wwwroot . '/user/profile.php" class="activity-header-link">' . $headertext . '</a>';
                 }
             }
@@ -271,7 +282,7 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
         $header->contextheader = '<a href="'.$CFG->wwwroot.'/course/view.php?id='.$COURSE->id.'" class="course-header-link">'.$headertext.'</a>';
        
 	}
-	
+    //print_r("<br>".$header->contextheader);
        
        $header->mycourseheader = '<h2><a href="'.$CFG->wwwroot.'/course/view.php?id='.$COURSE->id.'" title="'.$PAGE->url.'" class="mycourse-header-link">'.$COURSE->fullname.'</a></h2>';
        
@@ -327,9 +338,16 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
        	$header->courseimage = $CFG->wwwroot.'/theme/urcourses_default/pix/siteheader.jpg';
        }	
        
-       
-       $header->coursenavicon = '<a href="'.$CFG->wwwroot.'/course/view.php?id='.$COURSE->id.'"><img class="instr-avatar img-rounded" style="border-radius: 0.25em" src="'.$header->courseimage.'" height="18" width="18" title="'.$COURSE->fullname.'" alt="'.$COURSE->fullname.'" /></a>';
-       
+      $current_url = $PAGE->url;
+      $isProfilePage = (strpos($current_url, 'user/profile.php') !== false);  // Check if current page is profile page
+      if ($isProfilePage) {
+        $header->coursenavicon = '';
+  
+      }else {
+            $header->coursenavicon = '<a href="'.$CFG->wwwroot.'/course/view.php?id='.$COURSE->id.'"><img class="instr-avatar img-rounded" style="border-radius: 0.25em" src="'.$header->courseimage.'" height="18" width="18" title="'.$COURSE->fullname.'" alt="'.$COURSE->fullname.'" /></a>';
+    
+      }
+            
 	//error_log('navbar'.$header->navbar);
        
        $html = $this->render_from_template('theme_urcourses_default/full_header', $header);
@@ -340,7 +358,8 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
        //.'<pre><code>'.print_r($this->context_header(),1).'</code></pre>';
        //.'<pre><code>'.print_r($header,1).'</code></pre>';
        
-   }
+   
+}
    
    public function course_authornames() {
        
