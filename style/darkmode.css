@@ -567,6 +567,9 @@ select.form-control:focus::-ms-value {
   color: #1d2125;
   background-color: #f0ad4e;
   border-color: #f0ad4e; }
+  .btn-warning a{
+    color :#1d2125;
+  }
   .btn-warning:hover {
     color: #1d2125;
     background-color: #ed9d2b;
@@ -4341,6 +4344,24 @@ label[for=id_s_block_sharing_cart_workaround_qtypes_poodllrecording] .icon.icon{
 #page-mod-journal-report .journaluserentrywrapper {
   background-color: #18191A;
   box-shadow: 0 0 10px #2d2d2d;
+}
+
+.callout {
+  border: 2px solid #666666;
+  background-color: #242526;
+}
+
+.callout-yellow {
+  border: solid 1px #feefc3;
+  background-color: #FF9900;
+}
+
+.callout-yellow h2 {
+  color: #feefc3;
+}
+
+.activity-item .activity-altcontent img {
+  filter: invert(1);
 }
 
 /* .action-menu .dropdown-toggle .icon {
