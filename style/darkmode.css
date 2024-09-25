@@ -58,7 +58,7 @@ a {
   color: #32c875; }
   a:hover {
   color: #32c875 !important;
-	background-color: #3a7a57;
+	background-color: #3a7a57 !important;
   }
 
   a:not([class]):focus{
@@ -485,12 +485,19 @@ select.form-control:focus::-ms-value {
     .show > .btn-primary.dropdown-toggle:focus {
       box-shadow: 0 0 0 0.2rem rgba(51, 130, 201, 0.5); }
 
+.mceTmpl .btn-secondary{
+  background-color: #1d2125;
+}
+.mceTmpl .btn-secondary:hover a{
+  color: #006139 !important;
+};
+
 .btn-secondary {
   color: #1d2125;
   background-color: #ced4da;
   border-color: #ced4da; }
   .btn-secondary:hover {
-    color: #1d2125;
+    color: #1d2125 !important;
     background-color: #b8c1ca;
     border-color: #b1bbc4; }
   .btn-secondary:focus, .btn-secondary.focus {
@@ -1185,8 +1192,8 @@ a.btn.btn-link.p-0:hover{
     color: #525557; }
 
 .alert-success, .environmenttable .ok {
-  color: #1c3f1a;
-  background-color: #d7e4d6;
+  color: #c6dac6;
+  background-color: #1c3f1a;
   border-color: #c6dac6; }
   .alert-success hr, .environmenttable .ok hr {
     border-top-color: #b7d0b7; }
@@ -1194,8 +1201,8 @@ a.btn.btn-link.p-0:hover{
     color: #0c1b0b; }
 
 .alert-info {
-  color: #00434e;
-  background-color: #cce6ea;
+  color: #b8dce2;
+  background-color: #00434e;
   border-color: #b8dce2; }
   .alert-info hr {
     border-top-color: #a6d3db; }
@@ -1203,8 +1210,8 @@ a.btn.btn-link.p-0:hover{
     color: #00171b; }
 
 .alert-warning, .environmenttable .warn {
-  color: #7d5a29;
-  background-color: #fcefdc;
+  color: #fcefdc;
+  background-color: #654922 !important;
   border-color: #fbe8cd; }
   .alert-warning hr, .environmenttable .warn hr {
     border-top-color: #f9ddb5; }
@@ -1212,8 +1219,8 @@ a.btn.btn-link.p-0:hover{
     color: #573e1c; }
 
 .alert-danger, .environmenttable .error {
-  color: #691911;
-  background-color: #f4d6d2;
+  color: #f4d6d2;
+  background-color: #691911;
   border-color: #f0c5c1; }
   .alert-danger hr, .environmenttable .error hr {
     border-top-color: #ebb2ac; }
@@ -1879,29 +1886,42 @@ a.disabled {
 .alert-secondary .close {
   color: #393b3d; }
 
+.d-flex .align-items-center .btn .btn-secondary{
+  background-color: #414141;
+}
+
+#theme_urcourses_default_header_toggle_course_visibility_66f1e2f9c5c8766f1e2f92b00418 {
+  background-color: red;
+}
+
 .alert-success a, .environmenttable .ok a {
-  color: #0c1b0b; }
+  color: #d7e4d6; }
+
+.alert-success .btn-secondary{
+  background-color: #242526;
+}
 
 .alert-success .close, .environmenttable .ok .close {
   color: black;}
 
 .alert-info a {
-  color: #00171b; }
+  color: #3bec8a; }
 
 .alert-info .close {
   color: black; }
 
 .alert-warning a, .environmenttable .warn a {
-  color: #573e1c; }
+  color: #fcefdc;
+  background-color:#654922 !important; }
 
 .alert-warning .close, .environmenttable .warn .close {
   color: #302310;}
 
 .alert-danger a, .environmenttable .error a {
-  color: #3d0f0a; }
+  color: #f4d6d2; }
 
 .alert-danger .close, .environmenttable .error .close {
-  color: #110403; }
+  color: #ffffff; }
 
 .alert-light a {
   color: #686868; }
@@ -4047,6 +4067,10 @@ a:hover{
   color: #E4E6EB !important;
 }
 
+a[name="_Hlk143095047"]:hover{
+  color: rgb(36, 83, 97) !important;
+}
+
 .c4l-attention{
   color: #000;
 }
@@ -4353,7 +4377,8 @@ label[for=id_s_block_sharing_cart_workaround_qtypes_poodllrecording] .icon.icon{
 
 .callout-yellow {
   border: solid 1px #feefc3;
-  background-color: #FF9900;
+  background-color: #e15d29;
+  color: #1e1e1e;
 }
 
 .callout-yellow h2 {
@@ -4362,6 +4387,20 @@ label[for=id_s_block_sharing_cart_workaround_qtypes_poodllrecording] .icon.icon{
 
 .activity-item .activity-altcontent img {
   filter: invert(1);
+}
+
+.group.callout, div[class*="_block_callout"], table[class*="_block_callout"], div[class*="generic_large_callout"], 
+table[class*="generic_large_callout"], div[class*="generic_small_callout"], table[class*="generic_small_callout"]{
+  background-color: #333;
+  color: #fcfcfc;
+}
+
+.fyi_block img{
+  filter: invert(1);
+}
+
+.tour-actions>ul>li>a {
+  background-color: #18191A;
 }
 
 /* .action-menu .dropdown-toggle .icon {
