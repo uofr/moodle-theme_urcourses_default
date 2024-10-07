@@ -117,6 +117,21 @@
         <a href="{{signupurl}}" class="sr-only">{{#str}} tocreatenewaccount {{/str}}</a>
     {{/cansignup}}
 	
+    {{#hasidentityproviders}}
+        <div class="login-divider"></div>
+        <div class="login-identityproviders">
+            <h2 class="login-heading">{{#str}} potentialidps, auth {{/str}}</h2>
+            {{#identityproviders}}
+                <a class="btn login-identityprovider-btn btn-block" href="{{url}}">
+                    {{#iconurl}}
+                        <img src="{{iconurl}}" alt="" width="24" height="24"/>
+                    {{/iconurl}}
+                    {{name}}
+                </a>
+            {{/identityproviders}}
+        </div>
+    {{/hasidentityproviders}}
+	
 	<p><a href="index.php?authCAS=CAS" role="button" class="btn btn-primary btn-block mt-3 collapse show loginfrm" id="loginbtn" aria-expanded="true">{{#str}}login{{/str}} with CAS<br /><small>I have a uregina username and password</small></a></p>
 	
 	<p><a data-toggle="collapse" data-target=".login-form" href="#otherlogin" role="button" aria-expanded="false" aria-controls="otherlogin loginbtn otherx">Log in with other credentials</a><a data-toggle="collapse" data-target=".login-form" href="#loginx" class="btn btn-secondary collapse login-form ml-1" id="otherx" role="button" aria-expanded="false" aria-controls="otherlogin loginbtn otherx">Cancel</a></p>
