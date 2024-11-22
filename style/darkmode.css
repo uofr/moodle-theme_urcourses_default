@@ -55,7 +55,7 @@ body {
   }
 
 a {
-  color: #32c875; }
+  color: #32c875 !important; }
   a:hover {
   color: #32c875 !important;
 	background-color: #3a7a57;
@@ -460,7 +460,7 @@ select.form-control:focus::-ms-value {
 }
 
 .btn-primary {
-  color: #fff;
+  color: #fff !important;
   background-color: #3a7a57;
   border-color: #3a7a57; }
   .btn-primary:hover {
@@ -486,13 +486,13 @@ select.form-control:focus::-ms-value {
       box-shadow: 0 0 0 0.2rem rgba(51, 130, 201, 0.5); }
 
 .btn-secondary {
-  color: #1d2125;
-  background-color: #ced4da;
-  border-color: #ced4da; }
+  color: #ced4da !important;
+  background-color: #1d2125 !important;
+  border-color: #1d2125 !important; }
   .btn-secondary:hover {
-    color: #1d2125;
-    background-color: #b8c1ca;
-    border-color: #b1bbc4; }
+    color: #1d2125 !important;
+    background-color: #b8c1ca !important;
+    border-color: #b1bbc4 !important; }
   .btn-secondary:focus, .btn-secondary.focus {
     color: #1d2125;
     background-color: #b8c1ca;
@@ -1014,7 +1014,7 @@ a.btn.btn-link.p-0:hover{
     color: #e4e6eb; }
 
 .navbar-light .navbar-nav .nav-link {
-  color: #e4e6eb; }
+  color: #e4e6eb !important; }
   .navbar-light .navbar-nav .nav-link:hover, .navbar-light .navbar-nav .nav-link:focus {
     color: #e4e6eb; }
   .navbar-light .navbar-nav .nav-link.disabled {
@@ -1089,7 +1089,7 @@ a.btn.btn-link.p-0:hover{
   color: #6a737b; }
 
 .page-link {
-  color: #0a2b19;
+  color: #0a2b19 !important;
   background-color: #b0b3b8;
   border: 1px solid #949598; }
   .page-link:hover {
@@ -2352,11 +2352,11 @@ span.editinstructions {
  */
 @media (min-width: 1200px) and (max-width: 1600px) {
   #course-category-listings.columns-3 {
-    background-color: #fff; }
+    background-color: #242526; }
     #course-category-listings.columns-3 #category-listing > div,
     #course-category-listings.columns-3 #course-listing > div,
     #course-category-listings.columns-3 #course-detail > div {
-      background-color: #fff; }
+      background-color: #242526; }
 }
 
 .activity-add,
@@ -2458,9 +2458,9 @@ span.editinstructions {
   background: #f2f2f2; }
 
 .fp-viewbar:not(.disabled) a.checked {
-  background-color: #b1bbc4;
-  color: #1d2125;
-  border-color: #aab4bf; }
+  background-color: #1d2125;
+  color: #b1bbc4 !important;
+  border-color: #1d2125; }
 
 .fp-icon {
 filter: invert();}
@@ -3067,14 +3067,15 @@ a#hidebankcmd {
     background: #222; }
 
 .generaltable {
-  color: #e4e6eb; }
+  color: #e4e6eb;
+  background-color:#242526 !important; }
   .generaltable th,
   .generaltable td {
     border-top: 1px solid #dee2e6;
-    background-color:#242526; }
+    background-color:#242526 !important; }
   .generaltable thead th {
-    border-bottom: 2px solid #dee2e6;
-    background-color:#242526; }
+    border-bottom: 2px solid #dee2e6 !important;
+    background-color:#242526 !important; }
   .generaltable tbody + tbody {
     border-top: 2px solid #dee2e6; }
   .generaltable tbody tr:hover {
@@ -3085,6 +3086,10 @@ a#hidebankcmd {
 
   .btn.btn-icon:hover, .btn.btn-icon:focus {
     background-color: #3a3b3c; }
+
+  .path-grade-edit-tree .gradetree-wrapper {
+    background-color:#242526; 
+  }
 
 .path-grade-report-grader .gradepass,
 .path-grade-report-user .gradepass {
@@ -3130,7 +3135,7 @@ a#hidebankcmd {
   border: 2px dashed #343a40; }
 
 .path-grade-edit-tree .setup-grades.generaltable .levelodd {
-  background-color: rgba(0, 0, 0, 0.03); }
+  background-color: rgba(0, 0, 0, 0.03) !important; }
 
 /**
  * Grader report.
@@ -3838,7 +3843,7 @@ dt{
 }
 
 img.activityicon{
-  filter: invert(98%) sepia(8%) saturate(534%) hue-rotate(179deg) brightness(96%) contrast(91%);
+  filter: invert(98%) sepia(8%) saturate(534%) hue-rotate(179deg) brightness(96%) contrast(91%) !important;
 }
 
 .fp-pathbar .fp-path-folder{
