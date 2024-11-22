@@ -2342,6 +2342,9 @@ span.editinstructions {
 .course-being-dragged-proxy {
   color: #3a7a57; }
 
+  button:not(:disabled), [type="button"]:not(:disabled), [type="reset"]:not(:disabled), [type="submit"]:not(:disabled) {
+    color: white;
+  }
 /**
  * Display sizes:
  * Large displays                   1200        +
