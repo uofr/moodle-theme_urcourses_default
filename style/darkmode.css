@@ -2469,7 +2469,8 @@ span.editinstructions {
 filter: invert();}
 
 .fp-iconview .fp-thumbnail{
-  border: 1px solid #242526}
+  border: 1px solid #242526;
+  filter: invert();}
 
 .fp-iconview .fp-thumbnail:hover {
   background: #fff; }
@@ -2482,11 +2483,12 @@ filter: invert();}
   background-color: #eee; }
 
 .fp-select .fp-thumbnail {
-  background: #fff;
-  border: 1px solid #ddd; }
+  border: 1px solid #242526;
+  background-color: #242526; }
 
 .fp-select .fp-thumbnail img {
-  border: 1px solid #ddd; }
+  border: 1px solid #000000;
+  filter: invert(); }
 
 .fitem.disabled .filepicker-filelist,
 .fitem.disabled .filemanager-container {
@@ -4265,6 +4267,22 @@ h4.result-title .icon{
   background-color: #dbdad9;
   color: #1b1914;
   filter: invert(1);
+}
+
+.availability-field img {
+  filter: invert();
+}
+
+.path-mod-scheduler div.commandbar{
+  background-color: #3a3b3c;
+}
+
+#page-mod-scorm-player #scormpage #toctree #scorm_layout #scorm_content #scorm_object p{
+  color: white !important;
+}
+
+.yui3-skin-sam .yui3-treeview-selected>.yui3-treeview-row {
+  background-color: #000;
 }
 /* .action-menu .dropdown-toggle .icon {
   color: white;
