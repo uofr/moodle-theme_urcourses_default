@@ -2801,6 +2801,10 @@ a#hidebankcmd {
   background-color: #242526;
 }
 
+img.icon.itemicon{
+  filter: invert();
+}
+
 .format-designer .designer .section .content .section li.activity .activityinstance .aalink{
   color: #c4c4c4;
 }
@@ -3088,6 +3092,10 @@ a#hidebankcmd {
     background-color: rgba(0, 0, 0, 0.075); }
     .generaltable tbody tr:hover.dimmed_text a:not(.menu-action) {
       color: #e4e6eb; }
+
+.generaltable thead .sticky-column, .generaltable tbody tr:nth-of-type(even){
+  background-color: #242526;
+}
 
   .btn.btn-icon:hover, .btn.btn-icon:focus {
     background-color: #3a3b3c; }
