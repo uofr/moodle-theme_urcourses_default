@@ -2374,6 +2374,7 @@ span.editinstructions {
 
   button:not(:disabled), [type="button"]:not(:disabled), [type="reset"]:not(:disabled), [type="submit"]:not(:disabled) {
     color: white;
+    background-color: #1d2125;
   }
 /**
  * Display sizes:
