@@ -459,6 +459,11 @@ select.form-control:focus::-ms-value {
   background-color: #32c875 !important;
 }
 
+.btn:not(:disabled):not(.disabled) {
+  color: #ced4da !important;
+    background-color: #1d2125 !important;
+}
+
 .btn-primary {
   color: #fff !important;
   background-color: #3a7a57;
