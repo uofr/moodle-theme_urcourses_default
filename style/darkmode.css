@@ -4354,6 +4354,10 @@ h4.result-title .icon{
 .yui3-skin-sam .yui3-treeview-selected>.yui3-treeview-row {
   background-color: #000;
 }
+
+.cell.activityname.ps-5 img.icon{
+  filter: invert();
+}
 /* .action-menu .dropdown-toggle .icon {
   color: white;
 } */
