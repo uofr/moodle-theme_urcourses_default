@@ -153,7 +153,7 @@ $PAGE->requires->css('/theme/urcourses_default/style/c4l.css?v=2024090200');
 
 // if user has darkmode on, include the CSS
 if($darkmodecheck){
-   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css?v=2024090200');
+   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css?v=2024112900');
    
 }
 
