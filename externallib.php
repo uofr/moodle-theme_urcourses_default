@@ -336,6 +336,7 @@ class theme_urcourses_default_external extends external_api {
         if($user){
             //reset password and email out to new user
             $reset = reset_password_and_mail($user);
+            set_user_preference('auth_forcepasswordchange', 1, $user);
             return array("userid"=>$user->id, "username"=>$user->username,"reset"=>$reset); 
         }
         
