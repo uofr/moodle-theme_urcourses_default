@@ -15,51 +15,64 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Services for theme_urcourses_default.
+ * Services for theme_urcourses_default
  *
- * @author  John Lane
+ * @module  theme_urcourses_default
+ * @author  2024 John Lane <john.lane@uregina.ca>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
- $functions = array(
-    'theme_urcourses_default_toggle_course_visibility' => array(
-        'classname'     => 'theme_urcourses_default\external\course_visibility_toggle',
+$functions = [
+    'theme_urcourses_default_test_student_info' => [
+        'classname'     => 'theme_urcourses_default\external\test_student_info',
         'methodname'    => 'execute',
-        'description'   => 'Toggle course visibility between Show and Hide.',
+        'description'   => 'Get test student account info for the current user (if one exists).',
+        'type'          => 'read',
+        'ajax'          => true
+    ],
+    'theme_urcourses_default_reset_test_student' => [
+        'classname'     => 'theme_urcourses_default\external\reset_test_student',
+        'methodname'    => 'execute',
+        'description'   => 'Reset password for test student belonging to current user.',
         'type'          => 'write',
         'ajax'          => true
-    ),
-    'theme_urcourses_default_create_test_account' => array(
-       'classname'     => 'theme_urcourses_default_external',
-       'methodname'    => 'create_test_account',
-       'classpath'     => 'theme/urcourses_default/externallib.php',
-       'description'   => 'Creates and enrolls a test student account based on username.',
-       'type'          => 'write',
-       'ajax'          => 'true'
-    ),
-    'theme_urcourses_default_unenroll_test_account' => array(
-       'classname'     => 'theme_urcourses_default_external',
-       'methodname'    => 'unenroll_test_account',
-       'classpath'     => 'theme/urcourses_default/externallib.php',
-       'description'   => 'Removes user test student account from course',
-       'type'          => 'write',
-       'ajax'          => 'true'
-    ),
-    'theme_urcourses_default_test_account_info' => array(
-       'classname'     => 'theme_urcourses_default_external',
-       'methodname'    => 'test_account_info',
-       'classpath'     => 'theme/urcourses_default/externallib.php',
-       'description'   => 'Returns info on test account',
-       'type'          => 'read',
-       'ajax'          => 'true'
-    ),
-    'theme_urcourses_default_reset_test_account' => array(
-       'classname'     => 'theme_urcourses_default_external',
-       'methodname'    => 'reset_test_account',
-       'classpath'     => 'theme/urcourses_default/externallib.php',
-       'description'   => 'Reset password for student test account',
-       'type'          => 'write',
-       'ajax'          => 'true'
-    )
-);
+    ],
+    'theme_urcourses_default_create_test_student' => [
+        'classname'     => 'theme_urcourses_default\external\create_test_student',
+        'methodname'    => 'execute',
+        'description'   => 'Create test student for current user',
+        'type'          => 'write',
+        'ajax'          => true
+    ],
+    'theme_urcourses_default_get_enrolled_courses_by_timeline_classification' => [
+        'classname'     => 'theme_urcourses_default\external\get_enrolled_courses',
+        'methodname'    => 'get_enrolled_courses_by_timeline_classification',
+        'description'   => 'Grabs list of courses in specific timeline, based on code in core with
+                            teacher vs student tweaks.',
+        'type'          => 'read',
+        'ajax'          => 'true',
+    ],
+    'theme_urcourses_default_get_course_summary' => [
+        'classname'     => 'theme_urcourses_default\external\get_course_summary',
+        'methodname'    => 'execute',
+        'description'   => 'self explanatory',
+        'type'          => 'read',
+        'ajax'          => 'true',
+    ],
+    'theme_urcourses_default_enrol_test_student' => [
+        'classname'     => 'theme_urcourses_default\external\enrol_test_student',
+        'methodname'    => 'execute',
+        'description'   => 'self explanatory',
+        'type'          => 'write',
+        'ajax'          => 'true',
+    ],
+    'theme_urcourses_default_unenrol_test_student' => [
+        'classname'     => 'theme_urcourses_default\external\unenrol_test_student',
+        'methodname'    => 'execute',
+        'description'   => 'self explanatory',
+        'type'          => 'write',
+        'ajax'          => 'true',
+    ],
+];

@@ -15,64 +15,173 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Union - Language pack
+ * Theme UR Courses Default - Language pack
  *
- * @package    theme_boost_union
- * @copyright  2022 Moodle an Hochschulen e.V. <kontakt@moodle-an-hochschulen.de>
+ * @package    theme_urcourses_default
+ * @copyright  2023 Daniel Poggenpohl <daniel.poggenpohl@fernuni-hagen.de> and Alexander Bias <bias@alexanderbias.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
+// Let codechecker ignore some sniffs for this file as it is perfectly well ordered, just not alphabetically.
+// phpcs:disable moodle.Files.LangFilesOrdering.UnexpectedComment
+// phpcs:disable moodle.Files.LangFilesOrdering.IncorrectOrder
+
 // General.
-$string['pluginname'] = 'UR Courses: Default';
-$string['choosereadme'] = 'UR Courses: Default is a child theme of Boost Union, used for University of Regina courses.';
+$string['pluginname'] = 'UR Courses Default';
+$string['choosereadme'] = 'UR Courses Default theme.';
+$string['configtitle'] = 'UR Courses Default';
+$string['settingsoverview_buc_desc'] = 'UR Courses theme settings.';
 
-// UofR Customizations
-$string['darkmode'] = 'Darkmode';
-$string['darkmodepref'] = 'Darkmode preferences';
+// Settings: General settings tab.
+// ... Section: Inheritance.
+$string['inheritanceheading'] = 'Inheritance';
+$string['inheritanceinherit'] = 'Inherit';
+$string['inheritanceduplicate'] = 'Duplicate';
+$string['inheritanceoptionsexplanation'] = 'Most of the time, inheriting will be perfectly fine. However, it may happen that imperfect code is integrated into Boost Union which prevents simple SCSS inheritance for particular Boost Union features. If you encounter any issues with Boost Union features which seem not to work in UR Courses as well, try to switch this setting to \'Dupliate\' and, if this solves the problem, report an issue on Github (see the README.md file for details how to report an issue).';
+// ... ... Setting: Pre SCSS inheritance setting.
+$string['prescssinheritancesetting'] = 'Pre SCSS inheritance';
+$string['prescssinheritancesetting_desc'] = 'With this setting, you control if the pre SCSS code from Boost Union should be inherited or duplicated.';
+// ... ... Setting: Extra SCSS inheritance setting.
+$string['extrascssinheritancesetting'] = 'Extra SCSS inheritance';
+$string['extrascssinheritancesetting_desc'] = 'With this setting, you control if the extra SCSS code from Boost Union should be inherited or duplicated.';
 
-// Course Availability Toggle
-$string['timestatus_current'] = 'This course is in progress.';
-$string['timestatus_current_noenddate'] = 'This course is in progress (end date not set).';
-$string['timestatus_past'] = 'This course ended {$a}.';
-$string['timestatus_future'] = 'This course begins {$a}.';
-$string['hasenrollment'] = 'There is active enrolment ({$a}).';
-$string['noenrollment'] = 'There is no active enrolment.';
-$string['visible'] = 'The course is visible to students.';
-$string['notvisible'] = 'The course is hidden from students.';
-$string['visible_noenrollment'] = 'The course is visible.';
-$string['notvisible_noenrollment'] = 'The course is hidden.';
+// Privacy API.
+$string['privacy:metadata'] = 'The UR Courses theme does not store any personal data about any user.';
 
-// Course Availability Toggle Modal
-$string['showcourse'] = 'Show Course';
-$string['hidecourse'] = 'Hide Course';
-$string['showtitle'] = 'Show Course?';
-$string['showbody'] = 'Are you sure you want to show this course? The course will be visible to students enrolled in the {$a} semester.';
-$string['showbody_noenrollment'] = 'Are you sure you want to show this course? If students are enrolled, the course will be visible to them.';
-$string['hidetitle'] = 'Hide Course?';
-$string['hidebody'] = 'Are you sure you want to hide this course? This course will be hidden from students enrolled in the {$a} semester.';
-$string['hidebody_noenrollment'] = 'Are you sure you want to hide this course? If students are enrolled, the course will be hidden from them.';
-$string['confirmbutton'] = 'Confirm';
+/**************************************************************
+ * EXTENSION POINT:
+ * Add your language strings for your settings here.
+ *************************************************************/
 
-//Create Test Student Account
+// Dark Mode
+$string['enabledarkmode'] = 'Enable dark mode';
+$string['disabledarkmode'] = 'Disable dark mode';
+
+// UR Student Account
+$string['resetmodal_title'] = 'Reset Password for Test Student Account';
+$string['resetmodal_button'] = 'Reset Password';
+$string['resetmodal_confirm'] = 'Are you sure you want to reset the password for your test student account <strong>{$a}</strong>?';
+$string['resetmodal_date'] = 'Account Created On';
+$string['resetsuccess_title'] = 'Password Reset';
+$string['resetsuccess_body'] = 'Your test student password has been reset. An email will be sent to your <strong>{$a}</strong> account with instructions on how to set a new password for your test student.';
+$string['resetfail_title'] = 'Password Reset Failed';
+$string['resetfail_body'] = 'Test student password reset failed.';
+$string['createmodal_title'] = 'Create Test Student Account';
+$string['createmodal_button'] = 'Create';
+$string['createmodal_intro'] = 'The following test user account will be created:';
+$string['createmodal_email'] = 'Email';
+$string['createmodal_username'] = 'Username';
+$string['createmodal_email_helptext'] = 'Email sent to <strong>{$a->email}</strong> will be directed to your <strong>{$a->emailoriginal}</strong> account.';
+$string['createmodal_helptext'] = 'Upon clicking <strong>create</strong>, an email will be sent to your <strong>{$a->emailoriginal}</strong> account with instructions on how to log in to your new test student account.';
+$string['createmodal_confirmtext'] = 'Would you like to create the test student account?';
+$string['createmodal_confirm'] = 'Are you sure you want to create the test student account {$a}?';
+$string['createsuccess_title'] = 'Test Student Account Created';
+$string['createsuccess_body'] = 'Information on how to log in to your new test student account will be sent to your <strong>{$a}</strong> account.';
+$string['createfail_title'] = 'Test Student Account Failed';
+$string['createfail_body'] = 'Test student account creation failed.';
+$string['enrolurstudent'] = 'Enrol test student account';
+$string['unenrolurstudent'] = 'Unenrol test student account';
+$string['createteststudent'] = 'Create test student';
+$string['modifyteststudent'] = 'Modify test student';
 $string['newtestuser'] = 'New test student account';
-$string['newtestaccount'] = 'Hi {$a->firstname},
+$string['resettestuser'] = 'Test student account password reset.';
+$string['teststudentenrol_title'] = 'Enrol Test Student?';
+$string['teststudentenrol_body'] = 'Are you sure you want to enrol your test student account in this course?';
+$string['teststudentenrol_button'] = 'Enrol';
+$string['teststudentunenrol_title'] = 'Unenrol Test Student?';
+$string['teststudentunenrol_body'] = 'Are you sure you want to unenrol your test student account from this course?';
+$string['teststudentunenrol_button'] = 'Unenrol';
+$string['teststudentenrolled_title'] = 'Test student enrolled';
+$string['teststudentenrolled_body'] = 'Test student has been enrolled in this course.';
+$string['teststudentunenrolled_title'] = 'Test student unenrolled';
+$string['teststudentunenrolled_body'] = 'Test student has been removed from this course.';
+$string['newtestaccount_email'] = '<p>Hi {$a->firstname},</p>
+<p>Your new test student account at \'{$a->sitename}\' has been created.</p>
+<p>To log in to your test student account:</p>
+<ol>
+   <li>Log out of UR Courses.</li>
+   <li>Go to {$a->link}.</li>
+   <li>Click <strong>log in with other credentials</strong>.</li>
+   <li>Enter your test student username and temporary password.</li>
+   <ul>
+      <li>username: {$a->username}</li>
+      <li>password: {$a->newpassword}</li>
+   </ul>
+   <li>Press the <strong>Log in</strong> button.</li>
+</ol>
+<p>After you log in, you will have to create a new password for your test student account with at least 6 characters.</p>
+<p>{$a->signoff}</p>';
 
-Your new test student account at \'{$a->sitename}\' has been created,
-and you have been issued with a new temporary password.
+$string['resetteststudent_email'] = '<p>Hi Admin,</p>
+<p>Your test student account password has been reset.</p>
+<p>To set a new password for your test student account:</p>
+<ol>
+   <li>Log out of UR Courses.</li>
+   <li>Go to {$a->link}.</li>
+   <li>Click <strong>log in with other credentials</strong>.</li>
+   <li>Enter your test student username and temporary password.</li>
+   <ul>
+      <li>username: {$a->username}</li>
+      <li>password: {$a->newpassword}</li>
+   </ul>
+   <li>Press the <strong>Log in</strong> button.</li>
+</ol>
+<p>After you log in, you will be able to create a new password for your test student account.</p>
+<p>Note that the password must contain at least 6 characters.</p>
+<p>{$a->signoff}</p>';
 
-Your current login information is:
-   username: {$a->username}
-   password: {$a->newpassword}
+// Feedback
+$string['feedback_label'] = 'Feedback on UR Courses';
+$string['feedback_modal_header'] = 'Feedback';
+$string['feedback_modal_body'] = 'Give us your feedback on UR Courses.';
+$string['feedback_modal_problem'] = 'Report a problem';
+$string['feedback_modal_problem_label'] = 'What went wrong?';
+$string['feedback_modal_suggestion'] = 'Make a suggestion';
+$string['feedback_modal_suggestion_label'] = 'What can we do better?';
+$string['feedback_modal_back'] = 'Go back';
 
-Please login to \'{$a->sitename}\' to test the new account:
-   {$a->link}
+// My Courses (block_myoverview) Customizations
+$string['notavailabletostudents'] = 'Course unavailable to students';
+$string['coursehasended'] = 'Course ended {$a}';
+$string['coursenotstarted'] = 'Course begins {$a}';
+$string['coursesummarybuttontitle'] = 'The course summary is always available to students';
+$string['coursesummarybuttontext'] = 'View Course Summary';
+$string['coursesummarymissingtext'] = 'No course summary has been provided at this time.';
+$string['coursesummaryedit'] = 'Edit course summary';
+$string['strtimemonthdayyear'] = '%B %d, %Y';
 
-In most mail programs, this should appear as a blue link
-which you can just click on.  If that doesn\'t work,
-then cut and paste the address into the address
-line at the top of your web browser window.
+// Errors
+$string['teststudentnotallowed'] = 'You do not have permission to create a test student.';
+$string['teststudenteditnotallowed'] = 'You do not have permission to edit a test student account.';
+$string['teststudentexists'] = 'You already have a test student account.';
+$string['teststudentnotexist'] = 'You do not have a test student account.';
+$string['teststudentcouldnotemail'] = 'Failed to send test student account email.';
+$string['teststudentcoultnotsetpassword'] = 'Could not set new password for test student.';
+$string['teststudentalreadyenrolled'] = 'Test student is already enrolled in this course.';
+$string['teststudentnotenrolled'] = 'Test student is not enrolled in this course.';
+$string['teststudentcouldnotenrol'] = 'Failed to enrol test student to this course.';
+$string['teststudentcouldnotunenrol'] = 'Failed to unenrol test student to this course.';
+$string['noenrolmethod'] = 'Could not find manual enrolment plugin for this course.';
 
-Cheers from the \'{$a->sitename}\' administrator,
-{$a->signoff}';
+// Login Form
+$string['maintenance_mode'] = 'UR Courses is in maintenance mode.';
+$string['logincas'] = 'Log in with CAS';
+$string['logincas_subtitle'] = 'I have a uregina username and password';
+$string['loginother'] = 'Log in with other credentials';
+$string['loginhelp_header'] = 'Need help logging in?';
+$string['loginhelp_newstudent'] = 'Are you a new student?';
+$string['loginhelp_forgotpassword'] = 'Forgot your username or password?';
+$string['loginhelp_activate'] = 'Activate your account?';
+$string['login_help'] = 'For further assistance, please contact <a href="mailto:Service.Desk@uregina.ca">Service.Desk@uregina.ca</a> or call <a href="tel:+1-306-585-4685">(306) 585-4685</a>';
+
+// Course Header
+$string['instructorpicture_alt'] = 'Profile picture of {$a}';
+
+// Enrolment Course Hint
+$string['winter'] = 'Winter';
+$string['springsummer'] = 'Spring/Summer';
+$string['fall'] = 'Fall';
+$string['hasenrolment'] = 'This course has enrolment {$a}.';
+$string['noenrolment'] = 'This course does not have enrolment.';

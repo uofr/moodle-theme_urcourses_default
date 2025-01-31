@@ -15,39 +15,63 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Union - Theme config
+ * Theme UR Courses Default - Theme config
  *
- * @package    theme_boost_union
- * @copyright  2022 Moodle an Hochschulen e.V. <kontakt@moodle-an-hochschulen.de>
+ * @package    theme_urcourses_default
+ * @copyright  2025 John Lane
+ *             based on code by Alexander Bias <bias@alexanderbias.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
+// Let codechecker ignore some sniffs for this file as we do not need a login check here..
+// phpcs:disable moodle.Files.RequireLogin.Missing
+
+// As a start, inherit the whole theme config from Boost Union.
+// This move will save us from duplicating all lines from Boost Union's config.php into UR Courses's config.php.
+// This statement uses require (and not require_once) by purpose to make sure that all Boost Union settings are added
+// to the $THEME object even if the Boost Union config was already included in some other place.
+require($CFG->dirroot . '/theme/boost_union/config.php');
+
+// Then, we require UR Courses's locallib.php to make sure that it's always loaded.
+require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
+
+// Next, we overwrite only the settings which differ between Boost Union and UR Courses.
 $THEME->name = 'urcourses_default';
-$THEME->sheets = [];
-$THEME->editor_sheets = [];
-$THEME->editor_scss = ['editor'];
-$THEME->usefallback = true;
 $THEME->scss = function($theme) {
     return theme_urcourses_default_get_main_scss_content($theme);
 };
+$THEME->parents = ['boost_union', 'boost'];
+$THEME->extrascsscallback = 'theme_urcourses_default_get_extra_scss';
+$THEME->prescsscallback = 'theme_urcourses_default_get_pre_scss';
+$THEME->editor_scss = ['editor'];
 
-// The $THEME->layouts setting is not duplicated here as they are properly inherited from theme_boost.
-
-$THEME->parents = ['boost','boost_union'];
-$THEME->enable_dock = false;
-$THEME->extrascsscallback = 'theme_boost_union_get_extra_scss';
-$THEME->prescsscallback = 'theme_boost_union_get_pre_scss';
-$THEME->precompiledcsscallback = 'theme_boost_union_get_precompiled_css';
-$THEME->yuicssmodules = array();
+// We need to duplicate the rendererfactory even if it is set to the same value as in Boost Union.
+// The theme_config::get_renderer() method needs it to be directly in the theme_config object.
 $THEME->rendererfactory = 'theme_overridden_renderer_factory';
-$THEME->requiredblocks = '';
-$THEME->addblockposition = BLOCK_ADDBLOCK_POSITION_FLATNAV;
-$THEME->iconsystem = \core\output\icon_system::FONTAWESOME;
-$THEME->haseditswitch = true;
-$THEME->usescourseindex = true;
-// By default, all boost theme do not need their titles displayed.
-$THEME->activityheaderconfig = [
-    'notitle' => true
-];
+
+// Lastly, we replicate some settings from Boost Union at runtime into UR Courses's settings.
+// This becomes necessary if Moodle core code accesses a theme setting at $this->page->theme->settings->*.
+// In this case, the setting must exist in the currently active theme, otherwise it won't be found.
+// While Boost Union duplicates all settings from Boost Core and does not suffer from this issue,
+// it would be quite ugly to duplicate all of these settings again to UR Courses.
+// Currently, this affects these Boost Core settings:
+// unaddableblocks - called from blocklib.php.
+$unaddableblocks = get_config('theme_boost_union', 'unaddableblocks');
+if (!empty($unaddableblocks)) {
+    $THEME->settings->unaddableblocks = $unaddableblocks;
+}
+unset($unaddableblocks);
+// SCSS - called in theme_boost_get_extra_scss.
+$scss = get_config('theme_boost_union', 'scss');
+if (!empty($scss)) {
+    $THEME->settings->scss = $scss;
+}
+unset($scss);
+// SCSSpre - called in theme_boost_get_pre_scss.
+$scsspre = get_config('theme_boost_union', 'scsspre');
+if (!empty($scsspre)) {
+    $THEME->settings->scsspre = $scsspre;
+}
+unset($scsspre);

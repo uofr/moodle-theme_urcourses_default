@@ -16,15 +16,54 @@
 /**
  * External functions repository for theme_urcourses_default.
  *
- * @module  theme_urcourses_default/toggle_course_visibility
- * @author  2023 John Lane
+ * @module  theme_urcourse
+ * @author  2024 John Lane <john.lane@uregina.ca>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 import Ajax from 'core/ajax';
 
-export const toggleCourseVisibility = (courseid) => {
+export const testAccountInfo = () => {
     const request = {
-        methodname: 'theme_urcourses_default_toggle_course_visibility',
+        methodname: 'theme_urcourses_default_test_student_info',
+        args: {}
+    };
+
+    return Ajax.call([request])[0];
+};
+
+export const createTestStudent = () => {
+    const request = {
+        methodname: 'theme_urcourses_default_create_test_student',
+        args: {}
+    };
+
+    return Ajax.call([request])[0];
+};
+
+export const resetTestStudent = () => {
+    const request = {
+        methodname: 'theme_urcourses_default_reset_test_student',
+        args: {}
+    };
+
+    return Ajax.call([request])[0];
+};
+
+export const enrolTestStudent = (courseid) => {
+    const request = {
+        methodname: 'theme_urcourses_default_enrol_test_student',
+        args: {
+            courseid: courseid
+        }
+    };
+
+    return Ajax.call([request])[0];
+};
+
+export const unenrolTestStudent = (courseid) => {
+    const request = {
+        methodname: 'theme_urcourses_default_unenrol_test_student',
         args: {
             courseid: courseid
         }

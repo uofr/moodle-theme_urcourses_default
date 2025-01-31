@@ -67,16 +67,22 @@ const autoCollapse = menu => {
     if (menu.offsetHeight > maxHeight) {
         moreButton.classList.remove(Selectors.classes.hidden);
 
+        let menuHeight = 0;
         const menuNodes = Array.from(menu.children).reverse();
         menuNodes.forEach(item => {
             if (!item.classList.contains(Selectors.classes.dropdownmoremenu)) {
                 // After moving the menu items into the moreDropdown check again
                 // if the menu height is still larger then the height of the parent.
                 if (menu.offsetHeight > maxHeight) {
-                    const lastNode = menu.removeChild(item);
                     // Move this node into the more dropdown menu.
-                    moveIntoMoreDropdown(menu, lastNode, true);
+                    moveIntoMoreDropdown(menu, item, true);
+                } else if (menuHeight > maxHeight) {
+                    moveIntoMoreDropdown(menu, item, true);
+                    menuHeight = 0;
                 }
+            } else if (menu.offsetHeight > maxHeight) {
+                // Assign menu height to be used to check with menu parent.
+                menuHeight = menu.offsetHeight;
             }
         });
     } else {
@@ -189,16 +195,14 @@ const moveOutOfMoreDropdown = (menu, navNode) => {
 const sortMoreDropdown = (menu) => {
     const moreDropdown = menu.querySelector(Selectors.regions.moredropdown);
 
-    if ('children' in moreDropdown) {
-        if (moreDropdown.children.length > 0) {
-            const nodesSorted = Array.from(moreDropdown.children).sort((a, b) => {
-                return a.innerText.localeCompare(b.innerText);
-            });
-            moreDropdown.innerHTML = '';
-            nodesSorted.forEach(node => {
-                moreDropdown.appendChild(node);
-            });
-        }
+    if ('children' in moreDropdown && moreDropdown.children.length > 0) {
+        const nodesSorted = Array.from(moreDropdown.children).sort((a, b) => {
+            return a.innerText.localeCompare(b.innerText);
+        });
+        moreDropdown.innerHTML = '';
+        nodesSorted.forEach(node => {
+            moreDropdown.appendChild(node);
+        });
     }
 };
 
@@ -265,7 +269,6 @@ export default menu => {
     // moreMenu from closing.
     $('.' + Selectors.classes.dropdownmoremenu).on('show.bs.dropdown', function() {
         const moreDropdown = menu.querySelector(Selectors.regions.moredropdown);
-
         moreDropdown.querySelectorAll('.dropdown').forEach((dropdown) => {
             dropdown.removeEventListener('click', toggledropdown, true);
             dropdown.addEventListener('click', toggledropdown, true);

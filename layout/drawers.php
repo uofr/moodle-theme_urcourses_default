@@ -15,32 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Union - Drawers page layout.
+ * Theme UR Courses - Drawers page layout.
  *
- * This layoutfile is based on theme/boost/layout/drawers.php
+ * This layoutfile is based on theme/boost_union/layout/drawers.php
  *
- * Modifications compared to this layout file:
- * * Include footnote
- * * Render theme_boost_union/drawers instead of theme_boost/drawers template
- * * Include course related hints
- * * Include back to top button
- * * Include activity navigation
- *
- * @package   theme_boost_union
- * @copyright 2022 Luca Bösch, BFH Bern University of Applied Sciences luca.boesch@bfh.ch
- * @copyright based on code from theme_boost by Bas Brands
+ * @package   theme_urcourses_default
+ * @copyright 2024 John Lane <john.lane@uregina.ca>
+ * @copyright based on code from theme_boost_union by Luca Bösch
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-global $CFG,$PAGE,$DB,$COURSE;
-
 require_once($CFG->libdir . '/behat/lib.php');
 require_once($CFG->dirroot . '/course/lib.php');
 
-// Require own locallib.php.
-//require_once($CFG->dirroot . '/theme/boost_union/locallib.php');
+require_once($CFG->dirroot . '/theme/boost_union/locallib.php');
 require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
 
 // Add activity navigation if the feature is enabled.
@@ -49,46 +39,65 @@ if ($activitynavigation == THEME_BOOST_UNION_SETTING_SELECT_YES) {
     $PAGE->theme->usescourseindex = false;
 }
 
+$setdarkmode = optional_param('darkmode', null, PARAM_BOOL);
+if (!is_null($setdarkmode)) {
+    if ($setdarkmode) {
+        theme_urcourses_default_enable_darkmode();
+    }
+    else {
+        theme_urcourses_default_disable_darkmode();
+    }
+}
+
+$darkmodeenabled = theme_urcourses_default_darkmode_enabled();
+if ($darkmodeenabled) {
+    $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css?v=2025012700');
+}
+
+// Extra css.
+$PAGE->requires->css('/theme/urcourses_default/style/legacy.css?v=2024090200');
+$PAGE->requires->css('/theme/urcourses_default/style/callout.css?v=2024090200');
+$PAGE->requires->css('/theme/urcourses_default/style/alert.css?v=2024090200');
+$PAGE->requires->css('/theme/urcourses_default/style/pullquote.css?v=2024090200');
+$PAGE->requires->css('/theme/urcourses_defaultstyle/c4l.css?v=2024090200');
+
 // Add block button in editing mode.
 $addblockbutton = $OUTPUT->addblockbutton();
 
 if (isloggedin()) {
     $courseindexopen = (get_user_preferences('drawer-open-index', true) == true);
-    $blockdraweropen = (get_user_preferences('drawer-open-block') == true);
+
+    if (isguestuser()) {
+        $sitehomerighthandblockdrawerserverconfig = get_config('theme_boost_union', 'showsitehomerighthandblockdraweronguestlogin');
+    } else {
+        $sitehomerighthandblockdrawerserverconfig = get_config('theme_boost_union', 'showsitehomerighthandblockdraweronfirstlogin');
+    }
+
+    $isadminsettingyes = ($sitehomerighthandblockdrawerserverconfig == THEME_BOOST_UNION_SETTING_SELECT_YES);
+    $blockdraweropen = (get_user_preferences('drawer-open-block', $isadminsettingyes)) == true;
 } else {
     $courseindexopen = false;
     $blockdraweropen = false;
+
+    if (get_config('theme_boost_union', 'showsitehomerighthandblockdraweronvisit') == THEME_BOOST_UNION_SETTING_SELECT_YES) {
+        $blockdraweropen = true;
+    }
 }
 
 if (defined('BEHAT_SITE_RUNNING') && get_user_preferences('behat_keep_drawer_closed') != 1) {
-    $blockdraweropen = true;
-}
+    try {
+        if (
+            get_config('theme_boost_union', 'showsitehomerighthandblockdraweronvisit') === false &&
+            get_config('theme_boost_union', 'showsitehomerighthandblockdraweronguestlogin') === false &&
+            get_config('theme_boost_union', 'showsitehomerighthandblockdraweronfirstlogin') === false
+        ) {
+            $blockdraweropen = true;
+        }
+    } catch (Exception $e) {
+        echo $e->getMessage();
 
-//including Dark Mode css if darkmode==1 if query string is set
-//darkmode toggle code
-$setdarkmode = optional_param('darkmode', -1, PARAM_INT);
-
-if ($setdarkmode > -1) {
-    $userid = $USER->id;
-    $table = 'theme_urcourses_darkmode';
-
-    $newrecord = new stdClass();
-    $newrecord->userid = $userid;
-
-    //database check if user has a record, insert if not
-    if ($record = $DB->get_record($table, array('userid'=>$userid))) {
-     //if has a record, update record to $setdarkmode
-     
-     $newrecord->darkmode = $setdarkmode;
-     $newrecord->id = $record->id;
-     $DB->update_record($table, $newrecord);
+        $blockdraweropen = true;
     }
-    else {
-        //create a record
-        $newrecord->darkmode = $setdarkmode;
-        $DB->insert_record($table, $newrecord);
-    }  
-    
 }
 
 $extraclasses = ['uses-drawers'];
@@ -96,13 +105,6 @@ if ($courseindexopen) {
     $extraclasses[] = 'drawer-open-index';
 }
 
-$darkmodecheck = $DB->get_record('theme_urcourses_darkmode', array('userid'=>$USER->id, 'darkmode'=>1));
-//error_log('darkmode:'.print_r($darkmodecheck,1));
-if ($darkmodecheck) {
-	$extraclasses[] = 'ur-dark-mode';
-}
- 
- 
 $blockshtml = $OUTPUT->blocks('side-pre');
 $hasblocks = (strpos($blockshtml, 'data-block=') !== false || !empty($addblockbutton));
 if (!$hasblocks) {
@@ -113,10 +115,6 @@ if (!$courseindex) {
     $courseindexopen = false;
 }
 
-// Include the extra classes for the course index modification.
-require_once($CFG->dirroot . '/theme/boost_union/layout/includes/courseindex.php');
-
-$bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $forceblockdraweropen = $OUTPUT->firstview_fakeblocks();
 
 $secondarynavigation = false;
@@ -131,48 +129,36 @@ if ($PAGE->has_secondary_navigation()) {
     }
 }
 
-$primary = new core\navigation\output\primary($PAGE);
+// Load the navigation from boost_union primary navigation, the extended version of core primary navigation.
+// It includes the smart menus and menu items, for multiple locations.
+$primary = new theme_boost_union\output\navigation\primary($PAGE);
 $renderer = $PAGE->get_renderer('core');
 $primarymenu = $primary->export_for_template($renderer);
+
+// Add special class selectors to improve the Smart menus SCSS selectors.
+if (isset($primarymenu['includesmartmenu']) && $primarymenu['includesmartmenu'] == true) {
+    $extraclasses[] = 'theme-boost-union-smartmenu';
+}
+if (isset($primarymenu['bottombar']) && !empty($primarymenu['includesmartmenu'])) {
+    $extraclasses[] = 'theme-boost-union-bottombar';
+}
+
+// Include the extra classes for the course index modification.
+require_once($CFG->dirroot . '/theme/boost_union/layout/includes/courseindex.php');
+
 $buildregionmainsettings = !$PAGE->include_region_main_settings_in_header_actions() && !$PAGE->has_secondary_navigation();
 // If the settings menu will be included in the header then don't add it here.
 $regionmainsettingsmenu = $buildregionmainsettings ? $OUTPUT->region_main_settings_menu() : false;
 
-// load additional css
-$PAGE->requires->css('/theme/urcourses_default/style/legacy.css?v=2024090200');
-//$PAGE->requires->css('/theme/urcourses_default/style/card.css');
-//$PAGE->requires->css('/theme/urcourses_default/style/carousel.css');
-//$PAGE->requires->css('/theme/urcourses_default/style/editor.css');
-//$PAGE->requires->css('/theme/urcourses_default/style/image.css');
-$PAGE->requires->css('/theme/urcourses_default/style/callout.css?v=2024090200');
-$PAGE->requires->css('/theme/urcourses_default/style/alert.css?v=2024090200');
-//$PAGE->requires->css('/theme/urcourses_default/style/button.css');
-$PAGE->requires->css('/theme/urcourses_default/style/pullquote.css?v=2024090200');
-$PAGE->requires->css('/theme/urcourses_default/style/c4l.css?v=2024090200');
-
-
-// if user has darkmode on, include the CSS
-if($darkmodecheck){
-   $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css?v=2024090200');
-   
+if ($darkmodeenabled) {
+    $extraclasses[] = 'ur-dark-mode';
 }
+
+$bodyattributes = $OUTPUT->body_attributes($extraclasses); // In the original layout file, this line is place more above,
+                                                           // but we amended $extraclasses and had to move it.
 
 $header = $PAGE->activityheader;
 $headercontent = $header->export_for_template($renderer);
-
-$course_visibility_toggle = array();
-if (theme_urcourses_default_is_show_visibility_toggle()) {
-    $courseid = $COURSE->id;
-    $startdate = $COURSE->startdate;
-    $enddate = $COURSE->enddate;
-    $is_visible = $COURSE->visible;
-    $enrollment = theme_urcourses_default_get_course_enrollment($COURSE->id);
-    
-    $course_visibility_toggle_renderable = new \theme_urcourses_default\renderable\course_visibility_toggle(
-        $courseid, $startdate, $enddate, $is_visible, $enrollment);
-    
-    $course_visibility_toggle = $course_visibility_toggle_renderable->export_for_template($renderer);
-}
 
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
@@ -194,35 +180,50 @@ $templatecontext = [
     'overflow' => $overflow,
     'headercontent' => $headercontent,
     'addblockbutton' => $addblockbutton,
-    'visibilitytoggle' => $course_visibility_toggle
 ];
-
-// Get and use the course related hints HTML code, if any hints are configured.
-$courserelatedhintshtml = theme_boost_union_get_course_related_hints();
-if ($courserelatedhintshtml) {
-    $templatecontext['courserelatedhints'] = $courserelatedhintshtml;
-}
 
 // Include the template content for the course related hints.
 require_once(__DIR__ . '/includes/courserelatedhints.php');
 
+// Include the template content for the block regions.
+require_once($CFG->dirroot . '/theme/boost_union/layout/includes/blockregions.php');
+
 // Include the content for the back to top button.
-require_once(__DIR__ . '/includes/backtotopbutton.php');
+require_once($CFG->dirroot . '/theme/boost_union/layout/includes/backtotopbutton.php');
 
 // Include the content for the scrollspy.
-require_once(__DIR__ . '/includes/scrollspy.php');
+require_once($CFG->dirroot . '/theme/boost_union/layout/includes/scrollspy.php');
 
 // Include the template content for the footnote.
-require_once(__DIR__ . '/includes/footnote.php');
+require_once($CFG->dirroot . '/theme/boost_union/layout/includes/footnote.php');
 
 // Include the template content for the static pages.
-require_once(__DIR__ . '/includes/staticpages.php');
+require_once($CFG->dirroot . '/theme/boost_union/layout/includes/staticpages.php');
+
+// Include the template content for the footer button.
+require_once($CFG->dirroot . '/theme/boost_union/layout/includes/footer.php');
 
 // Include the template content for the JavaScript disabled hint.
-require_once(__DIR__ . '/includes/javascriptdisabledhint.php');
+require_once($CFG->dirroot . '/theme/boost_union/layout/includes/javascriptdisabledhint.php');
 
 // Include the template content for the info banners.
-require_once(__DIR__ . '/includes/infobanners.php');
+require_once($CFG->dirroot . '/theme/boost_union/layout/includes/infobanners.php');
 
-// Render drawers.mustache from boost_union.
-echo $OUTPUT->render_from_template('theme_urcourses_default/drawers', $templatecontext);
+// Include the template content for the navbar.
+require_once(__DIR__ . '/includes/navbar.php');
+
+// Include the template content for the advertisement tiles, but only if we are on the frontpage.
+if ($PAGE->pagelayout == 'frontpage') {
+    require_once($CFG->dirroot . '/theme/boost_union/layout/includes/advertisementtiles.php');
+}
+
+// Include the template content for the slider, but only if we are on the frontpage.
+if ($PAGE->pagelayout == 'frontpage') {
+    require_once($CFG->dirroot . '/theme/boost_union/layout/includes/slider.php');
+}
+
+// Include the template content for the smart menus.
+require_once($CFG->dirroot . '/theme/boost_union/layout/includes/smartmenus.php');
+
+// Render drawers.mustache from theme_boost (which is overridden in theme_boost_union).
+echo $OUTPUT->render_from_template('theme_boost/drawers', $templatecontext);

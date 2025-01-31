@@ -1,0 +1,44 @@
+{{#visible}}
+    <a href="{{viewurl}}" class="aalink coursename me-2 mb-1">
+        {{> core_course/favouriteicon }}
+        <span class="sr-only">
+            {{#str}}aria:coursename, core_course{{/str}}
+        </span>
+        <span class="multiline" title="{{fullname}}">
+            <span class="sr-only">{{{fullname}}}</span>
+            <span aria-hidden="true">
+                {{#shortentext}}55, {{{fullname}}} {{/shortentext}}
+            </span>
+        </span>
+    </a>
+{{/visible}}
+{{^visible}}
+    {{#canviewhidden}}
+        <a href="{{viewurl}}" class="aalink coursename me-2 mb-1">
+            {{> core_course/favouriteicon }}
+            <span class="sr-only">
+                {{#str}}aria:coursename, core_course{{/str}}
+            </span>
+            <span class="multiline" title="{{fullname}}">
+                <span class="sr-only">{{{fullname}}}</span>
+                <span aria-hidden="true">
+                    {{#shortentext}}55, {{{fullname}}} {{/shortentext}}
+                </span>
+            </span>
+        </a>
+    {{/canviewhidden}}
+    {{^canviewhidden}}
+        <div class="aalink coursename me-2 mb-1">
+            {{> core_course/favouriteicon }}
+            <span class="sr-only">
+                {{#str}}aria:coursename, core_course{{/str}}
+            </span>
+            <span class="multiline" title="{{fullname}}">
+                <span class="sr-only">{{{fullname}}}</span>
+                <span aria-hidden="true">
+                    {{#shortentext}}55, {{{fullname}}} {{/shortentext}}
+                </span>
+            </span>
+        </div>
+    {{/canviewhidden}}
+{{/visible}}

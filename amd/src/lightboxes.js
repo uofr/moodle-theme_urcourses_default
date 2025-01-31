@@ -14,71 +14,46 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Campus - JS code back to top button
- *
- * @package    theme_urcourses_default
- * @copyright  2017 Kathrin Osswald, Ulm University <kathrin.osswald@uni-ulm.de>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * Theme UR Courses - Display images linked with rel="lightbox" in a modal.
  */
 
-define(['jquery'], function($) {
-    "use strict";
+import $ from 'jquery';
+import LightboxModal from 'theme_urcourses_default/lightbox_modal';
+import Templates from 'core/templates';
 
-    /**
-     * Initialising.
-     */
-    function initLightBoxes() {
-		$('a[rel="lightbox"]').each(function() {
-			$(this).attr('data-toggle','modal');
-			$(this).attr('data-target','#lightboxmodal');
-			$(this).click(function() {
-				$('#lbimg').attr('src',$(this).children('img').eq(0).attr('src'));
-				$('#lbimgcap').html($(this).attr('title'));
-				$('#lbdialog').css('max-width', ($('#lbimg').width() + 34)+' px');
-			});
-		});
+const SELECTORS = {
+    PAGE_CONTENT: '#page-content',
+    LIGHTBOX_IMAGE: 'a[rel="lightbox"]'
+};
+
+const TEMPLATES = {
+    LIGHTBOX_MODAL_BODY: 'theme_urcourses_default/lightbox_modal_body'
+};
+
+export const init = () => {
+    if ($(SELECTORS.LIGHTBOX_IMAGE).length === 0) {
+        return;
     }
 
-    return {
-        init: function() {
-			// do we have links to lightbox?
-			if ($('a[rel="lightbox"]').length > 0) {
-				// does a modal already exist?
-				if (!$('#lightboxmodal').length > 0) {
-					// it does not exist,create it
+    registerEventListeners($(SELECTORS.PAGE_CONTENT));
+};
 
-					var modalmarkup = '<!-- Modal -->';
-					modalmarkup += '<div class="modal fade" id="lightboxmodal" role="dialog">';
-					modalmarkup += '<div class="modal-dialog" id="lbdialog">';
-					modalmarkup += '  <!-- Modal content-->';
-					modalmarkup += '    <div class="modal-content">';
-					modalmarkup += '      <div class="modal-header">';
-					modalmarkup += '        <button type="button" class="close" data-dismiss="modal">&times;</button>';
-					modalmarkup += '        <!--<h4 class="modal-title">Modal Header</h4>-->';
-					modalmarkup += '      </div>';
-					modalmarkup += '      <div class="modal-body">';
-					modalmarkup += '        <figure class="figure"><img id="lbimg" class="img-fluid" src="" />';
-					modalmarkup += '        <figcaption id="lbimgcap" class="figure-caption mt-2"></figcaption>';
-					modalmarkup += '      </div>';
-					modalmarkup += '      <div class="modal-footer">';
-					modalmarkup += '        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>';
-					modalmarkup += '      </div>';
-					modalmarkup += '    </div>';
-					modalmarkup += ' </div>';
-					modalmarkup += '</div>';
+const registerEventListeners = (root) => {
+    root.on('click', SELECTORS.LIGHTBOX_IMAGE, (e) => {
+        e.preventDefault();
+        const image = $(e.target);
+        showLightboxModal(image.attr('src'), image.attr('title'));
+    });
+};
 
-					$("body").append(modalmarkup);
-				}
-				initLightBoxes();
-
-				$('#lightboxmodal').on('show.bs.modal', function () {
-					$(this).find('.modal-body').css({
-						width:'auto', //probably not needed
-						height:'auto', //probably not needed
-						'max-height':'100%'
-					});
-				});
-			}
-		}
-	};
-});
+const showLightboxModal = (imgsrc, caption) => {
+    LightboxModal.create({
+        body: Templates.render(TEMPLATES.LIGHTBOX_MODAL_BODY, {
+            imgsrc: imgsrc,
+            caption: caption
+        }),
+        removeOnClose: true,
+        show: true,
+        large: true
+    });
+};

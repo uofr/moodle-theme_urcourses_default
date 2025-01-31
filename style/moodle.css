@@ -21805,7 +21805,7 @@ button.bg-gray:focus {
     object-fit: contain !important;
   }
   
-  #lbdialog .modal-content {
+  .lbdialog .modal-content {
     background-color: rgb(0, 0, 0) !important;
     left: 0 !important;
     top: 60px !important;
@@ -21820,21 +21820,21 @@ button.bg-gray:focus {
     outline: 0;
   }
 
-  #lbdialog .moodle-dialog{
+  .lbdialog .moodle-dialog{
 	  width: auto !important;
     height: auto !important;
     margin: 1.75rem auto !important;
   }
   
-  #lbdialog .modal-header {
+  .lbdialog .modal-header {
     display: none !important;
   }
   
-  #lbdialog .figure-caption{
+  .lbdialog .figure-caption{
     color: white !important;
   }
   
-  #lbdialog .figure {
+  .lbdialog .figure {
     display: inline-block !important;;
     color: white !important;;
     text-overflow: ellipsis !important;;
@@ -21844,24 +21844,24 @@ button.bg-gray:focus {
     text-align: center !important;;
   }
   
-  #lbdialog .modal-backdrop.show{
+  .lbdialog .modal-backdrop.show{
     opacity: 0.75 !important;;
   }
   
-  #lbdialog .modal-content .modal-footer .btn.btn-default{
+  .lbdialog .modal-content .modal-footer .btn.btn-default{
     color: white !important;
   }
   
     
   @media (min-width: 576px){
-  #lbdialog .modal-dialog {
+  .lbdialog .modal-dialog {
     max-width: 700px !important;
     max-height: fit-content !important;
   }
   }
   
   @media (min-height: 100px){
-    #lbdialog .modal-content {
+    .lbdialog .modal-content {
       min-width: auto !important;
         width: 100% !important;
         overflow-x: auto !important;

@@ -1,0 +1,19 @@
+<button id="back_button" class="btn btn-outline-secondary border-0 nosplit align-self-center mr-2">
+    {{#pix}} goback, theme_urcourses_default, {{#str}} feedback_modal_back, theme_urcourses_default {{/str}} {{/pix}}
+</button>
+<form>
+    <div class="form-group">
+        <label for="feedback_textarea">
+            {{$labeltext}}{{/labeltext}}
+        </label>
+        <textarea id="feedback_textarea" class="form-control" rows="3"></textarea>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">
+            {{#str}} submit {{/str}}
+        </button>
+        <button id="cancel_button" type="button" class="btn btn-secondary">
+            {{#str}} cancel {{/str}}
+        </button>
+    </div>
+</form>

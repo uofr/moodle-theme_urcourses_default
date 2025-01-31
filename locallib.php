@@ -13,398 +13,162 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-/**
- * Theme Boost Campus - Locallib file
- *
- * @package   theme_urcourses_default
- * @copyright 2017 Kathrin Osswald, Ulm University kathrin.osswald@uni-ulm.de
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
- 
- function theme_urcourses_default_get_course_related_hints() {
-	return theme_boost_union_get_course_related_hints();
- }
-
-
- /**
-  * Build the link to the imprint page.
-  *
-  * @return string.
-  */
- function theme_urcourses_default_get_imprint_link() {
-	return theme_boost_union_get_imprint_link();
- }
-
- /**
-  * Build the page title of the imprint page.
-  *
-  * @return string.
-  */
- function theme_urcourses_default_get_imprint_pagetitle() {
-    return theme_boost_union_get_imprint_pagetitle();
- }
- 
- /**
-  * Helper function to check if a given info banner should be shown on this page.
-  * This function checks
-  * a) if the banner is enabled at all
-  * b) if the banner has any content (i.e. is not empty)
-  * b) if the banner is configured to be shown on the given page
-  * c) if the banner is configured to be shown now (in case it is a time-based banner)
-  *
-  * @copyright  2022 Moodle an Hochschulen e.V. <kontakt@moodle-an-hochschulen.de>
-  * @copyright  based on code from theme_boost_campus by Kathrin Osswald.
-  *
-  * @param int $bannerno The counting number of the info banner.
-  *
-  * @return boolean.
-  */
- function theme_urcourses_default_infobanner_is_shown_on_page($bannerno) {
-	return theme_boost_union_infobanner_is_shown_on_page($bannerno);
- }
- 
- 
- /**
-  * Helper function to compare two infobanner orders.
-  *
-  * @param int $a The first value
-  * @param int $b The second value
-  *
-  * @return boolean.
-  */
- function theme_urcourses_default_infobanner_compare_order($a, $b) {
-	return theme_boost_union_infobanner_compare_order($a, $b);
- }
- 
-  
- /**
-  * Helper function to reset the visibility of a given info banner.
-  *
-  * @param int $no The number of the info banner.
-  *
-  * @return bool True if everything went fine, false if at least one user couldn't be resetted.
-  */
- function theme_urcourses_default_infobanner_reset_visibility($no) {
-	return theme_boost_union_infobanner_reset_visibility($no);
-} 
-  
-  
-/**
- * Get the random number for displaying the background image on the login page randomly.
- *
- * @return int|null
- * @throws coding_exception
- * @throws dml_exception
- */
-function theme_urcourses_default_get_random_loginbackgroundimage_number() {
-	return theme_boost_union_get_random_loginbackgroundimage_number();
-}
-  
-  
-/**
- * Get a random class for body tag for the background image of the login page.
- *
- * @return string
- */
-function theme_urcourses_default_get_random_loginbackgroundimage_class() {
-	return theme_boost_union_get_random_loginbackgroundimage_class();
-}	
-	
-/**
- * Return the files from the loginbackgroundimage file area.
- * This function always loads the files from the filearea which is not really performant.
- * However, we accept this at the moment as it is only invoked on the login page.
- *
- * @return array|null
- * @throws coding_exception
- * @throws dml_exception
- */
-function theme_urcourses_default_get_loginbackgroundimage_files() {
-	return theme_boost_union_get_loginbackgroundimage_files();
-}	
-
-
 
 /**
- * Add background images from setting 'loginbackgroundimage' to SCSS.
+ * Theme UR Courses - Local library
  *
- * @return string
+ * @package    theme_urcourses_default
+ * @copyright  2023 Alexander Bias <bias@alexanderbias.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-function theme_urcourses_default_get_loginbackgroundimage_scss() {
-	return theme_boost_union_get_loginbackgroundimage_scss();
+
+/***************************************************************
+ * EXTENSION POINT:
+ * Add whatever UR Courses local functions you need here.
+ **************************************************************/
+
+function theme_urcourses_default_enable_darkmode() {
+    return set_user_preference('theme_urcourses_default_darkmode', true);
 }
 
-
-/**
- * Get the text that should be displayed for the randomly displayed background image on the login page.
- *
- * @return array (of two strings, holding the text and the text color)
- * @throws coding_exception
- * @throws dml_exception
- */
-function theme_urcourses_default_get_loginbackgroundimage_text() {
-	return theme_boost_union_get_loginbackgroundimage_text();
+function theme_urcourses_default_disable_darkmode() {
+    return unset_user_preference('theme_urcourses_default_darkmode');
 }
 
-/**
- * Return the files from the additionalresources file area as templatecontext structure.
- * It was designed to compose the files for the settings-additionalresources-filelist.mustache template.
- * This function always loads the files from the filearea which is not really performant.
- * Thus, you have to take care where and how often you use it (or add some caching).
- *
- * @return array|null
- * @throws coding_exception
- * @throws dml_exception
- */
-function theme_urcourses_default_get_additionalresources_templatecontext() {
-	return theme_boost_union_get_additionalresources_templatecontext();
-}	
-
-/**
- * Return the files from the customfonts file area as templatecontext structure.
- * It was designed to compose the files for the settings-customfonts-filelist.mustache template.
- * This function always loads the files from the filearea which is not really performant.
- * Thus, you have to take care where and how often you use it (or add some caching).
- *
- * @return array|null
- * @throws coding_exception
- * @throws dml_exception
- */
-function theme_urcourses_default_get_customfonts_templatecontext() {
-	return theme_boost_union_get_customfonts_templatecontext();
+function theme_urcourses_default_darkmode_enabled() {
+    return get_user_preferences('theme_urcourses_default_darkmode', false);
 }
 
-/**
- * Helper function which makes sure that all webfont file types are registered in the system.
- * The webfont file types need to be registered in the system, otherwise the admin settings filepicker wouldn't allow restricting
- * the uploadable file types to webfonts only.
- *
- * @return void
- * @throws coding_exception
- */
-function theme_urcourses_default_register_webfonts_filetypes() {
-	return theme_boost_union_register_webfonts_filetypes();
-}	
-
-/* Get the course image if added to course.
- *
- * @param object $course
- * @return string url of course image
- */
-function theme_urcourses_default_get_course_image($course) {
-	return theme_urcourses_default_get_course_image_url($course);
-}
-
-
-function theme_urcourses_default_get_course_image_old($course) {
-    global $CFG;
-    $courseinlist = new \core_course_list_element($course);
-    foreach ($courseinlist->get_course_overviewfiles() as $file) {
-        if ($file->is_valid_image()) {
-            $pathcomponents = [
-                '/pluginfile.php',
-                $file->get_contextid(),
-                $file->get_component(),
-                $file->get_filearea() . $file->get_filepath() . $file->get_filename()
-            ];
-            $path = implode('/', $pathcomponents);
-            return (new moodle_url($path))->out();
-        }
-    }
-    return false;
-}
-
-// UOFR HACK dapiawej September 29, 2023
-// Retrieve course image and handle spaces, special characters in file names.
-function theme_urcourses_default_get_course_image_url() {
-    global $PAGE;
-
-    if (isset($PAGE->course->id) && $PAGE->course->id == SITEID) {
-        return null;
-    }
-    // Get the course image.
-    $courseimage = \core_course\external\course_summary_exporter::get_course_image($PAGE->course);
-
-    // If the course has a course image.
-    if ($courseimage) {
-        // Then return it.
-        return $courseimage;
-
-        // Otherwise, if a fallback image is configured.
-    } else if (get_config('theme_boost_union', 'courseheaderimagefallback')) {
-       
-        $systemcontext = \context_system::instance();
-
-        $fs = get_file_storage();
-
-        $files = $fs->get_area_files($systemcontext->id, 'theme_boost_union', 'courseheaderimagefallback',
-            false, 'itemid', false);
-
-        $file = reset($files);
-
-        return moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(),
-            $file->get_itemid(), $file->get_filepath(), $file->get_filename());
-    }
-
-    //As no image was found, return null.
-    return null;
-}
-
-
-/**
-* UR HACK
-* Return true or false if current user has a test account
-* for course
-* @return bool
-*/
-function theme_urcourses_default_check_test_account($username){
+function theme_urcourses_default_can_create_test_student($userid) {
     global $DB;
 
-    //get username to create email
-    $email = $username."+urstudent@uregina.ca";
-    //check if test user account has already been created
-    $select = 'SELECT * FROM mdl_user WHERE email ='.$email.';';
-    $sql = "SELECT * FROM mdl_user as u WHERE u.email ='{$email}'";  
-    $user = $DB->get_record_sql($sql);
-    
-    //if created
-    if($user){
-        return true;
+    $teacherroleid = $DB->get_field('role', 'id', ['shortname' => 'editingteacher']);
+    $managerroleid = $DB->get_field('role', 'id', ['shortname' => 'manager']);
+    $designerroleid = $DB->get_field('role', 'id', ['shortname' => 'instdesigner']);
+    $isteacher = $DB->record_exists('role_assignments', ['userid' => $userid, 'roleid' => $teacherroleid]);
+    $ismanager = $DB->record_exists('role_assignments', ['userid' => $userid, 'roleid' => $managerroleid]);
+    $isdesigner = $DB->record_exists('role_assignments', ['userid' => $userid, 'roleid' => $designerroleid]);
+
+    return ($isteacher|| $ismanager || $isdesigner || is_siteadmin());
+}
+
+function theme_urcourses_default_has_test_student_account($username) {
+    global $DB;
+
+    $email = "$username+urstudent@uregina.ca";
+    return $DB->record_exists('user', ['email' => $email]);
+}
+
+function theme_urcourses_default_create_darkmode_link() {
+    global $PAGE;
+
+    $darkmodeenabled = theme_urcourses_default_darkmode_enabled();
+
+    $darkmodelink = new stdClass();
+    $darkmodelink->divider = false;
+    $darkmodelink->itemtype = 'link';
+    $darkmodelink->link = true;
+    $darkmodelink->pixicon = $darkmodeenabled ? 'lightmode' : 'darkmode';
+    $darkmodelink->pixplugin = 'theme_urcourses_default';
+    $darkmodelink->title = theme_urcourses_default_darkmode_enabled()
+        ? get_string('disabledarkmode', 'theme_urcourses_default')
+        : get_string('enabledarkmode', 'theme_urcourses_default');
+    $darkmodelink->titleidentifier = 'darkmode,theme_urcourses_default';
+    $darkmodelink->url = new moodle_url($PAGE->url, ['darkmode' => !$darkmodeenabled]);
+
+    return $darkmodelink;
+}
+
+function theme_urcourses_default_create_teststudent_link($hasteststudentaccount) {
+    global $USER;
+
+    $studentaccountlink = new \stdClass();
+    $studentaccountlink->attributes = [
+        [
+            'name' => 'data-action',
+            'value' => $hasteststudentaccount ? 'resetteststudent' : 'createteststudent' 
+        ]
+    ];
+    $studentaccountlink->divider = false;
+    $studentaccountlink->itemtype = 'link';
+    $studentaccountlink->link = true;
+    $studentaccountlink->pixicon = 'i/user';
+    $studentaccountlink->title = $hasteststudentaccount
+        ? get_string('modifyteststudent', 'theme_urcourses_default')
+        : get_string('createteststudent', 'theme_urcourses_default');
+    $studentaccountlink->titleidentifier = 'studentaccount,theme_urcourses_default';
+    $studentaccountlink->url = '#';
+
+    return $studentaccountlink;
+}
+
+function theme_urcourses_default_add_custom_user_menu_items($usermenuitems, $customitems) {
+    $itemcount = count($usermenuitems);
+    $preferenceskey = 0;
+
+    foreach($usermenuitems as $key => $item) {
+        if (isset($item->title) && $item->title == 'Preferences') {
+            $preferenceskey = $key;
+            break;
+        }
+    }
+    $insertpoint = $preferenceskey + 1;
+
+    return array_merge(
+        array_slice($usermenuitems, 0, $insertpoint),
+        $customitems,
+        array_slice($usermenuitems, $insertpoint, $itemcount)
+    );
+}
+
+function theme_urcourses_default_get_course_related_hints() {
+    global $COURSE, $DB, $OUTPUT, $PAGE;
+
+    if (!$PAGE->context->contextlevel == CONTEXT_COURSE) {
+        return '';
     }
 
-    return false;
-}
-
-/**
- * Return the UR Category class for a given course id.
- * @param int $courseid
- * @return string
- */
-
- function theme_urcourses_default_get_ur_category_class($courseid) {
-	global $CFG, $DB;
-	
-	$ur_css_class = '';
-	
-	$ur_categories = array('','misc'=>'',
-		'khs'=>'Faculty of Kinesiology and Health Studies',
-		'edu'=>'Faculty of Education',
-		'sci'=>'Faculty of Science',
-		'map'=>'Faculty of Media, Art, and Performance',
-		'engg'=>'Faculty of Engineering',
-		'bus'=>'Business Administration',
-		'arts'=>'Faculty of Arts',
-		'sw'=>'Faculty of Social Work',
-		'nur'=>'Faculty of Nursing',
-		'scbscn'=>'Saskatchewan Collaborative Bachelor of Science in Nursing',
-		'luther'=>'Luther College',
-		'campion'=>'Campion College',
-		'cnpp'=>'Collaborative Nurse Practitioner Program',
-		'lacite'=>'La Cité universitaire francophone',
-		'fnuniv'=>'First Nations University of Canada',
-		'gbus'=>'Kenneth Levene Graduate School of Business',
-		'jsgspp'=>'Johnson-Shoyama Graduate School of Public Policy',
-		'misc'=>'Custom Themes');
-
-	
-	// Check theme first
-	
-	if (!is_numeric($courseid)) { $courseid=0; } // some IDs not numeric? check...
-		
-	$sql = "SELECT `theme` FROM mdl_course WHERE id={$courseid}";	
-	
-    $check_course_theme = $DB->get_record_sql($sql);
-    //debugging("Themes: " . $check_course_theme->theme  . "Course ID: " . $courseid, DEBUG_DEVELOPER);
-	
-	if (!empty($check_course_theme->theme)) {
-		$clean_theme_key = substr($check_course_theme->theme, 0, 16); //'urcourses_clean_'
-        $default_theme_key = substr($check_course_theme->theme, 0, 10); //'urcourses_'
-        
-        if ($clean_theme_key == 'urcourses_clean_') {
-            $theme_val = substr($check_course_theme->theme, 16);
-        }
-        else if ($default_theme_key == 'urcourses_') {
-            $theme_val = substr($check_course_theme->theme, 10);
-        } else {
-        	$theme_val = '';
-        }
-		
-		
-		$exc_themes = array('sw'=>'socialwork',
-			'map'=>'finearts',
-			'edu'=>'education',
-			'bus'=>'business',
-			'nur'=>'nursing',
-			'sci'=>'science');
-		
-		$key = array_search($theme_val,$exc_themes);
-		if (!empty($key)) $theme_val = $key;	
-		
-        return $theme_val;
-	}
-	
-		
-	//if default theme, then check category
-	
-	$sql = "SELECT a.name FROM {$CFG->prefix}course_categories a, {$CFG->prefix}course b WHERE a.id = b.category AND b.id = {$courseid}";
-	
-	$check_course_category = $DB->get_record_sql($sql);
-	if ($check_course_category) {
-		$key = array_search($check_course_category->name,$ur_categories);
-		if (!empty($key)) $ur_css_class = $key;
-	}
-	
-	return $ur_css_class;
-}
-
-/**
- * Check whether or not the course visibility toggle should be shown.
- * The toggle is shown when the user is editing a course page, or if the user is looking at a hidden course.
- * 
- * @return bool True if tool should be shown. Otherwise, False.
- */
-function theme_urcourses_default_is_show_visibility_toggle() {
-    global $COURSE, $PAGE;
-
-    $context = \context_course::instance($COURSE->id, IGNORE_MISSING);
-    $canviewhidden = has_capability('moodle/course:viewhiddencourses', $context);
-
-    $courseid = $COURSE->id;
-    $pageurl = $PAGE->url;
-    $course_viewurl = new moodle_url('/course/view.php', array('id' => $courseid));
-    $course_editurl = new moodle_url('/course/edit.php', array('id' => $courseid));
-
-    $is_on_course_view = $pageurl->compare($course_viewurl, URL_MATCH_BASE);
-    $is_on_course_edit = $pageurl->compare($course_editurl, URL_MATCH_BASE);
-
-    $is_on_course_page = $is_on_course_view || $is_on_course_edit;
-    $is_user_editing = $PAGE->user_is_editing();
-    $is_course_visible = $canviewhidden && $COURSE->visible == 0;
-
-    return ($is_on_course_page && ($is_user_editing || $is_course_visible));
-}
-
-/**
- * Gets enrollment information for the course specified by $courseid.
- * 
- * @return array
- */
-function theme_urcourses_default_get_course_enrollment(int $courseid) {
-    global $CFG, $DB;
-    
-    $is_urcourserequest_exist = is_file($CFG->dirroot.'/admin/tool/urcourserequest/lib.php');
-    $course_exists = $DB->record_exists('course', array('id' => $courseid));
-
-    if ($is_urcourserequest_exist && $course_exists) {
-        require_once($CFG->dirroot.'/admin/tool/urcourserequest/lib.php');
-
-        $course = get_course($courseid);
-        $enrollment = tool_urcourserequest_get_course_state($course->idnumber);
-
-        return $enrollment === false ? array() : $enrollment;
+    $course = get_course($COURSE->id);
+    if (empty($course->idnumber)) {
+        return '';
     }
-    else {
-        return array();
+
+    $enrolments = $DB->get_records_sql("SELECT * FROM ur_crn_map WHERE courseid = '$course->idnumber' ORDER BY semester DESC");
+    $coursehint_enrol = new \theme_urcourses_default\output\coursehint_enrol($enrolments, );
+
+    return $OUTPUT->render($coursehint_enrol);
+}
+
+// 01 - 04: 10 (Winter)
+// 05 - 08: 20 (Spring/Summer)
+// 09 - 12: 30 (Fall)
+function theme_urcourses_default_get_current_semester() {
+    $now = \core\di::get(\core\clock::class)->now();
+    $month = $now->format('m');
+    $year = $now->format('Y');
+
+    if ($month >= 1 && $month <= 4) {
+        $semester = 10;
+    } else if ($month >= 5 && $month <= 8) {
+        $semester = 20;
+    } else if ($month >= 9 && $month <= 12) {
+        $semester = 30;
+    }
+
+    return "$year$semester";
+}
+
+function theme_urcourses_default_get_semester_string($semestercode) {
+    $year = substr($semestercode, 0, 4);
+    $semester = substr($semestercode, -2);
+    switch ($semester) {
+        case '10':
+            return $year . ' ' . get_string('winter', 'theme_urcourses_default');
+        case '20':
+            return $year . ' ' . get_string('springsummer', 'theme_urcourses_default');
+        case '30':
+            return $year . ' ' . get_string('fall', 'theme_urcourses_default');
+        default:
+            return '';
     }
 }
