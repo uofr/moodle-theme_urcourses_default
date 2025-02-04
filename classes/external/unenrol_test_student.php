@@ -54,6 +54,10 @@ class unenrol_test_student extends external_api {
         $context = \context_course::instance($params['courseid']);
         self::validate_context($context);
 
+        if (!theme_urcourses_default_can_create_test_student($USER->id)) {
+            throw new \moodle_exception('teststudentnotallowed', 'theme_urcourses_default');
+        }
+
         $email = "$USER->username+urstudent@uregina.ca";
         $user = $DB->get_record('user', ['email' => $email]);
 
