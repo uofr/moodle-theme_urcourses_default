@@ -153,7 +153,7 @@ $string['coursesummaryedit'] = 'Edit course summary';
 $string['strtimemonthdayyear'] = '%B %d, %Y';
 
 // Errors
-$string['teststudentnotallowed'] = 'You do not have permission to create a test student.';
+$string['teststudentnotallowed'] = 'You do not have permission to use the test student account feature. You must be an instructor, manager, or course editor in at least one course.';
 $string['teststudenteditnotallowed'] = 'You do not have permission to edit a test student account.';
 $string['teststudentexists'] = 'You already have a test student account.';
 $string['teststudentnotexist'] = 'You do not have a test student account.';

@@ -47,26 +47,34 @@ const init = (root) => {
 const registerEventListeners = (root) => {
     root.on('click', SELECTORS.CREATE_TEST_STUDENT, async (e) => {
         e.preventDefault();
-        const testStudent = await Repository.testAccountInfo();
-        testStudentModal(
-            getString('createmodal_title', 'theme_urcourses_default'),
-            Templates.render(TEMPLATES.CREATE_TEST_STUDENT_MODAL, testStudent),
-            getString('createmodal_button', 'theme_urcourses_default'),
-            createTestStudent
-        );
+        try {
+            const testStudent = await Repository.testAccountInfo();
+            testStudentModal(
+                getString('createmodal_title', 'theme_urcourses_default'),
+                Templates.render(TEMPLATES.CREATE_TEST_STUDENT_MODAL, testStudent),
+                getString('createmodal_button', 'theme_urcourses_default'),
+                createTestStudent
+            );
+        } catch (error) {
+            Notification.exception(error);
+        }
     });
 
     root.on('click', SELECTORS.RESET_TEST_STUDENT, async (e) => {
         e.preventDefault();
-        const testStudent = await Repository.testAccountInfo();
-        testStudentModal(
-            getString('resetmodal_title', 'theme_urcourses_default'),
-            Templates.render(TEMPLATES.RESET_TEST_STUDENT_MODAL, testStudent),
-            getString('resetmodal_button', 'theme_urcourses_default'),
-            () => {
-                resetTestStudentConfirm(testStudent);
-            }
-        );
+        try {
+            const testStudent = await Repository.testAccountInfo();
+            testStudentModal(
+                getString('resetmodal_title', 'theme_urcourses_default'),
+                Templates.render(TEMPLATES.RESET_TEST_STUDENT_MODAL, testStudent),
+                getString('resetmodal_button', 'theme_urcourses_default'),
+                () => {
+                    resetTestStudentConfirm(testStudent);
+                }
+            );
+        } catch (error) {
+            Notification.exception(error);
+        }
     });
 };
 
