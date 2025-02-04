@@ -112,23 +112,21 @@ $string['newtestaccount_email'] = '<p>Hi {$a->firstname},</p>
 </ol>
 <p>After you log in, you will have to create a new password for your test student account.</p>';
 
-$string['resetteststudent_email'] = '<p>Hi Admin,</p>
+$string['resetteststudent_email'] = '<p>Hi {$a->firstname},</p>
 <p>Your test student account password has been reset.</p>
 <p>To set a new password for your test student account:</p>
 <ol>
-   <li>Log out of UR Courses.</li>
+   <li>Log out of UR Courses if you are currently logged in.</li>
    <li>Go to {$a->link}.</li>
    <li>Click <strong>log in with other credentials</strong>.</li>
-   <li>Enter your test student username and temporary password.</li>
+   <li>Enter your test student username and new temporary password.</li>
    <ul>
       <li>username: {$a->username}</li>
       <li>password: {$a->newpassword}</li>
    </ul>
    <li>Press the <strong>Log in</strong> button.</li>
 </ol>
-<p>After you log in, you will be able to create a new password for your test student account.</p>
-<p>Note that the password must contain at least 6 characters.</p>
-<p>{$a->signoff}</p>';
+<p>After you log in, you will be able to create a new password for your test student account.</p>';
 
 // Feedback
 $string['feedback_label'] = 'Feedback on UR Courses';
