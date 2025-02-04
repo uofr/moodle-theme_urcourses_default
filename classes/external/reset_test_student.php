@@ -51,7 +51,7 @@ class reset_test_student extends external_api {
         self::validate_context($context);
 
         if (!theme_urcourses_default_can_create_test_student($USER->id)) {
-            throw new \moodle_exception('teststudenteditnotallowed', 'theme_urcourses_default');
+            throw new \moodle_exception('teststudentnotallowed', 'theme_urcourses_default');
         }
 
         $email = "$USER->username+urstudent@uregina.ca";
@@ -59,12 +59,12 @@ class reset_test_student extends external_api {
             $authplugin = get_auth_plugin($user->auth);
 
             if (!$authplugin->can_change_password()) {
-                throw new \moodle_exception('teststudentcoultnotsetpassword', 'theme_urcourses_default');
+                throw new \moodle_exception('teststudentcoultnotresetpassword', 'theme_urcourses_default');
             }
 
             $password = generate_password();
             if (!$authplugin->user_update_password($user, $password)) {
-                throw new \moodle_exception('teststudentcoultnotsetpassword', 'theme_urcourses_default');
+                throw new \moodle_exception('teststudentcoultnotresetpassword', 'theme_urcourses_default');
             }
 
             set_user_preference('auth_forcepasswordchange', 1, $user);
@@ -94,6 +94,8 @@ class reset_test_student extends external_api {
             return [
                 'email' => "$USER->username@uregina.ca"
             ];
+        } else {
+            throw new \moodle_exception('teststudentdoesntexist', 'theme_urcourses_default');
         }
     }
 }

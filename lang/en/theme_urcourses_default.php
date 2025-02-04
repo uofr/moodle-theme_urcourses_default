@@ -70,12 +70,11 @@ $string['resetfail_title'] = 'Password Reset Failed';
 $string['resetfail_body'] = 'Test student password reset failed.';
 $string['createmodal_title'] = 'Create Test Student Account';
 $string['createmodal_button'] = 'Create';
-$string['createmodal_intro'] = 'The following test user account will be created:';
+$string['createmodal_intro'] = 'The following test student account will be created:';
 $string['createmodal_email'] = 'Email';
 $string['createmodal_username'] = 'Username';
 $string['createmodal_email_helptext'] = 'Email sent to <strong>{$a->email}</strong> will be directed to your <strong>{$a->emailoriginal}</strong> account.';
 $string['createmodal_helptext'] = 'Upon clicking <strong>create</strong>, an email will be sent to your <strong>{$a->emailoriginal}</strong> account with instructions on how to log in to your new test student account.';
-$string['createmodal_confirmtext'] = 'Would you like to create the test student account?';
 $string['createmodal_confirm'] = 'Are you sure you want to create the test student account {$a}?';
 $string['createsuccess_title'] = 'Test Student Account Created';
 $string['createsuccess_body'] = 'Information on how to log in to your new test student account will be sent to your <strong>{$a}</strong> account.';
@@ -101,7 +100,7 @@ $string['newtestaccount_email'] = '<p>Hi {$a->firstname},</p>
 <p>Your new test student account at \'{$a->sitename}\' has been created.</p>
 <p>To log in to your test student account:</p>
 <ol>
-   <li>Log out of UR Courses.</li>
+   <li>Log out of UR Courses if you are currently logged in.</li>
    <li>Go to {$a->link}.</li>
    <li>Click <strong>log in with other credentials</strong>.</li>
    <li>Enter your test student username and temporary password.</li>
@@ -111,8 +110,7 @@ $string['newtestaccount_email'] = '<p>Hi {$a->firstname},</p>
    </ul>
    <li>Press the <strong>Log in</strong> button.</li>
 </ol>
-<p>After you log in, you will have to create a new password for your test student account with at least 6 characters.</p>
-<p>{$a->signoff}</p>';
+<p>After you log in, you will have to create a new password for your test student account.</p>';
 
 $string['resetteststudent_email'] = '<p>Hi Admin,</p>
 <p>Your test student account password has been reset.</p>
@@ -154,11 +152,12 @@ $string['strtimemonthdayyear'] = '%B %d, %Y';
 
 // Errors
 $string['teststudentnotallowed'] = 'You do not have permission to use the test student account feature. You must be an instructor, manager, or course editor in at least one course.';
-$string['teststudenteditnotallowed'] = 'You do not have permission to edit a test student account.';
-$string['teststudentexists'] = 'You already have a test student account.';
-$string['teststudentnotexist'] = 'You do not have a test student account.';
+$string['teststudentexists'] = 'You cannot create a test student account. You already have a test student account.';
+$string['teststudentdoesntexist'] = 'You do not have a test student account.';
+$string['teststudentcoultnotsetpassword'] = 'There was an error while trying to set your test student account password.';
+$string['teststudentcoultnotresetpassword'] = 'There was an error while trying to reset your test student account password.';
 $string['teststudentcouldnotemail'] = 'Failed to send test student account email.';
-$string['teststudentcoultnotsetpassword'] = 'Could not set new password for test student.';
+$string['teststudentnotexist'] = 'You do not have a test student account.';
 $string['teststudentalreadyenrolled'] = 'Test student is already enrolled in this course.';
 $string['teststudentnotenrolled'] = 'Test student is not enrolled in this course.';
 $string['teststudentcouldnotenrol'] = 'Failed to enrol test student to this course.';
