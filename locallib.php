@@ -108,6 +108,7 @@ function theme_urcourses_default_add_custom_user_menu_items($usermenuitems, $cus
 
     foreach($usermenuitems as $key => $item) {
         if (isset($item->title) && $item->title == 'Preferences') {
+            $item->divider = false;
             $preferenceskey = $key;
             break;
         }
