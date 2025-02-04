@@ -26,6 +26,8 @@
 define('THEME_URCOURSES_DEFAULT_SETTING_INHERITANCE_INHERIT', 0);
 define('THEME_URCOURSES_DEFAULT_SETTING_INHERITANCE_DUPLICATE', 1);
 
+require_once(__DIR__ . '/locallib.php');
+
 /**
  * Returns the main SCSS content.
  *
