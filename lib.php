@@ -158,6 +158,10 @@ function theme_urcourses_default_extend_navigation_course($navigation, $course, 
         return;
     }
 
+    if (!theme_urcourses_default_can_create_test_student($USER->id)) {
+        return;
+    }
+
     $urstudentemail = $USER->username . '+urstudent@uregina.ca';
     if ($urstudent = $DB->get_record('user', ['email' => $urstudentemail])) {
         $urstudentenrolled = is_enrolled($context, $urstudent->id, '', true);
@@ -171,10 +175,6 @@ function theme_urcourses_default_extend_navigation_course($navigation, $course, 
             type: navigation_node::NODETYPE_LEAF,
             key: $urstudentenrolled ? 'unenrol_test_student' : 'enrol_test_student'
         );
-
-        if ($PAGE->url->compare($nodeurl, URL_MATCH_BASE)) {
-            $node->make_active();
-        }
 
         $navigation->add_node($node);
 
@@ -191,18 +191,21 @@ function theme_urcourses_default_get_fontawesome_icon_map() {
     ];
 }
 
-function theme_urcourses_default_render_navbar_output() {
-    global $USER, $OUTPUT;
+/**
+ * Hiding feedback button/modal for now since it's still a work in progress.
+ */
+// function theme_urcourses_default_render_navbar_output() {
+//     global $USER, $OUTPUT;
 
-    if (!isloggedin()) {
-        return '';
-    }
+//     if (!isloggedin()) {
+//         return '';
+//     }
 
-    // Compose the popover menu.
-    $html = $OUTPUT->render_from_template(
-        'theme_urcourses_default/feedback-button',
-        []
-    );
+//     // Compose the popover menu.
+//     $html = $OUTPUT->render_from_template(
+//         'theme_urcourses_default/feedback-button',
+//         []
+//     );
 
-    return $html;
-}
+//     return $html;
+// }
