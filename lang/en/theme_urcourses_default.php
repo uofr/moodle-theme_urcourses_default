@@ -93,9 +93,9 @@ $string['teststudentunenrol_title'] = 'Unenrol Test Student?';
 $string['teststudentunenrol_body'] = 'Are you sure you want to unenrol your test student account from this course?';
 $string['teststudentunenrol_button'] = 'Unenrol';
 $string['teststudentenrolled_title'] = 'Test student enrolled';
-$string['teststudentenrolled_body'] = 'Test student has been enrolled in this course.';
+$string['teststudentenrolled_body'] = 'Your test student account has been enrolled in this course.';
 $string['teststudentunenrolled_title'] = 'Test student unenrolled';
-$string['teststudentunenrolled_body'] = 'Test student has been removed from this course.';
+$string['teststudentunenrolled_body'] = 'Your test student account has been removed from this course.';
 $string['newtestaccount_email'] = '<p>Hi {$a->firstname},</p>
 <p>Your new test student account at \'{$a->sitename}\' has been created.</p>
 <p>To log in to your test student account:</p>
