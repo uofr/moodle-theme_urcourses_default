@@ -158,8 +158,8 @@ $string['teststudentcouldnotemail'] = 'Failed to send test student account email
 $string['teststudentnotexist'] = 'You do not have a test student account.';
 $string['teststudentalreadyenrolled'] = 'Your test student account is already enrolled in this course.';
 $string['teststudentnotenrolled'] = 'Your test student account is not enrolled in this course.';
-$string['teststudentcouldnotenrol'] = 'Failed to enrol test student to this course.';
-$string['teststudentcouldnotunenrol'] = 'Failed to unenrol test student to this course.';
+$string['teststudentcouldnotenrol'] = 'Failed to enrol test student in this course.';
+$string['teststudentcouldnotunenrol'] = 'Failed to unenrol test student from this course.';
 $string['noenrolmethod'] = 'Could not find manual enrolment plugin for this course.';
 
 // Login Form
