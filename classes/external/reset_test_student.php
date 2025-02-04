@@ -75,13 +75,11 @@ class reset_test_student extends external_api {
             $loginurl = new \moodle_url('/login');
 
             $a = new \stdClass();
-            $a->firstname   = $user->firstname;
-            $a->lastname    = $user->lastname;
+            $a->firstname   = $USER->firstname;
             $a->sitename    = format_string($site->fullname);
             $a->username    = $user->username;
             $a->newpassword = $password;
             $a->link        = \html_writer::link($loginurl, $loginurl->out());
-            $a->signoff     = generate_email_signoff();
 
             $message = get_string('resetteststudent_email', 'theme_urcourses_default', $a);
             $subject  = format_string(string: $site->fullname) .': '. get_string('resettestuser','theme_urcourses_default');
