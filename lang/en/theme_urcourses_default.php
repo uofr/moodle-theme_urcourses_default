@@ -64,8 +64,9 @@ $string['resetmodal_title'] = 'Reset Password for Test Student Account';
 $string['resetmodal_button'] = 'Reset Password';
 $string['resetmodal_confirm'] = 'Are you sure you want to reset the password for your test student account <strong>{$a}</strong>?';
 $string['resetmodal_date'] = 'Account Created On';
+$string['resetmodal_helptext'] = 'After clicking <strong>reset password</strong>, an email will be sent to your <strong>{$a}</strong> account with instructions on how to set a new password.';
 $string['resetsuccess_title'] = 'Password Reset';
-$string['resetsuccess_body'] = 'Your test student password has been reset. An email will be sent to your <strong>{$a}</strong> account with instructions on how to set a new password for your test student.';
+$string['resetsuccess_body'] = 'Your test student password has been reset. An email has be sent to your <strong>{$a}</strong> account with instructions on how to set a new password for your test student.';
 $string['resetfail_title'] = 'Password Reset Failed';
 $string['resetfail_body'] = 'Test student password reset failed.';
 $string['createmodal_title'] = 'Create Test Student Account';
@@ -74,10 +75,10 @@ $string['createmodal_intro'] = 'The following test student account will be creat
 $string['createmodal_email'] = 'Email';
 $string['createmodal_username'] = 'Username';
 $string['createmodal_email_helptext'] = 'Email sent to <strong>{$a->email}</strong> will be directed to your <strong>{$a->emailoriginal}</strong> account.';
-$string['createmodal_helptext'] = 'Upon clicking <strong>create</strong>, an email will be sent to your <strong>{$a->emailoriginal}</strong> account with instructions on how to log in to your new test student account.';
+$string['createmodal_helptext'] = 'After clicking <strong>create</strong>, an email will be sent to your <strong>{$a->emailoriginal}</strong> account with instructions on how to log in with your new test student account.';
 $string['createmodal_confirm'] = 'Are you sure you want to create the test student account {$a}?';
 $string['createsuccess_title'] = 'Test Student Account Created';
-$string['createsuccess_body'] = 'Information on how to log in to your new test student account will be sent to your <strong>{$a}</strong> account.';
+$string['createsuccess_body'] = 'Information on how to log in with your new test student account has be sent to your <strong>{$a}</strong> account.';
 $string['createfail_title'] = 'Test Student Account Failed';
 $string['createfail_body'] = 'Test student account creation failed.';
 $string['enrolurstudent'] = 'Enrol test student account';
@@ -98,7 +99,7 @@ $string['teststudentunenrolled_title'] = 'Test student unenrolled';
 $string['teststudentunenrolled_body'] = 'Your test student account has been removed from this course.';
 $string['newtestaccount_email'] = '<p>Hi {$a->firstname},</p>
 <p>Your new test student account at \'{$a->sitename}\' has been created.</p>
-<p>To log in to your test student account:</p>
+<p>To log in with your test student account:</p>
 <ol>
    <li>Log out of UR Courses if you are currently logged in.</li>
    <li>Go to {$a->link}.</li>
