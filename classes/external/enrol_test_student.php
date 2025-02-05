@@ -83,7 +83,8 @@ class enrol_test_student extends external_api {
             throw new \moodle_exception('noenrolmethod', 'theme_urcourses_default');
         }
 
-        $enrolplugin->enrol_user($enrolinstance, $user->id);
+        $studentrole = $DB->get_record('role', ['shortname' => 'student']);
+        $enrolplugin->enrol_user($enrolinstance, $user->id, $studentrole->id);
 
         if (!is_enrolled($context, $user->id)) {
             throw new \moodle_exception('teststudentcouldnotenrol', 'theme_urcourses_default');
