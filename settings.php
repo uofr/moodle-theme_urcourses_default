@@ -119,6 +119,24 @@ if ($hassiteconfig || has_capability('theme/boost_union:configure', context_syst
          * EXTENSION POINT:
          * Add your UR Courses settings here.
          *********************************************************/
+        $tab = new admin_settingpage('theme_urcourses_default_colour',
+        get_string('colourtab', 'theme_urcourses_default', null, true));
+
+        // Create example heading.
+        $name = 'theme_urcourses_default/colour';
+        $title = get_string('colourheading', 'theme_urcourses_default', null, true);
+        $setting = new admin_setting_heading($name, $title, null);
+        $tab->add($setting);
+
+        $name = 'theme_urcourses_default/brandcolour';
+        $title = get_string('brandcoloursetting', 'theme_urcourses_default', null, true);
+        $description = get_string('brandcoloursetting_desc', 'theme_urcourses_default', null, true);
+        $default = '';
+        $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
+        $setting->set_updatedcallback('theme_reset_all_caches');
+        $tab->add($setting);
+
+        $page->add($tab);
 
         // Add settings page to the admin settings category.
         $ADMIN->add('theme_boost_union', $page);

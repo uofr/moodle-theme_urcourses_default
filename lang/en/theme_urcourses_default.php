@@ -183,3 +183,9 @@ $string['springsummer'] = 'Spring/Summer';
 $string['fall'] = 'Fall';
 $string['hasenrolment'] = 'This course has enrolment {$a}.';
 $string['noenrolment'] = 'This course does not have enrolment.';
+
+// Settings
+$string['colourtab'] = 'Colours';
+$string['colourheading'] = 'Colours';
+$string['brandcoloursetting'] = 'Brand Colour';
+$string['brandcoloursetting_desc'] = 'Change the brand colour for this theme.';

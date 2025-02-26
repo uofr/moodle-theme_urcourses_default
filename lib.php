@@ -84,6 +84,10 @@ function theme_urcourses_default_get_pre_scss($theme) {
      * Compose and add additional pre-SCSS code here.
      * It will be added on top of Boost Union's pre-SCSS code.
      *********************************************************/
+    $brandcolour = get_config('theme_urcourses_default', 'brandcolour');
+    if ($brandcolour) {
+        $scss .= '$primary: ' . $brandcolour . ";\n";
+    }
 
     return $scss;
 }
