@@ -25,8 +25,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/theme/boost_union/layout/includes/courserelatedhints.php');
 
-// Hiding this for now since it's still work in progress.
-// $courserelatedhintshtml = theme_urcourses_default_get_course_related_hints();
-// if (!empty($courserelatedhintshtml)) {
-//     $templatecontext['courserelatedhints'] .= $courserelatedhintshtml;
-// }
+$courserelatedhintshtml = theme_urcourses_default_get_course_related_hints();
+if (!empty($courserelatedhintshtml)) {
+    $templatecontext['courserelatedhints'] .= $courserelatedhintshtml;
+}

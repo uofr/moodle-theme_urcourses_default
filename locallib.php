@@ -123,9 +123,13 @@ function theme_urcourses_default_add_custom_user_menu_items($usermenuitems, $cus
 }
 
 function theme_urcourses_default_get_course_related_hints() {
-    global $COURSE, $DB, $OUTPUT, $PAGE;
+    global $COURSE, $DB, $USER, $OUTPUT, $PAGE;
 
     if (!$PAGE->context->contextlevel == CONTEXT_COURSE) {
+        return '';
+    }
+
+    if (!($PAGE->url->compare(new core\url('/course/view.php'), URL_MATCH_BASE) && $USER->editing)) {
         return '';
     }
 
@@ -134,8 +138,13 @@ function theme_urcourses_default_get_course_related_hints() {
         return '';
     }
 
+    $context = \context_course::instance($course->id);
+    if (!has_capability('theme/urcourses_default:viewenrolhint', $context)) {
+        return '';
+    }
+
     $enrolments = $DB->get_records_sql("SELECT * FROM ur_crn_map WHERE courseid = '$course->idnumber' ORDER BY semester DESC");
-    $coursehint_enrol = new \theme_urcourses_default\output\coursehint_enrol($enrolments, );
+    $coursehint_enrol = new \theme_urcourses_default\output\coursehint_enrol($enrolments, $context->id);
 
     return $OUTPUT->render($coursehint_enrol);
 }

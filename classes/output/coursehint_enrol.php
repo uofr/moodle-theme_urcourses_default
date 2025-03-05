@@ -28,25 +28,37 @@ require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
 class coursehint_enrol implements \renderable, \templatable {
 
     public $enrolments;
+    public $contextid;
 
-    public function __construct(array $enrolments) {
+    public function __construct(array $enrolments, int $contextid) {
         $this->enrolments = $enrolments;
+        $this->contextid = $contextid;
     }
 
     public function export_for_template(\core\output\renderer_base $output) {
-        if (empty($this->enrolments)) {
-            $data = new \stdClass();
-            $data->latestenrolment = [];
+        $data = new \stdClass();
+
+        $hasenrolment = !empty($this->enrolments);
+
+        $enrolbutton = new \core\output\single_button(
+            new \moodle_url('/admin/tool/urcourserequest/index.php', ['contextid' => $this->contextid]),
+            get_string($hasenrolment ? 'editenrolment' : 'addenrolment', 'theme_urcourses_default'),
+            'post',
+            \core\output\single_button::BUTTON_SECONDARY
+        );
+
+        $data->enrolbutton = $enrolbutton->export_for_template($output);
+
+        if (!$hasenrolment) {
+            $data->hasenrolment = false;
             return $data;
         }
 
         $latestenrolment = $this->enrolments[array_key_first($this->enrolments)];
         $latestenrolmentsemester = theme_urcourses_default_get_semester_string($latestenrolment->semester);
 
-        $data = new \stdClass();
-        $data->latestenrolment = [
-            'semester' => $latestenrolmentsemester
-        ];
+        $data->hasenrolment = true;
+        $data->semester = $latestenrolmentsemester;
 
         return $data;
     }

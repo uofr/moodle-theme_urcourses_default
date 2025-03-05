@@ -181,11 +181,16 @@ $string['instructorpicture_alt'] = 'Profile picture of {$a}';
 $string['winter'] = 'Winter';
 $string['springsummer'] = 'Spring/Summer';
 $string['fall'] = 'Fall';
-$string['hasenrolment'] = 'This course has enrolment {$a}.';
+$string['hasenrolment'] = 'This course has enrolment ({$a}).';
 $string['noenrolment'] = 'This course does not have enrolment.';
+$string['addenrolment'] = 'Add Enrolment';
+$string['editenrolment'] = 'Edit Enrolment';
 
 // Settings
 $string['colourtab'] = 'Colours';
 $string['colourheading'] = 'Colours';
 $string['brandcoloursetting'] = 'Brand Colour';
 $string['brandcoloursetting_desc'] = 'Change the brand colour for this theme.';
+
+// Capabilities
+$string['urcourses_default:viewenrolhint'] = 'View course enrolment hint.';

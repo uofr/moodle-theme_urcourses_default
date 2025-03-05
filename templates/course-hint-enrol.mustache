@@ -1,0 +1,20 @@
+<div class="course-hint-hidden alert alert-info">
+    <div class="media">
+        <div class="me-3 icon-size-5">
+            {{#pix}} enrol, theme_urcourses_default {{/pix}}
+        </div>
+        <div class="media-body align-self-center">
+            {{#hasenrolment}}
+                <p>{{#str}}hasenrolment, theme_urcourses_default, {{semester}}{{/str}}</p>
+            {{/hasenrolment}}
+            {{^hasenrolment}}
+                <p>{{#str}}noenrolment, theme_urcourses_default{{/str}}</p>
+            {{/hasenrolment}}
+        </div>
+        <div>
+            {{#enrolbutton}}
+                {{>core/single_button}}
+            {{/enrolbutton}}
+        </div>
+    </div>
+</div>

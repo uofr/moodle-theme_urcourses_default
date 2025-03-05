@@ -193,7 +193,8 @@ function theme_urcourses_default_get_fontawesome_icon_map() {
         'theme_urcourses_default:darkmode' => 'fa-moon',
         'theme_urcourses_default:lightmode' => 'fa-sun',
         'theme_urcourses_default:feedback' => 'fa-face-smile',
-        'theme_urcourses_default:goback' => 'fa-arrow-left'
+        'theme_urcourses_default:goback' => 'fa-arrow-left',
+        'theme_urcourses_default:enrol' => 'fa-user-group'
     ];
 }
 
