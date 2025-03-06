@@ -368,5 +368,10 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
     public function render_coursehint_enrol(\theme_urcourses_default\output\coursehint_enrol $coursehint_enrol) {
         $data = $coursehint_enrol->export_for_template($this);
         return $this->render_from_template('theme_urcourses_default/course-hint-enrol', $data);
-    } 
+    }
+
+    public function render_coursehint_date(\theme_urcourses_default\output\coursehint_date $coursehint_date) {
+        $data = $coursehint_date->export_for_template($this);
+        return $this->render_from_template('theme_urcourses_default/course-hint-date', $data);
+    }
 }

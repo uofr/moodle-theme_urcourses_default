@@ -25,7 +25,12 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/theme/boost_union/layout/includes/courserelatedhints.php');
 
-$courserelatedhintshtml = theme_urcourses_default_get_course_related_hints();
-if (!empty($courserelatedhintshtml)) {
-    $templatecontext['courserelatedhints'] .= $courserelatedhintshtml;
+$enrolhinthtml = theme_urcourses_default_get_enrol_hint();
+if (!empty($enrolhinthtml)) {
+    $templatecontext['courserelatedhints'] .= $enrolhinthtml;
+}
+
+$datehinthtml = theme_urcourses_default_get_date_hint();
+if (!empty($datehinthtml)) {
+    $templatecontext['courserelatedhints'] .= $datehinthtml;
 }

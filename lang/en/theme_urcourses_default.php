@@ -186,6 +186,11 @@ $string['noenrolment'] = 'This course does not have enrolment.';
 $string['addenrolment'] = 'Add Enrolment';
 $string['editenrolment'] = 'Edit Enrolment';
 
+// Date Course Hint
+$string['hint_coursehasended'] = 'Course ended {$a}.';
+$string['hint_coursenotstarted'] = 'Course begins {$a}.';
+$string['datebutton'] = 'Edit Dates';
+
 // Settings
 $string['colourtab'] = 'Colours';
 $string['colourheading'] = 'Colours';

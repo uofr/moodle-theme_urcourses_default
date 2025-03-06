@@ -122,10 +122,10 @@ function theme_urcourses_default_add_custom_user_menu_items($usermenuitems, $cus
     );
 }
 
-function theme_urcourses_default_get_course_related_hints() {
+function theme_urcourses_default_get_enrol_hint() {
     global $COURSE, $DB, $USER, $OUTPUT, $PAGE;
 
-    if (!$PAGE->context->contextlevel == CONTEXT_COURSE) {
+    if ($PAGE->context->contextlevel != CONTEXT_COURSE) {
         return '';
     }
 
@@ -147,6 +147,39 @@ function theme_urcourses_default_get_course_related_hints() {
     $coursehint_enrol = new \theme_urcourses_default\output\coursehint_enrol($enrolments, $context->id);
 
     return $OUTPUT->render($coursehint_enrol);
+}
+
+function theme_urcourses_default_get_date_hint() {
+    global $COURSE, $DB, $USER, $OUTPUT, $PAGE;
+
+    if ($PAGE->context->contextlevel != CONTEXT_COURSE) {
+        return '';
+    }
+
+    if (!$PAGE->url->compare(new core\url('/course/view.php'), URL_MATCH_BASE)) {
+        return '';
+    }
+
+    $course = get_course($COURSE->id);
+
+    $context = \context_course::instance($course->id);
+    if (!has_capability('theme/urcourses_default:viewdatehint', $context)) {
+        return '';
+    }
+
+    $now = \core\di::get(\core\clock::class)->now();
+    $nowtimestamp = $now->getTimestamp();
+
+    if ($course->startdate < $nowtimestamp && ($course->enddate <= 0 || $course->enddate > $nowtimestamp)) {
+        return '';
+    }
+
+    $coursehint_date = new \theme_urcourses_default\output\coursehint_date(
+        $course->id, 
+        $nowtimestamp, 
+        $course->startdate, $course->enddate
+    );
+    return $OUTPUT->render($coursehint_date);
 }
 
 // 01 - 04: 10 (Winter)
