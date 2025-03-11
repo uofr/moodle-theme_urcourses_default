@@ -199,21 +199,25 @@ function theme_urcourses_default_get_fontawesome_icon_map() {
     ];
 }
 
-/**
- * Hiding feedback button/modal for now since it's still a work in progress.
- */
-// function theme_urcourses_default_render_navbar_output() {
-//     global $USER, $OUTPUT;
+function theme_urcourses_default_render_navbar_output() {
+    global $USER, $OUTPUT;
 
-//     if (!isloggedin()) {
-//         return '';
-//     }
+    if (!isloggedin()) {
+        return '';
+    }
 
-//     // Compose the popover menu.
-//     $html = $OUTPUT->render_from_template(
-//         'theme_urcourses_default/feedback-button',
-//         []
-//     );
+    $context = \context_user::instance($USER->id);
+    $feedbackbutton = new \theme_urcourses_default\output\feedbackbutton($context->id);
 
-//     return $html;
-// }
+    return $OUTPUT->render($feedbackbutton);
+}
+
+function theme_urcourses_default_output_fragment_suggestion_form() {
+    $suggestionform = new \theme_urcourses_default\form\suggestion_form(attributes: ['id' => 'suggestion_form']);
+    return $suggestionform->render();
+}
+
+function theme_urcourses_default_output_fragment_ticket_form() {
+    $ticketform = new \theme_urcourses_default\form\ticket_form(attributes: ['id' => 'ticket_form']);
+    return $ticketform->render();
+}

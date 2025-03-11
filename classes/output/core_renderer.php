@@ -374,4 +374,9 @@ class core_renderer extends \theme_boost_union\output\core_renderer {
         $data = $coursehint_date->export_for_template($this);
         return $this->render_from_template('theme_urcourses_default/course-hint-date', $data);
     }
+
+    public function render_feedbackbutton(\theme_urcourses_default\output\feedbackbutton $feedbackbutton) {
+        $data = $feedbackbutton->export_for_template($this);
+        return $this->render_from_template('theme_urcourses_default/feedback-button', $data);
+    }
 }

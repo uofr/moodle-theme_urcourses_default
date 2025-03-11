@@ -133,11 +133,14 @@ $string['resetteststudent_email'] = '<p>Hi {$a->firstname},</p>
 $string['feedback_label'] = 'Feedback on UR Courses';
 $string['feedback_modal_header'] = 'Feedback';
 $string['feedback_modal_body'] = 'Give us your feedback on UR Courses.';
-$string['feedback_modal_problem'] = 'Report a problem';
-$string['feedback_modal_problem_label'] = 'What went wrong?';
-$string['feedback_modal_suggestion'] = 'Make a suggestion';
+$string['feedback_modal_problem'] = 'Submit a Ticket';
+$string['feedback_modal_problem_label'] = 'Describe the problem you encountered.';
+$string['feedback_modal_problem_confirm_title'] = 'Ticket Submitted';
+$string['feedback_modal_problem_confirm'] = 'Your ticket has been submitted and will be reviewed by the IS Service Desk. You should receive an email shortly confirming the submission of your ticket.';
+$string['feedback_modal_suggestion'] = 'Make a Suggestion';
 $string['feedback_modal_suggestion_label'] = 'What can we do better?';
-$string['feedback_modal_back'] = 'Go back';
+$string['feedback_modal_suggestion_confirm_title'] = 'Feedback Submitted';
+$string['feedback_modal_suggestion_confirm'] = 'Your suggestion has been submitted and will be reviewed by our team. Thank you for your feedback!';
 
 // My Courses (block_myoverview) Customizations
 $string['notavailabletostudents'] = 'Course unavailable to students';

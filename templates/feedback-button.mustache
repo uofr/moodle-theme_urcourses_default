@@ -28,6 +28,6 @@
 
 {{#js}}
     require(['theme_urcourses_default/feedbackbutton'], function(FeedbackButton) {
-        FeedbackButton.init('#feedback_button_{{uniqid}}');
+        FeedbackButton.init('#feedback_button_{{uniqid}}', {{contextid}});
     });
 {{/js}}

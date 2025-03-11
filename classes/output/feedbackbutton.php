@@ -15,19 +15,26 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme UR Courses Default - Version file
+ * Theme Boost Union - Feedback button renderable.
  *
  * @package    theme_urcourses_default
  * @copyright  2025 John Lane
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace theme_urcourses_default\output;
 
-$plugin->component = 'theme_urcourses_default';
-$plugin->release = 'v4.3-r1';
-$plugin->version = 2025031001;
-$plugin->requires = 2023100906; // Requires Moodle 4.3.6 or later.
-$plugin->supported = [403, 405];
-$plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = ['theme_boost_union' => 2023102042];
+require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
+
+class feedbackbutton implements \renderable, \templatable {
+    public $contextid;
+
+    public function __construct(int $contextid) {
+        $this->contextid = $contextid;
+    }
+
+    public function export_for_template(\core\output\renderer_base $output) {
+        $data = new \stdClass();
+        $data->contextid = $this->contextid;
+        return $data;
+    }
+}
