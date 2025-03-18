@@ -1,11 +1,12 @@
-<div class="course-hint-hidden alert alert-info">
+<div class="course-hint-hidden alert alert-warning">
     <div class="media">
         <div class="me-3 icon-size-5">
             {{#pix}} enrol, theme_urcourses_default {{/pix}}
         </div>
         <div class="media-body align-self-center">
             {{#hasenrolment}}
-                <p>{{#str}}hasenrolment, theme_urcourses_default, {{semester}}{{/str}}</p>
+                <p class="mb-0">{{#str}}hasenrolment, theme_urcourses_default, {{semester}}{{/str}}</p>
+                <p class="m-0">{{#str}}hasenrolment_help, theme_urcourses_default, {{{enrollink}}}{{/str}}</p>
             {{/hasenrolment}}
             {{^hasenrolment}}
                 <p>{{#str}}noenrolment, theme_urcourses_default{{/str}}</p>
@@ -13,7 +14,7 @@
         </div>
         <div>
             {{#enrolbutton}}
-                {{>core/single_button}}
+                {{>theme_urcourses_default/coursehint_single_button}}
             {{/enrolbutton}}
         </div>
     </div>

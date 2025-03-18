@@ -129,7 +129,7 @@ function theme_urcourses_default_get_enrol_hint() {
         return '';
     }
 
-    if (!($PAGE->url->compare(new core\url('/course/view.php'), URL_MATCH_BASE) && $USER->editing)) {
+    if (!$PAGE->url->compare(new core\url('/course/view.php'), URL_MATCH_BASE)) {
         return '';
     }
 
@@ -144,7 +144,24 @@ function theme_urcourses_default_get_enrol_hint() {
     }
 
     $enrolments = $DB->get_records_sql("SELECT * FROM ur_crn_map WHERE courseid = '$course->idnumber' ORDER BY semester DESC");
-    $coursehint_enrol = new \theme_urcourses_default\output\coursehint_enrol($enrolments, $context->id);
+    $hasenrolments = !empty($enrolments);
+    $currentsemester = theme_urcourses_default_get_current_semester();
+    $latestenrolmentsemester = '';
+
+    if ($hasenrolments) {
+        $latestenrolment = $enrolments[array_key_first($enrolments)];
+        $latestenrolmentsemester = $latestenrolment->semester;
+    }
+
+    if ($hasenrolments && !empty($latestenrolmentsemester) && $latestenrolmentsemester >= $currentsemester) {
+        return '';
+    }
+
+    $coursehint_enrol = new \theme_urcourses_default\output\coursehint_enrol(
+        $hasenrolments,
+        $latestenrolmentsemester,
+        $context->id
+    );
 
     return $OUTPUT->render($coursehint_enrol);
 }
@@ -170,15 +187,15 @@ function theme_urcourses_default_get_date_hint() {
     $now = \core\di::get(\core\clock::class)->now();
     $nowtimestamp = $now->getTimestamp();
 
-    if ($course->startdate < $nowtimestamp && ($course->enddate <= 0 || $course->enddate > $nowtimestamp)) {
+    if ($course->enddate == 0 || $course->enddate > $nowtimestamp) {
         return '';
     }
 
     $coursehint_date = new \theme_urcourses_default\output\coursehint_date(
         $course->id, 
-        $nowtimestamp, 
-        $course->startdate, $course->enddate
+        $course->enddate
     );
+
     return $OUTPUT->render($coursehint_date);
 }
 

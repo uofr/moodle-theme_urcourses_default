@@ -28,30 +28,22 @@ require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
 class coursehint_date implements \renderable, \templatable {
 
     public $courseid;
-    public $now;
-    public $startdate;
     public $enddate;
-
-    public function __construct(int $courseid, int $now, int $startdate, int $enddate) {
+    public function __construct(int $courseid, int $enddate) {
         $this->courseid = $courseid;
-        $this->now = $now;
-        $this->startdate = $startdate;
         $this->enddate = $enddate;
     }
 
     public function export_for_template(\core\output\renderer_base $output) {
         $data = new \stdClass();
 
-        $data->startdate = $this->startdate;
         $data->enddate = $this->enddate;
-        $data->past = ($this->enddate > 0) && ($this->enddate < $this->now);
-        $data->future = $this->startdate > $this->now;
 
         $datebutton = new \core\output\single_button(
             new \moodle_url('/course/edit.php', ['id' => $this->courseid]),
             get_string('datebutton', 'theme_urcourses_default'),
             'post',
-            \core\output\single_button::BUTTON_SECONDARY
+            \core\output\single_button::BUTTON_WARNING
         );
 
         $data->datebutton = $datebutton->export_for_template($output);

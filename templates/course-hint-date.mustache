@@ -1,37 +1,23 @@
-<div class="course-hint-hidden alert alert-success">
+<div class="course-hint-hidden alert alert-warning">
     <div class="media">
         <div class="me-3 icon-size-5">
             {{#pix}} date, theme_urcourses_default {{/pix}}
         </div>
         <div class="media-body align-self-center">
-            {{#past}}
-                <p>
-                    {{#str}}
-                        hint_coursehasended,
-                        theme_urcourses_default,
-                        {{#userdate}}
-                            {{enddate}},
-                            {{#str}} strtimemonthdayyear, theme_urcourses_default {{/str}}
-                        {{/userdate}}
-                    {{/str}}
-                </p>
-            {{/past}}
-            {{#future}}
-                <p>
-                    {{#str}}
-                        hint_coursenotstarted,
-                        theme_urcourses_default,
-                        {{#userdate}}
-                            {{startdate}},
-                            {{#str}} strtimemonthdayyear, theme_urcourses_default {{/str}}
-                        {{/userdate}}
-                    {{/str}}
-                </p>
-            {{/future}}
+            <p>
+                {{#str}}
+                    hint_coursehasended,
+                    theme_urcourses_default,
+                    {{#userdate}}
+                        {{enddate}},
+                        {{#str}} strtimemonthdayyear, theme_urcourses_default {{/str}}
+                    {{/userdate}}
+                {{/str}}
+            </p>
         </div>
         <div>
             {{#datebutton}}
-                {{>core/single_button}}
+                {{>theme_urcourses_default/coursehint_single_button}}
             {{/datebutton}}
         </div>
     </div>

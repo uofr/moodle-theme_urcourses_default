@@ -23,42 +23,43 @@
 
 namespace theme_urcourses_default\output;
 
+use html_writer;
+
 require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
 
 class coursehint_enrol implements \renderable, \templatable {
 
-    public $enrolments;
+    public $hasenrolment;
+    public $latestenrolmentsemester;
     public $contextid;
 
-    public function __construct(array $enrolments, int $contextid) {
-        $this->enrolments = $enrolments;
+    public function __construct(bool $hasenrolment, string $latestenrolmentsemester, int $contextid) {
+        $this->hasenrolment = $hasenrolment;
+        $this->latestenrolmentsemester = $latestenrolmentsemester;
         $this->contextid = $contextid;
     }
 
     public function export_for_template(\core\output\renderer_base $output) {
         $data = new \stdClass();
 
-        $hasenrolment = !empty($this->enrolments);
-
         $enrolbutton = new \core\output\single_button(
             new \moodle_url('/admin/tool/urcourserequest/index.php', ['contextid' => $this->contextid]),
-            get_string($hasenrolment ? 'editenrolment' : 'addenrolment', 'theme_urcourses_default'),
+            get_string('addenrolment', 'theme_urcourses_default'),
             'post',
-            \core\output\single_button::BUTTON_SECONDARY
+            \core\output\single_button::BUTTON_WARNING
+        );
+
+        $enrolpagelink = html_writer::link(
+            new \moodle_url('/admin/tool/urcourserequest/index.php', ['contextid' => $this->contextid]),
+            get_string('addenrolment_lc', 'theme_urcourses_default')
         );
 
         $data->enrolbutton = $enrolbutton->export_for_template($output);
-
-        if (!$hasenrolment) {
-            $data->hasenrolment = false;
-            return $data;
-        }
-
-        $latestenrolment = $this->enrolments[array_key_first($this->enrolments)];
-        $latestenrolmentsemester = theme_urcourses_default_get_semester_string($latestenrolment->semester);
-
-        $data->hasenrolment = true;
-        $data->semester = $latestenrolmentsemester;
+        $data->enrollink = $enrolpagelink;
+        $data->hasenrolment = $this->hasenrolment;
+        $data->semester = !empty($this->latestenrolmentsemester)
+            ? theme_urcourses_default_get_semester_string($this->latestenrolmentsemester)
+            : '';
 
         return $data;
     }

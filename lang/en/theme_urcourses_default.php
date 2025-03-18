@@ -184,13 +184,15 @@ $string['instructorpicture_alt'] = 'Profile picture of {$a}';
 $string['winter'] = 'Winter';
 $string['springsummer'] = 'Spring/Summer';
 $string['fall'] = 'Fall';
-$string['hasenrolment'] = 'This course has enrolment ({$a}).';
+$string['hasenrolment'] = 'This course has enrolment from a previous semester ({$a}).';
+$string['hasenrolment_help'] = 'Instructions on reusing this course page can be found on the {$a} page.';
 $string['noenrolment'] = 'This course does not have enrolment.';
 $string['addenrolment'] = 'Add Enrolment';
-$string['editenrolment'] = 'Edit Enrolment';
+$string['addenrolment_lc'] = 'add enrolment';
+$string['editenrolment'] = 'Instructions';
 
 // Date Course Hint
-$string['hint_coursehasended'] = 'Course ended {$a}.';
+$string['hint_coursehasended'] = 'The end date for this course page is in the past ({$a}).';
 $string['hint_coursenotstarted'] = 'Course begins {$a}.';
 $string['datebutton'] = 'Edit Dates';
 
