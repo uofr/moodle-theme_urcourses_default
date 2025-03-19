@@ -160,7 +160,8 @@ function theme_urcourses_default_get_enrol_hint() {
     $coursehint_enrol = new \theme_urcourses_default\output\coursehint_enrol(
         $hasenrolments,
         $latestenrolmentsemester,
-        $context->id
+        $context->id,
+        $course->id
     );
 
     return $OUTPUT->render($coursehint_enrol);

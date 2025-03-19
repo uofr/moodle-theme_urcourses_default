@@ -33,29 +33,41 @@ class coursehint_enrol implements \renderable, \templatable {
     public $latestenrolmentsemester;
     public $contextid;
 
-    public function __construct(bool $hasenrolment, string $latestenrolmentsemester, int $contextid) {
+    public $courseid;
+
+    public function __construct(bool $hasenrolment, string $latestenrolmentsemester, int $contextid, int $courseid) {
         $this->hasenrolment = $hasenrolment;
         $this->latestenrolmentsemester = $latestenrolmentsemester;
         $this->contextid = $contextid;
+        $this->courseid = $courseid;
     }
 
     public function export_for_template(\core\output\renderer_base $output) {
         $data = new \stdClass();
 
-        $enrolbutton = new \core\output\single_button(
-            new \moodle_url('/admin/tool/urcourserequest/index.php', ['contextid' => $this->contextid]),
-            get_string('addenrolment', 'theme_urcourses_default'),
-            'post',
-            \core\output\single_button::BUTTON_WARNING
+        if (!$this->hasenrolment) {
+            $button = new \core\output\single_button(
+                new \moodle_url('/admin/tool/urcourserequest/index.php', ['contextid' => $this->contextid]),
+                get_string('addenrolment', 'theme_urcourses_default'),
+                'post',
+                \core\output\single_button::BUTTON_WARNING
+            );
+        } else {
+            $button = new \core\output\single_button(
+                new \moodle_url('/local/duplicate_course/duplicate_course.php', ['id' => $this->courseid]),
+                get_string('duplicatecourse', 'theme_urcourses_default'),
+                'post',
+                \core\output\single_button::BUTTON_WARNING
+            );
+        }
+
+        $duplicatelink = html_writer::link(
+            new \moodle_url('/local/duplicate_course/duplicate_course.php', ['id' => $this->courseid]),
+            get_string('duplicatethecourse', 'theme_urcourses_default')
         );
 
-        $enrolpagelink = html_writer::link(
-            new \moodle_url('/admin/tool/urcourserequest/index.php', ['contextid' => $this->contextid]),
-            get_string('addenrolment_lc', 'theme_urcourses_default')
-        );
-
-        $data->enrolbutton = $enrolbutton->export_for_template($output);
-        $data->enrollink = $enrolpagelink;
+        $data->button = $button->export_for_template($output);
+        $data->duplicatelink = $duplicatelink;
         $data->hasenrolment = $this->hasenrolment;
         $data->semester = !empty($this->latestenrolmentsemester)
             ? theme_urcourses_default_get_semester_string($this->latestenrolmentsemester)

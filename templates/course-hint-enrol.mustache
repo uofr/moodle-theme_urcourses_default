@@ -6,16 +6,16 @@
         <div class="media-body align-self-center">
             {{#hasenrolment}}
                 <p class="mb-0">{{#str}}hasenrolment, theme_urcourses_default, {{semester}}{{/str}}</p>
-                <p class="m-0">{{#str}}hasenrolment_help, theme_urcourses_default, {{{enrollink}}}{{/str}}</p>
+                <p class="m-0">{{#str}}hasenrolment_help, theme_urcourses_default, {{{duplicatelink}}}{{/str}}</p>
             {{/hasenrolment}}
             {{^hasenrolment}}
                 <p>{{#str}}noenrolment, theme_urcourses_default{{/str}}</p>
             {{/hasenrolment}}
         </div>
         <div>
-            {{#enrolbutton}}
+            {{#button}}
                 {{>theme_urcourses_default/coursehint_single_button}}
-            {{/enrolbutton}}
+            {{/button}}
         </div>
     </div>
 </div>

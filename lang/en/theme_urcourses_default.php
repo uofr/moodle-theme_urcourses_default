@@ -185,10 +185,11 @@ $string['winter'] = 'Winter';
 $string['springsummer'] = 'Spring/Summer';
 $string['fall'] = 'Fall';
 $string['hasenrolment'] = 'This course has enrolment from a previous semester ({$a}).';
-$string['hasenrolment_help'] = 'Instructions on reusing this course page can be found on the {$a} page.';
+$string['hasenrolment_help'] = 'If you would like to reuse this course page, please {$a} and add enrolment to the course copy.';
 $string['noenrolment'] = 'This course does not have enrolment.';
 $string['addenrolment'] = 'Add Enrolment';
-$string['addenrolment_lc'] = 'add enrolment';
+$string['duplicatecourse'] = 'Duplicate Course';
+$string['duplicatethecourse'] = 'duplicate the course';
 $string['editenrolment'] = 'Instructions';
 
 // Date Course Hint
