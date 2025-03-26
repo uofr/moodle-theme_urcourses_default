@@ -157,7 +157,9 @@ if ($hassiteconfig || has_capability('theme/boost_union:configure', context_syst
             AND cm.deletioninprogress = 0
             AND cm.module = (SELECT id FROM {modules} m WHERE m.name = 'questionnaire')"
         );
-        $options = [];
+        $options = [
+                '0' => 'None'
+        ];
         foreach ($sitelevelquestionnaires as $q) {
             $options[$q->id] = $q->name;
         }
@@ -168,7 +170,9 @@ if ($hassiteconfig || has_capability('theme/boost_union:configure', context_syst
         $title = get_string('questionname', 'theme_urcourses_default', null, true);
         $description = get_string('questionname_desc', 'theme_urcourses_default', null, true);
         $default = 0;
-        $options = [];
+        $options = [
+                '0' => 'None';
+        ];
         $questionnaireid = get_config('theme_urcourses_default', 'questionnaireid');
         if ($questionnaireid != 0) {
             require_once($CFG->dirroot . '/mod/questionnaire/locallib.php');
