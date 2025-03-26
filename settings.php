@@ -171,7 +171,7 @@ if ($hassiteconfig || has_capability('theme/boost_union:configure', context_syst
         $description = get_string('questionname_desc', 'theme_urcourses_default', null, true);
         $default = 0;
         $options = [
-                '0' => 'None';
+                '0' => 'None'
         ];
         $questionnaireid = get_config('theme_urcourses_default', 'questionnaireid');
         if ($questionnaireid != 0) {
