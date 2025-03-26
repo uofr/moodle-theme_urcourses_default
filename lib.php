@@ -213,7 +213,27 @@ function theme_urcourses_default_render_navbar_output() {
 }
 
 function theme_urcourses_default_output_fragment_suggestion_form() {
-    $suggestionform = new \theme_urcourses_default\form\suggestion_form(attributes: ['id' => 'suggestion_form']);
+    global $CFG, $PAGE;
+
+    require_once($CFG->dirroot . '/mod/questionnaire/locallib.php');
+
+    $questionnaireid = get_config('theme_urcourses_default', 'questionnaireid');
+    $questionname = get_config('theme_urcourses_default', 'questionname');
+
+    if ($questionnaireid == 0 || $questionname == 0) {
+        return '';
+    }
+
+    $suggestionform = new \theme_urcourses_default\form\suggestion_form(
+        attributes: [
+            'id' => 'suggestion_form'
+        ],
+        customdata: [
+            'questionname' => $questionname,
+            'questionnaireid' => $questionnaireid
+        ]
+    );
+
     return $suggestionform->render();
 }
 

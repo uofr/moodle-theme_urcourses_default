@@ -30,29 +30,68 @@ use \core_external\external_value;
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->dirroot . '/mod/questionnaire/locallib.php');
+require_once($CFG->dirroot.'/mod/questionnaire/questionnaire.class.php');
+
 class feedback_submit_suggestion extends external_api {
     public static function execute_parameters() {
         return new external_function_parameters([
-            'contextid' => new external_value(PARAM_INT),
+            'questionnaireid' => new external_value(PARAM_INT),
+            'questionname' => new external_value(PARAM_TEXT),
             'suggestion' => new external_value(PARAM_TEXT)
         ]);
     }
 
     public static function execute_returns() {
-        return new external_value(PARAM_BOOL);
+        return new external_value(PARAM_INT);
     }
 
-    public static function execute($contextid, $suggestion) {
+    public static function execute($questionnaireid, $questionname, $suggestion) {
         global $USER;
 
         $params = self::validate_parameters(self::execute_parameters(), [
-            'contextid' => $contextid,
+            'questionnaireid' => $questionnaireid,
+            'questionname' => $questionname,
             'suggestion' => $suggestion
         ]);
 
-        $context = \context_user::instance($params['contextid']);
+        $context = \context_user::instance($USER->id);
         self::validate_context($context);
 
-        return true;
+        list($cm, $course, $questionnaire) = questionnaire_get_standard_page_items($params['questionnaireid']);
+
+        $responsedata = new \stdClass();
+        $responsedata->referer = '';
+        $responsedata->a = $questionnaire->id;
+        $responsedata->sid = $questionnaire->sid;
+        $responsedata->rid = 0;
+        $responsedata->sec = 1;
+        $responsedata->sesskey = sesskey();
+        $responsedata->{$params['questionname']} = $params['suggestion'];
+        $responsedata->submittype = 'Submit Survey';
+        $responsedata->submit = 'Submit questionnaire';
+
+        $questionnaire = new \questionnaire($course, $cm, 0, $questionnaire);
+
+        $rid = $questionnaire->response_insert($responsedata, $USER->id);
+        self::response_commit($rid);
+
+        return $rid;
+    }
+
+    /**
+     * Commit the specified response.
+     * @param int $rid
+     * @return bool
+     */
+    private static function response_commit($rid) {
+        global $DB;
+
+        $record = new \stdClass();
+        $record->id = $rid;
+        $record->complete = 'y';
+        $record->submitted = time();
+
+        return $DB->update_record('questionnaire_response', $record);
     }
 }

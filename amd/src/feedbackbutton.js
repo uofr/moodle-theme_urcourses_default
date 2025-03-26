@@ -9,12 +9,14 @@ import Notification from 'core/notification';
 import Fragment from 'core/fragment';
 
 const SELECTORS = {
+    FORM_QUESTIONNAIREID: '[name="questionnaireid"]',
+    FORM_QUESTIONNAME: '[name="questionname"]',
+    FORM_SUGGESTION: '#id_suggestion',
     PROBLEM_BUTTON: '#problem_button',
     TICKET_FORM: '#ticket_form',
     TICKET_BOX: '#id_ticket',
     SUGGESTION_BUTTON: '#suggestion_button',
     SUGGESTION_FORM: '#suggestion_form',
-    SUGGESTION_BOX: '#id_suggestion',
     CANCEL_BUTTON: '#id_cancel'
 };
 
@@ -52,9 +54,9 @@ const registerEventListeners = (root, contextid) => {
 
         modal.getBody().on('submit', SELECTORS.SUGGESTION_FORM, (e) => {
             e.preventDefault();
-            const suggestion = $(SELECTORS.SUGGESTION_BOX).val();
-            if (suggestion.length > 0) {
-                submitSuggestion(contextid, suggestion, modal);
+            const formdata = getSuggestFormData();
+            if (formdata.suggestion.length > 0) {
+                submitSuggestion(contextid, formdata, modal);
             }
         });
 
@@ -68,12 +70,17 @@ const registerEventListeners = (root, contextid) => {
     });
 };
 
-const submitSuggestion = async (contextid, suggestion, modal) => {
+const getSuggestFormData = () => {
+    return {
+        questionnaireid: $(SELECTORS.SUGGESTION_FORM).find(SELECTORS.FORM_QUESTIONNAIREID).val(),
+        questionname: $(SELECTORS.SUGGESTION_FORM).find(SELECTORS.FORM_QUESTIONNAME).val(),
+        suggestion: $(SELECTORS.SUGGESTION_FORM).find(SELECTORS.FORM_SUGGESTION).val()
+    };
+};
+
+const submitSuggestion = async (contextid, formdata, modal) => {
     try {
-        const response = await Repository.submitSuggestion({
-            contextid: contextid,
-            suggestion: suggestion
-        });
+        const response = await Repository.submitSuggestion(formdata);
         if (response) {
             modal.destroy();
             showConfirmModal(

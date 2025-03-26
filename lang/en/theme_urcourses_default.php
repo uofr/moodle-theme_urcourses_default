@@ -202,6 +202,13 @@ $string['colourtab'] = 'Colours';
 $string['colourheading'] = 'Colours';
 $string['brandcoloursetting'] = 'Brand Colour';
 $string['brandcoloursetting_desc'] = 'Change the brand colour for this theme.';
+$string['feedbacktab'] = 'Feedback';
+$string['feedbackheading'] = 'Feedback';
+$string['questionnaireid'] = 'Questionnaire';
+$string['questionnaireid_desc'] = 'Questionnaire activity from the home page where suggestions will be stored.';
+$string['questionname'] = 'Questionnaire Question';
+$string['questionname_desc'] = 'Which question we will associate suggestions with.';
+
 
 // Capabilities
 $string['urcourses_default:viewenrolhint'] = 'View course enrolment hint.';
