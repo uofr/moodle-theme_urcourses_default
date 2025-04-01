@@ -39,7 +39,9 @@ if (theme_urcourses_default_can_create_test_student($USER->id)) {
 
 $customitems[array_key_last($customitems)]->divider = true;
 
-$templatecontext['usermenu']['items'] = theme_urcourses_default_add_custom_user_menu_items(
-    $templatecontext['usermenu']['items'],
-    $customitems
-);
+if (isset($templatecontext['usermenu']) && isset($templatecontext['usermenu']['items'])) {
+    $templatecontext['usermenu']['items'] = theme_urcourses_default_add_custom_user_menu_items(
+        $templatecontext['usermenu']['items'],
+        $customitems
+    );
+}
