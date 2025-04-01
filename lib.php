@@ -199,18 +199,18 @@ function theme_urcourses_default_get_fontawesome_icon_map() {
     ];
 }
 
-function theme_urcourses_default_render_navbar_output() {
-    global $USER, $OUTPUT;
+// function theme_urcourses_default_render_navbar_output() {
+//     global $USER, $OUTPUT;
 
-    if (!isloggedin()) {
-        return '';
-    }
+//     if (!isloggedin()) {
+//         return '';
+//     }
 
-    $context = \context_user::instance($USER->id);
-    $feedbackbutton = new \theme_urcourses_default\output\feedbackbutton($context->id);
+//     $context = \context_user::instance($USER->id);
+//     $feedbackbutton = new \theme_urcourses_default\output\feedbackbutton($context->id);
 
-    return $OUTPUT->render($feedbackbutton);
-}
+//     return $OUTPUT->render($feedbackbutton);
+// }
 
 function theme_urcourses_default_output_fragment_suggestion_form() {
     global $CFG, $PAGE;
