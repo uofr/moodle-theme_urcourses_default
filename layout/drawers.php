@@ -51,15 +51,15 @@ if (!is_null($setdarkmode)) {
 
 $darkmodeenabled = theme_urcourses_default_darkmode_enabled();
 if ($darkmodeenabled) {
-    $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css?v=2025012700');
+    $PAGE->requires->css('/theme/urcourses_default/style/darkmode.css?v=2025030300');
 }
 
 // Extra css.
-$PAGE->requires->css('/theme/urcourses_default/style/legacy.css?v=2024090200');
-$PAGE->requires->css('/theme/urcourses_default/style/callout.css?v=2024090200');
-$PAGE->requires->css('/theme/urcourses_default/style/alert.css?v=2024090200');
-$PAGE->requires->css('/theme/urcourses_default/style/pullquote.css?v=2024090200');
-$PAGE->requires->css('/theme/urcourses_default/style/c4l.css?v=2024090200');
+$PAGE->requires->css('/theme/urcourses_default/style/legacy.css?v=2025030300');
+$PAGE->requires->css('/theme/urcourses_default/style/callout.css?v=2025030300');
+$PAGE->requires->css('/theme/urcourses_default/style/alert.css?v=2025030300');
+$PAGE->requires->css('/theme/urcourses_default/style/pullquote.css?v=2025030300');
+$PAGE->requires->css('/theme/urcourses_default/style/c4l.css?v=2025030300');
 
 // Add block button in editing mode.
 $addblockbutton = $OUTPUT->addblockbutton();
