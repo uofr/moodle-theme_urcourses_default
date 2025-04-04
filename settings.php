@@ -137,59 +137,59 @@ if ($hassiteconfig || has_capability('theme/boost_union:configure', context_syst
 
         $page->add($tab);
 
-        $tab = new admin_settingpage('theme_urcourses_default_feedback',
-        get_string('feedbacktab', 'theme_urcourses_default', null, true));
+        // $tab = new admin_settingpage('theme_urcourses_default_feedback',
+        // get_string('feedbacktab', 'theme_urcourses_default', null, true));
 
-        $name = 'theme_urcourses_default/feedback';
-        $title = get_string('feedbackheading', 'theme_urcourses_default', null, true);
-        $setting = new admin_setting_heading($name, $title, null);
-        $tab->add($setting);
+        // $name = 'theme_urcourses_default/feedback';
+        // $title = get_string('feedbackheading', 'theme_urcourses_default', null, true);
+        // $setting = new admin_setting_heading($name, $title, null);
+        // $tab->add($setting);
 
-        $name = 'theme_urcourses_default/questionnaireid';
-        $title = get_string('questionnaireid', 'theme_urcourses_default', null, true);
-        $description = get_string('questionnaireid_desc', 'theme_urcourses_default', null, true);
-        $default = 0;
-        $sitelevelquestionnaires = $DB->get_records_sql(
-            "SELECT cm.id, q.name
-            FROM {course_modules} cm
-            LEFT JOIN {questionnaire} q ON q.id = cm.instance
-            WHERE cm.course = 1
-            AND cm.deletioninprogress = 0
-            AND cm.module = (SELECT id FROM {modules} m WHERE m.name = 'questionnaire')"
-        );
-        $options = [
-                '0' => 'None'
-        ];
-        foreach ($sitelevelquestionnaires as $q) {
-            $options[$q->id] = $q->name;
-        }
-        $setting = new admin_setting_configselect($name, $title, $description, $default, $options);
-        $tab->add($setting);
+        // $name = 'theme_urcourses_default/questionnaireid';
+        // $title = get_string('questionnaireid', 'theme_urcourses_default', null, true);
+        // $description = get_string('questionnaireid_desc', 'theme_urcourses_default', null, true);
+        // $default = 0;
+        // $sitelevelquestionnaires = $DB->get_records_sql(
+        //     "SELECT cm.id, q.name
+        //     FROM {course_modules} cm
+        //     LEFT JOIN {questionnaire} q ON q.id = cm.instance
+        //     WHERE cm.course = 1
+        //     AND cm.deletioninprogress = 0
+        //     AND cm.module = (SELECT id FROM {modules} m WHERE m.name = 'questionnaire')"
+        // );
+        // $options = [
+        //         '0' => 'None'
+        // ];
+        // foreach ($sitelevelquestionnaires as $q) {
+        //     $options[$q->id] = $q->name;
+        // }
+        // $setting = new admin_setting_configselect($name, $title, $description, $default, $options);
+        // $tab->add($setting);
 
-        $name = 'theme_urcourses_default/questionname';
-        $title = get_string('questionname', 'theme_urcourses_default', null, true);
-        $description = get_string('questionname_desc', 'theme_urcourses_default', null, true);
-        $default = 0;
-        $options = [
-                '0' => 'None'
-        ];
-        $questionnaireid = get_config('theme_urcourses_default', 'questionnaireid');
-        if ($questionnaireid != 0) {
-            require_once($CFG->dirroot . '/mod/questionnaire/locallib.php');
-            list($cm, $course, $questionnaire) = questionnaire_get_standard_page_items($questionnaireid);
-            $questions = $DB->get_records_sql(
-                "SELECT qq.id, qq.name FROM {questionnaire_question} qq
-                WHERE qq.surveyid = ?",
-                [$questionnaire->id]
-            );
-            foreach ($questions as $question) {
-                $options["q$question->id"] = $question->name;
-            }
-        }
-        $setting = new admin_setting_configselect($name, $title, $description, $default, $options);
-        $tab->add($setting);
+        // $name = 'theme_urcourses_default/questionname';
+        // $title = get_string('questionname', 'theme_urcourses_default', null, true);
+        // $description = get_string('questionname_desc', 'theme_urcourses_default', null, true);
+        // $default = 0;
+        // $options = [
+        //         '0' => 'None'
+        // ];
+        // $questionnaireid = get_config('theme_urcourses_default', 'questionnaireid');
+        // if ($questionnaireid != 0) {
+        //     require_once($CFG->dirroot . '/mod/questionnaire/locallib.php');
+        //     list($cm, $course, $questionnaire) = questionnaire_get_standard_page_items($questionnaireid);
+        //     $questions = $DB->get_records_sql(
+        //         "SELECT qq.id, qq.name FROM {questionnaire_question} qq
+        //         WHERE qq.surveyid = ?",
+        //         [$questionnaire->id]
+        //     );
+        //     foreach ($questions as $question) {
+        //         $options["q$question->id"] = $question->name;
+        //     }
+        // }
+        // $setting = new admin_setting_configselect($name, $title, $description, $default, $options);
+        // $tab->add($setting);
 
-        $page->add($tab);
+        // $page->add($tab);
 
         // Add settings page to the admin settings category.
         $ADMIN->add('theme_boost_union', $page);
