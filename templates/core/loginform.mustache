@@ -217,24 +217,6 @@
     </form>
     </div>
     {{/showlocallogin}}
-    {{#hasidentityproviders}}
-    <div id="theme_boost_union-loginorder-idp" class="theme_boost_union-loginmethod">
-        <div class="login-divider"></div>
-        <div class="login-identityproviders">
-            {{#showidploginintro}}
-            <h2 class="login-heading">{{#str}} potentialidps, auth {{/str}}</h2>
-            {{/showidploginintro}}
-            {{#identityproviders}}
-                <a class="btn login-identityprovider-btn btn-block btn-secondary" href="{{url}}">
-                    {{#iconurl}}
-                        <img src="{{iconurl}}" alt="" width="24" height="24"/>
-                    {{/iconurl}}
-                    {{name}}
-                </a>
-            {{/identityproviders}}
-        </div>
-    </div>
-    {{/hasidentityproviders}}
     <div id="theme_boost_union-loginorder-firsttimesignup" class="theme_boost_union-loginmethod">
     {{#hasinstructions}}
         <div class="login-divider"></div>
