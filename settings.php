@@ -137,6 +137,37 @@ if ($hassiteconfig || has_capability('theme/boost_union:configure', context_syst
 
         $page->add($tab);
 
+        // Create H5P tab.
+        $tab = new admin_settingpage('theme_urcourses_default_look_h5p',
+        get_string('h5ptab', 'theme_urcourses_default', null, true));
+
+        // Create Raw CSS for H5P heading.
+        $name = 'theme_urcourses_default/cssh5pheading';
+        $title = get_string('cssh5pheading', 'theme_urcourses_default', null, true);
+        $setting = new admin_setting_heading($name, $title, null);
+        $tab->add($setting);
+
+        // Setting: Raw CSS for H5P.
+        $name = 'theme_urcourses_default/cssh5p';
+        $title = get_string('cssh5psetting', 'theme_urcourses_default', null, true);
+        $description = get_string('cssh5psetting_desc', 'theme_urcourses_default', null, true);
+        $default = '';
+        $setting = new admin_setting_scsscode($name, $title, $description, $default, PARAM_RAW);
+        $setting->set_updatedcallback('theme_reset_all_caches');
+        $tab->add($setting);
+
+        // Setting: Raw Darkmode CSS for H5P.
+        $name = 'theme_urcourses_default/cssh5pdarkmode';
+        $title = get_string('cssh5psettingdarkmode', 'theme_urcourses_default', null, true);
+        $description = get_string('cssh5psettingdarkmode_desc', 'theme_urcourses_default', null, true);
+        $default = '';
+        $setting = new admin_setting_scsscode($name, $title, $description, $default, PARAM_RAW);
+        $setting->set_updatedcallback('theme_reset_all_caches');
+        $tab->add($setting);
+
+        // Add tab to settings page.
+        $page->add($tab);
+
         // $tab = new admin_settingpage('theme_urcourses_default_feedback',
         // get_string('feedbacktab', 'theme_urcourses_default', null, true));
 

@@ -208,6 +208,12 @@ $string['questionnaireid'] = 'Questionnaire';
 $string['questionnaireid_desc'] = 'Questionnaire activity from the home page where suggestions will be stored.';
 $string['questionname'] = 'Questionnaire Question';
 $string['questionname_desc'] = 'Which question we will associate suggestions with.';
+$string['h5ptab'] = 'H5P';
+$string['cssh5pheading'] = 'H5P';
+$string['cssh5psetting'] = 'Raw CSS for H5P (Regular)';
+$string['cssh5psetting_desc'] = 'Use this field to provide CSS code which will be applied to the presentation of H5P content by mod_h5p and mod_hvp. Please inspect the H5P content types to find the necessary CSS selectors.';
+$string['cssh5psettingdarkmode'] = 'Raw CSS for H5P (Darkmode)';
+$string['cssh5psettingdarkmode_desc'] = 'Use this field to provide CSS code which will be applied to the presentation of H5P content by mod_h5p and mod_hvp <strong>in darkmode</strong>. Please inspect the H5P content types to find the necessary CSS selectors.';
 
 
 // Capabilities
