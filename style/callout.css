@@ -89,7 +89,14 @@ figure.img-thumbnail figcaption.figure-caption {
     display: block !important;
 }
 
+/* CSS Clean up - Moodle 4.5 */
+
 .block.block_activity_modules img.icon {
     width: 20px;
     height: 20px;
+}
+
+/* TinyMCE height */
+.tox-tinymce {
+    min-height: 400px;
 }
