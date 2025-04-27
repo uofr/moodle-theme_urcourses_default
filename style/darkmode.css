@@ -1429,12 +1429,12 @@ button.bg-primary:focus {
   background-color: #0b5190 !important; }
 
 .bg-secondary {
-  background-color: #83868a !important; }
+  background-color: #333 !important; }
 
 a.bg-secondary:hover, a.bg-secondary:focus,
 button.bg-secondary:hover,
 button.bg-secondary:focus {
-  background-color: #b1bbc4 !important; }
+  background-color: #666 !important; }
 
 .bg-success {
   background-color: #357a32 !important; }
@@ -1572,10 +1572,10 @@ a.text-light:hover, a.text-light:focus {
   color: #cbd3da !important; }
 
 .text-dark {
-  color: #e4e6eb !important; }
+  color: #efefef !important; }
 
 a.text-dark:hover, a.text-dark:focus {
-  color: #8c8c8c !important; }
+  color: #fff !important; }
 
 .text-body {
   color: #1d2125 !important; }
@@ -4328,3 +4328,14 @@ h4.result-title .icon{
 /* .action-menu .dropdown-toggle .icon {
   color: white;
 } */
+
+.editing .activity-item:hover:not(:has(.activity:hover)) .activityiconcontainer, .editing .activity-item:hover:not(:has(.activity:hover)) .badge, .editing .activity-item.selected .activityiconcontainer, .editing .activity-item.selected .badge {
+  mix-blend-mode: normal;
+}
+
+.activity-item .activity-completion .completion-dialog .editcompletion a {
+	color: #999;
+}
+.activity-item .activity-completion .completion-dialog .editcompletion a:hover {
+	background-color: #3a7a57;
+}
