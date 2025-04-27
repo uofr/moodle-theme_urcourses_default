@@ -4332,10 +4332,16 @@ h4.result-title .icon{
 .editing .activity-item:hover:not(:has(.activity:hover)) .activityiconcontainer, .editing .activity-item:hover:not(:has(.activity:hover)) .badge, .editing .activity-item.selected .activityiconcontainer, .editing .activity-item.selected .badge {
   mix-blend-mode: normal;
 }
+.activity-item.hiddenactivity .description .course-description-item, .activity-item.hiddenactivity .activityiconcontainer, .activity-item.hiddenactivity .badge {
+  mix-blend-mode: normal;
+}
 
 .activity-item .activity-completion .completion-dialog .editcompletion a {
 	color: #999;
 }
 .activity-item .activity-completion .completion-dialog .editcompletion a:hover {
+	background-color: #3a7a57;
+}
+.btn.add-section:hover {
 	background-color: #3a7a57;
 }
