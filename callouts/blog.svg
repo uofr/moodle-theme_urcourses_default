@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Created with Vectornator (http://vectornator.io/) -->
-<svg height="100%" stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 512 512" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:vectornator="http://vectornator.io" xmlns:xlink="http://www.w3.org/1999/xlink">
-<defs/>
-<g id="Untitled" vectornator:layerName="Untitled">
-<path d="M205.055 77.6912C205.055 91.7808 216.438 103.164 230.527 103.164C328.995 103.164 408.836 183.005 408.836 281.473C408.836 295.562 420.219 306.945 434.309 306.945C448.398 306.945 459.782 295.562 459.782 281.473C459.782 154.826 357.174 52.2185 230.527 52.2185C216.438 52.2185 205.055 63.6016 205.055 77.6912ZM205.055 154.109C205.055 168.199 216.438 179.582 230.527 179.582C286.806 179.582 332.418 225.194 332.418 281.473C332.418 295.562 343.801 306.945 357.891 306.945C371.98 306.945 383.363 295.562 383.363 281.473C383.363 197.094 314.906 128.637 230.527 128.637C216.438 128.637 205.055 140.02 205.055 154.109ZM128.637 166.846C128.637 145.751 111.522 128.637 90.4275 128.637C69.3329 128.637 52.2185 145.751 52.2185 166.846L52.2185 345.154C52.2185 408.438 103.562 459.782 166.846 459.782C230.129 459.782 281.473 408.438 281.473 345.154C281.473 281.871 230.129 230.527 166.846 230.527L154.109 230.527L154.109 306.945L166.846 306.945C187.94 306.945 205.055 324.06 205.055 345.154C205.055 366.249 187.94 383.363 166.846 383.363C145.751 383.363 128.637 366.249 128.637 345.154L128.637 166.846Z" fill="#000000" fill-rule="nonzero" opacity="1" stroke="none" vectornator:layerName="path"/>
+<svg height="100%" stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 512 512" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<path d="M418.438 59.4426L443.875 81.0886L311.587 235.341L285.418 237.836L285.83 214.07L418.438 59.4426Z" id="Fill"/>
+</defs>
+<g id="Layer-1">
+<g opacity="1">
+<path d="M322.694 57.9801L87.8837 57.9801C76.4025 57.9801 67.095 67.2874 67.095 78.7688L67.095 433.576C67.095 451.455 88.1685 460.994 101.602 449.197L181.852 378.715C185.646 375.382 190.522 373.547 195.571 373.547L420.503 373.547C431.985 373.547 441.292 364.238 441.292 352.758L441.292 203.094" fill="none" opacity="1" stroke="#000000" stroke-linecap="round" stroke-linejoin="miter" stroke-width="20.7887"/>
+<path d="M272.556 140.749L134.062 140.749" fill="none" opacity="1" stroke="#000000" stroke-linecap="round" stroke-linejoin="miter" stroke-width="20.7887"/>
+<path d="M238.409 200.532L134.062 200.532" fill="none" opacity="1" stroke="#000000" stroke-linecap="round" stroke-linejoin="miter" stroke-width="20.7887"/>
+<path d="M226.291 258.772L134.062 258.772" fill="none" opacity="1" stroke="#000000" stroke-linecap="round" stroke-linejoin="miter" stroke-width="20.7887"/>
+<g opacity="1">
+<mask height="219.971" id="StrokeMask" maskUnits="userSpaceOnUse" width="200.034" x="264.629" y="38.6539">
+<rect fill="#ffffff" height="219.971" stroke="none" width="200.034" x="264.629" y="38.6539"/>
+<use fill="#000000" fill-rule="evenodd" stroke="none" xlink:href="#Fill"/>
+</mask>
+<use fill="none" mask="url(#StrokeMask)" stroke="#000000" stroke-linecap="butt" stroke-linejoin="round" stroke-width="41.5774" xlink:href="#Fill"/>
+</g>
+<path d="M396.819 69.4373L383.401 85.294L422.251 118.228L435.669 102.372L396.819 69.4373Z" fill="#000000" fill-rule="nonzero" opacity="1" stroke="none"/>
+</g>
 </g>
 </svg>
