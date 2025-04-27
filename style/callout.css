@@ -16,6 +16,8 @@
 .callout .icon {
     width:48px; 
     height:48px;
+	max-width: 48px;
+	max-height: 48px;
     margin-right: .5rem;
     margin-bottom: -5px;
     margin-top: -7px;
@@ -85,4 +87,9 @@ figure.img-thumbnail figcaption.figure-caption {
 
 .callout.d-sm-inline-flex {
     display: block !important;
+}
+
+.block.block_activity_modules img.icon {
+    width: 20px;
+    height: 20px;
 }
