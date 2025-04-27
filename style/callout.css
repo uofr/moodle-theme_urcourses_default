@@ -100,3 +100,31 @@ figure.img-thumbnail figcaption.figure-caption {
 .tox-tinymce {
     min-height: 400px;
 }
+
+
+/* Bootstrap accordion caret indicator */
+.course-content [data-toggle="collapse"].btn-link,
+.contentdesigner-content .contentdesigner-wrapper .course-content-list .richtext-content [data-toggle="collapse"].btn-link {
+  font-weight: 900;
+}
+.course-content [data-toggle="collapse"].btn-link::after,
+.contentdesigner-content .contentdesigner-wrapper .course-content-list .richtext-content [data-toggle="collapse"].btn-link::after {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: "\f078";
+  margin-left: 0.5em;
+}
+
+.course-content [data-toggle="collapse"].btn-link.collapsed::after,
+.contentdesigner-content .contentdesigner-wrapper .course-content-list .richtext-content [data-toggle="collapse"].btn-link.collapsed::after {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: "\f054";
+  margin-left: 0.5em;
+}
+.course-content [data-toggle="collapse"].btn-link:hover,
+.course-content [data-toggle="collapse"].btn-link:focus,
+.contentdesigner-content .contentdesigner-wrapper .course-content-list .richtext-content [data-toggle="collapse"].btn-link:hover,
+.contentdesigner-content .contentdesigner-wrapper .course-content-list .richtext-content [data-toggle="collapse"].btn-link:focus {
+  text-decoration: none;
+}
