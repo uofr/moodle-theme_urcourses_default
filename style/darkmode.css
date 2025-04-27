@@ -80,18 +80,18 @@ caption {
   color: #6a737b; }
 
 .btn, h1, h2{
-  color: #8c8c8c;
+  color: #ccc;
 }
 
 h1.h2  {
-  color: #8c8c8c;
+  color: #ccc;
 }
 
 h2 {
-	color: #8c8c8c;
+	color: #ccc;
 }
 h3, .h3{
-  color: #8c8c8c
+  color: #ccc;
 }
 
 hr {
@@ -103,6 +103,10 @@ mark,
 
 .blockquote-footer {
   color: #6a737b; }
+
+#page-navbar {
+	background-color: unset;
+}
 
 #page.drawers div[role="main"]{
   background-color: #242526;;
@@ -449,7 +453,7 @@ select.form-control:focus::-ms-value {
   .btn:hover {
     color: #e4e6eb; }
   .btn:focus, .btn.focus {
-    box-shadow: 0 0 0 0.2rem rgba(15, 108, 191, 0.75); }
+    box-shadow: 0 0 0 0.2rem rgb(50, 200, 117); }
 
 .btn .btn-link .p-0:hover{
   background-color: #32c875 !important;
@@ -1066,9 +1070,16 @@ a.btn.btn-link.p-0:hover{
     .navbar-dark .navbar-text a:hover, .navbar-dark .navbar-text a:focus {
       color: #fff; }
 
+.divider hr {
+	border-top-color: #666;
+}
+
 .card {
   background-color: #242526;
-  border: #e9ecef; }
+  border: solid 1px #333; }
+  .block.card {
+	  border-top: solid 1px #333;
+  }
 
 .card-header {
   background-color: rgba(0, 0, 0, 0.03);
@@ -1083,6 +1094,14 @@ a.btn.btn-link.p-0:hover{
 
 .breadcrumb-item.active {
   color: #6a737b; }
+
+.course-section .section-item {
+	border-color: #666;
+}
+
+.course-section .sectionname > a {
+	color: #ccc;
+}
 
 .page-link {
   color: #0a2b19;
@@ -1959,9 +1978,10 @@ body.dragging .drop-down {
   color: rgba(255, 255, 255, 0.5) !important;
   /* stylelint-disable-line declaration-no-important */ }
 
+/* 
 .activityiconcontainer {
   background-color: #3a3b3c;}
- 
+
 .activityiconcontainer.administration {
   background-color: #5d63f6; }
 
@@ -1979,7 +1999,8 @@ body.dragging .drop-down {
 
 .activityiconcontainer.interface {
   background-color: #a378ff; }
-
+*/
+  
 :root {
   --activityadministration: #5d63f6;
   --activityassessment: #eb66a2;
@@ -2355,6 +2376,15 @@ span.editinstructions {
       background-color: #fff; }
 }
 
+.btn.btn-icon.icons-collapse-expand {
+	color: #999;
+	background-color: #3a3b3c;
+}
+
+.btn.btn-icon.icons-collapse-expand:hover {
+	outline: 2px solid #999;
+}
+
 .activity-add,
 .block-add {
   color: #3a7a57;
@@ -2374,7 +2404,7 @@ span.editinstructions {
     background-color: #d7e4d6; }
 
 .course-section {
-  border-bottom: 1px solid #dee2e6; }
+  border-bottom: none; }
   .course-section .section-summary-activities .activity-count {
     color: #6a737b; }
   .course-section.dndupload-dropzone {
@@ -2388,9 +2418,13 @@ span.editinstructions {
   .description .course-description-item .description-inner {
     border-bottom: 1px solid #dee2e6; }
 
+.activity {
+	border-top: 0;
+}
+
 .activity-wrapper {
   position: relative;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   /* Prevent bootstrap strech-link from covering the inplace editable button using z-index. */ }
   .activity-item:not(.activityinline) {
     border: 1px solid #666666; }
@@ -2410,6 +2444,29 @@ span.editinstructions {
       .editing .activity-item:hover .badge {
         mix-blend-mode: normal; }
 
+
+.activity-item .activity-completion button.btn, .activity-item .activity-completion a[role="button"].btn, .activity-item .activity-completion .pagelayout-frontpage .theme_boost_union-catlisting > .collapsible-actions a.collapseexpand[role="button"], .pagelayout-frontpage .theme_boost_union-catlisting > .collapsible-actions .activity-item .activity-completion a.collapseexpand[role="button"], .activity-item .activity-completion .pagelayout-coursecategory .theme_boost_union-catlisting > .collapsible-actions a.collapseexpand[role="button"], .pagelayout-coursecategory .theme_boost_union-catlisting > .collapsible-actions .activity-item .activity-completion a.collapseexpand[role="button"], .activity-item .activity-completion #page-course-search .theme_boost_union-catlisting > .collapsible-actions a.collapseexpand[role="button"], #page-course-search .theme_boost_union-catlisting > .collapsible-actions .activity-item .activity-completion a.collapseexpand[role="button"] {
+  color: #999;
+  background-color: #333;
+  border-color: #666;
+}
+
+.activity-item .activity-completion button.btn:hover, .activity-item .activity-completion a[role="button"].btn:hover, .activity-item .activity-completion .pagelayout-frontpage .theme_boost_union-catlisting > .collapsible-actions a.collapseexpand[role="button"]:hover, .pagelayout-frontpage .theme_boost_union-catlisting > .collapsible-actions .activity-item .activity-completion a.collapseexpand[role="button"]:hover, .activity-item .activity-completion .pagelayout-coursecategory .theme_boost_union-catlisting > .collapsible-actions a.collapseexpand[role="button"]:hover, .pagelayout-coursecategory .theme_boost_union-catlisting > .collapsible-actions .activity-item .activity-completion a.collapseexpand[role="button"]:hover, .activity-item .activity-completion #page-course-search .theme_boost_union-catlisting > .collapsible-actions a.collapseexpand[role="button"]:hover, #page-course-search .theme_boost_union-catlisting > .collapsible-actions .activity-item .activity-completion a.collapseexpand[role="button"]:hover {
+	color: #1d2125;
+	  background-color: #ccc;
+	  border-color: #999;
+}
+
+.activity-item .activity-completion button.btn-success {
+	color: #fff;
+	  background-color: #357a32;
+	  border-color: #999;
+}
+
+.activity-item .activity-completion .completion-dialog {
+	color: #999;
+}
+	
 .drawer {
   background-color: #242526; }
 
@@ -3635,7 +3692,6 @@ body.path-mod h2 img.iconlarge{
 table.dataTable tr.odd, .path-mod-workshop .userplan dd,
 table.dataTable tr.odd td.sorting_1, .courses .coursebox.even,
 .mod_turnitintooltwo .top.listbar.clearfix {
-    background-color: #3c3934 !important;
     color: #e4e6eb;
 }
 
@@ -4019,6 +4075,21 @@ a:hover{
 
 .c4l-attention{
   color: #000;
+}
+
+/* C4L dark mode */
+
+.c4l-keyconcept,
+.c4lv-keyconcept,
+.c4l-tip,
+.c4lv-tip,
+.c4l-reminder,
+.c4lv-reminder {
+color: #333;
+}
+.c4l-dodontcards .c4l-dodontcards-do, .c4l-dodontcards .c4l-dodontcards-do, .c4lv-dodontcards .c4l-dodontcards-do, .c4lv-dodontcards .c4l-dodontcards-do,
+.c4l-dodontcards .c4l-dodontcards-dont, .c4l-dodontcards .c4l-dodontcards-dont, .c4lv-dodontcards .c4l-dodontcards-dont, .c4lv-dodontcards .c4l-dodontcards-dont {
+color: #333;
 }
 
 .navbar.fixed-top .navbar-brand .logo{
