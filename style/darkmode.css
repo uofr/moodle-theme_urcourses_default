@@ -3907,11 +3907,11 @@ ul.oublog-accordion li {
 dt{
   color: #E4E6EB;
 }
-
+/*
 img.activityicon{
   filter: invert(98%) sepia(8%) saturate(534%) hue-rotate(179deg) brightness(96%) contrast(91%);
 }
-
+*/
 .fp-pathbar .fp-path-folder{
   filter: invert(98%) sepia(8%) saturate(534%) hue-rotate(179deg) brightness(96%) contrast(91%);
 }
