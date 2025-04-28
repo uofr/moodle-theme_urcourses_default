@@ -4361,6 +4361,26 @@ h4.result-title .icon{
 .activity-item .activity-completion .completion-dialog .editcompletion a:hover {
 	background-color: #3a7a57;
 }
+.btn.add-section {
+	border: 2px dashed #666;
+}
 .btn.add-section:hover {
 	background-color: #3a7a57;
+}
+
+.divider .divider-content {
+	background: linear-gradient(transparent 40%,#666 40%,#666 60%,transparent 60%);
+}
+
+/* change color for reply quotes in course email */
+.mm-message .quote {
+	border: solid 2px #8f4eff !important;
+	color: #8f4eff !important;
+}
+.mail-list .list-group-item-action {
+	color: #666;
+}
+
+.activity.modtype_scorm .activityiconcontainer.courseicon img {
+	filter: none;
 }
