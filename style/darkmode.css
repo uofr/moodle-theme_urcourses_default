@@ -4382,9 +4382,9 @@ h4.result-title .icon{
 }
 
 .activity.modtype_scorm .activityiconcontainer.courseicon img {
-	filter: invert(25%) sepia(63%) saturate(1152%) hue-rotate(344deg) brightness(94%) contrast(91%);
+	filter: invert(25%) sepia(63%) saturate(1152%) hue-rotate(344deg) brightness(94%) contrast(91%) !important;
 }
 
 .activity.modtype_lti .activityiconcontainer.courseicon img, .modchoosercontainer .modicon_lti.activityiconcontainer img, #page-header .modicon_lti.activityiconcontainer img {
-	filter: invert(49%) sepia(52%) saturate(4675%) hue-rotate(156deg) brightness(89%) contrast(102%);
+	filter: invert(49%) sepia(52%) saturate(4675%) hue-rotate(156deg) brightness(89%) contrast(102%) !important;
 }
