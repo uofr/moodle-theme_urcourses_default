@@ -143,3 +143,9 @@ padding: 0;
 .contentdesigner-content .contentdesigner-wrapper .course-content-list .richtext-content [data-toggle="collapse"].btn-link:focus {
   text-decoration: none;
 }
+
+.mail-nav-menu img.icon {
+  width: 24px !important;
+  height: 24px !important;
+  margin: 0;
+}
