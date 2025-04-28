@@ -1178,6 +1178,21 @@ a.btn.btn-link.p-0:hover{
     color: #fff;
     background-color: #1d2124; }
 
+.activity.mail .unread .badge.badge-important {
+	color: #fff !important;
+	background-color: #9e2619;
+}
+
+.forumpost.unread .row.header, 
+.path-course-view .unread, 
+.activity.mail .unread, span.unread {
+	background-color: #333;
+	color: #ccc;
+	display: inline-block;
+	padding: 0 0.25em;
+	border-radius: 0.25em;
+}
+
 .alert-primary {
   color: #083863;
   background-color: #cfe2f2;
