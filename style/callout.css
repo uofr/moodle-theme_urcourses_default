@@ -149,3 +149,7 @@ padding: 0;
   height: 24px !important;
   margin: 0;
 }
+
+.activity.modtype_lti .activityiconcontainer.courseicon img, .modchoosercontainer .modicon_lti.activityiconcontainer img, #page-header .modicon_lti.activityiconcontainer img {
+	filter: none !important;
+}
