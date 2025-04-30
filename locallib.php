@@ -153,12 +153,15 @@ function theme_urcourses_default_get_enrol_hint() {
         $latestenrolmentsemester = $latestenrolment->semester;
     }
 
-    if ($hasenrolments && !empty($latestenrolmentsemester) && $latestenrolmentsemester >= $currentsemester) {
+    // Only show enrol banner for current enrolmens if course is in edit mode.
+    // If course has past enrolment, we might want to show outside edit mode too.
+    if ($hasenrolments && $latestenrolmentsemester >= $currentsemester && !$USER->editing) {
         return '';
     }
 
     $coursehint_enrol = new \theme_urcourses_default\output\coursehint_enrol(
         $hasenrolments,
+        $currentsemester,
         $latestenrolmentsemester,
         $context->id,
         $course->id

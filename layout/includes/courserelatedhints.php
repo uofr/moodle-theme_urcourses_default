@@ -25,7 +25,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/theme/boost_union/layout/includes/courserelatedhints.php');
 
-if (isset($templatecontext) && array_key_exists('courserelatedhints', $templatecontext)) {
+if (isset($templatecontext)) {
     $enrolhinthtml = theme_urcourses_default_get_enrol_hint();
     if (!empty($enrolhinthtml)) {
         $templatecontext['courserelatedhints'] .= $enrolhinthtml;
