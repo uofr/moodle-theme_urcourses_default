@@ -30,13 +30,15 @@ require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
 class coursehint_enrol implements \renderable, \templatable {
 
     public $hasenrolment;
+    public $currentsemester;
     public $latestenrolmentsemester;
     public $contextid;
 
     public $courseid;
 
-    public function __construct(bool $hasenrolment, string $latestenrolmentsemester, int $contextid, int $courseid) {
+    public function __construct(bool $hasenrolment, string $currentsemester, string $latestenrolmentsemester, int $contextid, int $courseid) {
         $this->hasenrolment = $hasenrolment;
+        $this->currentsemester = $currentsemester;
         $this->latestenrolmentsemester = $latestenrolmentsemester;
         $this->contextid = $contextid;
         $this->courseid = $courseid;
@@ -45,29 +47,32 @@ class coursehint_enrol implements \renderable, \templatable {
     public function export_for_template(\core\output\renderer_base $output) {
         $data = new \stdClass();
 
+        $pastenrol = $this->latestenrolmentsemester < $this->currentsemester;
+
         if (!$this->hasenrolment) {
-            $button = new \core\output\single_button(
+            $noenrolbutton = new \core\output\single_button(
                 new \moodle_url('/admin/tool/urcourserequest/index.php', ['contextid' => $this->contextid]),
                 get_string('addenrolment', 'theme_urcourses_default'),
                 'post',
                 \core\output\single_button::BUTTON_WARNING
             );
-        } else {
-            $button = new \core\output\single_button(
+            $data->noenrolbutton = $noenrolbutton->export_for_template($output);
+        } else if ($pastenrol) {
+            $pastenrolbutton = new \core\output\single_button(
                 new \moodle_url('/local/duplicate_course/duplicate_course.php', ['id' => $this->courseid]),
                 get_string('duplicatecourse', 'theme_urcourses_default'),
                 'post',
                 \core\output\single_button::BUTTON_WARNING
             );
+            $duplicatelink = html_writer::link(
+                new \moodle_url('/local/duplicate_course/duplicate_course.php', ['id' => $this->courseid]),
+                get_string('duplicatethecourse', 'theme_urcourses_default')
+            );
+            $data->pastenrolbutton = $pastenrolbutton->export_for_template(($output));
+            $data->duplicatelink = $duplicatelink;
         }
 
-        $duplicatelink = html_writer::link(
-            new \moodle_url('/local/duplicate_course/duplicate_course.php', ['id' => $this->courseid]),
-            get_string('duplicatethecourse', 'theme_urcourses_default')
-        );
-
-        $data->button = $button->export_for_template($output);
-        $data->duplicatelink = $duplicatelink;
+        $data->pastenrol = $pastenrol;
         $data->hasenrolment = $this->hasenrolment;
         $data->semester = !empty($this->latestenrolmentsemester)
             ? theme_urcourses_default_get_semester_string($this->latestenrolmentsemester)
