@@ -260,17 +260,21 @@ function theme_urcourses_default_get_status_hint() {
 
 
     $availability_msg = '';
-    if (empty($enrollment) && $COURSE->visible) {
-        $availability_msg = get_string('visible_noenrollment', 'theme_urcourses_default');
-    }
-    else if (empty($enrollment) && !$COURSE->visible) {
-        $availability_msg = get_string('notvisible_noenrollment', 'theme_urcourses_default');
-    }
-    else if ($COURSE->is_visible) {
-        $availability_msg = get_string('visible', 'theme_urcourses_default', $enrollment['name']);
+    if ($COURSE->visible) {
+        if (empty($enrollment)) {
+            $availability_msg = get_string('visible_noenrollment', 'theme_urcourses_default');
+        }
+        else {
+            $availability_msg = get_string('visible', 'theme_urcourses_default');
+        }
     }
     else {
-        $availability_msg = get_string('notvisible', 'theme_urcourses_default', $enrollment['name']);
+        if (empty($enrollment)) {
+            $availability_msg = get_string('notvisible_noenrollment', 'theme_urcourses_default');
+        }
+        else {
+            $availability_msg = get_string('notvisible', 'theme_urcourses_default');
+        }
     }
 
     $data = new \stdClass();
