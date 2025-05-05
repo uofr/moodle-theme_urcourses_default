@@ -203,6 +203,131 @@ function theme_urcourses_default_get_date_hint() {
     return $OUTPUT->render($coursehint_date);
 }
 
+function theme_urcourses_default_show_status_hint() {
+    global $COURSE, $DB, $USER, $PAGE;
+
+    $isoncourseviewpage = $PAGE->url->compare(new core\url('/course/view.php'), URL_MATCH_BASE);
+    $userisediting = $USER->editing;
+    $context = \context_course::instance($COURSE->id, IGNORE_MISSING);
+    $canviewhidden = has_capability('moodle/course:viewhiddencourses', $context);
+    $coursehidden = $COURSE->visible == 0;
+
+    return ($canviewhidden && $isoncourseviewpage && ($userisediting || $coursehidden));
+}
+
+function theme_urcourses_default_get_status_hint() {
+    global $COURSE, $OUTPUT;
+
+    $timestatus = theme_urcourses_default_get_course_time_status($COURSE->startdate, $COURSE->enddate);
+    $timestatus_msg = '';
+    if ($timestatus === 'ongoing') {
+        $timestatus_msg = get_string('timestatus_current', 'theme_urcourses_default');
+    }
+    else if ($timestatus === 'current') {
+        if ($COURSE->enddate == 0) {
+            $timestatus_msg = get_string('timestatus_current_noenddate', 'theme_urcourses_default');
+        }
+        else {
+            $timestatus_msg = get_string('timestatus_current', 'theme_urcourses_default');
+        }
+    }
+    else if ($timestatus === 'past' && $COURSE->enddate != 0) {
+        $str_enddate = date('F j, Y', $COURSE->enddate);
+        $timestatus_msg = get_string('timestatus_past', 'theme_urcourses_default', $str_enddate);
+    }
+    else if ($timestatus === 'future') {
+        $str_startdate = date('F j, Y', $COURSE->startdate);
+        $timestatus_msg = get_string('timestatus_future', 'theme_urcourses_default', $str_startdate);
+    }
+
+    $enrolment = theme_urcourses_default_get_course_enrollment($COURSE->id);
+    $enrollment_msg = '';
+    if (empty($enrollment)) {
+        $enrollment_msg = get_string('noenrollment', 'theme_urcourses_default');
+    }
+    else {
+        $enrollment_msg = get_string('hasenrollment', 'theme_urcourses_default', $enrollment['name']);
+    }
+
+    $availability_button_msg = '';
+    $settingslink = \html_writer::link(new \moodle_url('/course/edit.php', ['id' => $COURSE->id]), 'course settings');
+    if ($COURSE->visible) {
+        $availability_button_msg = get_string('hidecourse', 'theme_urcourses_default', $settingslink);
+    }
+    else {
+        $availability_button_msg = get_string('showcourse', 'theme_urcourses_default', $settingslink);
+    }
+
+
+    $availability_msg = '';
+    if (empty($enrollment) && $COURSE->visible) {
+        $availability_msg = get_string('visible_noenrollment', 'theme_urcourses_default');
+    }
+    else if (empty($enrollment) && !$COURSE->visible) {
+        $availability_msg = get_string('notvisible_noenrollment', 'theme_urcourses_default');
+    }
+    else if ($COURSE->is_visible) {
+        $availability_msg = get_string('visible', 'theme_urcourses_default', $enrollment['name']);
+    }
+    else {
+        $availability_msg = get_string('notvisible', 'theme_urcourses_default', $enrollment['name']);
+    }
+
+    $data = new \stdClass();
+    $data->timestatus_msg = $timestatus_msg;
+    $data->enrollment_msg = $enrollment_msg;
+    $data->availability_msg = $availability_msg;
+    $data->availability_button_msg = $availability_button_msg;
+    $data->courseid = $COURSE->id;
+    $data->visible = $COURSE->visible;
+
+    return $OUTPUT->render_from_template('theme_urcourses_default/course-hint-status', $data);
+}
+
+function theme_urcourses_default_get_course_time_status($startdate, $enddate) {
+    $currenttime = time();
+    $ongoingdate = 946706400; // Jan 01, 2000, 06:00 (date for ongoing courses)
+
+    // Check if the start date is set to the 'ongoing courses' date.
+    if ($startdate == $ongoingdate) {
+        return 'ongoing';
+    }
+    // If startdate is greater than the currenttime, the course is in the future.
+    if ($startdate > $currenttime) {
+        return 'future';
+    }
+    // If the enddate is set, and the currenttime is after the enddate, the course is in the past.
+    if ((isset($enddate) && $enddate != 0) && $enddate < $currenttime) {
+        return 'past';
+    }
+
+    return 'current';
+}
+
+/**
+ * Gets enrollment information for the course specified by $courseid.
+ * 
+ * @return array
+ */
+function theme_urcourses_default_get_course_enrollment(int $courseid) {
+    global $CFG, $DB;
+    
+    $is_urcourserequest_exist = is_file($CFG->dirroot.'/admin/tool/urcourserequest/lib.php');
+    $course_exists = $DB->record_exists('course', array('id' => $courseid));
+
+    if ($is_urcourserequest_exist && $course_exists) {
+        require_once($CFG->dirroot.'/admin/tool/urcourserequest/lib.php');
+
+        $course = get_course($courseid);
+        $enrollment = tool_urcourserequest_get_course_state($course->idnumber);
+
+        return $enrollment === false ? array() : $enrollment;
+    }
+    else {
+        return array();
+    }
+}
+
 // 01 - 04: 10 (Winter)
 // 05 - 08: 20 (Spring/Summer)
 // 09 - 12: 30 (Fall)

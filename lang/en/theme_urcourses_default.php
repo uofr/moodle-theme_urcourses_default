@@ -198,6 +198,27 @@ $string['hint_coursehasended'] = 'The end date for this course page is in the pa
 $string['hint_coursenotstarted'] = 'Course begins {$a}.';
 $string['datebutton'] = 'Edit Dates';
 
+// Status Hint
+$string['timestatus_current'] = 'This course is in progress.';
+$string['timestatus_current_noenddate'] = 'This course is in progress (end date not set).';
+$string['timestatus_past'] = 'This course ended {$a}.';
+$string['timestatus_future'] = 'This course begins {$a}.';
+$string['hasenrollment'] = 'There is active enrolment ({$a}).';
+$string['noenrollment'] = 'There is no active enrolment.';
+$string['visible'] = 'The course is visible to students.';
+$string['notvisible'] = 'The course is hidden from students.';
+$string['visible_noenrollment'] = 'The course is visible.';
+$string['notvisible_noenrollment'] = 'The course is hidden.';
+$string['showcourse'] = 'You can show the course in the {$a}.';
+$string['hidecourse'] = 'You can hide the course in the {$a}.';
+$string['showtitle'] = 'Show Course?';
+$string['showbody'] = 'Are you sure you want to show this course? The course will be visible to students enrolled in the {$a} semester.';
+$string['showbody_noenrollment'] = 'Are you sure you want to show this course? If students are enrolled, the course will be visible to them.';
+$string['hidetitle'] = 'Hide Course?';
+$string['hidebody'] = 'Are you sure you want to hide this course? This course will be hidden from students enrolled in the {$a} semester.';
+$string['hidebody_noenrollment'] = 'Are you sure you want to hide this course? If students are enrolled, the course will be hidden from them.';
+$string['confirmbutton'] = 'Confirm';
+
 // Settings
 $string['colourtab'] = 'Colours';
 $string['colourheading'] = 'Colours';
