@@ -26,13 +26,16 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/theme/boost_union/layout/includes/courserelatedhints.php');
 
 if (isset($templatecontext)) {
-    $enrolhinthtml = theme_urcourses_default_get_enrol_hint();
-    if (!empty($enrolhinthtml)) {
-        $templatecontext['courserelatedhints'] .= $enrolhinthtml;
+    if (theme_urcourses_default_show_status_hint()) {
+        $templatecontext['courserelatedhints'] .= theme_urcourses_default_get_status_hint();
     }
+    // $enrolhinthtml = theme_urcourses_default_get_enrol_hint();
+    // if (!empty($enrolhinthtml)) {
+    //     $templatecontext['courserelatedhints'] .= $enrolhinthtml;
+    // }
 
-    $datehinthtml = theme_urcourses_default_get_date_hint();
-    if (!empty($datehinthtml)) {
-        $templatecontext['courserelatedhints'] .= $datehinthtml;
-    }
+    // $datehinthtml = theme_urcourses_default_get_date_hint();
+    // if (!empty($datehinthtml)) {
+    //     $templatecontext['courserelatedhints'] .= $datehinthtml;
+    // }
 }
