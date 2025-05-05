@@ -240,7 +240,7 @@ function theme_urcourses_default_get_status_hint() {
         $timestatus_msg = get_string('timestatus_future', 'theme_urcourses_default', $str_startdate);
     }
 
-    $enrolment = theme_urcourses_default_get_course_enrollment($COURSE->id);
+    $enrollment = theme_urcourses_default_get_course_enrollment($COURSE->id);
     $enrollment_msg = '';
     if (empty($enrollment)) {
         $enrollment_msg = get_string('noenrollment', 'theme_urcourses_default');
