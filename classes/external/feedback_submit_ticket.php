@@ -52,7 +52,7 @@ class feedback_submit_ticket extends external_api {
 
         $courseid = $params['contextid'];
 
-        $context = \context_user::instance($courseid);
+        $context = \context_course::instance($courseid);
         self::validate_context($context);
 
         require_capability('moodle/course:changesummary', $context);
