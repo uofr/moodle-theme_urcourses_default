@@ -71,3 +71,15 @@ export const unenrolTestStudent = (courseid) => {
 
     return Ajax.call([request])[0];
 };
+
+export const toggleCourseVisibility = (courseid) => {
+    const request = {
+        methodname: 'theme_urcourses_default_submit_ticket',
+        args: {
+            contextid: courseid,
+            problem: ''
+        }
+    };
+
+    return Ajax.call([request])[0];
+};

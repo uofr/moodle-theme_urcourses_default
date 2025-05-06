@@ -39,7 +39,40 @@ class="alert {{#visible}} alert-success{{/visible}}{{^visible}} alert-warning{{/
             {{timestatus_msg}} {{{enrollment_msg}}} {{{availability_msg}}}
         </div>
     </div>
-    <div>
-        <span> {{{availability_button_msg}}} </span>
+    <div class="d-flex align-items-center">
+        <a class="btn btn-link p-0"
+        role="button"
+        data-toggle="popover"
+        data-placement="bottom"
+        data-content="{{#str}}coursevisibility_help, core{{/str}}"
+        data-html="true"
+        tabindex="0"
+        data-trigger="focus">
+            <i class="icon fa fa-question-circle text-info fa-fw"
+            role="img"
+            title="Help with Course visibility"
+            aria-label="Help with Course visibility">
+            </i>
+        </a>
+        <a href="#" class="btn btn-secondary" data-action="toggle_course_visibility"> {{{availability_button_msg}}} </a>
     </div>
 </div>
+
+{{#js}}
+require(['theme_urcourses_default/course_visibility_toggle'], function(CourseVisibilityToggle) {
+    CourseVisibilityToggle.init(
+        '#theme_urcourses_default_header_toggle_course_visibility_{{uniqid}}',
+        {{courseid}},
+        {{visible}},
+        {
+        {{#modalstrings}}
+                showtitle: '{{{showtitle}}}',
+                showbody: '{{{showbody}}}',
+                hidetitle: '{{{hidetitle}}}',
+                hidebody: '{{{hidebody}}}',
+                confirmbutton: '{{{confirmbutton}}}'
+        {{/modalstrings}}
+        }
+    );
+});
+{{/js}}

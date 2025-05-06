@@ -250,12 +250,11 @@ function theme_urcourses_default_get_status_hint() {
     }
 
     $availability_button_msg = '';
-    $settingslink = \html_writer::link(new \moodle_url('/course/edit.php', ['id' => $COURSE->id]), 'course settings');
     if ($COURSE->visible) {
-        $availability_button_msg = get_string('hidecourse', 'theme_urcourses_default', $settingslink);
+        $availability_button_msg = get_string('hidecourse', 'theme_urcourses_default');
     }
     else {
-        $availability_button_msg = get_string('showcourse', 'theme_urcourses_default', $settingslink);
+        $availability_button_msg = get_string('showcourse', 'theme_urcourses_default');
     }
 
 
@@ -277,6 +276,25 @@ function theme_urcourses_default_get_status_hint() {
         }
     }
 
+    if (empty($enrollment)) {
+        $modalstrings = array(
+            'showtitle' => get_string('showtitle', 'theme_urcourses_default'),
+            'showbody' => get_string('showbody_noenrollment', 'theme_urcourses_default'),
+            'hidetitle' => get_string('hidetitle', 'theme_urcourses_default'),
+            'hidebody' => get_string('hidebody_noenrollment', 'theme_urcourses_default'),
+            'confirmbutton' => get_string('confirmbutton', 'theme_urcourses_default')
+        );
+    }
+    else {
+        $modalstrings = array(
+            'showtitle' => get_string('showtitle', 'theme_urcourses_default'),
+            'showbody' => get_string('showbody', 'theme_urcourses_default', $enrollment['name']),
+            'hidetitle' => get_string('hidetitle', 'theme_urcourses_default'),
+            'hidebody' => get_string('hidebody', 'theme_urcourses_default', $enrollment['name']),
+            'confirmbutton' => get_string('confirmbutton', 'theme_urcourses_default')
+        );
+    }
+
     $data = new \stdClass();
     $data->timestatus_msg = $timestatus_msg;
     $data->enrollment_msg = $enrollment_msg;
@@ -284,6 +302,7 @@ function theme_urcourses_default_get_status_hint() {
     $data->availability_button_msg = $availability_button_msg;
     $data->courseid = $COURSE->id;
     $data->visible = $COURSE->visible;
+    $data->modalstrings = $modalstrings;
 
     return $OUTPUT->render_from_template('theme_urcourses_default/course-hint-status', $data);
 }
