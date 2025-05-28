@@ -15,14 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Campus - Library
+ * Theme UR Courses Default - Library
  *
- * @package    theme_boost_campus
- * @copyright  2017 Kathrin Osswald, Ulm University <kathrin.osswald@uni-ulm.de>
+ * @package    theme_urcourses_default
+ * @copyright  2025 John Lane
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+// Constants which are use throughout this theme.
+define('THEME_URCOURSES_DEFAULT_SETTING_INHERITANCE_INHERIT', 0);
+define('THEME_URCOURSES_DEFAULT_SETTING_INHERITANCE_DUPLICATE', 1);
+
+require_once(__DIR__ . '/locallib.php');
 
 /**
  * Returns the main SCSS content.
@@ -30,151 +34,210 @@ defined('MOODLE_INTERNAL') || die();
  * @param theme_config $theme The theme config object.
  * @return string
  */
-function theme_boost_campus_get_main_scss_content($theme) {
+function theme_urcourses_default_get_main_scss_content($theme) {
     global $CFG;
 
-    $scss = '';
-    $filename = !empty($theme->settings->preset) ? $theme->settings->preset : null;
-    $fs = get_file_storage();
+    // Require the necessary libraries.
+    require_once($CFG->dirroot . '/theme/boost_union/lib.php');
 
-    $context = context_system::instance();
-    if ($filename == 'default.scss') {
-        // We still load the default preset files directly from the boost theme. No sense in duplicating them.
-        $scss .= file_get_contents($CFG->dirroot . '/theme/boost/scss/preset/default.scss');
-    } else if ($filename == 'plain.scss') {
-        // We still load the default preset files directly from the boost theme. No sense in duplicating them.
-        $scss .= file_get_contents($CFG->dirroot . '/theme/boost/scss/preset/plain.scss');
+    // As a start, get the compiled main SCSS from Boost Union.
+    // This way, UR Courses will ship the same SCSS code as Boost Union itself.
+    $scss = theme_boost_union_get_main_scss_content(theme_config::load('boost_union'));
 
-    } else if ($filename && ($presetfile = $fs->get_file($context->id, 'theme_boost_campus', 'preset', 0, '/', $filename))) {
-        // This preset file was fetched from the file area for theme_boost_campus and not theme_boost (see the line above).
-        $scss .= $presetfile->get_content();
-    } else {
-        // Safety fallback - maybe new installs etc.
-        $scss .= file_get_contents($CFG->dirroot . '/theme/boost/scss/preset/default.scss');
-    }
+    // And add UR Courses's main SCSS file to the stack.
+    $scss .= file_get_contents($CFG->dirroot . '/theme/urcourses_default/scss/post.scss');
 
-    // Pre CSS - this is loaded AFTER any prescss from the setting but before the main scss.
-    $pre = file_get_contents($CFG->dirroot . '/theme/boost_campus/scss/pre.scss');
-    // Post CSS - this is loaded AFTER the main scss but before the extra scss from the setting.
-    $post = file_get_contents($CFG->dirroot . '/theme/boost_campus/scss/post.scss');
-
-    // Combine them together.
-    return $pre . "\n" . $scss . "\n" . $post;
+    return $scss;
 }
 
 /**
- * Override to add CSS values from settings to pre scss file.
- *
  * Get SCSS to prepend.
  *
  * @param theme_config $theme The theme config object.
- * @return array
+ * @return string
  */
-function theme_boost_campus_get_pre_scss($theme) {
+function theme_urcourses_default_get_pre_scss($theme) {
     global $CFG;
-    // MODIFICATION START.
-    require_once($CFG->dirroot . '/theme/boost_campus/locallib.php');
-    // MODIFICATION END.
 
+    // Require the necessary libraries.
+    require_once($CFG->dirroot . '/theme/boost_union/lib.php');
+
+    // As a start, initialize the Pre SCSS code with an empty string.
     $scss = '';
-    $configurable = [
-        // Config key => [variableName, ...].
-        'brandcolor' => ['primary'],
-        // MODIFICATION START: Add own variables.
-        'section0title' => ['section0title'],
-        'showswitchedroleincourse' => ['showswitchedroleincourse'],
-        'loginform' => ['loginform'],
-        'footerhidehelplink' => ['footerhidehelplink'],
-        'footerhidelogininfo' => ['footerhidelogininfo'],
-        'footerhidehomelink' => ['footerhidehomelink'],
-        'blockicon' => ['blockicon'],
-        'brandsuccesscolor' => ['success'],
-        'brandinfocolor' => ['info'],
-        'brandwarningcolor' => ['warning'],
-        'branddangercolor' => ['danger'],
-        'darknavbar' => ['darknavbar'],
-        'footerblocks' => ['footerblocks'],
-        'imageareaitemsmaxheight' => ['imageareaitemsmaxheight'],
-        'showsettingsincourse' => ['showsettingsincourse'],
-        'incoursesettingsswitchtoroleposition' => ['incoursesettingsswitchtoroleposition'],
-        'hidefooteronloginpage' => ['hidefooteronloginpage'],
-        'footerhideusertourslink' => ['footerhideusertourslink'],
-        'navdrawerfullwidth' => ['navdrawerfullwidth'],
-        'helptextmodal' => ['helptextmodal'],
-        'breakpoint' => ['breakpoint']
-        // MODIFICATION END.
-    ];
 
-    // Prepend variables first.
-    foreach ($configurable as $configkey => $targets) {
-        $value = isset($theme->settings->{$configkey}) ? $theme->settings->{$configkey} : null;
-        if (empty($value)) {
-            continue;
-        }
-        array_map(function($target) use (&$scss, $value) {
-            $scss .= '$' . $target . ': ' . $value . ";\n";
-        }, (array) $targets);
+    // Then, if configured, get the compiled pre SCSS code from Boost Union.
+    // This should not be necessary as Moodle core calls the *_get_pre_scss() functions from all parent themes as well.
+    // However, as soon as Boost Union would use $theme->settings in this function, $theme would be this theme here and
+    // not Boost Union. The Boost Union developers are aware of this topic, but faults can always happen.
+    // If such a fault happens, the UR Courses administrator can switch the inheritance to 'Duplicate'.
+    // This way, we will add the pre SCSS code with the explicit use of the Boost Union configuration to the stack.
+    $inheritanceconfig = get_config('theme_urcourses_default', 'prescssinheritance');
+    if ($inheritanceconfig == THEME_URCOURSES_DEFAULT_SETTING_INHERITANCE_DUPLICATE) {
+        $scss .= theme_boost_union_get_pre_scss(theme_config::load('boost_union'));
     }
 
-    // MODIFICATION START: Add login background images that are uploaded to the setting 'loginbackgroundimage' to CSS.
-    $scss .= theme_boost_campus_get_loginbackgroundimage_scss();
-    // MODIFICATION END.
+    // And add UR Courses's pre SCSS file to the stack.
+    $scss .= file_get_contents($CFG->dirroot . '/theme/urcourses_default/scss/pre.scss');
 
-    // Prepend pre-scss.
-    if (!empty($theme->settings->scsspre)) {
-        $scss .= $theme->settings->scsspre;
+    /**********************************************************
+     * EXTENSION POINT:
+     * Compose and add additional pre-SCSS code here.
+     * It will be added on top of Boost Union's pre-SCSS code.
+     *********************************************************/
+    $brandcolour = get_config('theme_urcourses_default', 'brandcolour');
+    if ($brandcolour) {
+        $scss .= '$primary: ' . $brandcolour . ";\n";
     }
 
     return $scss;
 }
 
 /**
- * Implement pluginfile function to deliver files which are uploaded in theme settings
+ * Inject additional SCSS.
  *
- * @param stdClass $course course object
- * @param stdClass $cm course module
- * @param stdClass $context context object
- * @param string $filearea file area
- * @param array $args extra arguments
- * @param bool $forcedownload whether or not force download
- * @param array $options additional options affecting the file serving
- * @return bool
+ * @param theme_config $theme The theme config object.
+ * @return string
  */
-function theme_boost_campus_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
-    if ($context->contextlevel == CONTEXT_SYSTEM) {
-        $theme = theme_config::load('boost_campus');
-        // By default, theme files must be cache-able by both browsers and proxies.
-        // TODO: For new file areas: Check if the cacheability needs to be restricted.
-        if (!array_key_exists('cacheability', $options)) {
-            $options['cacheability'] = 'public';
-        }
-        if ($filearea === 'favicon') {
-            return $theme->setting_file_serve('favicon', $args, $forcedownload, $options);
-        } else if (s($filearea === 'logo' || $filearea === 'backgroundimage')) {
-            return $theme->setting_file_serve($filearea, $args, $forcedownload, $options);
-        } else if ($filearea === 'loginbackgroundimage') {
-            return $theme->setting_file_serve('loginbackgroundimage', $args, $forcedownload, $options);
-        } else if ($filearea === 'fontfiles') {
-            return $theme->setting_file_serve('fontfiles', $args, $forcedownload, $options);
-        } else if ($filearea === 'imageareaitems') {
-            return $theme->setting_file_serve('imageareaitems', $args, $forcedownload, $options);
-        } else {
-            send_file_not_found();
-        }
-    } else {
-        send_file_not_found();
+function theme_urcourses_default_get_extra_scss($theme) {
+    global $CFG;
+
+    // Require the necessary libraries.
+    require_once($CFG->dirroot . '/theme/boost_union/lib.php');
+
+    // As a start, initialize the Extra SCSS code with an empty string.
+    $scss = '';
+
+    // Then, if configured, get the compiled extra SCSS code from Boost Union.
+    // This should not be necessary as Moodle core calls the *_get_extra_scss() functions from all parent themes as well.
+    // However, as soon as Boost Union would use $theme->settings in this function, $theme would be this theme here and
+    // not Boost Union. The Boost Union developers are aware of this topic, but faults can always happen.
+    // If such a fault happens, the UR Courses administrator can switch the inheritance to 'Duplicate'.
+    // This way, we will add the extra SCSS code with the explicit use of the Boost Union configuration to the stack.
+    $inheritanceconfig = get_config('theme_urcourses_default', 'extrascssinheritance');
+    if ($inheritanceconfig == THEME_URCOURSES_DEFAULT_SETTING_INHERITANCE_DUPLICATE) {
+        $scss .= theme_boost_union_get_extra_scss(theme_config::load('boost_union'));
     }
+
+    /**********************************************************
+     * EXTENSION POINT:
+     * Compose and add additional SCSS code here.
+     * It will be added on top of Boost Union's SCSS code.
+     *********************************************************/
+
+    return $scss;
 }
 
 /**
- * If setting is updated, use this callback to clear the theme_boost_campus' own application cache.
+ * Callback function for theme_boost_union to allow UR Courses to add cards to the Boost Union settings overview page.
+ * This function is expected to return an array of arrays containing values with the keys 'label', 'desc', 'btn' and 'url'.
+ *
+ * @return array
  */
-function theme_boost_campus_reset_app_cache() {
-    // Get the cache from area.
-    $themeboostcampuscache = cache::make('theme_boost_campus', 'imagearea');
-    // Delete the cache for the imagearea.
-    $themeboostcampuscache->delete('imageareadata');
-    // To be safe and because there can only be one callback function added to a plugin setting,
-    // we also delete the complete theme cache here.
-    theme_reset_all_caches();
+function theme_urcourses_default_extend_busettingsoverview() {
+
+    $cards[] = [
+        'label' => get_string('pluginname', 'theme_urcourses_default'),
+        'desc' => get_string('settingsoverview_buc_desc', 'theme_urcourses_default'),
+        'btn' => 'primary',
+        'url' => new \moodle_url('/admin/settings.php', ['section' => 'theme_urcourses_default']),
+    ];
+
+    return $cards;
+}
+
+/**
+ * Adds a Unenrol Test Student Account link to the course admin menu.
+ *
+ * @param navigation_node $navigation The navigation node to extend
+ * @param stdClass $course The course to object for the tool
+ * @param context $context The context of the course
+ * @return void
+ */
+function theme_urcourses_default_extend_navigation_course($navigation, $course, $context) {
+    global $DB, $USER, $PAGE;
+
+    if (!isloggedin()) {
+        return;
+    }
+
+    if (!has_capability('moodle/course:update', $context, $USER->id)) {
+        return;
+    }
+
+    if (!theme_urcourses_default_can_create_test_student($USER->id)) {
+        return;
+    }
+
+    $urstudentemail = $USER->username . '+urstudent@uregina.ca';
+    if ($urstudent = $DB->get_record('user', ['email' => $urstudentemail])) {
+        $urstudentenrolled = is_enrolled($context, $urstudent->id, '', true);
+
+        $nodetext = $urstudentenrolled ? get_string('unenrolurstudent', 'theme_urcourses_default') : get_string('enrolurstudent', 'theme_urcourses_default');
+        $nodeurl = new moodle_url('');
+
+        $node = navigation_node::create(
+            text: $nodetext,
+            action: $nodeurl,
+            type: navigation_node::NODETYPE_LEAF,
+            key: $urstudentenrolled ? 'unenrol_test_student' : 'enrol_test_student'
+        );
+
+        $navigation->add_node($node);
+
+        $PAGE->requires->js_call_amd('theme_urcourses_default/enrolteststudent', 'init', [$course->id]);
+    }
+}
+
+function theme_urcourses_default_get_fontawesome_icon_map() {
+    return [
+        'theme_urcourses_default:darkmode' => 'fa-moon',
+        'theme_urcourses_default:lightmode' => 'fa-sun',
+        'theme_urcourses_default:feedback' => 'fa-face-smile',
+        'theme_urcourses_default:goback' => 'fa-arrow-left',
+        'theme_urcourses_default:enrol' => 'fa-user-group',
+        'theme_urcourses_default:date' => 'fa-clock'
+    ];
+}
+
+// function theme_urcourses_default_render_navbar_output() {
+//     global $USER, $OUTPUT;
+
+//     if (!isloggedin()) {
+//         return '';
+//     }
+
+//     $context = \context_user::instance($USER->id);
+//     $feedbackbutton = new \theme_urcourses_default\output\feedbackbutton($context->id);
+
+//     return $OUTPUT->render($feedbackbutton);
+// }
+
+function theme_urcourses_default_output_fragment_suggestion_form() {
+    global $CFG, $PAGE;
+
+    require_once($CFG->dirroot . '/mod/questionnaire/locallib.php');
+
+    $questionnaireid = get_config('theme_urcourses_default', 'questionnaireid');
+    $questionname = get_config('theme_urcourses_default', 'questionname');
+
+    if ($questionnaireid == 0 || $questionname == 0) {
+        return '';
+    }
+
+    $suggestionform = new \theme_urcourses_default\form\suggestion_form(
+        attributes: [
+            'id' => 'suggestion_form'
+        ],
+        customdata: [
+            'questionname' => $questionname,
+            'questionnaireid' => $questionnaireid
+        ]
+    );
+
+    return $suggestionform->render();
+}
+
+function theme_urcourses_default_output_fragment_ticket_form() {
+    $ticketform = new \theme_urcourses_default\form\ticket_form(attributes: ['id' => 'ticket_form']);
+    return $ticketform->render();
 }

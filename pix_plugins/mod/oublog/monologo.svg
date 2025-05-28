@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with Vectornator (http://vectornator.io/) -->
+<svg height="100%" stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 24 24" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<path d="M19.954 2.8797L21.1776 3.92093L14.7608 11.255L13.502 11.375L13.5218 10.2318L19.954 2.8797Z" id="Fill"/>
+</defs>
+<g id="Untitled">
+<path d="M15.2951 2.72339L4 2.72339C3.44772 2.72339 3 3.1711 3 3.72339L3 20.7907C3 21.6507 4.0137 22.1096 4.65989 21.5421L8.52017 18.1517C8.70265 17.9914 8.93721 17.9031 9.18007 17.9031L20 17.9031C20.5523 17.9031 21 17.4553 21 16.9031L21 9.70382" fill="none" opacity="1" stroke="#000000" stroke-linecap="round" stroke-linejoin="miter" stroke-width="1"/>
+<path d="M12.8833 6.70483L6.2213 6.70483" fill="none" opacity="1" stroke="#000000" stroke-linecap="round" stroke-linejoin="miter" stroke-width="1"/>
+<path d="M11.2407 9.58057L6.2213 9.58057" fill="none" opacity="1" stroke="#000000" stroke-linecap="round" stroke-linejoin="miter" stroke-width="1"/>
+<path d="M10.6578 12.3821L6.2213 12.3821" fill="none" opacity="1" stroke="#000000" stroke-linecap="round" stroke-linejoin="miter" stroke-width="1"/>
+<g opacity="1">
+<mask height="10.4953" id="StrokeMask" maskUnits="userSpaceOnUse" width="9.67561" x="12.502" y="1.8797">
+<rect fill="#ffffff" height="10.4953" stroke="none" width="9.67561" x="12.502" y="1.8797"/>
+<use fill="#000000" fill-rule="evenodd" stroke="none" xlink:href="#Fill"/>
+</mask>
+<use fill="none" mask="url(#StrokeMask)" stroke="#000000" stroke-linecap="butt" stroke-linejoin="round" stroke-width="2" xlink:href="#Fill"/>
+</g>
+<path d="M18.7382 3.14542L18.0904 3.93372L20.33 5.84712L20.9781 5.09006L18.7382 3.14542Z" fill="#000000" fill-rule="nonzero" opacity="1" stroke="none"/>
+</g>
+</svg>

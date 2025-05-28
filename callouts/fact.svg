@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:vectornator="http://vectornator.io" version="1.1" viewBox="0 0 1920 1920">
+  <!-- Generator: Adobe Illustrator 29.5.1, SVG Export Plug-In . SVG Version: 2.1.0 Build 141)  -->
+  <defs>
+    <style>
+      .st0, .st1 {
+        fill: none;
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .st1 {
+        stroke-linecap: round;
+        stroke-width: 100px;
+      }
+    </style>
+  </defs>
+  <g id="Untitled" vectornator:layerName="Untitled">
+    <path d="M1489.79,295.29c74.39,0,134.92,60.52,134.92,134.92v1059.59c0,74.39-60.52,134.92-134.92,134.92H430.21c-74.39,0-134.92-60.52-134.92-134.92V430.21c0-74.39,60.52-134.92,134.92-134.92h1059.59M1489.79,218.29H430.21c-116.88,0-211.92,95.03-211.92,211.92v1059.59c0,116.88,95.03,211.92,211.92,211.92h1059.59c116.88,0,211.92-95.03,211.92-211.92V430.21c0-116.89-95.03-211.92-211.92-211.92h0Z"/>
+  </g>
+  <path class="st0" d="M1333.83,959.83l.33.33"/>
+  <path class="st1" d="M1469.23,655.66l-576.9,576.9c-42.37,42.37-110.87,42.37-152.79,0l-288.45-288.45"/>
+</svg>

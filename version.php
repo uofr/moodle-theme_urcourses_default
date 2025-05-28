@@ -15,18 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Campus - Version file
+ * Theme UR Courses Default - Version file
  *
- * @package    theme_boost_campus
- * @copyright  2017 Kathrin Osswald, Ulm University <kathrin.osswald@uni-ulm.de>
+ * @package    theme_urcourses_default
+ * @copyright  2025 John Lane
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'theme_boost_campus';
-$plugin->version = 2019021300;
-$plugin->release = 'v3.6-r2';
-$plugin->requires = 2018120300;
+$plugin->component = 'theme_urcourses_default';
+$plugin->release = 'v4.3-r1';
+$plugin->version = 2025031001;
+$plugin->requires = 2023100906; // Requires Moodle 4.3.6 or later.
+$plugin->supported = [403, 405];
 $plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = array('theme_boost' => 2018120300);
+$plugin->dependencies = ['theme_boost_union' => 2023102042];

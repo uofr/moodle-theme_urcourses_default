@@ -15,22 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Campus - Privacy provider
+ * Theme UR Courses - Privacy provider
  *
- * @package    theme_boost_campus
- * @copyright  2018 Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
+ * @package    theme_urcourses_default
+ * @copyright  2023 Daniel Poggenpohl <daniel.poggenpohl@fernuni-hagen.de> and Alexander Bias <bias@alexanderbias.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace theme_boost_campus\privacy;
-
-defined('MOODLE_INTERNAL') || die();
+namespace theme_urcourses_default\privacy;
 
 /**
  * Privacy Subsystem implementing null_provider.
  *
- * @package    theme_boost_campus
- * @copyright  2018 Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
+ * @package    theme_urcourses_default
+ * @copyright  2023 Daniel Poggenpohl <daniel.poggenpohl@fernuni-hagen.de> and Alexander Bias <bias@alexanderbias.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements \core_privacy\local\metadata\null_provider {
@@ -41,7 +39,7 @@ class provider implements \core_privacy\local\metadata\null_provider {
      *
      * @return string
      */
-    public static function get_reason() : string {
+    public static function get_reason(): string {
         return 'privacy:metadata';
     }
 }

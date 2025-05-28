@@ -1,0 +1,35 @@
+<div class="course-hint-hidden alert alert-warning">
+    <div class="media">
+        <div class="me-3 icon-size-5">
+            {{#pix}} enrol, theme_urcourses_default {{/pix}}
+        </div>
+        <div class="media-body align-self-center">
+            {{#hasenrolment}}
+                {{#pastenrol}}
+                    <p class="mb-0">{{#str}}haspastenrolment, theme_urcourses_default, {{semester}}{{/str}}</p>
+                    <p class="m-0">{{#str}}haspastenrolment_help, theme_urcourses_default, {{{duplicatelink}}}{{/str}}</p>
+                {{/pastenrol}}
+                {{^pastenrol}}
+                    <p class="mb-0">{{#str}}hasenrolment, theme_urcourses_default, {{semester}}{{/str}}</p>
+                {{/pastenrol}}
+            {{/hasenrolment}}
+            {{^hasenrolment}}
+                <p>{{#str}}noenrolment, theme_urcourses_default{{/str}}</p>
+            {{/hasenrolment}}
+        </div>
+        <div>
+            {{#hasenrolment}}
+                {{#pastenrol}}
+                    {{#pastenrolbutton}}
+                        {{>theme_urcourses_default/coursehint_single_button}}
+                    {{/pastenrolbutton}}
+                {{/pastenrol}}
+            {{/hasenrolment}}
+            {{^hasenrolment}}
+                {{#noenrolbutton}}
+                    {{>theme_urcourses_default/coursehint_single_button}}
+                {{/noenrolbutton}}
+            {{/hasenrolment}}
+        </div>
+    </div>
+</div>

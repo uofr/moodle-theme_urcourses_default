@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with Vectornator (http://vectornator.io/) -->
+<svg height="100%" stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 512 512" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<path d="M418.438 59.4426L443.875 81.0886L311.587 235.341L285.418 237.836L285.83 214.07L418.438 59.4426Z" id="Fill"/>
+</defs>
+<g id="Layer-1">
+<g opacity="1">
+<path d="M322.694 57.9801L87.8837 57.9801C76.4025 57.9801 67.095 67.2874 67.095 78.7688L67.095 433.576C67.095 451.455 88.1685 460.994 101.602 449.197L181.852 378.715C185.646 375.382 190.522 373.547 195.571 373.547L420.503 373.547C431.985 373.547 441.292 364.238 441.292 352.758L441.292 203.094" fill="none" opacity="1" stroke="#000000" stroke-linecap="round" stroke-linejoin="miter" stroke-width="20.7887"/>
+<path d="M272.556 140.749L134.062 140.749" fill="none" opacity="1" stroke="#000000" stroke-linecap="round" stroke-linejoin="miter" stroke-width="20.7887"/>
+<path d="M238.409 200.532L134.062 200.532" fill="none" opacity="1" stroke="#000000" stroke-linecap="round" stroke-linejoin="miter" stroke-width="20.7887"/>
+<path d="M226.291 258.772L134.062 258.772" fill="none" opacity="1" stroke="#000000" stroke-linecap="round" stroke-linejoin="miter" stroke-width="20.7887"/>
+<g opacity="1">
+<mask height="219.971" id="StrokeMask" maskUnits="userSpaceOnUse" width="200.034" x="264.629" y="38.6539">
+<rect fill="#ffffff" height="219.971" stroke="none" width="200.034" x="264.629" y="38.6539"/>
+<use fill="#000000" fill-rule="evenodd" stroke="none" xlink:href="#Fill"/>
+</mask>
+<use fill="none" mask="url(#StrokeMask)" stroke="#000000" stroke-linecap="butt" stroke-linejoin="round" stroke-width="41.5774" xlink:href="#Fill"/>
+</g>
+<path d="M396.819 69.4373L383.401 85.294L422.251 118.228L435.669 102.372L396.819 69.4373Z" fill="#000000" fill-rule="nonzero" opacity="1" stroke="none"/>
+</g>
+</g>
+</svg>

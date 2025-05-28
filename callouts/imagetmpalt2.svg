@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with Vectornator (http://vectornator.io/) -->
+<svg height="100%" stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 100 100" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:vectornator="http://vectornator.io" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs/>
+<g id="Layer_2" vectornator:layerName="Layer_2">
+<path d="M14.93 16.955L85.4891 16.955L85.4891 16.955L85.4891 76.477L85.4891 76.477L14.93 76.477L14.93 76.477L14.93 16.955L14.93 16.955Z" fill="#51bc86" fill-rule="nonzero" opacity="1" stroke="none" vectornator:layerName="rect"/>
+<path d="M24.916 34.9561C24.916 30.3844 28.6221 26.6782 33.1939 26.6782C37.7656 26.6782 41.4718 30.3844 41.4718 34.9561C41.4718 39.5279 37.7656 43.234 33.1939 43.234C28.6221 43.234 24.916 39.5279 24.916 34.9561Z" fill="#fac361" fill-rule="nonzero" opacity="1" stroke="none" vectornator:layerName="circle"/>
+<path d="M85.6205 71.0025L14.7986 71.0025L14.7986 23.5248C14.7986 21.0283 16.9009 18.9259 19.3974 18.9259L81.1531 18.9259C83.6496 18.9259 85.7519 21.0283 85.7519 23.5248L85.6205 71.0025ZM82.3356 11.1736L17.9521 11.1736C12.8277 11.1736 8.75441 15.2469 8.75441 20.3713L8.75441 71.3467C8.73993 71.396 91.2524 71.4646 91.5333 71.3467L91.5333 20.3713C91.5333 15.3783 87.4601 11.1736 82.3356 11.1736Z" fill="#fac361" fill-rule="nonzero" opacity="1" stroke="none" vectornator:layerName="path"/>
+<path d="M81.4159 58.7386L85.4891 61.8921L85.4891 78.1851L14.6672 78.1851L14.6672 71.3526L27.8067 61.7607C29.3834 60.5782 32.0113 60.5782 33.7195 61.7607L38.8439 65.4398L45.1508 60.841L61.7066 48.7526C63.2834 47.5701 65.9113 47.5701 67.6194 48.7526L81.4159 58.7386Z" fill="#3c5f84" fill-rule="nonzero" opacity="1" stroke="none" vectornator:layerName="path"/>
+<path d="M85.5 22.1025L85.5 72.0713C85.5 74.5678 83.3715 76.665 80.875 76.665L19.125 76.665C16.6285 76.665 14.5312 74.5678 14.5312 72.0713L14.6562 22.1025C13.8589 22.1091 8.77004 22.0941 8.75 22.1025L8.75 75.2275C8.75 77.8624 9.88147 80.2748 11.7033 81.9659C13.3338 83.4794 15.5173 84.415 17.9375 84.415L82.3438 84.415C87.4682 84.415 91.5312 80.3519 91.5312 75.2275L91.5312 22.1025C91.5323 22.0989 86.3114 22.1062 85.5 22.1025Z" fill="#fac361" fill-rule="nonzero" opacity="1" stroke="none"/>
+</g>
+</svg>

@@ -1,0 +1,36 @@
+{{^started}}
+    <div class="d-flex flex-wrap mt-1">
+        <div class="badge alert-success small font-weight-light">
+            <i class="fa fa-clock-o"></i>
+            <span class="text-wrap">
+                {{#str}}
+                    coursenotstarted,
+                    theme_urcourses_default,
+                    {{#userdate}} {{startdate}}, {{#str}} strtimemonthdayyear, theme_urcourses_default {{/str}} {{/userdate}}
+                {{/str}}
+            </span>
+        </div>
+    </div>
+{{/started}}
+{{#ended}}
+    <div class="d-flex flex-wrap mt-1">
+        <div class="badge alert-info small font-weight-light">
+            <i class="fa fa-calendar-o"></i>
+            <span class="text-wrap">
+                {{#str}}
+                    coursehasended,
+                    theme_urcourses_default,
+                    {{#userdate}} {{enddate}}, {{#str}} strtimemonthdayyear, theme_urcourses_default {{/str}} {{/userdate}}
+                {{/str}}
+            </span>
+        </div>
+    </div>
+{{/ended}}
+{{^visible}}
+    <div class="d-flex flex-wrap mt-1">
+        <div class="badge alert-warning small font-weight-light">
+            <i class="fa fa-eye-slash"></i>
+            <span class="text-wrap">{{#str}} notavailabletostudents, theme_urcourses_default {{/str}}</span>
+        </div>
+    </div>
+{{/visible}}

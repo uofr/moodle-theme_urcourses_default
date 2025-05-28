@@ -13,341 +13,426 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-/**
- * Theme Boost Campus - Locallib file
- *
- * @package   theme_boost_campus
- * @copyright 2017 Kathrin Osswald, Ulm University kathrin.osswald@uni-ulm.de
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
- defined('MOODLE_INTERNAL') || die();
-
 
 /**
- * Get a random class for body tag for the background image of the login page.
- * This function always loads the files from the filearea that is not really performant.
- * However, we accept this at the moment as it is only invoked on the login page.
+ * Theme UR Courses - Local library
  *
- * @return string
+ * @package    theme_urcourses_default
+ * @copyright  2023 Alexander Bias <bias@alexanderbias.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-function theme_boost_campus_get_random_loginbackgroundimage_class() {
 
-    // Fetch context.
-    $systemcontext = \context_system::instance();
+/***************************************************************
+ * EXTENSION POINT:
+ * Add whatever UR Courses local functions you need here.
+ **************************************************************/
 
-    // Get filearea.
-    $fs = get_file_storage();
-
-    // Get all files from filearea.
-    $files = $fs->get_area_files($systemcontext->id, 'theme_boost_campus', 'loginbackgroundimage', false, 'itemid', false);
-
-    // Get count of array elements.
-    $filecount = count($files);
-
-    /* We only add this class to the body background of the login page if images are uploaded at all (filearea contains images). */
-    if ($filecount > 0) {
-        // Generate random number.
-        $randomindex = rand(1, $filecount);
-        return "loginbackgroundimage" . $randomindex;
-    } else {
-        return "";
-    }
+function theme_urcourses_default_enable_darkmode() {
+    return set_user_preference('theme_urcourses_default_darkmode', true);
 }
 
-
-/**
- * Add background images from setting 'loginbackgroundimage' to SCSS.
- *
- * @return string
- */
-function theme_boost_campus_get_loginbackgroundimage_scss() {
-    $count = 0;
-    $scss = "";
-
-    // Fetch context.
-    $systemcontext = \context_system::instance();
-
-    // Get filearea.
-    $fs = get_file_storage();
-
-    // Get all files from filearea.
-    $files = $fs->get_area_files($systemcontext->id, 'theme_boost_campus', 'loginbackgroundimage', false, 'itemid', false);
-
-    // Add URL of uploaded images to eviqualent class.
-    foreach ($files as $file) {
-        $count++;
-        // Get url from file.
-        $url = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(),
-                $file->get_itemid(), $file->get_filepath(), $file->get_filename());
-        // Add this url to the body class loginbackgroundimage[n] as a background image.
-        $scss .= '$loginbackgroundimage' . $count.': "' . $url . '";';
-    }
-
-    return $scss;
+function theme_urcourses_default_disable_darkmode() {
+    return unset_user_preference('theme_urcourses_default_darkmode');
 }
 
-
-/**
- * Create information needed for the imagearea.mustache file.
- *
- * @return array
- */
-function theme_boost_campus_get_imageareacontent() {
-    // Get cache.
-    $themeboostcampuscache = cache::make('theme_boost_campus', 'imagearea');
-    // If cache is filled, return the cache.
-    $cachecontent = $themeboostcampuscache->get('imageareadata');
-    if (!empty($cachecontent)) {
-        return $cachecontent;
-    } else { // Create cache.
-        // Fetch context.
-        $systemcontext = \context_system::instance();
-        // Get filearea.
-        $fs = get_file_storage();
-        // Get all files from filearea.
-        $files = $fs->get_area_files($systemcontext->id, 'theme_boost_campus', 'imageareaitems', false, 'itemid', false);
-
-        // Only continue processing if there are files in the filearea.
-        if (!empty($files)) {
-            // Get the content from the setting imageareaitemslink and explode it to an array by the delimiter "new line".
-            // The string contains: the image identifier (uploaded file name) and the corresponding link URL.
-            $lines = explode("\n", get_config('theme_boost_campus', 'imageareaitemslink'));
-            // Parse item settings.
-            foreach ($lines as $line) {
-                $line = trim($line);
-                // If the setting is empty.
-                if (strlen($line) == 0) {
-                    // Create an array with a dummy entry because the function array_key_exists need a
-                    // not empty array for parameter 2.
-                    $links = array('foo');
-                    continue;
-                } else {
-                    $settings = explode("|", $line);
-                    // Check if both parameters are set.
-                    if (!empty($settings[1])) {
-                        // The name of the image is the key for the URL that will be set.
-                        $links[$settings[0]] = $settings[1];
-                    }
-                }
-            }
-            // Traverse the files.
-            foreach ($files as $file) {
-                // Get the Moodle url for each file.
-                $url = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(),
-                    $file->get_itemid(), $file->get_filepath(), $file->get_filename());
-                // Get the path to the file.
-                $filepath = $url->get_path();
-                // Get the filename.
-                $filename = $file->get_filename();
-                // If filename and key value from the imageareaitemslink setting entry match.
-                if (array_key_exists($filename, $links)) {
-                    // Set the file and the corresponding link.
-                    $imageareacache[] = array('filepath' => $filepath, 'linkpath' => $links[$filename]);
-                    // Fill the cache.
-                    $themeboostcampuscache->set('imageareadata', $imageareacache);
-                } else { // Just add the file without a link.
-                    $imageareacache[] = array('filepath' => $filepath);
-                    // Fill the cache.
-                    $themeboostcampuscache->set('imageareadata', $imageareacache);
-                }
-            }
-            // Sort array alphabetically ascending to the key "filepath".
-            usort($imageareacache, function($a, $b) {
-                return strcmp($a["filepath"], $b["filepath"]);
-            });
-            return $imageareacache;
-        } else { // If no images are uploaded, then cache an empty array.
-            return $themeboostcampuscache->set('imageareadata', array());
-        }
-    }
+function theme_urcourses_default_darkmode_enabled() {
+    return get_user_preferences('theme_urcourses_default_darkmode', false);
 }
 
+function theme_urcourses_default_can_create_test_student($userid) {
+    global $DB;
 
-/**
- * Returns a modified flat_navigation object.
- *
- * @param flat_navigation $flatnav The flat navigation object.
- * @return flat_navigation.
- */
-function theme_boost_campus_process_flatnav(flat_navigation $flatnav) {
-    global $USER;
-    // If the setting defaulthomepageontop is enabled.
-    if (get_config('theme_boost_campus', 'defaulthomepageontop') == 'yes') {
-        // Only proceed processing if we are in a course context.
-        if (($coursehomenode = $flatnav->find('coursehome', global_navigation::TYPE_CUSTOM)) != false) {
-            // If the site home is set as the default homepage by the admin.
-            if (get_config('core', 'defaulthomepage') == HOMEPAGE_SITE) {
-                // Return the modified flat_navigation.
-                $flatnavreturn = theme_boost_campus_set_node_on_top($flatnav, 'home', $coursehomenode);
-            } else if (get_config('core', 'defaulthomepage') == HOMEPAGE_MY) { // If the dashboard is set as the default homepage
-                // by the admin.
-                // Return the modified flat_navigation.
-                $flatnavreturn = theme_boost_campus_set_node_on_top($flatnav, 'myhome', $coursehomenode);
-            } else if (get_config('core', 'defaulthomepage') == HOMEPAGE_USER) { // If the admin defined that the user can set
-                // the default homepage for himself.
-                // Site home.
-                if (get_user_preferences('user_home_page_preference') == 0) {
-                    // Return the modified flat_navigtation.
-                    $flatnavreturn = theme_boost_campus_set_node_on_top($flatnav, 'home', $coursehomenode);
-                } else if (get_user_preferences('user_home_page_preference') == 1 || // Dashboard.
-                    get_user_preferences('user_home_page_preference') === false) { // If no user preference is set,
-                    // use the default value of core setting default homepage (Dashboard).
-                    // Return the modified flat_navigtation.
-                    $flatnavreturn = theme_boost_campus_set_node_on_top($flatnav, 'myhome', $coursehomenode);
-                } else { // Should not happen.
-                    // Return the passed flat navigation without changes.
-                    $flatnavreturn = $flatnav;
-                }
-            } else { // Should not happen.
-                // Return the passed flat navigation without changes.
-                $flatnavreturn = $flatnav;
-            }
-        } else { // Not in course context.
-            // Return the passed flat navigation without changes.
-            $flatnavreturn = $flatnav;
-        }
-    } else { // Defaulthomepageontop not enabled.
-        // Return the passed flat navigation without changes.
-        $flatnavreturn = $flatnav;
-    }
+    $teacherroleid = $DB->get_field('role', 'id', ['shortname' => 'editingteacher']);
+    $managerroleid = $DB->get_field('role', 'id', ['shortname' => 'manager']);
+    $designerroleid = $DB->get_field('role', 'id', ['shortname' => 'instdesigner']);
+    $isteacher = $DB->record_exists('role_assignments', ['userid' => $userid, 'roleid' => $teacherroleid]);
+    $ismanager = $DB->record_exists('role_assignments', ['userid' => $userid, 'roleid' => $managerroleid]);
+    $isdesigner = $DB->record_exists('role_assignments', ['userid' => $userid, 'roleid' => $designerroleid]);
 
-    return $flatnavreturn;
+    return ($isteacher|| $ismanager || $isdesigner || is_siteadmin());
 }
 
-/**
- * Modifies the flat_navigation to add the node on top.
- *
- * @param flat_navigation $flatnav The flat navigation object.
- * @param string $nodename The name of the node that is to modify.
- * @param navigation_node $beforenode The node before which the to be modified node shall be added.
- * @return flat_navigation.
- */
-function theme_boost_campus_set_node_on_top(flat_navigation $flatnav, $nodename, $beforenode) {
-    // Get the node for which the sorting shall be changed.
-    $pageflatnav = $flatnav->find($nodename, global_navigation::TYPE_SYSTEM);
+function theme_urcourses_default_has_test_student_account($username) {
+    global $DB;
 
-    // If user is logged in as a guest pageflatnav is false. Only proceed here if the result is true.
-    if (!empty($pageflatnav)) {
-        // Set the showdivider of the new top node to false that no empty nav-element will be created.
-        $pageflatnav->set_showdivider(false);
-        // Add the showdivider to the coursehome node as this is the next one and this will add a margin top to it.
-        $beforenode->set_showdivider(true);
-        // Remove the site home navigation node that it does not appear twice in the menu.
-        $flatnav->remove($nodename);
-        // Add the saved site home node before the $beforenode.
-        $flatnav->add($pageflatnav, $beforenode->key);
-    }
-
-    // Return the modified changes.
-    return $flatnav;
+    $email = "$username+urstudent@uregina.ca";
+    return $DB->record_exists('user', ['email' => $email]);
 }
 
-
-/**
- * Provides the node for the in-course course or activity settings.
- *
- * @return navigation_node.
- */
-function theme_boost_campus_get_incourse_settings() {
-    global $COURSE, $PAGE;
-    // Initialize the node with false to prevent problems on pages that do not have a courseadmin node.
-    $node = false;
-    // If setting showsettingsincourse is enabled.
-    if (get_config('theme_boost_campus', 'showsettingsincourse') == 'yes') {
-        // Only search for the courseadmin node if we are within a course or a module context.
-        if ($PAGE->context->contextlevel == CONTEXT_COURSE || $PAGE->context->contextlevel == CONTEXT_MODULE) {
-            // Get the courseadmin node for the current page.
-            $node = $PAGE->settingsnav->find('courseadmin', navigation_node::TYPE_COURSE);
-            // Check if $node is not empty for other pages like for example the langauge customization page.
-            if (!empty($node)) {
-                // If the setting 'incoursesettingsswitchtoroleposition' is set either set to the option 'yes'
-                // or to the option 'both', then add these to the $node.
-                if (((get_config('theme_boost_campus', 'incoursesettingsswitchtoroleposition') == 'yes') ||
-                    (get_config('theme_boost_campus', 'incoursesettingsswitchtoroleposition') == 'both'))
-                    && !is_role_switched($COURSE->id)) {
-                    // Build switch role link
-                    // We could only access the existing menu item by creating the user menu and traversing it.
-                    // So we decided to create this node from scratch with the values copied from Moodle core.
-                    $roles = get_switchable_roles($PAGE->context);
-                    if (is_array($roles) && (count($roles) > 0)) {
-                        // Define the properties for a new tab.
-                        $properties = array('text' => get_string('switchroleto', 'theme_boost_campus'),
-                                            'type' => navigation_node::TYPE_CONTAINER,
-                                            'key'  => 'switchroletotab');
-                        // Create the node.
-                        $switchroletabnode = new navigation_node($properties);
-                        // Add the tab to the course administration node.
-                        $node->add_node($switchroletabnode);
-                        // Add the available roles as children nodes to the tab content.
-                        foreach ($roles as $key => $role) {
-                            $properties = array('action' => new moodle_url('/course/switchrole.php',
-                                array('id'         => $COURSE->id,
-                                      'switchrole' => $key,
-                                      'returnurl'  => $PAGE->url->out_as_local_url(false),
-                                      'sesskey'    => sesskey())),
-                                                'type'   => navigation_node::TYPE_CUSTOM,
-                                                'text'   => $role);
-                            $switchroletabnode->add_node(new navigation_node($properties));
-                        }
-                    }
-                }
-            }
-        }
-        return $node;
-    }
-}
-
-/**
- * Provides the node for the in-course settings for other contexts.
- *
- * @return navigation_node.
- */
-function theme_boost_campus_get_incourse_activity_settings() {
+function theme_urcourses_default_create_darkmode_link() {
     global $PAGE;
-    $context = $PAGE->context;
-    $node = false;
-    // If setting showsettingsincourse is enabled.
-    if (get_config('theme_boost_campus', 'showsettingsincourse') == 'yes') {
-        // Settings belonging to activity or resources.
-        if ($context->contextlevel == CONTEXT_MODULE) {
-            $node = $PAGE->settingsnav->find('modulesettings', navigation_node::TYPE_SETTING);
-        } else if ($context->contextlevel == CONTEXT_COURSECAT) {
-            // For course category context, show category settings menu, if we're on the course category page.
-            if ($PAGE->pagetype === 'course-index-category') {
-                $node = $PAGE->settingsnav->find('categorysettings', navigation_node::TYPE_CONTAINER);
-            }
-        } else {
-            $node = false;
-        }
-    }
-    return $node;
+
+    $darkmodeenabled = theme_urcourses_default_darkmode_enabled();
+
+    $darkmodelink = new stdClass();
+    $darkmodelink->divider = false;
+    $darkmodelink->itemtype = 'link';
+    $darkmodelink->link = true;
+    $darkmodelink->pixicon = $darkmodeenabled ? 'lightmode' : 'darkmode';
+    $darkmodelink->pixplugin = 'theme_urcourses_default';
+    $darkmodelink->title = theme_urcourses_default_darkmode_enabled()
+        ? get_string('disabledarkmode', 'theme_urcourses_default')
+        : get_string('enabledarkmode', 'theme_urcourses_default');
+    $darkmodelink->titleidentifier = 'darkmode,theme_urcourses_default';
+    $darkmodelink->url = new moodle_url($PAGE->url, ['darkmode' => !$darkmodeenabled]);
+
+    return $darkmodelink;
 }
 
-/**
- * Build the guest access hint HTML code.
- *
- * @param int $courseid The course ID.
- * @return string.
- */
-function theme_boost_campus_get_course_guest_access_hint($courseid) {
-    global $CFG;
-    require_once($CFG->dirroot . '/enrol/self/lib.php');
+function theme_urcourses_default_create_teststudent_link($hasteststudentaccount) {
+    global $USER;
 
-    $html = '';
-    $instances = enrol_get_instances($courseid, true);
-    $plugins = enrol_get_plugins(true);
-    foreach ($instances as $instance) {
-        if (!isset($plugins[$instance->enrol])) {
-            continue;
-        }
-        $plugin = $plugins[$instance->enrol];
-        if ($plugin->show_enrolme_link($instance)) {
-            $html = html_writer::tag('div', get_string('showhintcourseguestaccesslink',
-                'theme_boost_campus', array('url' => $CFG->wwwroot . '/enrol/index.php?id=' . $courseid)));
+    $studentaccountlink = new \stdClass();
+    $studentaccountlink->attributes = [
+        [
+            'name' => 'data-action',
+            'value' => $hasteststudentaccount ? 'resetteststudent' : 'createteststudent' 
+        ]
+    ];
+    $studentaccountlink->divider = false;
+    $studentaccountlink->itemtype = 'link';
+    $studentaccountlink->link = true;
+    $studentaccountlink->pixicon = 'i/user';
+    $studentaccountlink->title = $hasteststudentaccount
+        ? get_string('modifyteststudent', 'theme_urcourses_default')
+        : get_string('createteststudent', 'theme_urcourses_default');
+    $studentaccountlink->titleidentifier = 'studentaccount,theme_urcourses_default';
+    $studentaccountlink->url = '#';
+
+    return $studentaccountlink;
+}
+
+function theme_urcourses_default_add_custom_user_menu_items($usermenuitems, $customitems) {
+    $itemcount = count($usermenuitems);
+    $preferenceskey = 0;
+
+    foreach($usermenuitems as $key => $item) {
+        if (isset($item->title) && $item->title == 'Preferences') {
+            $item->divider = false;
+            $preferenceskey = $key;
             break;
         }
     }
+    $insertpoint = $preferenceskey + 1;
 
-    return $html;
+    return array_merge(
+        array_slice($usermenuitems, 0, $insertpoint),
+        $customitems,
+        array_slice($usermenuitems, $insertpoint, $itemcount)
+    );
+}
+
+function theme_urcourses_default_get_enrol_hint() {
+    global $COURSE, $DB, $USER, $OUTPUT, $PAGE;
+
+    if ($PAGE->context->contextlevel != CONTEXT_COURSE) {
+        return '';
+    }
+
+    if (!$PAGE->url->compare(new core\url('/course/view.php'), URL_MATCH_BASE)) {
+        return '';
+    }
+
+    $course = get_course($COURSE->id);
+    if (empty($course->idnumber)) {
+        return '';
+    }
+
+    $context = \context_course::instance($course->id);
+    if (!has_capability('theme/urcourses_default:viewenrolhint', $context)) {
+        return '';
+    }
+
+    $enrolments = $DB->get_records_sql("SELECT * FROM ur_crn_map WHERE courseid = '$course->idnumber' ORDER BY semester DESC");
+    $hasenrolments = !empty($enrolments);
+    $currentsemester = theme_urcourses_default_get_current_semester();
+    $latestenrolmentsemester = '';
+
+    if ($hasenrolments) {
+        $latestenrolment = $enrolments[array_key_first($enrolments)];
+        $latestenrolmentsemester = $latestenrolment->semester;
+    }
+
+    // Only show enrol banner for current enrolmens if course is in edit mode.
+    // If course has past enrolment, we might want to show outside edit mode too.
+    if ($hasenrolments && $latestenrolmentsemester >= $currentsemester && !$USER->editing) {
+        return '';
+    }
+
+    $coursehint_enrol = new \theme_urcourses_default\output\coursehint_enrol(
+        $hasenrolments,
+        $currentsemester,
+        $latestenrolmentsemester,
+        $context->id,
+        $course->id
+    );
+
+    return $OUTPUT->render($coursehint_enrol);
+}
+
+function theme_urcourses_default_get_date_hint() {
+    global $COURSE, $DB, $USER, $OUTPUT, $PAGE;
+
+    if ($PAGE->context->contextlevel != CONTEXT_COURSE) {
+        return '';
+    }
+
+    if (!$PAGE->url->compare(new core\url('/course/view.php'), URL_MATCH_BASE)) {
+        return '';
+    }
+
+    $course = get_course($COURSE->id);
+
+    $context = \context_course::instance($course->id);
+    if (!has_capability('theme/urcourses_default:viewdatehint', $context)) {
+        return '';
+    }
+
+    $now = \core\di::get(\core\clock::class)->now();
+    $nowtimestamp = $now->getTimestamp();
+
+    if ($course->enddate == 0 || $course->enddate > $nowtimestamp) {
+        return '';
+    }
+
+    $coursehint_date = new \theme_urcourses_default\output\coursehint_date(
+        $course->id, 
+        $course->enddate
+    );
+
+    return $OUTPUT->render($coursehint_date);
+}
+
+function theme_urcourses_default_show_status_hint() {
+    global $COURSE, $DB, $USER, $PAGE;
+
+    $isoncourseviewpage = $PAGE->url->compare(new core\url('/course/view.php'), URL_MATCH_BASE);
+    $userisediting = $USER->editing;
+    $context = \context_course::instance($COURSE->id, IGNORE_MISSING);
+    $canviewhidden = has_capability('moodle/course:viewhiddencourses', $context);
+    $coursehidden = $COURSE->visible == 0;
+
+    return ($canviewhidden && $isoncourseviewpage && ($userisediting || $coursehidden));
+}
+
+function theme_urcourses_default_get_status_hint() {
+    global $COURSE, $OUTPUT;
+
+    $timestatus = theme_urcourses_default_get_course_time_status($COURSE->startdate, $COURSE->enddate);
+    $timestatus_msg = '';
+    if ($timestatus === 'ongoing') {
+        $timestatus_msg = get_string('timestatus_current', 'theme_urcourses_default');
+    }
+    else if ($timestatus === 'current') {
+        if ($COURSE->enddate == 0) {
+            $timestatus_msg = get_string('timestatus_current_noenddate', 'theme_urcourses_default');
+        }
+        else {
+            $timestatus_msg = get_string('timestatus_current', 'theme_urcourses_default');
+        }
+    }
+    else if ($timestatus === 'past' && $COURSE->enddate != 0) {
+        $str_enddate = date('F j, Y', $COURSE->enddate);
+        $timestatus_msg = get_string('timestatus_past', 'theme_urcourses_default', $str_enddate);
+    }
+    else if ($timestatus === 'future') {
+        $str_startdate = date('F j, Y', $COURSE->startdate);
+        $timestatus_msg = get_string('timestatus_future', 'theme_urcourses_default', $str_startdate);
+    }
+
+    $enrollment = theme_urcourses_default_get_course_enrollment($COURSE->id);
+    $enrollment_msg = '';
+    if (empty($enrollment)) {
+        $enrollment_msg = get_string('noenrollment', 'theme_urcourses_default');
+    }
+    else {
+        $enrollment_msg = get_string('hasenrollment', 'theme_urcourses_default', $enrollment['name']);
+    }
+
+    $availability_button_msg = '';
+    if ($COURSE->visible) {
+        $availability_button_msg = get_string('hidecourse', 'theme_urcourses_default');
+    }
+    else {
+        $availability_button_msg = get_string('showcourse', 'theme_urcourses_default');
+    }
+
+
+    $availability_msg = '';
+    if ($COURSE->visible) {
+        if (empty($enrollment)) {
+            $availability_msg = get_string('visible_noenrollment', 'theme_urcourses_default');
+        }
+        else {
+            $availability_msg = get_string('visible', 'theme_urcourses_default');
+        }
+    }
+    else {
+        if (empty($enrollment)) {
+            $availability_msg = get_string('notvisible_noenrollment', 'theme_urcourses_default');
+        }
+        else {
+            $availability_msg = get_string('notvisible', 'theme_urcourses_default');
+        }
+    }
+
+    if (empty($enrollment)) {
+        $modalstrings = array(
+            'showtitle' => get_string('showtitle', 'theme_urcourses_default'),
+            'showbody' => get_string('showbody_noenrollment', 'theme_urcourses_default'),
+            'hidetitle' => get_string('hidetitle', 'theme_urcourses_default'),
+            'hidebody' => get_string('hidebody_noenrollment', 'theme_urcourses_default'),
+            'confirmbutton' => get_string('confirmbutton', 'theme_urcourses_default')
+        );
+    }
+    else {
+        $modalstrings = array(
+            'showtitle' => get_string('showtitle', 'theme_urcourses_default'),
+            'showbody' => get_string('showbody', 'theme_urcourses_default', $enrollment['name']),
+            'hidetitle' => get_string('hidetitle', 'theme_urcourses_default'),
+            'hidebody' => get_string('hidebody', 'theme_urcourses_default', $enrollment['name']),
+            'confirmbutton' => get_string('confirmbutton', 'theme_urcourses_default')
+        );
+    }
+
+    $data = new \stdClass();
+    $data->timestatus_msg = $timestatus_msg;
+    $data->enrollment_msg = $enrollment_msg;
+    $data->availability_msg = $availability_msg;
+    $data->availability_button_msg = $availability_button_msg;
+    $data->courseid = $COURSE->id;
+    $data->visible = $COURSE->visible;
+    $data->modalstrings = $modalstrings;
+
+    return $OUTPUT->render_from_template('theme_urcourses_default/course-hint-status', $data);
+}
+
+function theme_urcourses_default_get_course_time_status($startdate, $enddate) {
+    $currenttime = time();
+    $ongoingdate = 946706400; // Jan 01, 2000, 06:00 (date for ongoing courses)
+
+    // Check if the start date is set to the 'ongoing courses' date.
+    if ($startdate == $ongoingdate) {
+        return 'ongoing';
+    }
+    // If startdate is greater than the currenttime, the course is in the future.
+    if ($startdate > $currenttime) {
+        return 'future';
+    }
+    // If the enddate is set, and the currenttime is after the enddate, the course is in the past.
+    if ((isset($enddate) && $enddate != 0) && $enddate < $currenttime) {
+        return 'past';
+    }
+
+    return 'current';
+}
+
+/**
+ * Gets enrollment information for the course specified by $courseid.
+ * 
+ * @return array
+ */
+function theme_urcourses_default_get_course_enrollment(int $courseid) {
+    global $CFG, $DB;
+    
+    $is_urcourserequest_exist = is_file($CFG->dirroot.'/admin/tool/urcourserequest/lib.php');
+    $course_exists = $DB->record_exists('course', array('id' => $courseid));
+
+    if ($is_urcourserequest_exist && $course_exists) {
+        require_once($CFG->dirroot.'/admin/tool/urcourserequest/lib.php');
+
+        $course = get_course($courseid);
+        $enrollment = tool_urcourserequest_get_course_state($course->idnumber);
+
+        return $enrollment === false ? array() : $enrollment;
+    }
+    else {
+        return array();
+    }
+}
+
+// 01 - 04: 10 (Winter)
+// 05 - 08: 20 (Spring/Summer)
+// 09 - 12: 30 (Fall)
+function theme_urcourses_default_get_current_semester() {
+    $now = \core\di::get(\core\clock::class)->now();
+    $month = $now->format('m');
+    $year = $now->format('Y');
+
+    if ($month >= 1 && $month <= 4) {
+        $semester = 10;
+    } else if ($month >= 5 && $month <= 8) {
+        $semester = 20;
+    } else if ($month >= 9 && $month <= 12) {
+        $semester = 30;
+    }
+
+    return "$year$semester";
+}
+
+function theme_urcourses_default_get_semester_string($semestercode) {
+    $year = substr($semestercode, 0, 4);
+    $semester = substr($semestercode, -2);
+    switch ($semester) {
+        case '10':
+            return $year . ' ' . get_string('winter', 'theme_urcourses_default');
+        case '20':
+            return $year . ' ' . get_string('springsummer', 'theme_urcourses_default');
+        case '30':
+            return $year . ' ' . get_string('fall', 'theme_urcourses_default');
+        default:
+            return '';
+    }
+}
+
+/**
+ * Helper function which returns the course header image url, picking the current course from the course settings
+ * or the fallback image from the theme.
+ * If no course header image can should be shown for the current course, the function returns null.
+ *
+ * @return null | string
+ */
+function theme_urcourses_default_get_course_header_image_url() {
+    global $PAGE;
+
+    // If the current course is the frontpage course (which means that we are not within any real course),
+    // directly return null.
+    if (isset($PAGE->course->id) && $PAGE->course->id == SITEID) {
+        return null;
+    }
+
+    // Get the course image.
+    $courseimage = \core_course\external\course_summary_exporter::get_course_image($PAGE->course);
+
+    // If the course has a course image.
+    if ($courseimage) {
+        // Then return it directly.
+        return $courseimage;
+
+        // Otherwise, if a fallback image is configured.
+    } else if (get_config('theme_boost_union', 'courseheaderimagefallback')) {
+        // Get the system context.
+        $systemcontext = \context_system::instance();
+
+        // Get filearea.
+        $fs = get_file_storage();
+
+        // Get all files from filearea.
+        $files = $fs->get_area_files($systemcontext->id, 'theme_boost_union', 'courseheaderimagefallback',
+            false, 'itemid', false);
+
+        // Just pick the first file - we are sure that there is just one file.
+        $file = reset($files);
+
+        // Build and return the image URL.
+        return core\url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(),
+            $file->get_itemid(), $file->get_filepath(), $file->get_filename());
+    }
+
+    if (isset($PAGE->course->id)) {
+        $renderer = $PAGE->get_renderer('core');
+        return $renderer->get_generated_image_for_id($PAGE->course->id);
+    } else {
+        return null;
+    }
 }

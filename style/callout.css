@@ -1,0 +1,155 @@
+.callout {
+    border: 2px solid #e6e6e6;
+    border-radius: 10px;
+    padding: 1em;
+    margin-top: .5em;
+    margin-bottom: .5em;
+    width: 100%;
+	background-color: #fff;
+}
+
+.callout h2 {
+    margin-bottom: .5em;
+    font-weight: bold
+}
+
+.callout .icon {
+    width:48px; 
+    height:48px;
+	max-width: 48px;
+	max-height: 48px;
+    margin-right: .5rem;
+    margin-bottom: -5px;
+    margin-top: -7px;
+    margin-left: -5px;
+    flex-shrink: 0;
+}
+
+.callout-yellow {
+    border: solid 1px #FF9900;
+    background-color: #feefc3;
+    width: 50%;
+    margin: 0px 10px 10px 0px;
+    -moz-border-radius: 15px; 
+    border-radius: 15px; 
+    min-height: 70px;
+}
+
+.callout-yellow h2 {
+    color:#e15d29;
+}
+
+.callout-blue {
+    border: dotted 3px #0766b7;
+    background-color: #c1d9ed;
+    width: 35%; 
+    margin: 0px 0px 10px 10px; 
+    min-height: 70px;
+}
+
+.callout-blue h2 {
+    color: #0766b7;
+}
+
+.callout-aqua {
+    border: double 6px #000000; 
+    background-color: #359aae; 
+    margin: 0px auto 10px auto; min-height: 70px;
+    color: #ffffff;
+}
+
+.callout-aqua h2 {
+    color: #ffffff;
+}
+
+.mceTmpl .carousel {
+    background-color: hsla(0, 0%, 2%, 0.24);
+    position:relative;
+}
+
+figure.img-thumbnail {
+    margin: 1em;
+}
+figure.img-thumbnail.float-sm-left  {
+	margin-left: 0;
+}
+figure.img-thumbnail.float-sm-right  {
+	margin-right: 0;
+}
+
+figure.img-thumbnail figcaption.figure-caption {
+    display:table-caption;
+    caption-side: bottom;
+    background-color: #dee2e6;
+    padding-bottom: .5rem;
+    color: #3d4042;
+}  
+
+.callout.d-sm-inline-flex {
+    display: block !important;
+}
+
+/* CSS Clean up - Moodle 4.5 */
+
+.block.block_activity_modules img.icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* TinyMCE height */
+.tox-tinymce {
+    min-height: 400px;
+}
+
+/* Bootstrap accordion styles */
+.accordion > .card > .card-header {
+padding: 0;
+}
+
+.accordion > .card > .card-header [data-toggle="collapse"].btn-link {
+  padding: .75rem 1.25rem;
+  width: 100%;
+  text-align: left;
+}
+
+.accordion > .card > .card-header [data-toggle="collapse"].btn-link,
+.accordion > .card > .card-header [data-toggle="collapse"].btn-link:hover {
+	border-radius: 0;
+}
+
+/* Bootstrap accordion caret indicator */
+.course-content [data-toggle="collapse"].btn-link,
+.contentdesigner-content .contentdesigner-wrapper .course-content-list .richtext-content [data-toggle="collapse"].btn-link {
+  font-weight: 900;
+}
+.course-content [data-toggle="collapse"].btn-link::after,
+.contentdesigner-content .contentdesigner-wrapper .course-content-list .richtext-content [data-toggle="collapse"].btn-link::after {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: "\f078";
+  margin-left: 0.5em;
+}
+
+.course-content [data-toggle="collapse"].btn-link.collapsed::after,
+.contentdesigner-content .contentdesigner-wrapper .course-content-list .richtext-content [data-toggle="collapse"].btn-link.collapsed::after {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: "\f054";
+  margin-left: 0.5em;
+}
+.course-content [data-toggle="collapse"].btn-link:hover,
+.course-content [data-toggle="collapse"].btn-link:focus,
+.contentdesigner-content .contentdesigner-wrapper .course-content-list .richtext-content [data-toggle="collapse"].btn-link:hover,
+.contentdesigner-content .contentdesigner-wrapper .course-content-list .richtext-content [data-toggle="collapse"].btn-link:focus {
+  text-decoration: none;
+}
+
+.mail-nav-menu img.icon {
+  width: 24px !important;
+  height: 24px !important;
+  margin: 0;
+}
+
+.activity.modtype_lti .activityiconcontainer.courseicon img, .modchoosercontainer .modicon_lti.activityiconcontainer img, #page-header .modicon_lti.activityiconcontainer img {
+	filter: none !important;
+}

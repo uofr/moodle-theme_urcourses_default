@@ -15,602 +15,183 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme Boost Campus - Settings file
+ * Theme UR Courses Default - Settings file
  *
- * @package    theme_boost_campus
- * @copyright  2017 Kathrin Osswald, Ulm University <kathrin.osswald@uni-ulm.de>
+ * @package    theme_urcourses_default
+ * @copyright  2025 John Lane
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-if ($ADMIN->fulltree) {
+if ($hassiteconfig || has_capability('theme/boost_union:configure', context_system::instance())) {
 
-    // Create settings page with tabs.
-    $settings = new theme_boost_admin_settingspage_tabs('themesettingboost_campus',
-        get_string('configtitle', 'theme_boost_campus', null, true));
+    // How this file works:
+    // Boost Union's settings are divided into multiple settings pages which resides in its own settings category.
+    // You will understand it as soon as you look at /theme/boost_union/settings.php.
+    // This settings file here is built in a way that it adds another settings page to this existing settings
+    // category. You can add all child-theme-specific settings to this settings page here.
 
-
-    // Create general tab.
-    $page = new admin_settingpage('theme_boost_campus_general', get_string('generalsettings', 'theme_boost', null, true));
-
-    // Settings title to group preset related settings together with a common heading. We don't want a description here.
-    $name = 'theme_boost_campus/presetheading';
-    $title = get_string('presetheadingsetting', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_heading($name, $title, null);
-    $page->add($setting);
-
-    // Replicate the preset setting from theme_boost.
-    $name = 'theme_boost_campus/preset';
-    $title = get_string('preset', 'theme_boost', null, true);
-    $description = get_string('preset_desc', 'theme_boost', null, true);
-    $default = 'default.scss';
-
-    // We list files in our own file area to add to the drop down. We will provide our own function to
-    // load all the presets from the correct paths.
-    $context = context_system::instance();
-    $fs = get_file_storage();
-    $files = $fs->get_area_files($context->id, 'theme_boost_campus', 'preset', 0, 'itemid, filepath, filename', false);
-
-    $choices = [];
-    foreach ($files as $file) {
-        $choices[$file->get_filename()] = $file->get_filename();
+    // However, there is still the $settings variable which is expected by Moodle core to be filled with the theme
+    // settings and which is automatically linked from the theme selector page.
+    // To avoid that there appears a broken "UR Courses" settings page, we redirect the user to a settings
+    // overview page if he opens this page.
+    $mainsettingspageurl = new moodle_url('/admin/settings.php', ['section' => 'themesettingurcoursesdefault']);
+    if ($ADMIN->fulltree && $PAGE->has_set_url() && $PAGE->url->compare($mainsettingspageurl)) {
+        redirect(new moodle_url('/admin/settings.php', ['section' => 'theme_urcourses_default']));
     }
-    // These are the built in presets from Boost.
-    $choices['default.scss'] = 'default.scss';
-    $choices['plain.scss'] = 'plain.scss';
 
-    $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-
-    // Preset files setting.
-    $name = 'theme_boost_campus/presetfiles';
-    $title = get_string('presetfiles', 'theme_boost', null, true);
-    $description = get_string('presetfiles_desc', 'theme_boost', null, true);
-
-    $setting = new admin_setting_configstoredfile($name, $title, $description, 'preset', 0,
-        array('maxfiles' => 20, 'accepted_types' => array('.scss')));
-    $page->add($setting);
-
-    // Settings title to group core background image related settings together with a common heading.
-    // We don't want a description here.
-    $name = 'theme_boost_campus/backgroundimageheading';
-    $title = get_string('backgroundimage', 'theme_boost', null, true);
-    $setting = new admin_setting_heading($name, $title, null);
-    $page->add($setting);
-
-    // Background image setting.
-    $name = 'theme_boost_campus/backgroundimage';
-    $title = get_string('backgroundimage', 'theme_boost', null, true);
-    $description = get_string('backgroundimage_desc', 'theme_boost', null, true);
-    $description .= get_string('backgroundimage_desc_note', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configstoredfile($name, $title, $description, 'backgroundimage');
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Settings title to group brand color related settings together with a common heading. We don't want a description here.
-    $name = 'theme_boost_campus/brandcolorheading';
-    $title = get_string('brandcolorheadingsetting', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_heading($name, $title, null);
-    $page->add($setting);
-
-    // Variable $brand-color.
-    // We use an empty default value because the default colour should come from the preset.
-    $name = 'theme_boost_campus/brandcolor';
-    $title = get_string('brandcolor', 'theme_boost', null, true);
-    $description = get_string('brandcolor_desc', 'theme_boost', null, true);
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Variable $brand-succes-color.
-    $name = 'theme_boost_campus/brandsuccesscolor';
-    $title = get_string('brandsuccesscolorsetting', 'theme_boost_campus', null, true);
-    $description = get_string('brandsuccesscolorsetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Variable $brand-info-color.
-    $name = 'theme_boost_campus/brandinfocolor';
-    $title = get_string('brandinfocolorsetting', 'theme_boost_campus', null, true);
-    $description = get_string('brandinfocolorsetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Variable $brand-warning-color.
-    $name = 'theme_boost_campus/brandwarningcolor';
-    $title = get_string('brandwarningcolorsetting', 'theme_boost_campus', null, true);
-    $description = get_string('brandwarningcolorsetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Variable $brand-warning-color.
-    $name = 'theme_boost_campus/branddangercolor';
-    $title = get_string('branddangercolorsetting', 'theme_boost_campus', null, true);
-    $description = get_string('branddangercolorsetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Settings title to group favicon related settings together with a common heading. We don't want a description here.
-    $name = 'theme_boost_campus/faviconheading';
-    $title = get_string('faviconheadingsetting', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_heading($name, $title, null);
-    $page->add($setting);
-
-    // Favicon upload.
-    $name = 'theme_boost_campus/favicon';
-    $title = get_string('faviconsetting', 'theme_boost_campus', null, true);
-    $description = get_string('faviconsetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configstoredfile($name, $title, $description, 'favicon', 0,
-        array('maxfiles' => 1, 'accepted_types' => array('.ico', '.png')));
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Add tab to settings page.
-    $settings->add($page);
-
-
-    // Create advanced settings tab.
-    $page = new admin_settingpage('theme_boost_campus_advanced', get_string('advancedsettings', 'theme_boost', null, true));
-
-    // Raw SCSS to include before the content.
-    $name = 'theme_boost_campus/scsspre';
-    $title = get_string('rawscsspre', 'theme_boost', null, true);
-    $description = get_string('rawscsspre_desc', 'theme_boost', null, true);
-    $setting = new admin_setting_configtextarea($name, $title, $description, '', PARAM_RAW);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Raw SCSS to include after the content.
-    $name = 'theme_boost_campus/scss';
-    $title = get_string('rawscss', 'theme_boost', null, true);
-    $description = get_string('rawscss_desc', 'theme_boost', null, true);
-    $setting = new admin_setting_configtextarea($name, $title, $description, '', PARAM_RAW);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Settings title for the catching keybaord commands.
-    $name = 'theme_boost_campus/catchkeyboardcommandsheading';
-    $title = get_string('catchkeyboardcommandsheadingsetting', 'theme_boost_campus', null, true);
-    $description = get_string('catchkeyboardcommandsheadingsetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_heading($name, $title, $description);
-    $page->add($setting);
-
-    // Setting for catching the end key.
-    $name = 'theme_boost_campus/catchendkey';
-    $title = get_string('catchendkeysetting', 'theme_boost_campus', null, true);
-    $description = get_string('catchendkeysetting_desc', 'theme_boost_campus', null, true) . ' ' .
-        get_string('catchkeys_desc_addition', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Setting for catching the cmd + arrow down keys.
-    $name = 'theme_boost_campus/catchcmdarrowdown';
-    $title = get_string('catchcmdarrowdownsetting', 'theme_boost_campus', null, true);
-    $description = get_string('catchcmdarrowdownsetting_desc', 'theme_boost_campus', null, true) . ' ' .
-        get_string('catchkeys_desc_addition', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Setting for catching the strg + arrow down keys.
-    $name = 'theme_boost_campus/catchctrlarrowdown';
-    $title = get_string('catchctrlarrowdownsetting', 'theme_boost_campus', null, true);
-    $description = get_string('catchctrlarrowdownsetting_desc', 'theme_boost_campus', null, true) . ' ' .
-        get_string('catchkeys_desc_addition', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Add tab to settings page.
-    $settings->add($page);
-
-
-    // Create course layout settings tab.
-    $name = 'theme_boost_campus_courselayout';
-    $title = get_string('courselayoutsettings', 'theme_boost_campus', null, true);
-    $page = new admin_settingpage($name, $title);
-
-    // Setting for displaying section-0 title in courses.
-    $name = 'theme_boost_campus/section0title';
-    $title = get_string('section0titlesetting', 'theme_boost_campus', null, true);
-    $description = get_string('section0titlesetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 'no', 'yes', 'no'); // Overriding default values
-        // yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss() (lib.php). Default 0 value would
-        // not write the variable to scss that could cause the scss to crash if used in that file. See MDL-58376.
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Setting for displaying edit on / off button addionally in course header.
-    $name = 'theme_boost_campus/courseeditbutton';
-    $title = get_string('courseeditbuttonsetting', 'theme_boost_campus', null, true);
-    $description = get_string('courseeditbuttonsetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Settings title for grouping course settings related aspects together. We don't need a description here.
-    $name = 'theme_boost_campus/coursehintsheading';
-    $title = get_string('coursehintsheadingsetting', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_heading($name, $title, null);
-    $page->add($setting);
-
-    // Setting to display information of a switched role in the course header.
-    $name = 'theme_boost_campus/showswitchedroleincourse';
-    $title = get_string('showswitchedroleincoursesetting', 'theme_boost_campus', null, true);
-    $description = get_string('showswitchedroleincoursesetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 'no', 'yes', 'no'); // Overriding default values
-        // yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss() (lib.php).
-        // Default 0 value would not write the variable to scss that could cause the scss to crash if used in that file.
-        // See MDL-58376.
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Setting to display a hint to the hidden visibility of a course.
-    $name = 'theme_boost_campus/showhintcoursehidden';
-    $title = get_string('showhintcoursehiddensetting', 'theme_boost_campus', null, true);
-    $description = get_string('showhintcoursehiddensetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 'no', 'yes', 'no'); // Overriding default values
-    // yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss() (lib.php).
-    // Default 0 value would not write the variable to scss that could cause the scss to crash if used in that file.
-    // See MDL-58376.
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Setting to display a hint to the guest accessing of a course.
-    $name = 'theme_boost_campus/showhintcourseguestaccess';
-    $title = get_string('showhintcoursguestaccesssetting', 'theme_boost_campus', null, true);
-    $description = get_string('showhintcourseguestaccesssetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 'no', 'yes', 'no'); // Overriding default values
-    // yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss() (lib.php).
-    // Default 0 value would not write the variable to scss that could cause the scss to crash if used in that file.
-    // See MDL-58376.
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Settings title for grouping course settings related aspects together. We don't need a description here.
-    $name = 'theme_boost_campus/coursesettingsheading';
-    $title = get_string('coursesettingsheadingsetting', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_heading($name, $title, null);
-    $page->add($setting);
-
-    // Setting to display the course settings page as a panel within the course.
-    $name = 'theme_boost_campus/showsettingsincourse';
-    $title = get_string('showsettingsincoursesetting', 'theme_boost_campus', null, true);
-    $description = get_string('showsettingsincoursesetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 'no', 'yes', 'no'); // Overriding default values
-    // yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss() (lib.php).
-    // Default 0 value would not write the variable to scss that could cause the scss to crash if used in that file.
-    // See MDL-58376.
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Setting to display the switch role to link as a separate tab within the in-course settings panel.
-    $name = 'theme_boost_campus/incoursesettingsswitchtoroleposition';
-    $title = get_string('incoursesettingsswitchtorolepositionsetting', 'theme_boost_campus', null, true);
-    $description = get_string('incoursesettingsswitchtorolepositionsetting_desc', 'theme_boost_campus', null, true);
-    $incoursesettingsswitchtorolesetting = [
-     // Don't use string lazy loading (= false) because the string will be directly used and would produce a PHP warning otherwise.
-    'no' => get_string('incoursesettingsswitchtorolesettingjustmenu', 'theme_boost_campus', null, false),
-    'yes' => get_string('incoursesettingsswitchtorolesettingjustcourse', 'theme_boost_campus', null, true),
-    'both' => get_string('incoursesettingsswitchtorolesettingboth', 'theme_boost_campus', null, true)
-    ];
-    $setting = new admin_setting_configselect($name, $title, $description, $incoursesettingsswitchtorolesetting['no'],
-        $incoursesettingsswitchtorolesetting);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Add tab to settings page.
-    $settings->add($page);
-
-
-    // Create footer layout settings tab.
-    $name = 'theme_boost_campus_footerlayout';
-    $title = get_string('footerlayoutsettings', 'theme_boost_campus', null, true);
-    $page = new admin_settingpage($name, $title);
-
-    // Settings title for the footer blocks. We don't need a description here.
-    $name = 'theme_boost_campus/footerblocksheading';
-    $title = get_string('footerblocksheadingsetting', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_heading($name, $title, null);
-    $page->add($setting);
-
-    // Setting for enabling blocks with different layouts in the footer.
-    $name = 'theme_boost_campus/footerblocks';
-    $title = get_string('footerblockssetting', 'theme_boost_campus', null, true);
-    $description = get_string('footerblockssetting_desc', 'theme_boost_campus', null, true);
-    $footerlayoutoptions = [
-     // Don't use string lazy loading (= false) because the string will be directly used and would produce a PHP warning otherwise.
-    '0columns' => get_string('footerblocks0columnssetting', 'theme_boost_campus', null, false),
-    '1columns' => get_string('footerblocks1columnssetting', 'theme_boost_campus', null, true),
-    '2columns' => get_string('footerblocks2columnssetting', 'theme_boost_campus', null, true),
-    '3columns' => get_string('footerblocks3columnssetting', 'theme_boost_campus', null, true)
-    ];
-    $setting = new admin_setting_configselect($name, $title, $description, $footerlayoutoptions['0columns'], $footerlayoutoptions);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Settings title to group the settings footerhelplink, footerlogininfo and footerhomelink together with a common description.
-    $name = 'theme_boost_campus/footerlinksheading';
-    $title = get_string('footerlinksheadingsetting', 'theme_boost_campus', null, true);
-    $description = get_string('footerlinksheadingsetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_heading($name, $title, $description);
-    $page->add($setting);
-
-    // Helplink.
-    $name = 'theme_boost_campus/footerhidehelplink';
-    $title = get_string('footerhidehelplinksetting', 'theme_boost_campus', null, true);
-    $description = get_string('footerlinks_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 'no', 'yes', 'no' ); // Overriding default values
-        // yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss() (lib.php). Default 0 value would
-        // not write the variable to scss that could cause the scss to crash if used in that file. See MDL-58376.
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Logininfo.
-    $name = 'theme_boost_campus/footerhidelogininfo';
-    $title = get_string('footerhidelogininfosetting', 'theme_boost_campus', null, true);
-    $description = get_string('footerlinks_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 'no', 'yes', 'no' ); // Overriding default values
-        // yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss() (lib.php). Default 0 value would
-        // not write the variable to scss that could cause the scss to crash if used in that file. See MDL-58376.
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Homelink.
-    $name = 'theme_boost_campus/footerhidehomelink';
-    $title = get_string('footerhidehomelinksetting', 'theme_boost_campus', null, true);
-    $description = get_string('footerlinks_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 'no', 'yes', 'no' ); // Overriding default values
-        // yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss() (lib.php). Default 0 value would
-        // not write the variable to scss that could cause the scss to crash if used in that file. See MDL-58376.
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // User tours.
-    $name = 'theme_boost_campus/footerhideusertourslink';
-    $title = get_string('footerhideusertourslinksetting', 'theme_boost_campus', null, true);
-    $description = get_string('footerlinks_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 'no', 'yes', 'no' ); // Overriding default values
-    // yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss() (lib.php). Default 0 value would
-    // not write the variable to scss that could cause the scss to crash if used in that file. See MDL-58376.
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Settings title for hiding the footer. We don't need a description here.
-    $name = 'theme_boost_campus/hidefooterheading';
-    $title = get_string('hidefooterheadingsetting', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_heading($name, $title, null);
-    $page->add($setting);
-
-    // Hide the footer on the login page.
-    $name = 'theme_boost_campus/hidefooteronloginpage';
-    $title = get_string('hidefooteronloginpagesetting', 'theme_boost_campus', null, true);
-    $description = get_string('hidefooteronloginpagesetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 'no', 'yes', 'no' ); // Overriding default values
-    // yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss() (lib.php). Default 0 value would
-    // not write the variable to scss that could cause the scss to crash if used in that file. See MDL-58376.
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Add tab to settings page.
-    $settings->add($page);
-
-
-    // Create additional layout settings tab.
-    $name = 'theme_boost_campus_additionallayout';
-    $title = get_string('additionallayoutsettings', 'theme_boost_campus', null, true);
-    $page = new admin_settingpage($name, $title);
-
-    // Settings title to group image area settings together with a common heading and description.
-    $name = 'theme_boost_campus/imageareaheading';
-    $title = get_string('imageareaheadingsetting', 'theme_boost_campus', null, true);
-    $description = get_string('imageareaheadingsetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_heading($name, $title, $description);
-    $page->add($setting);
-
-    // Image area setting.
-    $name = 'theme_boost_campus/imageareaitems';
-    $title = get_string('imageareaitemssetting', 'theme_boost_campus', null, true);
-    $description = get_string('imageareaitemssetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configstoredfile($name, $title, $description, 'imageareaitems', 0, array('maxfiles' => 100,
-        'accepted_types' => array('web_image'), 'subdirs' => 0));
-    $setting->set_updatedcallback('theme_boost_campus_reset_app_cache');
-    $page->add($setting);
-
-    $name = 'theme_boost_campus/imageareaitemslink';
-    $title = get_string('imageareaitemslinksetting', 'theme_boost_campus', null, true);
-    $description = get_string('imageareaitemslinksetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configtextarea($name, $title, $description, null, PARAM_TEXT);
-    $setting->set_updatedcallback('theme_boost_campus_reset_app_cache');
-    $page->add($setting);
-
-    $name = 'theme_boost_campus/imageareaitemsmaxheight';
-    $title = get_string('imageareaitemsmaxheightsetting', 'theme_boost_campus', null, true);
-    $description = get_string('imageareaitemsmaxheightsetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configtext_with_maxlength($name, $title, $description, 100, PARAM_INT, null, 3);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Settings title to group footnote settings together with a common heading and description.
-    $name = 'theme_boost_campus/footnoteheading';
-    $title = get_string('footnoteheadingsetting', 'theme_boost_campus', null, true);
-    $description = get_string('footnoteheadingsetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_heading($name, $title, $description);
-    $page->add($setting);
-
-    // Footnote setting.
-    $name = 'theme_boost_campus/footnote';
-    $title = get_string('footnotesetting', 'theme_boost_campus', null, true);
-    $description = get_string('footnotesetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_confightmleditor($name, $title, $description, '');
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Settings title to group navdrawer related settings together with a common heading. We don't want a description here.
-    $setting = new admin_setting_heading('theme_boost_campus/navdrawerheading',
-        get_string('navdrawerheadingsetting', 'theme_boost_campus', null, true), null);
-    $page->add($setting);
-
-    // Create default homepage on top control widget
-    // (switch label and description depending on what will really happens on the site).
-    if (get_config('core', 'defaulthomepage') == HOMEPAGE_SITE) {
-        $page->add(new admin_setting_configcheckbox('theme_boost_campus/defaulthomepageontop',
-            get_string('sitehomeontopsetting', 'theme_boost_campus', null, true),
-            get_string('sitehomeontopsetting_desc', 'theme_boost_campus', null, true), 'no', 'yes', 'no'));
-            // Overriding default values yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss()
-            // (lib.php). Default 0 value would not write the variable to scss that could cause the scss to crash if used in
-            // that file. See MDL-58376.
-    } else if (get_config('core', 'defaulthomepage') == HOMEPAGE_MY) {
-        $page->add(new admin_setting_configcheckbox('theme_boost_campus/defaulthomepageontop',
-            get_string('dashboardontopsetting', 'theme_boost_campus', null, true),
-            get_string('dashboardontopsetting_desc', 'theme_boost_campus', null, true), 'no', 'yes', 'no'));
-            // Overriding default values yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss()
-            // (lib.php). Default 0 value would not write the variable to scss that could cause the scss to crash if used in
-            // that file. See MDL-58376.
-    } else if (get_config('core', 'defaulthomepage') == HOMEPAGE_USER) {
-        $page->add(new admin_setting_configcheckbox('theme_boost_campus/defaulthomepageontop',
-            get_string('userdefinedontopsetting', 'theme_boost_campus', null, true),
-            get_string('userdefinedontopsetting_desc', 'theme_boost_campus', null, true), 'no', 'yes', 'no'));
-            // Overriding default values yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss()
-            // (lib.php). Default 0 value would not write the variable to scss that could cause the scss to crash if used in
-            // that file. See MDL-58376.
-    } else { // This should not happen.
-        $page->add(new admin_setting_configcheckbox('theme_boost_campus/defaulthomepageontop',
-            get_string('defaulthomepageontopsetting', 'theme_boost_campus', null, true),
-            get_string('defaulthomepageontopsetting_desc', 'theme_boost_campus', null, true), 'no', 'yes', 'no'));
-            // Overriding default values yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss()
-            // (lib.php). Default 0 value would not write the variable to scss that could cause the scss to crash if used in
-            // that file. See MDL-58376.
+    // Create empty settings page structure to make the site administration work on non-admin pages.
+    if (!$ADMIN->fulltree) {
+        // Create UR Courses settings page
+        // (and allow users with the theme/boost_union:configure capability to access it).
+        $tab = new admin_settingpage('theme_urcourses_default',
+                get_string('configtitle', 'theme_urcourses_default', null, true),
+                'theme/boost_union:configure');
+        $ADMIN->add('theme_boost_union', $tab);
     }
-    $page->add($setting);
 
-    // Set navdrawer to full width on small screens when opened.
-    $name = 'theme_boost_campus/navdrawerfullwidth';
-    $title = get_string('navdrawerfullwidthsetting', 'theme_boost_campus', null, true);
-    $description = get_string('navdrawerfullwidthsettings_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 'no', 'yes', 'no' ); // Overriding default
-    // values yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss() (lib.php). Default 0 value
-    // would not write the variable to scss that could cause the scss to crash if used in that file. See MDL-58376.
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
+    // Create full settings page structure.
+    // phpcs:disable moodle.ControlStructures.ControlSignature.Found
+    else if ($ADMIN->fulltree) {
 
-    // Add tab to settings page.
-    $settings->add($page);
+        // Require the necessary libraries.
+        require_once($CFG->dirroot . '/theme/boost_union/lib.php');
+        require_once($CFG->dirroot . '/theme/boost_union/locallib.php');
+        require_once($CFG->dirroot . '/theme/urcourses_default/lib.php');
+        require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
+
+        // Prepare options array for select settings.
+        // Due to MDL-58376, we will use binary select settings instead of checkbox settings throughout this theme.
+        $yesnooption = [THEME_BOOST_UNION_SETTING_SELECT_YES => get_string('yes'),
+                THEME_BOOST_UNION_SETTING_SELECT_NO => get_string('no'), ];
 
 
-     // Create design settings tab.
-    $page = new admin_settingpage('theme_boost_campus_design', get_string('designsettings', 'theme_boost_campus', null, true));
+        // Create UR Courses settings page with tabs
+        // (and allow users with the theme/boost_union:configure capability to access it).
+        $page = new theme_boost_admin_settingspage_tabs('theme_urcourses_default',
+                get_string('configtitle', 'theme_urcourses_default', null, true),
+                'theme/boost_union:configure');
 
-    // Settings title to group login page related settings together with a common heading. We don't want a description here.
-    $name = 'theme_boost_campus/loginpagedesignheading';
-    $title = get_string('loginpagedesignheadingsetting', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_heading($name, $title, null);
-    $page->add($setting);
 
-    // Login page background setting.
-    $name = 'theme_boost_campus/loginbackgroundimage';
-    $title = get_string('loginbackgroundimagesetting', 'theme_boost_campus', null, true);
-    $description = get_string('loginbackgroundimagesetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configstoredfile($name, $title, $description, 'loginbackgroundimage', 0,
-        array('maxfiles' => 10, 'accepted_types' => 'web_image'));
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
+        // Create general settings tab.
+        $tab = new admin_settingpage('theme_urcourses_default_general',
+                get_string('generalsettings', 'theme_boost', null, true));
 
-    // Setting to change the position and design of the login form.
-    $name = 'theme_boost_campus/loginform';
-    $title = get_string('loginform', 'theme_boost_campus', null, true);
-    $description = get_string('loginform_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 'no', 'yes', 'no'); // Overriding default values
-        // yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss() (lib.php). Default 0 value would
-        // not write the variable to scss that could cause the scss to crash if used in that file. See MDL-58376.
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
+        // Create inheritance heading.
+        $name = 'theme_urcourses_default/inheritanceheading';
+        $title = get_string('inheritanceheading', 'theme_urcourses_default', null, true);
+        $setting = new admin_setting_heading($name, $title, null);
+        $tab->add($setting);
 
-    // Settings title to group font related settings together with a common heading. We don't want a description here.
-    $name = 'theme_boost_campus/fontdesignheading';
-    $title = get_string('fontdesignheadingsetting', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_heading($name, $title, null);
-    $page->add($setting);
+        // Prepare inheritance options.
+        $inheritanceoptions = [
+                THEME_URCOURSES_DEFAULT_SETTING_INHERITANCE_INHERIT =>
+                        get_string('inheritanceinherit', 'theme_urcourses_default'),
+                THEME_URCOURSES_DEFAULT_SETTING_INHERITANCE_DUPLICATE =>
+                        get_string('inheritanceduplicate', 'theme_urcourses_default'),
+        ];
 
-    // Font files upload.
-    $name = 'theme_boost_campus/fontfiles';
-    $title = get_string('fontfilessetting', 'theme_boost_campus', null, true);
-    $description = get_string('fontfilessetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configstoredfile($name, $title, $description, 'fontfiles', 0,
-            array('maxfiles' => 100, 'accepted_types' => array('.ttf', '.eot', '.woff', '.woff2')));
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
-    // Settings title to group block related settings together with a common heading. We don't want a description here.
-    $name = 'theme_boost_campus/blockdesignheading';
-    $title = get_string('blockdesignheadingsetting', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_heading($name, $title, null);
-    $page->add($setting);
-
-    // Setting for displaying a standard Font Awesome icon in front of the block title.
-    $name = 'theme_boost_campus/blockicon';
-    $title = get_string('blockiconsetting', 'theme_boost_campus', null, true);
-    $description = get_string('blockiconsetting_desc', 'theme_boost_campus', null, true) .
-        get_string('blockiconsetting_desc_code', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 'no', 'yes', 'no'); // Overriding default values
-        // yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss() (lib.php). Default 0 value would
-        // not write the variable to scss that could cause the scss to crash if used in that file. See MDL-58376.
+        // Setting: Pre SCSS inheritance setting.
+        $name = 'theme_urcourses_default/prescssinheritance';
+        $title = get_string('prescssinheritancesetting', 'theme_urcourses_default', null, true);
+        $description = get_string('prescssinheritancesetting_desc', 'theme_urcourses_default', null, true).'<br />'.
+                get_string('inheritanceoptionsexplanation', 'theme_urcourses_default', null, true);
+        $setting = new admin_setting_configselect($name, $title, $description,
+                THEME_URCOURSES_DEFAULT_SETTING_INHERITANCE_INHERIT, $inheritanceoptions);
         $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
+        $tab->add($setting);
 
-     // Settings title to group navbar related settings together with a common heading. We don't want a description here.
-    $name = 'theme_boost_campus/navbardesignheading';
-    $title = get_string('navbardesignheadingsetting', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_heading($name, $title, null);
-    $page->add($setting);
+        // Setting: Extra SCSS inheritance setting.
+        $name = 'theme_urcourses_default/extrascssinheritance';
+        $title = get_string('extrascssinheritancesetting', 'theme_urcourses_default', null, true);
+        $description = get_string('extrascssinheritancesetting_desc', 'theme_urcourses_default', null, true).'<br />'.
+                get_string('inheritanceoptionsexplanation', 'theme_urcourses_default', null, true);
+        $setting = new admin_setting_configselect($name, $title, $description,
+                THEME_URCOURSES_DEFAULT_SETTING_INHERITANCE_INHERIT, $inheritanceoptions);
+        $setting->set_updatedcallback('theme_reset_all_caches');
+        $tab->add($setting);
 
-    $name = 'theme_boost_campus/darknavbar';
-    $title = get_string('darknavbarsetting', 'theme_boost_campus', null, true);
-    $description = get_string('darknavbarsetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 'no', 'yes', 'no' ); // Overriding default values
-    // yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss() (lib.php). Default 0 value would
-    // not write the variable to scss that could cause the scss to crash if used in that file. See MDL-58376.
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
+        // Add tab to settings page.
+        $page->add($tab);
 
-    // Settings title to group navbar related settings together with a common heading. We don't want a description here.
-    $name = 'theme_boost_campus/helptextheading';
-    $title = get_string('helptextheadingsetting', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_heading($name, $title, null);
-    $page->add($setting);
+        /**********************************************************
+         * EXTENSION POINT:
+         * Add your UR Courses settings here.
+         *********************************************************/
+        $tab = new admin_settingpage('theme_urcourses_default_colour',
+        get_string('colourtab', 'theme_urcourses_default', null, true));
 
-    $name = 'theme_boost_campus/helptextmodal';
-    $title = get_string('helptextmodalsetting', 'theme_boost_campus', null, true);
-    $description = get_string('helptextmodalsetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 'no', 'yes', 'no' ); // Overriding default values
-    // yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss() (lib.php). Default 0 value would
-    // not write the variable to scss that could cause the scss to crash if used in that file. See MDL-58376.
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
+        $name = 'theme_urcourses_default/colour';
+        $title = get_string('colourheading', 'theme_urcourses_default', null, true);
+        $setting = new admin_setting_heading($name, $title, null);
+        $tab->add($setting);
 
-    // Settings title to group breakpoint related settings together with a common heading. We don't want a description here.
-    $name = 'theme_boost_campus/breakpointheading';
-    $title = get_string('breakpointheadingsetting', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_heading($name, $title, null);
-    $page->add($setting);
+        $name = 'theme_urcourses_default/brandcolour';
+        $title = get_string('brandcoloursetting', 'theme_urcourses_default', null, true);
+        $description = get_string('brandcoloursetting_desc', 'theme_urcourses_default', null, true);
+        $default = '';
+        $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
+        $setting->set_updatedcallback('theme_reset_all_caches');
+        $tab->add($setting);
 
-    $name = 'theme_boost_campus/breakpoint';
-    $title = get_string('breakpointsetting', 'theme_boost_campus', null, true);
-    $description = get_string('breakpointsetting_desc', 'theme_boost_campus', null, true);
-    $setting = new admin_setting_configcheckbox($name, $title, $description, 'no', 'yes', 'no' ); // Overriding default values
-    // yes = 1 and no = 0 because of the use of empty() in theme_boost_campus_get_pre_scss() (lib.php). Default 0 value would
-    // not write the variable to scss that could cause the scss to crash if used in that file. See MDL-58376.
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
+        $page->add($tab);
 
-    // Add tab to settings page.
-    $settings->add($page);
+        // $tab = new admin_settingpage('theme_urcourses_default_feedback',
+        // get_string('feedbacktab', 'theme_urcourses_default', null, true));
+
+        // $name = 'theme_urcourses_default/feedback';
+        // $title = get_string('feedbackheading', 'theme_urcourses_default', null, true);
+        // $setting = new admin_setting_heading($name, $title, null);
+        // $tab->add($setting);
+
+        // $name = 'theme_urcourses_default/questionnaireid';
+        // $title = get_string('questionnaireid', 'theme_urcourses_default', null, true);
+        // $description = get_string('questionnaireid_desc', 'theme_urcourses_default', null, true);
+        // $default = 0;
+        // $sitelevelquestionnaires = $DB->get_records_sql(
+        //     "SELECT cm.id, q.name
+        //     FROM {course_modules} cm
+        //     LEFT JOIN {questionnaire} q ON q.id = cm.instance
+        //     WHERE cm.course = 1
+        //     AND cm.deletioninprogress = 0
+        //     AND cm.module = (SELECT id FROM {modules} m WHERE m.name = 'questionnaire')"
+        // );
+        // $options = [
+        //         '0' => 'None'
+        // ];
+        // foreach ($sitelevelquestionnaires as $q) {
+        //     $options[$q->id] = $q->name;
+        // }
+        // $setting = new admin_setting_configselect($name, $title, $description, $default, $options);
+        // $tab->add($setting);
+
+        // $name = 'theme_urcourses_default/questionname';
+        // $title = get_string('questionname', 'theme_urcourses_default', null, true);
+        // $description = get_string('questionname_desc', 'theme_urcourses_default', null, true);
+        // $default = 0;
+        // $options = [
+        //         '0' => 'None'
+        // ];
+        // $questionnaireid = get_config('theme_urcourses_default', 'questionnaireid');
+        // if ($questionnaireid != 0) {
+        //     require_once($CFG->dirroot . '/mod/questionnaire/locallib.php');
+        //     list($cm, $course, $questionnaire) = questionnaire_get_standard_page_items($questionnaireid);
+        //     $questions = $DB->get_records_sql(
+        //         "SELECT qq.id, qq.name FROM {questionnaire_question} qq
+        //         WHERE qq.surveyid = ?",
+        //         [$questionnaire->id]
+        //     );
+        //     foreach ($questions as $question) {
+        //         $options["q$question->id"] = $question->name;
+        //     }
+        // }
+        // $setting = new admin_setting_configselect($name, $title, $description, $default, $options);
+        // $tab->add($setting);
+
+        // $page->add($tab);
+
+        // Add settings page to the admin settings category.
+        $ADMIN->add('theme_boost_union', $page);
+    }
 }

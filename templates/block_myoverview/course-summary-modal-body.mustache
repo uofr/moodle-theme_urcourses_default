@@ -1,0 +1,19 @@
+<div>
+    <div>
+        {{#summary}}
+            {{{summary}}}
+        {{/summary}}
+        {{^summary}}
+            <p>
+                {{#str}} coursesummarymissingtext, theme_urcourses_default {{/str}}
+            </p>
+        {{/summary}}
+    </div>
+    {{#caneditsummary}}
+        <div>
+            <a href="{{{editlink}}}" class="btn btn-secondary btn-block text-center">
+                <small>{{#str}}coursesummaryedit, theme_urcourses_default {{/str}}</small>
+            </a>
+        </div>
+    {{/caneditsummary}}
+</div>

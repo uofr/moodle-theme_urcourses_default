@@ -1,0 +1,41 @@
+<p>
+    <strong>
+        {{#str}} createmodal_intro, theme_urcourses_default {{/str}}
+    </strong>
+</p>
+<p>
+    <strong>
+        {{#str}} createmodal_email, theme_urcourses_default {{/str}}
+    </strong>
+    <br>
+    {{email}}
+</p>
+<p>
+    <strong>
+        {{#str}} createmodal_username, theme_urcourses_default {{/str}}
+    </strong>
+    <br>
+    {{username}}
+</p>
+<hr/>
+<p>
+    {{#str}}
+        createmodal_email_helptext,
+        theme_urcourses_default,
+        {
+            "email": {{#quote}} {{email}} {{/quote}},
+            "emailoriginal": {{#quote}} {{emailoriginal}} {{/quote}}
+        }
+    {{/str}}
+</p>
+<hr/>
+<p>
+    {{#str}}
+        createmodal_helptext,
+        theme_urcourses_default,
+        {
+            "email": {{#quote}} {{email}} {{/quote}},
+            "emailoriginal": {{#quote}} {{emailoriginal}} {{/quote}}
+        }
+    {{/str}}
+</p>

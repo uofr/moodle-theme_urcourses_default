@@ -1,0 +1,61 @@
+/*
+.c4l-estimatedtime::before {
+  content: url(../pix/c4l/c4l_estimatedtime.svg);
+}
+
+.c4l-estimatedtime {
+  color: #533c00;
+  background-color: #fffad6;
+}
+.c4l-duedate {
+  color: #533c00;
+  background-color: #fffad6;
+}
+.c4l-duedate::after {
+  content: url(../pix/c4l/c4l_duedate.svg);
+}
+.c4l-gradingvalue {
+  color: #533c00;
+  background-color: #fffad6;
+}
+.c4l-gradingvalue::after {
+  content: url(../pix/c4l/c4l_gradingvalue.svg);
+}
+*/
+.c4l-quote-line {
+  border-left: 4px solid #333333;
+}
+.c4l-quote-text p:first-of-type::before {
+  content: url(../pix/c4l/c4l_quote_open.svg);
+}
+.c4l-quote-text p:last-of-type::after {
+  content: url(../pix/c4l/c4l_quote_close.svg);
+}
+/*
+.c4l-proceduralcontext {
+  color: #705100;
+}
+*/
+.c4l-example h1 {
+  color: #333;
+  border-bottom: 2px solid #333;
+}
+
+.c4l-tag {
+  color: #1d2125;
+  background-color: #e9ecef;
+  }
+  
+/*
+.c4l-inlinetag {
+  color: #533c00;
+  background: #ffc82e80;
+}
+*/
+.c4l-allpurposecard {
+  background: #f8f9fa;
+}
+.editing .activity-item:hover .c4l-allpurposecard {
+  mix-blend-mode: multiply;
+}
+
