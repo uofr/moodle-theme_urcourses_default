@@ -156,6 +156,8 @@ function theme_urcourses_default_extend_busettingsoverview() {
 function theme_urcourses_default_extend_navigation_course($navigation, $course, $context) {
     global $DB, $USER, $PAGE;
 
+$PAGE->requires->js_call_amd('theme_urcourses_default/louper', 'init');
+
     if (!isloggedin()) {
         return;
     }

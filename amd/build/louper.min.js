@@ -1,0 +1,156 @@
+define("theme_urcourses_default/louper",["exports","jquery"],(function(_exports,_jquery){
+
+
+const SELECTORS = {
+	MAG_IMAGE: 'img[data-magnify]'
+}
+
+_jquery=_interopRequireDefault(_jquery);
+
+function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj}}
+
+_exports.init=()=>{
+
+	console.log('louper loaded');
+
+imageLouper({
+          style: "center",
+          background: '#1b1b1b',
+          frameSize: 3,
+          size: 250,
+          frameColor: 'rgba(0, 0, 0, .3)'
+        });
+/*
+	(0,_jquery.default)('img[data-magnify]').imageLouper({
+          style: "center",
+          background: '#1b1b1b',
+          frameSize: 3,
+          size: 250,
+          frameColor: 'rgba(0, 0, 0, .3)'
+        });
+*/
+}
+
+function imageLouper(options) {
+
+                options = (0,_jquery.default).extend({
+                        size: 200,
+                        magnification: 2.5,
+                        frameSize: 4,
+                        frameColor: 'white',
+                        background: 'black',
+                        trigger: 'hover',
+                        style: 'offset'
+                }, options || {});
+
+                var radius = options.size / 2,
+                        active = false,
+                        loupe = (0,_jquery.default)('<figure/>').css({
+                                width: options.size,
+                                height: options.size,
+                                position: 'absolute',
+                                pointerEvents: 'none',
+                                display: 'none'
+                        }),
+                        c = (0,_jquery.default)('<canvas/>').attr({
+                                width: options.size,
+                                height: options.size
+                        }),
+                        bg = (0,_jquery.default)('<div/>').css({
+                                width: options.size - options.frameSize*2,
+                                height: options.size - options.frameSize*2,
+                                position: 'absolute',
+                                top: options.frameSize,
+                                left: options.frameSize,
+                                borderRadius: '50%',
+                                backgroundColor: options.background,
+                                backgroundRepeat: 'no-repeat',
+                                overflow: 'hidden'
+                        });
+
+                loupe.append(bg);
+
+                if (options.style === 'offset') {
+                        loupe.append(c);
+                        var ctx = c.get(0).getContext('2d');
+                        ctx.beginPath();
+                        ctx.arc(radius, radius, radius, 0.5*Math.PI, 2*Math.PI);
+                        ctx.quadraticCurveTo(options.size*0.95, options.size*0.95, options.size, options.size);
+                        ctx.quadraticCurveTo(options.size*0.95, options.size*0.95, radius, options.size);
+                        ctx.fillStyle = options.frameColor;
+                        ctx.fill();
+				} else {
+                        bg.css({
+                                width: options.size - (options.frameSize / 2),
+                                height: options.size - (options.frameSize / 2),
+                                border: options.frameSize + 'px solid ' + options.frameColor
+                        });
+                }
+
+                bg.clone().css({
+                        background: '-webkit-radial-gradient(transparent, transparent 50%, rgba(0,0,0,.8))'
+                }).appendTo(loupe);
+
+                loupe.appendTo('body');
+
+                if (options.trigger === 'click') {
+					
+                        (0,_jquery.default)('img[data-magnify]').css('cursor', '-webkit-zoom-in');
+                        (0,_jquery.default)('img[data-magnify]').on('click', function(e) {
+                                e.preventDefault();
+                                loupe.toggle();
+                                active = !active;
+                                (0,_jquery.default)('img[data-magnify]').css('cursor', '-webkit-zoom-' + (active ? 'out' : 'in'));
+                        });
+                }
+
+                (0,_jquery.default)('img[data-magnify]').on('mousemove touchmove', function(e) {
+                        e.preventDefault();
+
+                        if (e.type === 'touchmove') {
+                                e = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+                        }
+
+                        var w = this.width,
+                            h = this.height,
+                            x = (e.offsetX / w),
+                            y = (e.offsetY / h),
+                            magW = w * options.magnification,
+                            magH = h * options.magnification,
+                            xOffset = -((x * magW) - radius),
+                            yOffset = -((y * magH) - radius);
+
+                    	//bg.css('backgroundImage') === 'none' && bg.css('backgroundImage', 'url(' + ( (0,_jquery.default)(this).data('magnify') || this.src ) + ')');
+						bg.css('backgroundImage', 'url(' + ( (0,_jquery.default)(this).data('magnify') || this.src ) + ')');	
+
+                    	bg.css({
+                            backgroundPosition: xOffset + 'px ' + yOffset + 'px',
+                            backgroundSize: magW + 'px ' + magH + 'px'
+                    	});
+					
+						loupe.css({
+                        	top: e.pageY - (options.style === 'offset' ? options.size - 5 : (options.size / 2) + (options.frameSize / 2)),
+                        	left: e.pageX - (options.style === 'offset' ? options.size - 5 : (options.size / 2) + (options.frameSize / 2))
+                		});
+
+		                if (options.trigger === 'hover' || active) {
+		                        loupe.show();
+		                }
+		        });
+
+	            (0,_jquery.default)('img[data-magnify]').on('mouseout touchend', function(e) {
+	                    e.preventDefault();
+	                    loupe.hide();
+	                    active = false;
+	                    if (options.trigger === 'click') {
+	                            (0,_jquery.default)(this).css('cursor', '-webkit-zoom-' + (active ? 'out' : 'in'));
+	                    }
+	            });
+
+            //return this;
+
+};
+
+
+
+}));		
