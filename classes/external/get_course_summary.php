@@ -50,25 +50,38 @@ class get_course_summary extends external_api {
     }
 
     public static function execute($courseid) {
-        global $DB, $USER;
+    global $DB, $USER, $CFG;
+     require_once($CFG->libdir . '/filelib.php');
 
-        $params = self::validate_parameters(self::execute_parameters(), [
-            'courseid' => $courseid
-        ]);
+    $params = self::validate_parameters(self::execute_parameters(), [
+        'courseid' => $courseid
+    ]);
 
-        $context = \context_course::instance($params['courseid']);
+    $context = \context_course::instance($params['courseid']);
+    $course = get_course($params['courseid']);
+    $canedit = has_capability('moodle/course:changesummary', $context);
+    $editlink = $canedit
+        ? (new \moodle_url('/course/edit.php', ['id' => $params['courseid']]))->out()
+        : '';
 
-        $course = get_course($params['courseid']);
-        $canedit = has_capability('moodle/course:changesummary', $context);
-        $editlink = $canedit
-            ? (new \moodle_url('/course/edit.php', ['id' => $params['courseid']]))->out()
-            : '';
+    // Rewrite pluginfile URLs and format the summary for AJAX.
+   $summary = format_text(
+    file_rewrite_pluginfile_urls($course->summary, 'pluginfile.php',
+        $context->id, 'course', 'summary', null),
+    $course->summaryformat,
+    [
+        'noclean' => true,
+        'overflowdiv' => true,
+        'context' => $context 
+    ]
+    );
 
-        return [
-            'summary' => $course->summary,
-            'fullname' => $course->fullname,
-            'caneditsummary' => $canedit,
-            'editlink' => $editlink
-        ];
+    return [
+        'summary' => $summary,
+        'fullname' => $course->fullname,
+        'caneditsummary' => $canedit,
+        'editlink' => $editlink
+    ];
     }
+
 }
