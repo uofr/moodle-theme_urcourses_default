@@ -50,38 +50,56 @@ class get_course_summary extends external_api {
     }
 
     public static function execute($courseid) {
-    global $DB, $USER, $CFG;
-     require_once($CFG->libdir . '/filelib.php');
+        global $DB, $USER, $CFG, $PAGE;
 
-    $params = self::validate_parameters(self::execute_parameters(), [
-        'courseid' => $courseid
-    ]);
+        require_once($CFG->libdir . '/filelib.php');
 
-    $context = \context_course::instance($params['courseid']);
-    $course = get_course($params['courseid']);
-    $canedit = has_capability('moodle/course:changesummary', $context);
-    $editlink = $canedit
-        ? (new \moodle_url('/course/edit.php', ['id' => $params['courseid']]))->out()
-        : '';
+        // Validate parameters.
+        $params = self::validate_parameters(self::execute_parameters(), [
+            'courseid' => $courseid
+        ]);
 
-    // Rewrite pluginfile URLs and format the summary for AJAX.
-   $summary = format_text(
-    file_rewrite_pluginfile_urls($course->summary, 'pluginfile.php',
-        $context->id, 'course', 'summary', null),
-    $course->summaryformat,
-    [
-        'noclean' => true,
-        'overflowdiv' => true,
-        'context' => $context 
-    ]
-    );
+        // Get course context and course object.
+        $context = \context_course::instance($params['courseid']);
+        $course = get_course($params['courseid']);
 
-    return [
-        'summary' => $summary,
-        'fullname' => $course->fullname,
-        'caneditsummary' => $canedit,
-        'editlink' => $editlink
-    ];
+        // Initialise $PAGE so emoticon filter doesn’t error.
+        $PAGE->set_context($context);
+        $PAGE->set_url('/'); // $Page URLs
+
+        // Check if user can edit the summary.
+        $canedit = has_capability('moodle/course:changesummary', $context);
+        $editlink = $canedit
+            ? (new \moodle_url('/course/edit.php', ['id' => $params['courseid']]))->out()
+            : '';
+
+        // Run all filters including emoticons.
+        $summary = format_text(
+            file_rewrite_pluginfile_urls(
+                $course->summary,
+                'pluginfile.php',
+                $context->id,
+                'course',
+                'summary',
+                null
+            ),
+            $course->summaryformat,
+            [
+                'context' => $context,
+                'noclean' => true,
+                'overflowdiv' => true,
+                'filter' => true
+            ]
+        );
+
+        return [
+            'summary' => $summary,
+            'fullname' => $course->fullname,
+            'caneditsummary' => $canedit,
+            'editlink' => $editlink
+        ];
     }
+
+
 
 }
