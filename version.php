@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'theme_urcourses_default';
 $plugin->release = 'v4.3-r1';
-$plugin->version = 2025031001;
+$plugin->version = 2025092200;
 $plugin->requires = 2023100906; // Requires Moodle 4.3.6 or later.
 $plugin->supported = [403, 405];
 $plugin->maturity = MATURITY_STABLE;

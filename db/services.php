@@ -74,19 +74,5 @@ $functions = [
         'description'   => 'self explanatory',
         'type'          => 'write',
         'ajax'          => 'true',
-    ],
-    'theme_urcourses_default_submit_suggestion' => [
-        'classname'     => 'theme_urcourses_default\external\feedback_submit_suggestion',
-        'methodname'    => 'execute',
-        'description'   => 'self explanatory',
-        'type'          => 'write',
-        'ajax'          => 'true',
-    ],
-    'theme_urcourses_default_submit_ticket' => [
-        'classname'     => 'theme_urcourses_default\external\feedback_submit_ticket',
-        'methodname'    => 'execute',
-        'description'   => 'self explanatory',
-        'type'          => 'write',
-        'ajax'          => 'true',
-    ],
+    ]
 ];

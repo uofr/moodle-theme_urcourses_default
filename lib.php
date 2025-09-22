@@ -199,45 +199,15 @@ function theme_urcourses_default_get_fontawesome_icon_map() {
     ];
 }
 
-// function theme_urcourses_default_render_navbar_output() {
-//     global $USER, $OUTPUT;
+function theme_urcourses_default_render_navbar_output() {
+    global $OUTPUT;
 
-//     if (!isloggedin()) {
-//         return '';
-//     }
-
-//     $context = \context_user::instance($USER->id);
-//     $feedbackbutton = new \theme_urcourses_default\output\feedbackbutton($context->id);
-
-//     return $OUTPUT->render($feedbackbutton);
-// }
-
-function theme_urcourses_default_output_fragment_suggestion_form() {
-    global $CFG, $PAGE;
-
-    require_once($CFG->dirroot . '/mod/questionnaire/locallib.php');
-
-    $questionnaireid = get_config('theme_urcourses_default', 'questionnaireid');
-    $questionname = get_config('theme_urcourses_default', 'questionname');
-
-    if ($questionnaireid == 0 || $questionname == 0) {
+    if (!isloggedin()) {
         return '';
     }
 
-    $suggestionform = new \theme_urcourses_default\form\suggestion_form(
-        attributes: [
-            'id' => 'suggestion_form'
-        ],
-        customdata: [
-            'questionname' => $questionname,
-            'questionnaireid' => $questionnaireid
-        ]
-    );
+    $questionnaireid = get_config('theme_urcourses_default', 'questionnaireid');
+    $feedbackbutton = new \theme_urcourses_default\output\feedbackbutton($questionnaireid);
 
-    return $suggestionform->render();
-}
-
-function theme_urcourses_default_output_fragment_ticket_form() {
-    $ticketform = new \theme_urcourses_default\form\ticket_form(attributes: ['id' => 'ticket_form']);
-    return $ticketform->render();
+    return $OUTPUT->render($feedbackbutton);
 }

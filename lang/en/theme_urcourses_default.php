@@ -131,16 +131,6 @@ $string['resetteststudent_email'] = '<p>Hi {$a->firstname},</p>
 
 // Feedback
 $string['feedback_label'] = 'Feedback on UR Courses';
-$string['feedback_modal_header'] = 'Feedback';
-$string['feedback_modal_body'] = 'Give us your feedback on UR Courses.';
-$string['feedback_modal_problem'] = 'Submit a Ticket';
-$string['feedback_modal_problem_label'] = 'Describe the problem you encountered.';
-$string['feedback_modal_problem_confirm_title'] = 'Ticket Submitted';
-$string['feedback_modal_problem_confirm'] = 'Your ticket has been submitted and will be reviewed by the IS Service Desk. You should receive an email shortly confirming the submission of your ticket.';
-$string['feedback_modal_suggestion'] = 'Make a Suggestion';
-$string['feedback_modal_suggestion_label'] = 'What can we do better?';
-$string['feedback_modal_suggestion_confirm_title'] = 'Feedback Submitted';
-$string['feedback_modal_suggestion_confirm'] = 'Your suggestion has been submitted and will be reviewed by our team. Thank you for your feedback!';
 
 // My Courses (block_myoverview) Customizations
 $string['notavailabletostudents'] = 'Course unavailable to students';
@@ -227,10 +217,7 @@ $string['brandcoloursetting_desc'] = 'Change the brand colour for this theme.';
 $string['feedbacktab'] = 'Feedback';
 $string['feedbackheading'] = 'Feedback';
 $string['questionnaireid'] = 'Questionnaire';
-$string['questionnaireid_desc'] = 'Questionnaire activity from the home page where suggestions will be stored.';
-$string['questionname'] = 'Questionnaire Question';
-$string['questionname_desc'] = 'Which question we will associate suggestions with.';
-
+$string['questionnaireid_desc'] = 'ID of questionnaire activity used for site feedback.';
 
 // Capabilities
 $string['urcourses_default:viewenrolhint'] = 'View course enrolment hint.';

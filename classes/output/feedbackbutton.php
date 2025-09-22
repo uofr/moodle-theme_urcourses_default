@@ -26,15 +26,21 @@ namespace theme_urcourses_default\output;
 require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
 
 class feedbackbutton implements \renderable, \templatable {
-    public $contextid;
 
-    public function __construct(int $contextid) {
-        $this->contextid = $contextid;
+    /** @var int Questionnaire ID. */
+    public $qid;
+
+    /**
+     * @param int $qid - Questionnaire ID.
+     */
+    public function __construct($qid) {
+        $this->qid = $qid;
     }
 
     public function export_for_template(\core\output\renderer_base $output) {
+        $url = new \moodle_url('/mod/questionnaire/complete.php', ['id' => $this->qid]);
         $data = new \stdClass();
-        $data->contextid = $this->contextid;
+        $data->url = $url->out();
         return $data;
     }
 }
