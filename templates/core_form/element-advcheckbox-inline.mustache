@@ -1,0 +1,48 @@
+{{!
+		Removed form-check-input from input's class attribute after moving input out of
+		the label for consistency with radio buttons. Using this class broke many alignments
+		with this form field. Added feedback-control to include the right margin 
+		that these inputs need for consistency with other input elements.
+		MD, Nov 2025
+ }}
+<input type="checkbox" name="{{element.name}}" class="feedback-control {{element.extraclasses}}"
+    id="{{element.id}}"
+    {{#element.selectedvalue}}
+        value="{{element.selectedvalue}}"
+    {{/element.selectedvalue}}
+    {{#element.checked}}checked{{/element.checked}}
+    {{#error}}
+        autofocus aria-describedby="{{element.iderror}}"
+    {{/error}}
+    {{#required}}
+       aria-required="true"
+    {{/required}}
+    {{#element.frozen}}
+        disabled
+    {{/element.frozen}}
+    {{{element.attributes}}} >
+<label class="form-check-inline {{#error}}has-danger{{/error}} fitem {{#advanced}}advanced{{/advanced}} {{{element.extraclasses}}}" for="{{element.id}}">
+{{^element.hardfrozen}}
+    {{^element.frozen}}
+        <input type="hidden" name="{{element.name}}" value="{{element.deselectedvalue}}">
+    {{/element.frozen}}
+    {{#element.frozen}}
+        <input type="hidden" name="{{element.name}}" value="{{element.frozenvalue}}">
+    {{/element.frozen}}
+{{/element.hardfrozen}}
+    {{{label}}}
+</label>
+{{#text}}
+    <em>{{{.}}}</em>
+{{/text}}
+{{{helpbutton}}}
+<span class="form-control-feedback invalid-feedback" id="{{element.iderror}}" {{#error}} style="display: block;"{{/error}}>
+    {{{error}}}
+</span>
+{{^element.frozen}}
+{{#js}}
+require(['theme_boost/form-display-errors'], function(module) {
+    module.enhance({{#quote}}{{element.id}}{{/quote}});
+});
+{{/js}}
+{{/element.frozen}}
