@@ -566,3 +566,71 @@ body.path-mod h2 img.iconlarge {
 .multichoice-c.multichoice-horizontal input:nth-child(n+3) {
     margin-left: 0.25rem;
 }
+
+/* branding for simple tabular data tables */
+.table-sm caption {
+    border-collapse: collapse;
+    box-sizing: border-box;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    color: rgb(2, 71, 49); /* #6a737b */
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2em;
+    text-align: left;
+    caption-side: top;
+}
+.table-sm>thead>tr>th,
+.table-sm>tbody>tr>th {
+    font-size: .8rem;
+    color: rgb(2, 71, 49);
+    vertical-align: middle;
+}
+.table-sm {
+    table-layout: fixed;
+    border-top: 3px solid rgb(2, 71, 49);
+}
+.table-sm tbody tr:last-of-type,
+.book_content tbody tr:last-of-type {
+    border-bottom: 6px solid rgb(2, 71, 49);
+}
+.table-sm tbody tr:last-of-type td,
+.table-sm tbody tr:last-of-type th {
+    padding-bottom: .3rem;
+}
+.table-hover tbody tr:hover td,
+.table-hover tbody tr:hover th {
+    background-color: color-mix(in srgb, rgb(253, 200, 57) 25%, white);
+    color: #404040;
+}
+.table-sm>tbody>tr>td:empty {
+    background-color: #e5e5e5;
+    color: #666666;
+    font-size: .8em;
+}
+.table-sm>tbody>tr>td:empty::after {
+    content: "no value";
+}
+.ur_green {
+     color: rgb(2, 71, 49);
+}
+
+/* branding the tables in the Content Designer activity */
+.contentdesigner-content .contentdesigner-wrapper .table-striped>tbody>tr:nth-child(odd)>td, 
+.contentdesigner-content .contentdesigner-wrapper .table-striped>tbody>tr:nth-child(odd)>th {
+    background-color: rgb(253, 200, 57, 0.25); /* --ur_primary_gold @ 25% */
+}
+.contentdesigner-content .contentdesigner-wrapper .table-striped,
+.contentdesigner-content .contentdesigner-wrapper .table-striped>tbody>tr>td,
+.contentdesigner-content .contentdesigner-wrapper .table-striped>tbody>tr>th {
+    border-color: rgb(2, 71, 49, 0.25); /* --ur_primary_green @ 25% */
+    vertical-align: middle;
+}
+.contentdesigner-content .contentdesigner-wrapper .table-striped>thead>tr>th {
+    background-color: rgb(2, 71, 49); /* --ur_primary_green */
+    color: rgb(253, 200, 57); /* --ur_primary_gold */
+    font-size: 1.5em;
+}
+.contentdesigner-content .contentdesigner-wrapper th {
+    text-align: center;
+}
