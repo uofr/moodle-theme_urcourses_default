@@ -213,6 +213,8 @@ function theme_urcourses_default_show_status_hint() {
     $isoncourseviewpage = $PAGE->url->compare(new core\url('/course/view.php'), URL_MATCH_BASE);
     if (isset($USER) && isset($USER->editing)) {
         $userisediting = $USER->editing;
+    } else {
+        $userisediting = false;
     }
     $context = \context_course::instance($COURSE->id, IGNORE_MISSING);
     $canviewhidden = has_capability('moodle/course:viewhiddencourses', $context);
