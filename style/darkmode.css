@@ -330,11 +330,6 @@ pre {
     color: #fff;
     background-color: rgba(255, 255, 255, 0.075); }
 
-/* dark mode for content designer activity tables */
-
-
-
-
 .form-control {
   color: #e4e6eb;
   background-color: #3a3b3c;
@@ -1602,7 +1597,9 @@ a.text-dark:hover, a.text-dark:focus {
 
 .text-body {
   color: #1d2125 !important; }
-
+.form-check.text-wrap.text-break > label.text-body { /* this is for some specific question types that were still dark in Dark Mode */
+	color: #e0e1e4 !important;
+}
 .text-muted {
   color: #ebf3fa !important; }
 
@@ -2708,6 +2705,8 @@ filter: invert();}
     border-top-color: #a6d3db; }
   .que .formulation .alert-link {
     color: black; }
+  .que .formulation .draghome { /* darker colour for the drag 'n' drop answers */
+    color: #273139; }
 
 .que .comment {
   color: #1c3f1a;
@@ -3146,7 +3145,7 @@ a#hidebankcmd {
   color: #e4e6eb; }
   .generaltable th,
   .generaltable td {
-    border-top: 1px solid #dee2e6;
+    border-top: 1px solid color-mix(in srgb, black 35%, white) /* #dee2e6 */;
     background-color:#242526; }
   .generaltable thead th {
     border-bottom: 2px solid #dee2e6;
@@ -4163,7 +4162,16 @@ table.question-bank-table{
 .filter_embedquestion-error{
   background-color: #3a3b3c;
 }
-
+.filter .filter-name {
+		color: #e0e1e4;
+}
+.filters-dropdown.dropdown-menu .reportbuilder-filters-sidebar {
+    background: unset;
+    background-color: color-mix(in srgb, #242526 85%, white);
+}
+.reportbuilder-filters-sidebar .filter:not(:nth-last-child(2)) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.65)
+}
 .action-menu .dropdown-subpanel.content-displayed {
   background-color: #495057;
 }
@@ -4392,6 +4400,19 @@ h4.result-title .icon{
 .activity.modtype_lti .activityiconcontainer.courseicon img, .modchoosercontainer .modicon_lti.activityiconcontainer img, #page-header .modicon_lti.activityiconcontainer img {
 	filter: invert(49%) sepia(52%) saturate(4675%) hue-rotate(156deg) brightness(89%) contrast(102%) !important;
 }
+
+.ur-dark-mode .activityiconcontainer.content:not(.isbranded) .activityicon:not(.nofilter),
+.ur-dark-mode .activityiconcontainer.interactivecontent:not(.isbranded) .activityicon:not(.nofilter),
+.ur-dark-mode .modtype_syllabus .activityiconcontainer.administration .activityicon,
+.modchoosercontainer .modicon_hsuforum.activityiconcontainer img,
+.modchoosercontainer .modicon_h5pactivity.activityiconcontainer img  { /* account for black icons in dark mode */
+/*
+    Don't like having to use an !important here, but there was no other way to get IMS Content and Lesson types to override
+    the !important without altering /theme/boost_union/locallib.php
+*/
+    filter: invert(80%) brightness(115%) !important;
+}
+
 
 /*
     dark mode for simple tabular data tables
