@@ -531,39 +531,40 @@ body.path-mod h2 img.iconlarge {
 
 /* 
 	Use star ratings for feedback activity.
-	Only applies to multichoice rated, horizontal radio buttons in feedback activities.
+	Only applies to multichoice rated, horizontal radio buttons in feedback activities
+	belonging to course-1 (site level)
 */
-.multichoicerated-r.multichoicerated-horizontal fieldset .d-flex { // reverse the row so the selection shows in the correct order
+body.course-1 .multichoicerated-r.multichoicerated-horizontal fieldset .d-flex { // reverse the row so the selection shows in the correct order
 	flex-direction: row-reverse;
 	justify-content: left;
 	width: fit-content;
 }
-.multichoicerated-r.multichoicerated-horizontal fieldset .d-flex input,
-.multichoicerated-r.multichoicerated-horizontal fieldset .d-flex .weight { // hide the default inputs and labels
+body.course-1 .multichoicerated-r.multichoicerated-horizontal fieldset .d-flex input,
+body.course-1 .multichoicerated-r.multichoicerated-horizontal fieldset .d-flex .weight { // hide the default inputs and labels
 	display: none;
 }    
-.multichoicerated-r.multichoicerated-horizontal fieldset .d-flex > label { // setting up the stars
+body.course-1 .multichoicerated-r.multichoicerated-horizontal fieldset .d-flex > label { // setting up the stars
 	font-size: 3.5em;
 	color: color-mix(in srgb, var(--ur_primary_green) 15%, white);
 	position: relative;
 }
-.multichoicerated-r.multichoicerated-horizontal fieldset .d-flex > label::before { // display the stars
+body.course-1 .multichoicerated-r.multichoicerated-horizontal fieldset .d-flex > label::before { // display the stars
 	margin: -3px; /* closing the gap between stars to remove the jitter if the pointer goes between stars */
 	padding-right: 8px; /* keeping 5px, even with the negative margin */
 	content: '\2605';
 }
-.multichoicerated-r.multichoicerated-horizontal fieldset .d-flex input[type="radio"]:checked ~ label::before { // full colour for the clicked rating and lower
+body.course-1 .multichoicerated-r.multichoicerated-horizontal fieldset .d-flex input[type="radio"]:checked ~ label::before { // full colour for the clicked rating and lower
 	color: var(--ur_primary_gold);
 }
-.multichoicerated-r.multichoicerated-horizontal fieldset .d-flex > label:hover::before,
-.multichoicerated-r.multichoicerated-horizontal fieldset .d-flex > label:hover ~ label::before { // lighter colour when hovering over rating
+body.course-1 .multichoicerated-r.multichoicerated-horizontal fieldset .d-flex > label:hover::before,
+body.course-1 .multichoicerated-r.multichoicerated-horizontal fieldset .d-flex > label:hover ~ label::before { // lighter colour when hovering over rating
 	color: color-mix(in srgb, var(--ur_primary_gold) 50%, white);
 }
-#feedback_complete_form .feedback-control,
-#feedback_edit_form .feedback-control, { // we re-ordered some elements in the template to make this work, removing a class selector in the process. This returns the margin to radio inputs that are still displayed for the other feedback question types.
+body.course-1 #feedback_complete_form .feedback-control,
+body.course-1 #feedback_edit_form .feedback-control, { // we re-ordered some elements in the template to make this work, removing a class selector in the process. This returns the margin to radio inputs that are still displayed for the other feedback question types.
     margin-right: 0.25rem;
 }
-.multichoice-c.multichoice-horizontal input:nth-child(n+3) {
+body.course-1 .multichoice-c.multichoice-horizontal input:nth-child(n+3) {
     margin-left: 0.25rem;
 }
 
