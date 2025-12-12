@@ -330,6 +330,10 @@ pre {
     color: #fff;
     background-color: rgba(255, 255, 255, 0.075); }
 
+/* dark mode for content designer activity tables */
+
+
+
 
 .form-control {
   color: #e4e6eb;
@@ -4138,12 +4142,12 @@ color: #333;
 .list-group .icon{
   filter: invert(98%) sepia(8%) saturate(534%) hue-rotate(179deg) brightness(96%) contrast(91%);
 }
-
-.book_content th{
+/*
+.book_content th {
   background-color: black;
   border: solid #999 1px;
 }
-
+*/
 .book_content .caption {
   color: #fff;
 }
@@ -4387,4 +4391,70 @@ h4.result-title .icon{
 
 .activity.modtype_lti .activityiconcontainer.courseicon img, .modchoosercontainer .modicon_lti.activityiconcontainer img, #page-header .modicon_lti.activityiconcontainer img {
 	filter: invert(49%) sepia(52%) saturate(4675%) hue-rotate(156deg) brightness(89%) contrast(102%) !important;
+}
+
+/*
+    dark mode for simple tabular data tables
+*/
+.ur-dark-mode caption,
+.ur-dark-mode .table-sm>thead>tr>th,
+.ur-dark-mode .table-sm>tbody>tr>th {
+    color: #f2f2f2;
+}
+.ur-dark-mode .book_content th {
+    color: #18191A;
+}
+.ur-dark-mode .table-sm>tbody>tr>td {
+    color: #f9f9f9;
+}
+.ur-dark-mode .table-hover tbody tr:hover td,
+.table-hover tbody tr:hover th {
+    background-color: color-mix(in srgb, rgb(253, 200, 57) 50%, white);
+    color: #404040;
+}
+.ur-dark-mode .table-sm>tbody>tr>td:empty {
+    background-color: color-mix(in srgb, black 55%, white);
+    color: #f9f9f9;
+}
+.ur-dark-mode .table-sm {
+    border-top-color: #f2f2f2;
+}
+.ur-dark-mode .table-sm tbody tr:last-of-type,
+.book_content tbody tr:last-of-type {
+    border-bottom-color: #f2f2f2;
+}
+.book_content tbody tr>th:first-child {
+    border-left-color: #f2f2f2;
+}
+.book_content tbody tr>th:last-child {
+    border-right-color: #f2f2f2;
+}
+/*
+    dark mode for branding the tables in the Content Designer activity
+*/
+.ur-dark-mode .contentdesigner-content .contentdesigner-wrapper .table-striped>tbody>tr:nth-child(odd)>td, 
+.ur-dark-mode .contentdesigner-content .contentdesigner-wrapper .table-striped>tbody>tr:nth-child(odd)>th {
+    background-color: rgb(99, 99, 99);
+}
+.ur-dark-mode .contentdesigner-content .contentdesigner-wrapper .table-striped>tbody>tr:nth-child(even)>td, 
+.ur-dark-mode .contentdesigner-content .contentdesigner-wrapper .table-striped>tbody>tr:nth-child(even)>th {
+    background-color: color-mix(in srgb, black 55%, white);
+}
+.ur-dark-mode .contentdesigner-content .contentdesigner-wrapper .table>:not(caption)>*>* {
+    color: #f9f9f9;
+}
+.ur-dark-mode .contentdesigner-content .contentdesigner-wrapper .table-striped>thead>tr>th {
+    background-color: color-mix(in srgb, rgb(2, 71, 49) 75%, black);
+    color: color-mix(in srgb, rgb(253, 200, 57) 75%, black);
+    font-size: 1.5em;
+}
+.ur-dark-mode .contentdesigner-content .contentdesigner-wrapper .table-bordered th,
+.ur-dark-mode .contentdesigner-content .contentdesigner-wrapper .table-bordered td {
+    border: 1px solid color-mix(in srgb, black 35%, white);
+}
+.ur-dark-mode .contentdesigner-content .contentdesigner-wrapper .table thead th {
+    border: 1px solid color-mix(in srgb, black 35%, white);
+}
+.ur-dark-mode .ur_green {
+    color: #f2f2f2;
 }
