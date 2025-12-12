@@ -206,8 +206,16 @@ function theme_urcourses_default_get_date_hint() {
 function theme_urcourses_default_show_status_hint() {
     global $COURSE, $DB, $USER, $PAGE;
 
+    if (defined('BEHAT_SITE_RUNNING')) {
+        return false;
+    }
+
     $isoncourseviewpage = $PAGE->url->compare(new core\url('/course/view.php'), URL_MATCH_BASE);
-    $userisediting = $USER->editing;
+    if (isset($USER) && isset($USER->editing)) {
+        $userisediting = $USER->editing;
+    } else {
+        $userisediting = false;
+    }
     $context = \context_course::instance($COURSE->id, IGNORE_MISSING);
     $canviewhidden = has_capability('moodle/course:viewhiddencourses', $context);
     $coursehidden = $COURSE->visible == 0;

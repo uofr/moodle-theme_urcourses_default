@@ -234,3 +234,4 @@ $string['questionname_desc'] = 'Which question we will associate suggestions wit
 
 // Capabilities
 $string['urcourses_default:viewenrolhint'] = 'View course enrolment hint.';
+$string['urcourses_default:viewdatehint'] = 'View date hint.';
