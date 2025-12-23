@@ -4479,3 +4479,22 @@ h4.result-title .icon{
 .ur-dark-mode .ur_green {
     color: #f2f2f2;
 }
+.ur-dark-mode span[data-flexitour="container"][x-placement="top-start"] div[data-role="arrow"]:after {
+    border-top-color: #ced4da;
+    bottom: 0;
+}
+.ur-dark-mode span[data-flexitour="container"][x-placement="right-start"] div[data-role="arrow"]:after {
+    border-right-color: #ced4da;
+    left: 0;
+}
+.ur-dark-mode span[data-flexitour="container"][x-placement="bottom-start"] div[data-role="arrow"]:after {
+    border-bottom-color: #ced4da;
+    top: 0;
+}
+.ur-dark-mode span[data-flexitour="container"][x-placement="left-start"] div[data-role="arrow"]:after {
+    border-left-color: #ced4da;
+    right: 0;
+}
+.ur-dark-mode .popover.footer .popover-body .tool_usertours-resettourcontainer .usertour a {
+    color: #e4e6eb;
+}
