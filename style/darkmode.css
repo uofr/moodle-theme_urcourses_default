@@ -4418,14 +4418,14 @@ h4.result-title .icon{
     dark mode for simple tabular data tables
 */
 .ur-dark-mode caption,
-.ur-dark-mode .table-sm>thead>tr>th,
-.ur-dark-mode .table-sm>tbody>tr>th {
+.ur-dark-mode .course-content .table-sm>thead>tr>th,
+.ur-dark-mode .course-content .table-sm>tbody>tr>th {
     color: #f2f2f2;
 }
 .ur-dark-mode .book_content th {
     color: #18191A;
 }
-.ur-dark-mode .table-sm>tbody>tr>td {
+.ur-dark-mode .course-content .table-sm>tbody>tr>td {
     color: #f9f9f9;
 }
 .ur-dark-mode .table-hover tbody tr:hover td,
@@ -4433,14 +4433,14 @@ h4.result-title .icon{
     background-color: color-mix(in srgb, rgb(253, 200, 57) 50%, white);
     color: #404040;
 }
-.ur-dark-mode .table-sm>tbody>tr>td:empty {
+.ur-dark-mode .course-content .table-sm>tbody>tr>td:empty {
     background-color: color-mix(in srgb, black 55%, white);
     color: #f9f9f9;
 }
-.ur-dark-mode .table-sm {
+.ur-dark-mode .course-content .table-sm {
     border-top-color: #f2f2f2;
 }
-.ur-dark-mode .table-sm tbody tr:last-of-type,
+.ur-dark-mode .course-content .table-sm tbody tr:last-of-type,
 .book_content tbody tr:last-of-type {
     border-bottom-color: #f2f2f2;
 }
