@@ -1504,7 +1504,12 @@ button.bg-dark:focus {
 
 .bg-white {
   background-color: #000 !important; }
-
+.ur-card-footer.bg-white {
+  background-color: inherit !important;
+}
+.ur-card-footer.bg-white.ms-auto {
+  background-color: #000 !important;
+}
 .border {
   border: 1px solid #484a4c !important; }
 
@@ -4404,8 +4409,9 @@ h4.result-title .icon{
 .ur-dark-mode .activityiconcontainer.content:not(.isbranded) .activityicon:not(.nofilter),
 .ur-dark-mode .activityiconcontainer.interactivecontent:not(.isbranded) .activityicon:not(.nofilter),
 .ur-dark-mode .modtype_syllabus .activityiconcontainer.administration .activityicon,
-.modchoosercontainer .modicon_hsuforum.activityiconcontainer img,
-.modchoosercontainer .modicon_h5pactivity.activityiconcontainer img  { /* account for black icons in dark mode */
+.ur-dark-mode .modchoosercontainer .modicon_hsuforum.activityiconcontainer img,
+.ur-dark-mode .modchoosercontainer .modicon_h5pactivity.activityiconcontainer img,
+.ur-dark-mode .activity.modtype_lti .activityiconcontainer.courseicon img  { /* account for black icons in dark mode */
 /*
     Don't like having to use an !important here, but there was no other way to get IMS Content and Lesson types to override
     the !important without altering /theme/boost_union/locallib.php
