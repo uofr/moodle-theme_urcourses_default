@@ -571,7 +571,7 @@ body.course-1 .multichoice-c.multichoice-horizontal input:nth-child(n+3) {
 }
 
 /* branding for simple tabular data tables */
-.table-sm caption {
+.course-content .table-sm caption {
     border-collapse: collapse;
     box-sizing: border-box;
     padding-top: .75rem;
@@ -583,22 +583,22 @@ body.course-1 .multichoice-c.multichoice-horizontal input:nth-child(n+3) {
     text-align: left;
     caption-side: top;
 }
-.table-sm>thead>tr>th,
-.table-sm>tbody>tr>th {
+.course-content .table-sm>thead>tr>th,
+.course-content .table-sm>tbody>tr>th {
     font-size: .8rem;
     color: rgb(2, 71, 49);
     vertical-align: middle;
 }
-.table-sm {
+.course-content .table-sm {
     table-layout: fixed;
     border-top: 3px solid rgb(2, 71, 49);
 }
-.table-sm tbody tr:last-of-type,
+.course-content .table-sm tbody tr:last-of-type,
 .book_content tbody tr:last-of-type {
     border-bottom: 6px solid rgb(2, 71, 49);
 }
-.table-sm tbody tr:last-of-type td,
-.table-sm tbody tr:last-of-type th {
+.course-content .table-sm tbody tr:last-of-type td,
+.course-content .table-sm tbody tr:last-of-type th {
     padding-bottom: .3rem;
 }
 .table-hover tbody tr:hover td,
@@ -606,12 +606,12 @@ body.course-1 .multichoice-c.multichoice-horizontal input:nth-child(n+3) {
     background-color: color-mix(in srgb, rgb(253, 200, 57) 25%, white);
     color: #404040;
 }
-.table-sm>tbody>tr>td:empty {
+.course-content .table-sm>tbody>tr>td:empty {
     background-color: #e5e5e5;
     color: #666666;
     font-size: .8em;
 }
-.table-sm>tbody>tr>td:empty::after {
+.course-content .table-sm>tbody>tr>td:empty::after {
     content: "no value";
 }
 .ur_green {
@@ -652,6 +652,7 @@ span[data-flexitour="container"][x-placement="right-start"] div[data-role="arrow
 span[data-flexitour="container"][x-placement="bottom-start"] div[data-role="arrow"] {
     top: -16px;
 }
+span[data-flexitour="container"][x-placement="bottom-start"] div[data-role="arrow"]:after
 */
 span[data-flexitour="container"][x-placement="left-start"] div[data-role="arrow"],
 span[data-flexitour="container"][x-placement="right-start"] div[data-role="arrow"] {
@@ -660,5 +661,5 @@ span[data-flexitour="container"][x-placement="right-start"] div[data-role="arrow
 }
 span[data-flexitour="container"][x-placement="bottom-start"] div[data-role="arrow"],
 span[data-flexitour="container"][x-placement="top-start"] div[data-role="arrow"] {
-    margin-left: -2rem;
+    margin-left: -1rem;
 }

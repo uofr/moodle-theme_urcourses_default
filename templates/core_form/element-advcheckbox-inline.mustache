@@ -5,6 +5,15 @@
 		that these inputs need for consistency with other input elements.
 		MD, Nov 2025
  }}
+{{^element.hardfrozen}}
+    {{^element.frozen}}
+        <input type="hidden" name="{{element.name}}" value="{{element.deselectedvalue}}">
+    {{/element.frozen}}
+    {{#element.frozen}}
+        <input type="hidden" name="{{element.name}}" value="{{element.frozenvalue}}">
+    {{/element.frozen}}
+{{/element.hardfrozen}}
+    {{{label}}}
 <input type="checkbox" name="{{element.name}}" class="feedback-control {{element.extraclasses}}"
     id="{{element.id}}"
     {{#element.selectedvalue}}
@@ -22,15 +31,6 @@
     {{/element.frozen}}
     {{{element.attributes}}} >
 <label class="form-check-inline {{#error}}has-danger{{/error}} fitem {{#advanced}}advanced{{/advanced}} {{{element.extraclasses}}}" for="{{element.id}}">
-{{^element.hardfrozen}}
-    {{^element.frozen}}
-        <input type="hidden" name="{{element.name}}" value="{{element.deselectedvalue}}">
-    {{/element.frozen}}
-    {{#element.frozen}}
-        <input type="hidden" name="{{element.name}}" value="{{element.frozenvalue}}">
-    {{/element.frozen}}
-{{/element.hardfrozen}}
-    {{{label}}}
 </label>
 {{#text}}
     <em>{{{.}}}</em>
