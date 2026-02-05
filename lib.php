@@ -87,6 +87,7 @@ function theme_urcourses_default_get_pre_scss($theme) {
     $brandcolour = get_config('theme_urcourses_default', 'brandcolour');
     if ($brandcolour) {
         $scss .= '$primary: ' . $brandcolour . ";\n";
+        $scss .= '$ur_primary_green: #024731' . ";\n";
     }
 
     return $scss;

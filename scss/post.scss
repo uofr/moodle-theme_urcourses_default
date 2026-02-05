@@ -47,7 +47,7 @@ h2 {
 }
 
 a {
-    color: var(--ur_primary_green) /* #006139 */;
+    color: var($ur_primary_green) /* #006139 */;
     text-decoration: none;
     background-color: transparent;
 }
@@ -65,14 +65,14 @@ a:hover {
 
 .page-link:hover {
     border-radius: 0;
-    color: var(--ur_primary_green) /* #000000 */;
+    color: var($ur_primary_green) /* #000000 */;
     background-color: color-mix(in srgb, var(--ur_primary_gold) 50%, white) /* #ffc82e80 */;
 }
 
 .btn-primary {
     color: #fff;
-    background-color: var(--ur_primary_green) /* #004f2e */;
-    border-color: var(--ur_primary_green) /* #004f2e */;
+    background-color: var($ur_primary_green) /* #004f2e */;
+    border-color: var($ur_primary_green) /* #004f2e */;
 }
 
 .btn-primary:hover {
@@ -92,8 +92,8 @@ a:hover {
 .btn-primary.disabled,
 .btn-primary:disabled {
     color: #fff;
-    background-color: var(--ur_primary_green) /* #004f2e */;
-    border-color: var(--ur_primary_green) /* #004f2e */;
+    background-color: var($ur_primary_green) /* #004f2e */;
+    border-color: var($ur_primary_green) /* #004f2e */;
 }
 
 .btn-primary:not(:disabled):not(.disabled):active,
@@ -114,8 +114,8 @@ a:hover {
 .btn-primary:not(:disabled):not(.disabled).active,
 .show>.btn-primary.dropdown-toggle {
     color: #fff;
-    background-color: var(--ur_primary_green) /* #004f2e */;
-    border-color: var(--ur_primary_green) /* #004f2e */;
+    background-color: var($ur_primary_green) /* #004f2e */;
+    border-color: var($ur_primary_green) /* #004f2e */;
 }
 
 .btn-primary:focus,
@@ -251,20 +251,20 @@ button.close:focus,
 }
 
 .moremenu .nav-link.active {
-    border-bottom-color: var(--ur_primary_green) /* #004f2e */;
+    border-bottom-color: var($ur_primary_green) /* #004f2e */;
 }
 
 .moremenu .nav-link.active:focus,
 .moremenu .nav-link.active:hover {
     background-color: #d7e4d6;
-    border-bottom-color: var(--ur_primary_green) /* #004f2e */;
+    border-bottom-color: var($ur_primary_green) /* #004f2e */;
 }
 
 .page-item.active .page-link {
     z-index: 0;
     color: #fff;
-    background-color: var(--ur_primary_green) /* #004f2e */;
-    border-color: var(--ur_primary_green) /* #004f2e */;
+    background-color: var($ur_primary_green) /* #004f2e */;
+    border-color: var($ur_primary_green) /* #004f2e */;
 }
 
 .page-link {
@@ -273,7 +273,7 @@ button.close:focus,
     padding: .5rem .75rem;
     margin-left: -1px;
     line-height: 1.25;
-    color: var(--ur_primary_green) /* #004f2e */;
+    color: var($ur_primary_green) /* #004f2e */;
     background-color: #fff;
     border: 1px solid #dee2e6;
 }
@@ -282,8 +282,8 @@ button.close:focus,
 .editing .activity-item:hover:not(:has(.activity:hover)) {
     color: #1d2125;
     background-color: #f3f3f380;
-    border-color: 2px solid var(--ur_primary_green) /* #004f2e50 */;
-    outline: 2px solid var(--ur_primary_green);
+    border-color: 2px solid var($ur_primary_green) /* #004f2e50 */;
+    outline: 2px solid var($ur_primary_green);
 }
 
 .activity-add,
@@ -547,7 +547,7 @@ body.course-1 .multichoicerated-r.multichoicerated-horizontal fieldset .d-flex .
 }    
 body.course-1 .multichoicerated-r.multichoicerated-horizontal fieldset .d-flex > label { // setting up the stars
 	font-size: 3.5em;
-	color: color-mix(in srgb, var(--ur_primary_green) 15%, white);
+	color: color-mix(in srgb, var($ur_primary_green) 15%, white);
 	position: relative;
 }
 body.course-1 .multichoicerated-r.multichoicerated-horizontal fieldset .d-flex > label::before { // display the stars
@@ -626,11 +626,11 @@ body.course-1 .multichoice-c.multichoice-horizontal input:nth-child(n+3) {
 .contentdesigner-content .contentdesigner-wrapper .table-striped,
 .contentdesigner-content .contentdesigner-wrapper .table-striped>tbody>tr>td,
 .contentdesigner-content .contentdesigner-wrapper .table-striped>tbody>tr>th {
-    border-color: rgb(2, 71, 49, 0.25); /* --ur_primary_green @ 25% */
+    border-color: rgb(2, 71, 49, 0.25); /* $ur_primary_green @ 25% */
     vertical-align: middle;
 }
 .contentdesigner-content .contentdesigner-wrapper .table-striped>thead>tr>th {
-    background-color: rgb(2, 71, 49); /* --ur_primary_green */
+    background-color: rgb(2, 71, 49); /* $ur_primary_green */
     color: rgb(253, 200, 57); /* --ur_primary_gold */
     font-size: 1.5em;
 }
