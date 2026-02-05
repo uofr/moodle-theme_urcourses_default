@@ -36,7 +36,7 @@
         ]
     }
 }}
-<div role="list">
+<div class="list-group" role="list">
 {{#courses}}
     <div class="course-summaryitem list-group-item course-listitem border-start-0 border-end-0 border-top-0 px-2 rounded-0{{^visible}} urhiddendash{{/visible}}" role="listitem"
         data-region="course-content"
@@ -54,7 +54,7 @@
                         {{#showcoursecategory}}
                             <div class="px-1">|</div>
                         {{/showcoursecategory}}
-                        <span class="sr-only">
+                        <span class="visually-hidden">
                             {{#str}}aria:courseshortname, core_course{{/str}}
                         </span>
                         <div>{{{shortname}}}</div>
@@ -62,7 +62,7 @@
                 {{/showshortname}}
                 {{> theme_urcourses_default/block_myoverview/course-name-list-summary }}
                 {{$coursecategory}}
-                    <span class="sr-only">
+                    <span class="visually-hidden">
                         {{#str}}aria:coursecategory, core_course{{/str}}
                     </span>
                     {{#showcoursecategory}}
@@ -78,7 +78,7 @@
                     {{> theme_urcourses_default/block_myoverview/progress-bar}}
                 {{/hasprogress}}
                 <div class="summary mt-3">
-                    <span class="sr-only">{{#str}}aria:coursesummary, block_myoverview{{/str}}</span>
+                    <span class="visually-hidden">{{#str}}aria:coursesummary, block_myoverview{{/str}}</span>
                     {{{summary}}}
                     {{^summary}}
                         <span class="text-muted">
