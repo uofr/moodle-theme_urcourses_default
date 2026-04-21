@@ -234,3 +234,5 @@ $string['questionname_desc'] = 'Which question we will associate suggestions wit
 
 // Capabilities
 $string['urcourses_default:viewenrolhint'] = 'View course enrolment hint.';
+
+$string['sliderfrontpagepositionsetting_dashboard'] = 'At the top of the dashboard';
