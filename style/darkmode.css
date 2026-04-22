@@ -47,7 +47,11 @@
   --warning: #f0ad4e;
   --danger: #ca3120;
   --light: #f8f9fa;
-  --dark: #343a40;}
+  --dark: #343a40;
+  
+  --charcoal: #363839;
+  
+  }
 
 body {
   color: #e0e1e4;
@@ -3222,8 +3226,13 @@ a#hidebankcmd {
 .path-grade-report-grader .gradeparent .floater .cell.odd,
 .path-grade-report-grader .gradeparent .heading .cell,
 .path-grade-report-grader .gradeparent .cell.category,
-.path-grade-report-grader .gradeparent .avg .cell {
-  background-color: #363839; }
+.path-grade-report-grader .gradeparent .avg .cell,
+.path-mod-assign .gradingtable thead th,
+.path-mod-assign [data-region="grade-panel"],
+table.dataTable tr.odd,
+table.dataTable tr.odd td.sorting_1,
+table.dataTable tr.even td.sorting_1 {
+  background-color: var(--charcoal); }
 
   .path-grade-report-grader .gradeparent tr.lastrow td,
   .path-grade-report-grader .gradeparent tr.lastrow th {
@@ -3711,10 +3720,15 @@ body.path-mod h2 img.iconlarge{
 /*table colors*/
 .path-grade-report-grader .gradeparent tr .cell,
 .path-grade-report-grader .gradeparent .floater .cell,
-table.dataTable tr.odd, .path-mod-workshop .userplan dd,
-table.dataTable tr.odd td.sorting_1, .courses .coursebox.even,
+table.dataTable tr.odd,
+.path-mod-workshop .userplan dd,
+table.dataTable tr.odd td.sorting_1,
+.courses .coursebox.even,
 .mod_turnitintooltwo .top.listbar.clearfix {
     color: #e4e6eb;
+}
+.mod_turnitintooltwo_submissions_data_table .odd {
+	background-color: var(--charcoal) !important;
 }
 
 .mod_board .board_column{
