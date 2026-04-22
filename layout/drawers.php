@@ -184,6 +184,7 @@ $templatecontext = [
     'overflow' => $overflow,
     'headercontent' => $headercontent,
     'addblockbutton' => $addblockbutton,
+    'mydashboard' => 0,
 ];
 
 // Include the template content for the course related hints.
@@ -221,9 +222,12 @@ if ($PAGE->pagelayout == 'frontpage') {
     require_once($CFG->dirroot . '/theme/boost_union/layout/includes/advertisementtiles.php');
 }
 
-// Include the template content for the slider, but only if we are on the frontpage.
-if ($PAGE->pagelayout == 'frontpage') {
-    require_once($CFG->dirroot . '/theme/boost_union/layout/includes/slider.php');
+// Include the template content for the slider, but only if we are on the frontpage or the dashboard.
+if ($PAGE->pagelayout == 'frontpage' || $PAGE->pagelayout == 'mydashboard') {
+    require_once($CFG->dirroot . '/theme/urcourses_default/layout/includes/slider.php');
+    if ($PAGE->pagelayout == 'mydashboard') {
+    	$templatecontext['mydashboard'] = 1; // this flag allows us to only show the slider on the dashboard.
+    }
 }
 
 // Include the template content for the smart menus.
