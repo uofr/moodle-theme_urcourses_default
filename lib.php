@@ -26,10 +26,6 @@
 define('THEME_URCOURSES_DEFAULT_SETTING_INHERITANCE_INHERIT', 0);
 define('THEME_URCOURSES_DEFAULT_SETTING_INHERITANCE_DUPLICATE', 1);
 
-define('THEME_BOOST_UNION_SETTING_SLIDER_FRONTPAGEPOSITION_BEFOREBEFORE', 1);
-define('THEME_BOOST_UNION_SETTING_SLIDER_FRONTPAGEPOSITION_BEFOREAFTER', 2);
-define('THEME_BOOST_UNION_SETTING_SLIDER_FRONTPAGEPOSITION_AFTERBEFORE', 3);
-define('THEME_BOOST_UNION_SETTING_SLIDER_FRONTPAGEPOSITION_AFTERAFTER', 4);
 define('THEME_BOOST_UNION_SETTING_SLIDER_FRONTPAGEPOSITION_DASHBOARD', 5);
 
 require_once(__DIR__ . '/locallib.php');
@@ -152,7 +148,7 @@ function theme_urcourses_default_extend_busettingsoverview() {
 }
 
 /**
- * Adds a Unenrol Test Student Account link to the course admin menu.
+ * Adds an Unenrol Test Student Account link to the course admin menu.
  *
  * @param navigation_node $navigation The navigation node to extend
  * @param stdClass $course The course to object for the tool
