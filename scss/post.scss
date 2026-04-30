@@ -664,11 +664,6 @@ span[data-flexitour="container"][x-placement="top-start"] div[data-role="arrow"]
     margin-left: -1rem;
 }
 
-
-.hasstickyfooter .stickyfooter,
-.footer-content-debugging.footer-dark {
-	 display: none;
-}
 @media(max-width:480px) {
 	.carousel-indicators {
 		bottom: -9px;
