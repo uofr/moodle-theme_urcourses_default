@@ -205,9 +205,9 @@ if ($templatecontext['showslider'] == true) {
         case THEME_BOOST_UNION_SETTING_SLIDER_ANIMATIONTYPE_FADE:
             $generalslidersettings->animation = 'slide carousel-fade';
             break;
-        case THEME_BOOST_UNION_SETTING_SLIDER_ANIMATIONTYPE_NONE:
-            $generalslidersettings->animation = '';
-            break;
+        // case THEME_BOOST_UNION_SETTING_SLIDER_ANIMATIONTYPE_NONE:
+        //     $generalslidersettings->animation = '';
+        //     break;
     }
 
     // Getting and setting the slider's animation interval setting.
