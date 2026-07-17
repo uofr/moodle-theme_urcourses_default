@@ -25,25 +25,67 @@
     * canloginbyemail - Is login by email allowed?,
     * cansignup - Signup allowed?,
     * showloginform - Hide the standard login form if it not necessary (only OAuth2 for example)
-    * cookieshelpicon - cookies help icon details
     * error - Any errors in the form?,
+    * errortitle - Optional bold heading shown above the error message (credential failures only),
+    * hasauthinstructions - Flag, set to true when auth_instructions is configured,
     * info - Info notification to display,
     * forgotpasswordurl - Forgot password url,
     * hasidentityproviders - Flag, set to true to hide identity providers,
-    * hasinstructions - Flag, set to true to show instructions,
-    * identityproviders - List of identiy providers,
+    * identityproviders - List of identity providers,
     * instructions - Instructions,
-    * instructionsformat - Format of instructions,
     * loginurl - Login url,
     * signupurl - Signup url,
-    * errorformatted - Formatted error,
     * logourl - Flag, logo url,
     * sitename - Name of site.,
     * logintoken - Random token to protect login request.,
     * maintenance - Maintenance message
-    * showlocallogin - Should the local login form be shown?
-    * showlocalloginintro - Should the local login intro be shown?
-    * showidploginintro - Should the IDP login intro be shown?
+    * guestloginbtnclass - Bootstrap btn classes (color and size) for the guest login button,
+    * guestlogininstructions - Custom guest login instructions (optional),
+    * guestlogininstructionsbetween - Flag, show guest instructions between heading and form,
+    * guestlogininstructionsbelow - Flag, show guest instructions below form,
+    * guestloginintrotext - Custom guest login intro text (optional),
+    * idploginbtnclass - Bootstrap btn classes (color and size) for IDP login buttons (e.g. btn-secondary btn-lg),
+    * idplogininstructions - Custom IDP login instructions (optional),
+    * idplogininstructionsbetween - Flag, show IDP instructions between heading and provider list,
+    * idplogininstructionsbelow - Flag, show IDP instructions below provider list,
+    * idploginintrotext - Custom IDP login intro text (optional),
+    * localloginbtnclass - Bootstrap btn classes (color and size) for the local login button (e.g. btn-primary btn-lg),
+    * locallogininstructions - Custom local login instructions (optional),
+    * locallogininstructionsbetween - Flag, show local instructions between heading and form,
+    * locallogininstructionsbelow - Flag, show local instructions below form,
+    * localloginintrotext - Custom local login intro text (optional),
+    * logininstructionsabove - Instructions shown above the login provider list (optional),
+    * logininstructionsbelow - Instructions shown below the login provider list (optional),
+    * logininstructionssideupper - Instructions shown in the upper side panel (optional),
+    * logininstructionssidelower - Instructions shown in the lower side panel (optional),
+    * loginlayoutaccordion - Flag used to check if elements should be displayed for the accordion layout type,
+    * loginlayouttabs - Flag used to check if elements should be displayed for the tabs layout type,
+    * loginlayoutvertical - Flag used to check if elements should be displayed for the vertical layout type,
+    * loginmethods - Array used to iterate over the login methods, each with: id, name, order, type, islocal, isidp, isfirsttimesignup, isguest, isfirst, label, active,
+    * selfregistrationloginbtnclass - Bootstrap btn classes (color and size) for the self registration button,
+    * selfregistrationlogininstructions - Custom self registration instructions (optional),
+    * selfregistrationlogininstructionsbetween - Flag, show self registration instructions between heading and button,
+    * selfregistrationlogininstructionsbelow - Flag, show self registration instructions below button,
+    * selfregistrationloginintrotext - Custom self registration intro text (optional),
+    * shibbolethembeddedwayfcode - Custom Shibboleth embedded WAYF JavaScript code (optional),
+    * showguestlogin - Should guest login be shown? (theme + core),
+    * showguestloginintro - Should the guest login intro be shown?,
+    * showguestlogininstruction - Should the guest login instructions be shown?,
+    * showidplogin - Should IDP login be shown? (theme + core),
+    * showidploginintro - Should the IDP login intro be shown?,
+    * showidplogininstruction - Should the IDP login instructions be shown?,
+    * showlocallogin - Should the local login form be shown?,
+    * showlocalloginintro - Should the local login intro be shown?,
+    * showlocallogininstruction - Should the local login instructions be shown?,
+    * showselfregistration - Should self registration be shown? (theme + core),
+    * showselfregistrationloginintro - Should the self registration intro be shown?
+    * showselfregistrationlogininstruction - Should the self registration instructions be shown?,
+    * showshibbolethembeddedwayfcode - Should the Shibboleth embedded WAYF code be shown?,
+    * loginbrandshowlogo - Flag, whether to show the logo on the login page (controlled by loginpagebrand setting),
+    * loginbrandshowheading - Flag, whether to show the heading on the login page (controlled by loginpagebrand setting),
+    * loginbrandshowtagline - Flag, whether to show the tagline on the login page (controlled by loginpagebrand setting),
+    * loginheadingtext - Heading text for the login page (controlled by loginpageheading setting),
+    * logintaglinetext - Tagline text for the login page (controlled by loginpagetagline setting)
 
     Example context (json):
     {
@@ -52,46 +94,16 @@
         "canloginbyemail": false,
         "cansignup": true,
         "showloginform": true,
-        "cookieshelpicon": {
-            "heading": "Cookies must be enabled in your browser",
-            "text": "<div class=\"no-overflow\">Two cookies are used on this site. Both died..</div>",
-            "icon": {
-                "attributes": [
-                    {
-                        "name": "class",
-                        "value": ""
-                    },
-                    {
-                        "name": "alt",
-                        "value": "Help with Cookies must be enabled in your browser"
-                    },
-                    {
-                        "name": "title",
-                        "value": "Help with Cookies must be enabled in your browser"
-                    },
-                    {
-                        "name": "src",
-                        "value": "http://localhost/stable_master/theme/image.php?theme=boost&component=core&image=help"
-                    }
-                ]
-            },
-            "linktext": null,
-            "title": "Help with Cookies must be enabled in your browser",
-            "url": "http://localhost/stable_master/help.php?component=core&identifier=cookiesenabled&lang=en",
-            "ltr": true
-        },
         "error": "",
+        "errortitle": "",
+        "hasauthinstructions": false,
         "info": "",
         "forgotpasswordurl": "http://localhost/stable_master/login/forgot_password.php",
         "hasidentityproviders": false,
-        "hasinstructions": true,
         "identityproviders": [],
         "instructions": "For full access to this site, you first need to create an account.",
-        "instructionsformat": "1",
         "loginurl": "http://localhost/stable_master/login/index.php",
         "signupurl": "http://localhost/stable_master/login/signup.php",
-        "cookieshelpiconformatted": "",
-        "errorformatted": "",
         "logourl": false,
         "sitename": "Beer & Chips",
         "logintoken": "randomstring",
@@ -99,182 +111,490 @@
         "languagemenu": "Choose language",
         "togglepassword": true,
         "smallscreensonly": true,
+        "guestlogininstructions": "<p>Guest access provides limited features.</p>",
+        "guestlogininstructionsbetween": true,
+        "guestlogininstructionsbelow": false,
+        "guestloginintrotext": "",
+        "idplogininstructions": "<p>You can also login with your institutional identity provider.</p>",
+        "idplogininstructionsbetween": false,
+        "idplogininstructionsbelow": true,
+        "idploginintrotext": "",
+        "locallogininstructions": "<p>Please use your Moodle account credentials.</p>",
+        "locallogininstructionsbetween": true,
+        "locallogininstructionsbelow": false,
+        "localloginintrotext": "",
+        "selfregistrationlogininstructions": "<p>Create a new account to access all site features.</p>",
+        "selfregistrationlogininstructionsbetween": true,
+        "selfregistrationlogininstructionsbelow": false,
+        "selfregistrationloginintrotext": "",
+        "loginlayoutaccordion": false,
+        "loginlayouttabs": true,
+        "loginlayoutvertical": false,
+        "loginmethods": [
+            {
+                "id": "login-method-local",
+                "name": "local",
+                "order": 1,
+                "type": "local",
+                "islocal": true,
+                "isidp": false,
+                "isfirsttimesignup": false,
+                "isguest": false,
+                "isfirst": true,
+                "label": "Moodle account",
+                "active": true
+            },
+            {
+                "id": "login-method-idp",
+                "name": "idp",
+                "order": 2,
+                "type": "idp",
+                "islocal": false,
+                "isidp": true,
+                "isfirsttimesignup": false,
+                "isguest": false,
+                "isfirst": false,
+                "label": "IDP login",
+                "active": false
+            }
+        ],
         "showlocallogin": true,
         "showlocalloginintro": true,
-        "showidploginintro": true
+        "showlocallogininstruction": true,
+        "showidplogin": true,
+        "showidploginintro": true,
+        "showidplogininstruction": true,
+        "showguestlogin": true,
+        "showguestloginintro": true,
+        "showguestlogininstruction": false,
+        "showselfregistration": true,
+        "showselfregistrationloginintro": true,
+        "showselfregistrationlogininstruction": true,
+        "showshibbolethembeddedwayfcode": false,
+        "localloginbtnclass": "btn-primary",
+        "idploginbtnclass": "btn-secondary",
+        "selfregistrationloginbtnclass": "btn-secondary",
+        "guestloginbtnclass": "btn-secondary"
     }
 }}
 {{!
-    This template is a modified version of core/loginform
+    This template is a modified version of core/loginform which was overwritten and modified in theme_boost already
 
     Modifications compared to the original template:
     * Add btn-secondary class to identityprovider login buttons.
-    * Added the possibility to hide the local login form (with Boost Union).
+    * Added the possibility to change the login form layout from a vertical to a tabbed layout or accordion layout.
+    * Added the option to show each identity provider in its own tab, accordion panel, or vertical block.
+    * Added the possibility to hide each login provider (with Boost Union).
     * Removed the possibility to hide the local login form (with Moodle Core from Moodle 4.5 on).
-    * Added the possibility to hide the IDP login intro.
-    * Added the possibility to show a local login intro.
-    * Added the possibility to change the login method order by adding wrapper divs around each login method.
+    * Added the possibility to show or hide the login provider intros.
+    * Added the possibility to change the login method order.
+    * Added the possibility to show an embedded WAYF (based on configuration or based on custom JS code)
+    * Added the possibility to align the login logo.
+    * Added the possibility to control login page branding (logo, heading, tagline) via the loginpagebrand setting.
+
+    This template supports three layout options (vertical, tabs, accordion) and renders multiple
+    login methods (local, IDP, firsttimesignup, guest) in a sorted order. The broad structure of this document
+    consists of: Header Section (logo/heading and messages), Container Section (either for tabs layout
+    where we iterate over the tabs array, or for vertical/accordion layout), Login Methods Section
+    (where we iterate over the loginmethods array to display the actual login forms), Container Close
+    Section (to close the container), Footer Section (language menu and cookies notice), and
+    JavaScript Section (for form handling and layout-specific functionality).
 }}
 
 <div class="loginform">
-    {{#logourl}}
-        <div id="loginlogo" class="login-logo">
-            <img id="logoimage" src="{{logourl}}" class="img-fluid" alt="{{sitename}}"/>
-            <h1 class="login-heading sr-only">{{#str}} loginto, core, {{sitename}} {{/str}}</h1>
-        </div>
-    {{/logourl}}
-    {{^logourl}}
-        <h1 class="login-heading mb-4">{{#str}} loginto, core, {{sitename}} {{/str}}</h1>
-    {{/logourl}}
+    {{#loginbrandshowlogo}}
+        {{#logourl}}
+            <div id="loginlogo" class="d-flex mb-4 login-logo{{#loginlogoclasses}} {{loginlogoclasses}}{{/loginlogoclasses}}">
+                <img id="logoimage" src="{{logourl}}" class="img-fluid" alt="{{sitename}}"/>
+            </div>
+        {{/logourl}}
+    {{/loginbrandshowlogo}}
+    {{#loginbrandshowheading}}
+        <h1 class="h2 login-heading mb-{{#loginbrandshowtagline}}2{{/loginbrandshowtagline}}{{^loginbrandshowtagline}}4{{/loginbrandshowtagline}}">{{loginheadingtext}}</h1>
+    {{/loginbrandshowheading}}
+    {{^loginbrandshowheading}}
+        <h1 class="h2 login-heading visually-hidden">{{loginheadingtext}}</h1>
+    {{/loginbrandshowheading}}
+    {{#loginbrandshowtagline}}
+        {{#logintaglinetext}}
+            <p class="login-tagline text-muted mb-4">{{logintaglinetext}}</p>
+        {{/logintaglinetext}}
+    {{/loginbrandshowtagline}}
     {{#maintenance}}
         <div class="alert alert-danger login-maintenance">
-            <h5>{{#str}}maintenance_mode, theme_urcourses_default{{/str}}</h5>
             {{{maintenance}}}
         </div>
     {{/maintenance}}
     {{#error}}
-        <a href="#" id="loginerrormessage" class="sr-only">{{error}}</a>
-        <div class="alert alert-danger" role="alert">{{error}}</div>
+        <div class="alert alert-danger" id="loginerrormessage" role="alert">
+            {{#errortitle}}<strong class="d-block mb-1">{{errortitle}}</strong>{{/errortitle}}
+            {{error}}
+        </div>
     {{/error}}
     {{#info}}
-        <a href="#" id="logininfomessage" class="sr-only">{{info}}</a>
-        <div class="alert alert-info" role="alert">{{info}}</div>
+        <div class="alert alert-info" id="logininfomessage" role="status">{{info}}</div>
     {{/info}}
-    {{#cansignup}}
-        <a href="{{signupurl}}" class="sr-only">{{#str}} tocreatenewaccount {{/str}}</a>
-    {{/cansignup}}
-    <div id="theme_boost_union-loginorder">
+
+    {{! =========================================================================== }}
+    {{! OPEN BU LOGINFORM CONTAINER }}
+    {{! =========================================================================== }}
+
+    <div id="theme_boost_union-loginform">
+
+    {{! =========================================================================== }}
+    {{! GLOBAL INSTRUCTIONS ABOVE LOGIN PANELS }}
+    {{! =========================================================================== }}
+
+    {{#logininstructionsabove}}
+    <div class="login-instructions login-instructions-above mb-4">
+        {{{logininstructionsabove}}}
+    </div>
+    {{/logininstructionsabove}}
+
+    {{! =========================================================================== }}
+    {{! SIDE PANEL INSTRUCTIONS ABOVE (small screens only) }}
+    {{! =========================================================================== }}
+
+    {{#logininstructionssideupper}}
+    <div class="login-instructions login-instructions-sideupper d-lg-none small mb-4">
+        {{{logininstructionssideupper}}}
+    </div>
+    {{/logininstructionssideupper}}
+
+    {{! =========================================================================== }}
+    {{! OPEN LAYOUT CONTAINER: Tabs or Accordion }}
+    {{! =========================================================================== }}
+
+    {{! Tabs Layout: Navigation and start content section }}
+    {{#loginlayouttabs}}
+        <ul class="nav nav-tabs mb-4" id="login-layout-tabs" role="tablist">
+            {{#loginmethods}}
+            <li class="nav-item" role="presentation">
+                <a class="nav-link {{#active}}active{{/active}}" id="{{id}}-tab" data-bs-toggle="tab" href="#{{id}}" role="tab" aria-controls="{{id}}" {{#active}}aria-selected="true"{{/active}}{{^active}}aria-selected="false" tabindex="-1"{{/active}}>{{label}}</a>
+            </li>
+            {{/loginmethods}}
+        </ul>
+        <div class="tab-content mb-4" id="login-layout-tabs-content">
+    {{/loginlayouttabs}}
+    {{! Accordion Layout: Start container }}
+    {{#loginlayoutaccordion}}
+        <div id="login-layout-accordion" class="accordion">
+    {{/loginlayoutaccordion}}
+
+    {{! =========================================================================== }}
+    {{! LOGIN METHODS: Loop through sorted methods }}
+    {{! =========================================================================== }}
+    {{#loginmethods}}
+
+    {{! --------------------------------------------------------------------------- }}
+    {{! METHOD: Local Login }}
+    {{! --------------------------------------------------------------------------- }}
+    {{#islocal}}
     {{#showlocallogin}}
-    <div id="theme_boost_union-loginorder-local" class="theme_boost_union-loginmethod">
-    <div class="login-divider"></div>
-    {{#showlocalloginintro}}
-    <h2 class="login-heading">{{#str}} loginlocalintro, theme_boost_union {{/str}}</h2>
-    {{/showlocalloginintro}}
-    <a href="{{casurl}}"
-        role="button"
-        class="btn btn-primary btn-block mt-3 mb-3 collapse show loginfrm"
-        id="loginbtn"
-        aria-expanded="true">
-            {{#str}}logincas, theme_urcourses_default{{/str}}
-            <br>
-            <small>{{#str}}logincas_subtitle, theme_urcourses_default{{/str}}</small>
-            <br>
-    </a>
-    <a data-toggle="collapse"
-        data-target=".login-form"
-        href="#otherlogin" role="button"
-        aria-expanded="false"
-        aria-controls="otherlogin loginbtn otherx"
-        class="mb-3">
-            {{#str}}loginother, theme_urcourses_default{{/str}}
-    </a>
-    <a
-        data-toggle="collapse"
-        data-target=".login-form"
-        href="#loginx"
-        class="btn btn-secondary collapse login-form ml-1"
-        id="otherx"
-        role="button"
-        aria-expanded="false"
-        aria-controls="otherlogin loginbtn otherx">
-            {{#str}}cancel{{/str}}
-    </a>
-    <form class="collapse login-form mt-3" action="{{loginurl}}" method="post" id="login">
-        <input id="anchor" type="hidden" name="anchor" value="">
-        <script>document.getElementById('anchor').value = location.hash;</script>
-        <input type="hidden" name="logintoken" value="{{logintoken}}">
-        <div class="login-form-username mb-3">
-            <label for="username" class="sr-only">
-                {{^canloginbyemail}}
-                    {{#str}} username {{/str}}
-                {{/canloginbyemail}}
-                {{#canloginbyemail}}
-                    {{#str}} usernameemail {{/str}}
-                {{/canloginbyemail}}
-            </label>
-            <input type="text" name="username" id="username" {{!
-                !}}class="form-control form-control-lg" {{!
-                !}}value="{{username}}" {{!
-                !}}placeholder="{{^canloginbyemail}}{{#cleanstr}}username{{/cleanstr}}{{/canloginbyemail}}{{!
-                !}}{{#canloginbyemail}}{{#cleanstr}}usernameemail{{/cleanstr}}{{/canloginbyemail}}" {{!
-                !}}autocomplete="username">
+    {{>theme_boost_union/loginform-partial-method-start}}
+
+        {{! Intro heading }}
+        {{#showlocalloginintro}}
+        <h2 class="h5 login-heading {{#loginlayoutaccordion}}text-break w-100{{/loginlayoutaccordion}}">{{#localloginintrotext}}{{{localloginintrotext}}}{{/localloginintrotext}}{{^localloginintrotext}}{{#str}} loginlocalintro, theme_boost_union {{/str}}{{/localloginintrotext}}</h2>
+        {{/showlocalloginintro}}
+
+        {{! Instructions (between heading and form) }}
+        {{#showlocallogininstruction}}
+        {{#locallogininstructionsbetween}}
+        <div class="login-instructions login-instructions-local mb-3">
+            {{{locallogininstructions}}}
         </div>
-        <div class="login-form-password mb-3">
-            <label for="password" class="sr-only">{{#str}} password {{/str}}</label>
-            <input type="password" name="password" id="password" value="" {{!
-                !}}class="form-control form-control-lg" {{!
-                !}}placeholder="{{#cleanstr}}password{{/cleanstr}}" {{!
-                !}}autocomplete="current-password">
-        </div>
-        {{#recaptcha}}
-            <div class="login-form-recaptcha mb-3">
-                {{{recaptcha}}}
+        {{/locallogininstructionsbetween}}
+        {{/showlocallogininstruction}}
+        <a data-bs-toggle="collapse"
+            data-bs-target=".login-form"
+            href="#otherlogin"
+            role="button"
+            aria-expanded="false"
+            aria-controls="otherlogin loginbtn otherx"
+            class="mb-3">
+                {{#str}}loginother, theme_urcourses_default{{/str}}
+        </a>
+        <a
+            data-bs-toggle="collapse"
+            data-bs-target=".login-form"
+            href="#loginx"
+            class="btn btn-secondary collapse login-form ml-1"
+            id="otherx"
+            role="button"
+            aria-expanded="false"
+            aria-controls="otherlogin loginbtn otherx">
+                {{#str}}cancel{{/str}}
+        </a>
+        <form class="login-form collapse mt-3" action="{{loginurl}}" method="post" id="login">
+            <input id="anchor" type="hidden" name="anchor" value="">
+            <script>document.getElementById('anchor').value = location.hash;</script>
+            <input type="hidden" name="logintoken" value="{{logintoken}}">
+            <div class="login-form-username mb-3">
+                <label for="username" class="form-label">
+                    {{^canloginbyemail}}
+                        {{#str}} username {{/str}}
+                    {{/canloginbyemail}}
+                    {{#canloginbyemail}}
+                        {{#str}} usernameemail {{/str}}
+                    {{/canloginbyemail}}
+                </label>
+                <input type="text" name="username" id="username" {{!
+                    !}}class="form-control" {{!
+                    !}}value="{{username}}" {{!
+                    !}}placeholder="{{^canloginbyemail}}{{#str}}enterusername{{/str}}{{/canloginbyemail}}{{!
+                    !}}{{#canloginbyemail}}{{#str}}loginenterusernameoremail{{/str}}{{/canloginbyemail}}" {{!
+                    !}}autocomplete="username">
             </div>
-        {{/recaptcha}}
-        <div class="login-form-submit mb-3">
-            <button class="btn btn-primary btn-lg" type="submit" id="loginbtn">{{#str}}login{{/str}}</button>
+            <div class="login-form-password mb-3">
+                <label for="password" class="form-label">{{#str}} password {{/str}}</label>
+                <input type="password" name="password" id="password" value="" {{!
+                    !}}class="form-control" {{!
+                    !}}placeholder="{{#str}}loginenterpassword{{/str}}" {{!
+                    !}}autocomplete="current-password">
+            </div>
+            {{#recaptcha}}
+                <div class="login-form-recaptcha mb-3">
+                    {{{recaptcha}}}
+                </div>
+            {{/recaptcha}}
+            <div class="login-form-submit mb-3">
+                <button class="btn {{localloginbtnclass}} w-100" type="submit" id="loginbtn">{{#str}}login{{/str}}</button>
+            </div>
+        </form>
+
+        {{! Instructions (below form) }}
+        {{#showlocallogininstruction}}
+        {{#locallogininstructionsbelow}}
+        <div class="login-instructions login-instructions-local mt-3">
+            {{{locallogininstructions}}}
         </div>
-    </form>
-    </div>
+        {{/locallogininstructionsbelow}}
+        {{/showlocallogininstruction}}
+
+    {{>theme_boost_union/loginform-partial-method-end}}
     {{/showlocallogin}}
-    <div id="theme_boost_union-loginorder-firsttimesignup" class="theme_boost_union-loginmethod">
-    {{#hasinstructions}}
-        <div class="login-divider"></div>
-        <div class="login-instructions {{#cansignup}}mb-3{{/cansignup}}">
-            <h2 class="login-heading">{{#str}}firsttime{{/str}}</h2>
-            {{{instructions}}}
+    {{/islocal}}
+
+    {{! --------------------------------------------------------------------------- }}
+    {{! METHOD: Identity Providers (OAuth2, SAML, etc.) }}
+    {{! --------------------------------------------------------------------------- }}
+    {{#isidp}}
+    {{#showidplogin}}
+    {{>theme_boost_union/loginform-partial-method-start}}
+
+        <div class="login-identityproviders">
+            {{! Intro heading (For the vertical layout with split IDP, this is the provider name. Otherwise, it is the intro text) }}
+            {{#showidploginintro}}
+            <h2 class="h5 login-heading {{#loginlayoutaccordion}}text-break w-100{{/loginlayoutaccordion}}{{#loginlayoutvertical}}{{#idpsplit}} text-break w-100{{/idpsplit}}{{/loginlayoutvertical}}">
+                {{#loginlayoutvertical}}
+                    {{#idpsplit}}
+                        {{label}}
+                    {{/idpsplit}}
+                    {{^idpsplit}}
+                        {{#idploginintrotext}}{{{idploginintrotext}}}{{/idploginintrotext}}{{^idploginintrotext}}{{#str}} loginidpintro, theme_boost_union {{/str}}{{/idploginintrotext}}
+                    {{/idpsplit}}
+                {{/loginlayoutvertical}}
+                {{^loginlayoutvertical}}
+                    {{#idploginintrotext}}{{{idploginintrotext}}}{{/idploginintrotext}}{{^idploginintrotext}}{{#str}} loginidpintro, theme_boost_union {{/str}}{{/idploginintrotext}}
+                {{/loginlayoutvertical}}
+            </h2>
+            {{/showidploginintro}}
+
+            {{! Instructions (between heading and form) }}
+            {{#showidplogininstruction}}
+            {{#idplogininstructionsbetween}}
+            <div class="login-instructions login-instructions-idp mb-3">
+                {{{idplogininstructions}}}
+            </div>
+            {{/idplogininstructionsbetween}}
+            {{/showidplogininstruction}}
+
+            {{! If not using embedded WAYF code. }}
+            {{^showshibbolethembeddedwayfcode}}
+                {{#identityproviders}}
+                    <div class="login-identityprovider mb-3">
+                        {{! Use internal WAYF for Shibboleth }}
+                        {{#useinternalwayf}}
+                        <form class="login-shibboleth-wayf-form mb-3" action="{{shibbolethloginurl}}" method="post" id="{{wayfformid}}">
+                            <div class="mb-3">
+                                <label for="{{wayfformid}}-idp" class="form-label">{{#str}}auth_shibboleth_select_organization, auth_shibboleth{{/str}}</label>
+                                <select id="{{wayfformid}}-idp" name="idp" class="form-select w-100">
+                                    <option value="-">{{#str}}auth_shibboleth_select_member, auth_shibboleth{{/str}}</option>
+                                    {{#shibbidps}}
+                                    <option value="{{value}}" {{#selected}}selected{{/selected}}>{{name}}</option>
+                                    {{/shibbidps}}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn {{idploginbtnclass}} w-100" accesskey="s">
+                                {{#str}}login{{/str}}
+                            </button>
+                            <p class="form-text text-muted mt-2 mb-0 text-break">
+                                {{#str}}auth_shib_contact_administrator, auth_shibboleth, {{adminemail}}{{/str}}
+                            </p>
+                        </form>
+                        {{/useinternalwayf}}
+                        {{! Use standard IDP button }}
+                        {{^useinternalwayf}}
+                        <a class="btn {{idploginbtnclass}} w-100" href="{{url}}">
+                            {{#iconurl}}
+                                <img src="{{iconurl}}" alt="" width="24" height="24"/>
+                            {{/iconurl}}
+                            {{name}}
+                        </a>
+                        {{/useinternalwayf}}
+                    </div>
+                {{/identityproviders}}
+            {{/showshibbolethembeddedwayfcode}}
+            {{! Otherwise, if using embedded WAYF code, display the configured JavaScript code. }}
+            {{#showshibbolethembeddedwayfcode}}
+                {{{shibbolethembeddedwayfcode}}}
+            {{/showshibbolethembeddedwayfcode}}
         </div>
-    {{/hasinstructions}}
-    {{#cansignup}}
-        <div class="login-signup">
-            <a class="btn btn-secondary" href="{{signupurl}}">{{#str}}startsignup{{/str}}</a>
+
+        {{! Instructions (below form) }}
+        {{#showidplogininstruction}}
+        {{#idplogininstructionsbelow}}
+        <div class="login-instructions login-instructions-idp mt-3">
+            {{{idplogininstructions}}}
         </div>
-    {{/cansignup}}
-    </div>
-    {{#canloginasguest}}
-    <div id="theme_boost_union-loginorder-guest" class="theme_boost_union-loginmethod">
-        <div class="login-divider"></div>
-        <h2 class="login-heading">{{#str}}someallowguest{{/str}}</h2>
-        <form action="{{loginurl}}" method="post" id="guestlogin">
+        {{/idplogininstructionsbelow}}
+        {{/showidplogininstruction}}
+
+    {{>theme_boost_union/loginform-partial-method-end}}
+    {{/showidplogin}}
+    {{/isidp}}
+
+    {{! --------------------------------------------------------------------------- }}
+    {{! METHOD: Signup / First Time User }}
+    {{! --------------------------------------------------------------------------- }}
+    {{#isfirsttimesignup}}
+    {{#showselfregistration}}
+    {{>theme_boost_union/loginform-partial-method-start}}
+
+        <div class="login-signup-content">
+            {{! Intro heading }}
+            {{#showselfregistrationloginintro}}
+            <h2 class="h5 login-heading {{#loginlayoutaccordion}}text-break w-100{{/loginlayoutaccordion}}">{{#selfregistrationloginintrotext}}{{{selfregistrationloginintrotext}}}{{/selfregistrationloginintrotext}}{{^selfregistrationloginintrotext}}{{#str}} loginselfregistrationintro, theme_boost_union {{/str}}{{/selfregistrationloginintrotext}}</h2>
+            {{/showselfregistrationloginintro}}
+
+            {{! Instructions (between heading and form) }}
+            {{#showselfregistrationlogininstruction}}
+            {{#selfregistrationlogininstructionsbetween}}
+            <div class="login-instructions login-instructions-firsttimesignup mb-3">
+                {{{selfregistrationlogininstructions}}}
+            </div>
+            {{/selfregistrationlogininstructionsbetween}}
+            {{/showselfregistrationlogininstruction}}
+        </div>
+
+        <div class="login-signup mb-3">
+            <a class="btn {{selfregistrationloginbtnclass}} w-100" href="{{signupurl}}">{{#str}}startsignup{{/str}}</a>
+        </div>
+
+        {{! Instructions (below form) }}
+        {{#showselfregistrationlogininstruction}}
+        {{#selfregistrationlogininstructionsbelow}}
+        <div class="login-instructions login-instructions-firsttimesignup mt-3">
+            {{{selfregistrationlogininstructions}}}
+        </div>
+        {{/selfregistrationlogininstructionsbelow}}
+        {{/showselfregistrationlogininstruction}}
+
+    {{>theme_boost_union/loginform-partial-method-end}}
+    {{/showselfregistration}}
+    {{/isfirsttimesignup}}
+
+    {{! --------------------------------------------------------------------------- }}
+    {{! METHOD: Guest Login }}
+    {{! --------------------------------------------------------------------------- }}
+    {{#isguest}}
+    {{#showguestlogin}}
+    {{>theme_boost_union/loginform-partial-method-start}}
+
+        {{! Intro heading }}
+        {{#showguestloginintro}}
+        <h2 class="h5 login-heading {{#loginlayoutaccordion}}text-break w-100{{/loginlayoutaccordion}}">{{#guestloginintrotext}}{{{guestloginintrotext}}}{{/guestloginintrotext}}{{^guestloginintrotext}}{{#str}} loginguestintro, theme_boost_union {{/str}}{{/guestloginintrotext}}</h2>
+        {{/showguestloginintro}}
+
+        {{! Instructions (between heading and form) }}
+        {{#showguestlogininstruction}}
+        {{#guestlogininstructionsbetween}}
+        <div class="login-instructions login-instructions-guest mb-3">
+            {{{guestlogininstructions}}}
+        </div>
+        {{/guestlogininstructionsbetween}}
+        {{/showguestlogininstruction}}
+
+        <form action="{{loginurl}}" method="post" id="guestlogin" class="mb-3">
             <input type="hidden" name="logintoken" value="{{logintoken}}">
             <input type="hidden" name="username" value="guest" />
             <input type="hidden" name="password" value="guest" />
-            <button class="btn btn-secondary" type="submit" id="loginguestbtn">{{#str}}loginguest{{/str}}</button>
+            <button class="btn {{guestloginbtnclass}} w-100" type="submit" id="loginguestbtn"><i class="fa fa-user me-2" aria-hidden="true"></i>{{#str}}loginasguest{{/str}}</button>
         </form>
+
+        {{! Instructions (below form) }}
+        {{#showguestlogininstruction}}
+        {{#guestlogininstructionsbelow}}
+        <div class="login-instructions login-instructions-guest mt-3">
+            {{{guestlogininstructions}}}
+        </div>
+        {{/guestlogininstructionsbelow}}
+        {{/showguestlogininstruction}}
+
+    {{>theme_boost_union/loginform-partial-method-end}}
+    {{/showguestlogin}}
+    {{/isguest}}
+    {{/loginmethods}}
+
+    {{! =========================================================================== }}
+    {{! CLOSE LAYOUT CONTAINER: Tabs or Accordion }}
+    {{! =========================================================================== }}
+
+    {{#loginlayouttabs}}
     </div>
-    {{/canloginasguest}}
+    {{/loginlayouttabs}}
+    {{#loginlayoutaccordion}}
     </div>
-    <div class="login-divider"></div>
-    <div class="form-label">
-        {{#str}}loginhelp_header, theme_urcourses_default{{/str}}
+    {{/loginlayoutaccordion}}
+
+    {{! =========================================================================== }}
+    {{! GLOBAL INSTRUCTIONS BELOW LOGIN PANELS }}
+    {{! =========================================================================== }}
+
+    {{#logininstructionsbelow}}
+    <div class="login-instructions login-instructions-below mt-4">
+        {{{logininstructionsbelow}}}
     </div>
-        <ul>
-            <li>
-                <a href="{{newstudenturl}}">
-                    {{#str}}loginhelp_newstudent, theme_urcourses_default{{/str}}
-                </a>
-            </li>
-            <li>
-                <a href="{{forgotpasswordurl}}">
-                    {{#str}}loginhelp_forgotpassword, theme_urcourses_default{{/str}}
-                </a>
-            </li>
-            <li>
-                <a href="{{activateurl}}">
-                    {{#str}}loginhelp_activate, theme_urcourses_default{{/str}}
-                </a>
-            </li>
-        </ul>
-        <p>{{#str}}login_help, theme_urcourses_default{{/str}}</p>
-    <div class="login-divider"></div>
-    <div class="d-flex">
-        {{#languagemenu}}
-            <div class="login-languagemenu">
-                {{>core/action_menu}}
-            </div>
-            <div class="divider border-start align-self-center mx-3"></div>
-        {{/languagemenu}}
-        <button type="button" class="btn btn-secondary" {{!
+    {{/logininstructionsbelow}}
+
+    {{! =========================================================================== }}
+    {{! SIDE PANEL INSTRUCTIONS BELOW (small screens only) }}
+    {{! =========================================================================== }}
+
+    {{#logininstructionssidelower}}
+    <div class="login-instructions login-instructions-sidelower d-lg-none small mt-4">
+        {{{logininstructionssidelower}}}
+    </div>
+    {{/logininstructionssidelower}}
+
+    {{! =========================================================================== }}
+    {{! CLOSE BU LOGINFORM CONTAINER }}
+    {{! =========================================================================== }}
+
+    </div>
+
+    {{! =========================================================================== }}
+    {{! LOGIN FORM FOOTER }}
+    {{! =========================================================================== }}
+
+    {{#languagemenu}}
+        <div class="login-languagemenu d-flex justify-content-center my-5">
+            {{>core/action_menu}}
+        </div>
+    {{/languagemenu}}
+    <div class="login-cookiesnotice text-center">
+        <button type="button" class="btn btn-link p-0" {{!
         }} data-modal="alert"{{!
         }} data-modal-title-str='["cookiesenabled", "core"]' {{!
         }} data-modal-content-str='["cookiesenabled_help_html", "core"]'{{!
@@ -288,10 +608,11 @@
             require(['core_form/events'], function(FormEvent) {
                 function autoFocus() {
                     const userNameField = document.getElementById('username');
-                    if (userNameField.value.length == 0) {
+                    const passwordField = document.getElementById('password');
+                    if (userNameField && userNameField.value.length == 0) {
                         userNameField.focus();
-                    } else {
-                        document.getElementById('password').focus();
+                    } else if (passwordField) {
+                        passwordField.focus();
                     }
                 }
                 autoFocus();
@@ -299,9 +620,28 @@
             });
         {{/autofocusform}}
     {{/error}}
-    {{#error}}
-        document.getElementById('loginerrormessage').focus();
-    {{/error}}
+    require(['core/pending'], function(Pending) {
+        const errorMessageDiv = document.getElementById('loginerrormessage');
+        const infoMessageDiv = document.getElementById('logininfomessage');
+        const errorMessage = errorMessageDiv?.textContent.trim();
+        const infoMessage = infoMessageDiv?.textContent.trim();
+        if (errorMessage || infoMessage) {
+            const pendingJS = new Pending('login-move-focus');
+            const usernameField = document.getElementById('username');
+            setTimeout(function() {
+                if (errorMessage && usernameField) {
+                    usernameField.focus();
+                }
+                if (errorMessage) {
+                    errorMessageDiv.innerHTML += "&nbsp;";
+                }
+                if (infoMessage) {
+                    infoMessageDiv.innerHTML += "&nbsp;";
+                }
+                pendingJS.resolve();
+            }, 500);
+        }
+    });
     {{#togglepassword}}
         require(['core/togglesensitive'], function(ToggleSensitive) {
             ToggleSensitive.init("password", {{smallscreensonly}});
@@ -309,8 +649,17 @@
     {{/togglepassword}}
     require(['core_form/submit'], function(Submit) {
         Submit.init("loginbtn");
-        {{#canloginasguest}}
+        {{#showguestlogin}}
             Submit.init("loginguestbtn");
-        {{/canloginasguest}}
+        {{/showguestlogin}}
     });
+
+    {{! Tabs layout: Clear URL hash on page reload to prevent automatic tab switching by the browser based on the hash }}
+    {{#loginlayouttabs}}
+    (function() {
+        if (window.location.hash && (window.location.hash.indexOf('login-method-') !== -1)) {
+            history.replaceState(null, null, window.location.pathname + window.location.search);
+        }
+    })();
+    {{/loginlayouttabs}}
 {{/js}}
