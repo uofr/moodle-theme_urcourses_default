@@ -61,9 +61,14 @@
     * Include theme_boost_union/advertisementtiles template
     * Include theme_boost_union/slider template
     * Added additional block regions (including JS for offcanvas region)
+      During this implementation, course_content_header was split into two functions
+        course_content_header_notifications and course_content_header_coursecontent to be able to show the notifications
+        before the blocks in the contentupper region.
     * Added smartmenu js to support third level submenus.
+    * Added blockregions JS to support vertical alignment of outside regions. Included alignmentspacers for the outside left and right regions.
 }}
 {{> theme_boost/head }}
+
 <body {{{ bodyattributes }}}>
 {{> core/local/toast/wrapper}}
 <div id="page-wrapper" class="d-print-block">
@@ -77,6 +82,7 @@
             {{$drawerheadercontent}}
                 {{> theme_boost/courseindexdrawercontrols}}
             {{/drawerheadercontent}}
+            {{$drawerheading}}{{> theme_boost/courseindexdrawerheading}}{{/drawerheading}}
             {{$drawerclasses}}drawer drawer-left {{#courseindexopen}}show{{/courseindexopen}}{{/drawerclasses}}
             {{$drawercontent}}
                 {{{courseindex}}}
@@ -85,6 +91,10 @@
             {{$drawerstate}}show-drawer-left{{/drawerstate}}
             {{$tooltipplacement}}right{{/tooltipplacement}}
             {{$closebuttontext}}{{#str}}closecourseindex, core{{/str}}{{/closebuttontext}}
+            {{$closebuttonicon}}
+                <span class="dir-rtl-hide">{{#pix}} e/sidebar_left, core {{/pix}}</span>
+                <span class="dir-ltr-hide">{{#pix}} e/sidebar_right, core {{/pix}}</span>
+            {{/closebuttonicon}}
         {{/ theme_boost/drawer}}
     {{/courseindex}}
     {{#hasblocks}}
@@ -103,6 +113,10 @@
             {{$tooltipplacement}}left{{/tooltipplacement}}
             {{$drawercloseonresize}}1{{/drawercloseonresize}}
             {{$closebuttontext}}{{#str}}closeblockdrawer, core{{/str}}{{/closebuttontext}}
+            {{$closebuttonicon}}
+                <span class="dir-rtl-hide">{{#pix}} e/sidebar_right, core {{/pix}}</span>
+                <span class="dir-ltr-hide">{{#pix}} e/sidebar_left, core {{/pix}}</span>
+            {{/closebuttonicon}}
         {{/ theme_boost/drawer}}
     {{/hasblocks}}
 
@@ -148,7 +162,8 @@
 
         <div class="main-inner-wrapper {{{maininnerwrapperclass}}} {{{outsideregionsplacement}}}">
             {{#regions.outsideleft.hasblocks}}
-                <section id="theme-block-region-outside-left" class="theme-block-region" aria-label="{{#str}}blocks{{/str}}">
+                <section id="theme-block-region-outside-left" class="theme-block-region {{#blockregionsdata.outsideregions.verticaloffset}}invisible{{/blockregionsdata.outsideregions.verticaloffset}}" aria-label="{{#str}}blocks{{/str}}">
+                    {{#blockregionsdata.outsideregions.verticaloffset}}<div class="outside-region-alignmentspacer"></div>{{/blockregionsdata.outsideregions.verticaloffset}}
                     {{{ regions.outsideleft.addblockbutton }}}
                     {{{ regions.outsideleft.regionhtml }}}
                  </section>
@@ -159,45 +174,48 @@
                 {{#courseindex}}
                     <div class="drawer-toggler drawer-left-toggle open-nav d-print-none">
                         <button
-                            class="btn icon-no-margin"
+                            class="btn btn-icon icon-size-3"
                             data-toggler="drawers"
                             data-action="toggle"
                             data-target="theme_boost-drawers-courseindex"
-                            data-toggle="tooltip"
-                            data-placement="right"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="right"
                             title="{{#str}}opendrawerindex, core{{/str}}"
                         >
-                            <span class="sr-only">{{#str}}opendrawerindex, core{{/str}}</span>
-                            {{#pix}} t/index_drawer, moodle {{/pix}}
+                            <span class="visually-hidden">{{#str}}opendrawerindex, core{{/str}}</span>
+                            <span class="dir-rtl-hide">{{#pix}} e/sidebar_left, core {{/pix}}</span>
+                            <span class="dir-ltr-hide">{{#pix}} e/sidebar_right, core {{/pix}}</span>
                         </button>
                     </div>
                 {{/courseindex}}
                 {{#hasblocks}}
                     <div class="drawer-toggler drawer-right-toggle ms-auto d-print-none">
                         <button
-                            class="btn icon-no-margin"
+                            class="btn btn-icon icon-size-3"
                             data-toggler="drawers"
                             data-action="toggle"
                             data-target="theme_boost-drawers-blocks"
-                            data-toggle="tooltip"
-                            data-placement="right"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="right"
                             title="{{#str}}opendrawerblocks, core{{/str}}"
                         >
-                            <span class="sr-only">{{#str}}opendrawerblocks, core{{/str}}</span>
-                            <span class="dir-rtl-hide">{{#pix}}t/blocks_drawer, core{{/pix}}</span>
-                            <span class="dir-ltr-hide">{{#pix}}t/blocks_drawer_rtl, core{{/pix}}</span>
+                            <span class="visually-hidden">{{#str}}opendrawerblocks, core{{/str}}</span>
+                            <span class="dir-rtl-hide">{{#pix}} e/sidebar_right, core {{/pix}}</span>
+                            <span class="dir-ltr-hide">{{#pix}} e/sidebar_left, core {{/pix}}</span>
                         </button>
                     </div>
                 {{/hasblocks}}
             </div>
             {{> theme_boost_union/javascriptdisabledhint }}
-            {{> theme_boost_union/infobanners }}
+            {{> theme_boost_union/infobannersabove }}
             {{{ output.full_header }}}
+            {{> theme_boost_union/infobannersbelow }}
             {{#secondarymoremenu}}
                 <div class="secondary-navigation d-print-none">
                     {{> core/moremenu}}
                 </div>
             {{/secondarymoremenu}}
+            {{{ output.course_content_header_notifications }}}
             {{#regions.contentupper.hasblocks}}
                 <section id="theme-block-region-content-upper" class="theme-block-region" aria-label="{{#str}}blocks{{/str}}">
                     {{{ regions.contentupper.addblockbutton }}}
@@ -216,20 +234,19 @@
                         {{#hasregionmainsettingsmenu}}
                             <div class="region_main_settings_menu_proxy"></div>
                         {{/hasregionmainsettingsmenu}}
-                        {{{ output.course_content_header }}}
+                        {{{ output.course_content_header_coursecontent }}}
                         {{#headercontent}}
                             {{> core/activity_header }}
                         {{/headercontent}}
                         {{#overflow}}
                             <div class="container-fluid tertiary-navigation">
                                 <div class="navitem">
-                                    {{> core/url_select}}
+                                    {{> core/tertiary_navigation_selector}}
                                 </div>
                             </div>
                         {{/overflow}}
                         {{{courserelatedhints}}}
-                        
-												{{#mydashboard}}
+						{{#mydashboard}}
                         {{#sliderpositiondashboard}}
                             {{> theme_boost_union/slider }}
                         {{/sliderpositiondashboard}}
@@ -275,7 +292,8 @@
         </div>
 
         {{#regions.outsideright.hasblocks}}
-            <section id="theme-block-region-outside-right" class="theme-block-region" aria-label="{{#str}}blocks{{/str}}">
+            <section id="theme-block-region-outside-right" class="theme-block-region {{#blockregionsdata.outsideregions.verticaloffset}}invisible{{/blockregionsdata.outsideregions.verticaloffset}}" aria-label="{{#str}}blocks{{/str}}">
+                {{#blockregionsdata.outsideregions.verticaloffset}}<div class="outside-region-alignmentspacer"></div>{{/blockregionsdata.outsideregions.verticaloffset}}
                 {{{ regions.outsideright.addblockbutton }}}
                 {{{ regions.outsideright.regionhtml }}}
             </section>
@@ -324,10 +342,10 @@
 </html>
 {{#js}}
 M.util.js_pending('theme_boost/loader');
-require(['theme_boost/loader', 'theme_boost/drawer'{{#regions.offcanvas.hasblocks}},'theme_boost_union/offcanvas'{{/regions.offcanvas.hasblocks}}{{#includesmartmenu}}, 'theme_boost_union/smartmenu'{{/includesmartmenu}}], function(Loader, Drawer{{#regions.offcanvas.hasblocks}},OffCanvas{{/regions.offcanvas.hasblocks}}{{#includesmartmenu}}, SmartMenu{{/includesmartmenu}}) {
+require(['theme_boost/loader', 'theme_boost/drawer'{{#regions.offcanvas.hasblocks}},'theme_boost_union/offcanvas'{{/regions.offcanvas.hasblocks}}{{#includesmartmenu}}, 'theme_boost_union/smartmenu'{{/includesmartmenu}}{{#includestarredcacheinvalidation}}, 'theme_boost_union/smartmenu_starred_cacheinvalidation'{{/includestarredcacheinvalidation}}{{#blockregionsdata.includeblockregionsamd}}, 'theme_boost_union/blockregions'{{/blockregionsdata.includeblockregionsamd}}], function(Loader, Drawer{{#regions.offcanvas.hasblocks}},OffCanvas{{/regions.offcanvas.hasblocks}}{{#includesmartmenu}}, SmartMenu{{/includesmartmenu}}{{#includestarredcacheinvalidation}}, SmartMenuStarredCacheInvalidation{{/includestarredcacheinvalidation}}{{#blockregionsdata.includeblockregionsamd}}, BlockRegions{{/blockregionsdata.includeblockregionsamd}}) {
     Drawer.init();
     M.util.js_complete('theme_boost/loader');
-{{#regions.offcanvas.hasblocks}}OffCanvas.init();{{/regions.offcanvas.hasblocks}}
-{{#includesmartmenu}}SmartMenu.init();{{/includesmartmenu}}
+    {{! All init method calls are placed on one line to avoid a ESLint warning about too many empty lines, see Github issue #1107. }}
+    {{#regions.offcanvas.hasblocks}}OffCanvas.init();{{/regions.offcanvas.hasblocks}}{{#includesmartmenu}}SmartMenu.init();{{/includesmartmenu}}{{#includestarredcacheinvalidation}}SmartMenuStarredCacheInvalidation.init();{{/includestarredcacheinvalidation}}{{#blockregionsdata.outsideregions.verticaloffset}}BlockRegions.OutsideRegionsVerticalAlignment();{{/blockregionsdata.outsideregions.verticaloffset}}
 });
 {{/js}}

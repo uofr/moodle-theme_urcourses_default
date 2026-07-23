@@ -125,7 +125,13 @@ if ($PAGE->has_secondary_navigation()) {
     $secondarynavigation = $moremenu->export_for_template($OUTPUT);
     $overflowdata = $PAGE->secondarynav->get_overflow_menu_data();
     if (!is_null($overflowdata)) {
-        $overflow = $overflowdata->export_for_template($OUTPUT);
+        $selectmenu = new \core\output\select_menu(
+            'tertiarynavigation',
+            $overflowdata->urls,
+            $overflowdata->selected,
+        );
+        $selectmenu->set_label($overflowdata->label, $overflowdata->labelattributes);
+        $overflow = $selectmenu->export_for_template($OUTPUT);
     }
 }
 
@@ -139,7 +145,8 @@ $primarymenu = $primary->export_for_template($renderer);
 if (isset($primarymenu['includesmartmenu']) && $primarymenu['includesmartmenu'] == true) {
     $extraclasses[] = 'theme-boost-union-smartmenu';
 }
-if (isset($primarymenu['bottombar']) && !empty($primarymenu['includesmartmenu'])) {
+
+if (!empty($primarymenu['bottombar']) && !empty($primarymenu['bottombar']['drawer']) && !empty($primarymenu['includesmartmenu'])) {
     $extraclasses[] = 'theme-boost-union-bottombar';
 }
 
@@ -160,12 +167,21 @@ $bodyattributes = $OUTPUT->body_attributes($extraclasses); // In the original la
 $header = $PAGE->activityheader;
 $headercontent = $header->export_for_template($renderer);
 
+$coursefullname = $PAGE->course?->fullname ? format_string(
+    $PAGE->course->fullname,
+    true,
+    ['context' => context_course::instance($PAGE->course->id), 'escape' => false],
+) : '';
+$courseurl = $PAGE->course ? new \core\url('/course/view.php', ['id' => $PAGE->course->id]) : null;
+
 if (defined('BEHAT_SITE_RUNNING')) {
     $blockdraweropen = true;
 }
 
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
+    'coursefullname' => $coursefullname,
+    'courseurl' => $courseurl ? $courseurl->out(false) : null,
     'output' => $OUTPUT,
     'sidepreblocks' => $blockshtml,
     'hasblocks' => $hasblocks,
@@ -233,5 +249,22 @@ if ($PAGE->pagelayout == 'frontpage' || $PAGE->pagelayout == 'mydashboard') {
 // Include the template content for the smart menus.
 require_once($CFG->dirroot . '/theme/boost_union/layout/includes/smartmenus.php');
 
-// Render drawers.mustache from theme_boost (which is overridden in theme_boost_union).
-echo $OUTPUT->render_from_template('theme_boost/drawers', $templatecontext);
+// If we are on MWP.
+if (\theme_boost_union\local\mwp::extension_present() == true) {
+    // Call the BU MWP class method only if the class and method exist.
+    if (
+        class_exists('\\local_boost_union_mwp\\local\\layouts') &&
+            method_exists('\\local_boost_union_mwp\\local\\layouts', 'postprocess_drawers_templatecontext')
+    ) {
+        // Post-process the templatecontext array.
+        $templatecontext = \local_boost_union_mwp\local\layouts::postprocess_drawers_templatecontext($templatecontext);
+    }
+
+    // Render drawers.mustache from local_boost_union_mwp.
+    echo $OUTPUT->render_from_template('local_boost_union_mwp/drawers', $templatecontext);
+
+    // Otherwise.
+} else {
+    // Render drawers.mustache from theme_boost (which is overridden in theme_boost_union).
+    echo $OUTPUT->render_from_template('theme_boost/drawers', $templatecontext);
+}
