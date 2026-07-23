@@ -88,7 +88,7 @@ const autoCollapse = menu => {
         // If the menu height is smaller than the height of the parent, then try returning navlinks to the menu.
         if ('children' in moreDropdown) {
             // Iterate through the nodes within the more dropdown menu.
-            Array.from(moreDropdown.children).forEach(item => {
+            Array.from(moreDropdown.children).sort((a, b) => a.dataset.defaultOrder - b.dataset.defaultOrder).forEach(item => {
                 // Don't move the node to the more menu if it is explicitly defined that
                 // this node should be displayed in the more dropdown menu at all times.
                 if (menu.offsetHeight < maxHeight && item.dataset.forceintomoremenu !== 'true') {
@@ -107,7 +107,6 @@ const autoCollapse = menu => {
             autoCollapse(menu);
         }
     }
-    sortMenu(menu);
     menu.parentNode.classList.add(Selectors.classes.observed);
 };
 
@@ -145,10 +144,18 @@ const moveIntoMoreDropdown = (menu, navNode, prepend = false) => {
     // the moreDropdown.
     navLink.classList.remove(Selectors.classes.navlink);
     navLink.classList.add(Selectors.classes.dropdownitem);
-    if (prepend) {
-        moreDropdown.prepend(navNode);
-    } else {
+
+    const menuItems = Array.from(moreDropdown.children).sort((a, b) => {
+        return a.innerText.trim().localeCompare(b.innerText.trim());
+    });
+    const insertPoint = menuItems.find((item) => {
+        return item.innerText.trim().localeCompare(navNode.innerText.trim()) == 1;
+    });
+    if (!insertPoint) {
         moreDropdown.append(navNode);
+    }
+    else {
+        insertPoint.after(navNode);
     }
 };
 
@@ -188,7 +195,7 @@ const moveOutOfMoreDropdown = (menu, navNode) => {
     menu.insertBefore(navNode, moreButton);
 };
 
-const sortMenu = (menu) => {
+const sortMoreMenu = (menu) => {
     const moreDropdown = menu.querySelector(Selectors.regions.moredropdown);
 
     if ('children' in moreDropdown && moreDropdown.children.length > 0) {
@@ -198,17 +205,6 @@ const sortMenu = (menu) => {
         moreDropdown.innerHTML = '';
         nodesSorted.forEach(node => {
             moreDropdown.appendChild(node);
-        });
-    }
-
-    if ('children' in menu && menu.children.length > 0) {
-        const menuItems = Array.from(menu.children);
-        const menuItemsSorted = menuItems.sort((a, b) => {
-            return a.dataset.defaultOrder - b.dataset.defaultOrder;
-        });
-        menu.innerHTML = '';
-        menuItemsSorted.forEach((item) => {
-            menu.appendChild(item);
         });
     }
 };
@@ -254,11 +250,12 @@ export default menu => {
                 }
             }
         });
-        sortMenu(menu);
     }
     // Populate the more dropdown menu with additional nodes if necessary, depending on the current screen size.
     autoCollapse(menu);
     menu_navigation(menu);
+
+    sortMoreMenu(menu);
 
     // When the screen size changes make sure the menu still fits.
     window.addEventListener('resize', () => {
