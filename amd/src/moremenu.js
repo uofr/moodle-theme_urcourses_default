@@ -22,7 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-import $ from 'jquery';
 import menu_navigation from "core/menu_navigation";
 /**
  * Moremenu selectors.
@@ -39,12 +38,12 @@ const Selectors = {
         active: 'active',
         nav: 'nav',
         navlink: 'nav-link',
-        observed: 'observed',
         navitem: 'nav-item',
+        observed: 'observed',
     },
     attributes: {
         menu: '[role="menu"]',
-        dropdowntoggle: '[data-toggle="dropdown"]'
+        dropdowntoggle: '[data-bs-toggle="dropdown"]'
     }
 };
 
@@ -108,6 +107,7 @@ const autoCollapse = menu => {
             autoCollapse(menu);
         }
     }
+    sortMenu(menu);
     menu.parentNode.classList.add(Selectors.classes.observed);
 };
 
@@ -150,8 +150,6 @@ const moveIntoMoreDropdown = (menu, navNode, prepend = false) => {
     } else {
         moreDropdown.append(navNode);
     }
-
-    sortMoreDropdown(menu);
 };
 
 /**
@@ -188,11 +186,9 @@ const moveOutOfMoreDropdown = (menu, navNode) => {
     navLink.classList.remove(Selectors.classes.dropdownitem);
     navLink.classList.add(Selectors.classes.navlink);
     menu.insertBefore(navNode, moreButton);
-
-    sortMoreDropdown(menu);
 };
 
-const sortMoreDropdown = (menu) => {
+const sortMenu = (menu) => {
     const moreDropdown = menu.querySelector(Selectors.regions.moredropdown);
 
     if ('children' in moreDropdown && moreDropdown.children.length > 0) {
@@ -202,6 +198,17 @@ const sortMoreDropdown = (menu) => {
         moreDropdown.innerHTML = '';
         nodesSorted.forEach(node => {
             moreDropdown.appendChild(node);
+        });
+    }
+
+    if ('children' in menu && menu.children.length > 0) {
+        const menuItems = Array.from(menu.children);
+        const menuItemsSorted = menuItems.sort((a, b) => {
+            return a.dataset.defaultOrder - b.dataset.defaultOrder;
+        });
+        menu.innerHTML = '';
+        menuItemsSorted.forEach((item) => {
+            menu.appendChild(item);
         });
     }
 };
@@ -233,7 +240,9 @@ export default menu => {
     if ('children' in menu) {
         const moreButton = menu.querySelector(Selectors.regions.morebutton);
         const menuNodes = Array.from(menu.children);
+        let order = 0;
         menuNodes.forEach((item) => {
+            item.dataset.defaultOrder = order++;
             if (!item.classList.contains(Selectors.classes.dropdownmoremenu) &&
                     item.dataset.forceintomoremenu === 'true') {
                 // Append this node into the more dropdown menu.
@@ -245,6 +254,7 @@ export default menu => {
                 }
             }
         });
+        sortMenu(menu);
     }
     // Populate the more dropdown menu with additional nodes if necessary, depending on the current screen size.
     autoCollapse(menu);
@@ -256,18 +266,10 @@ export default menu => {
         menu_navigation(menu);
     });
 
-    const toggledropdown = e => {
-        const innerMenu = e.target.parentNode.querySelector(Selectors.attributes.menu);
-        if (innerMenu) {
-            innerMenu.classList.toggle('show');
-        }
-        e.stopPropagation();
-    };
+    const toggledropdown = e => e.stopPropagation();
 
-    // If there are dropdowns in the MoreMenu, add a new
-    // event listener to show the contents on click and prevent the
-    // moreMenu from closing.
-    $('.' + Selectors.classes.dropdownmoremenu).on('show.bs.dropdown', function() {
+    // If there are dropdowns in the "More" menu, add an event listener on click to prevent the menu from closing.
+    document.querySelector('.' + Selectors.classes.dropdownmoremenu).addEventListener('show.bs.dropdown', () => {
         const moreDropdown = menu.querySelector(Selectors.regions.moredropdown);
         moreDropdown.querySelectorAll('.dropdown').forEach((dropdown) => {
             dropdown.removeEventListener('click', toggledropdown, true);
