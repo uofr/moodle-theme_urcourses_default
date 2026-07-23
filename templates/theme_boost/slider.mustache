@@ -37,6 +37,7 @@
       * caption - The slide's caption (might be empty)
       * content - The slide's content (might be empty)
       * contentstyleclass - The CSS class for the slide
+      * interval - The individual interval for this slide in milliseconds (might be empty)
       * isfirstslide - The flag if this is the first slide
       * linkimage - The flag if the slide's background image should be linked
       * linktext - The flag if the slide's text (caption + content) should be linked
@@ -113,21 +114,21 @@
 }}
 {{#showslider}}
 <div id="themeboostunionslider-wrapper" class="container-fluid pb-3">
-  <div id="themeboostunionslider" class="carousel {{slidergeneralsettings.animation}}" data-interval="{{slidergeneralsettings.interval}}"
-    data-keyboard="{{slidergeneralsettings.keyboard}}" data-pause="{{slidergeneralsettings.pause}}"
-    data-ride="{{slidergeneralsettings.ride}}" data-wrap="{{slidergeneralsettings.wrap}}">
+  <div id="themeboostunionslider" class="carousel {{slidergeneralsettings.animation}}{{#slidergeneralsettings.dark}} carousel-dark{{/slidergeneralsettings.dark}}" data-bs-interval="{{slidergeneralsettings.interval}}"
+    data-bs-keyboard="{{slidergeneralsettings.keyboard}}" data-bs-pause="{{slidergeneralsettings.pause}}"
+    data-bs-ride="{{slidergeneralsettings.ride}}" data-bs-wrap="{{slidergeneralsettings.wrap}}">
 
     {{#slidergeneralsettings.showindicatornav}}
-    <ol class="carousel-indicators">
+    <div class="carousel-indicators">
       {{#slides}}
-      <li data-target="#themeboostunionslider" data-slide-to="{{slideto}}" {{#isfirstslide}}class="active"{{/isfirstslide}}></li>
+      <button type="button" data-bs-target="#themeboostunionslider" data-bs-slide-to="{{slideto}}" {{#isfirstslide}}class="active"{{/isfirstslide}}></button>
       {{/slides}}
-    </ol>
+    </div>
     {{/slidergeneralsettings.showindicatornav}}
 
-    <div class="carousel-inner">
+    <div class="carousel-inner rounded">
       {{#slides}}
-        <div id="themeboostunionslide{{no}}" class="carousel-item {{#isfirstslide}}active{{/isfirstslide}}">
+        <div id="themeboostunionslide{{no}}" class="carousel-item {{#isfirstslide}}active{{/isfirstslide}}"{{#interval}} data-bs-interval="{{interval}}"{{/interval}}>
           {{#linkimage}}{{#link}}<a href="{{link}}" {{#linktitle}}title="{{linktitle}}"{{/linktitle}} {{#linktargetnewtab}}target="_blank" rel="noopener noreferrer"{{/linktargetnewtab}}>{{/link}}{{/linkimage}}
             {{#backgroundimageurl}}<img class="d-block w-100" src="{{backgroundimageurl}}" alt="{{backgroundimagealt}}">{{/backgroundimageurl}}
           {{#linkimage}}{{#link}}</a>{{/link}}{{/linkimage}}
@@ -144,14 +145,14 @@
     </div>
 
     {{#slidergeneralsettings.showarrownav}}
-    <a class="carousel-control-prev" href="#themeboostunionslider" role="button" data-slide="prev">
+    <button class="carousel-control-prev" type="button" data-bs-target="#themeboostunionslider" data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">prev</span>
-    </a>
-    <a class="carousel-control-next" href="#themeboostunionslider" role="button" data-slide="next">
+      <span class="visually-hidden">{{#str}}previous,core{{/str}}</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#themeboostunionslider" data-bs-slide="next">
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">next</span>
-    </a>
+      <span class="visually-hidden">{{#str}}next,core{{/str}}</span>
+    </button>
     {{/slidergeneralsettings.showarrownav}}
   </div>
 </div>
