@@ -32,7 +32,7 @@ class="alert {{#visible}} alert-success{{/visible}}{{^visible}} alert-warning{{/
     background: white;
     opacity: 75%;">
         {{> core/loading }}
-        <span class="ml-2"> Loading... </span>
+        <span class="ms-2"> Loading... </span>
     </div>
     <div class="mb-2">
         <div>
@@ -42,12 +42,12 @@ class="alert {{#visible}} alert-success{{/visible}}{{^visible}} alert-warning{{/
     <div class="d-flex align-items-center">
         <a class="btn btn-link p-0"
         role="button"
-        data-toggle="popover"
-        data-placement="bottom"
-        data-content="{{#str}}coursevisibility_help, core{{/str}}"
-        data-html="true"
+        data-bs-toggle="popover"
+        data-bs-placement="bottom"
+        data-bs-content="{{#str}}coursevisibility_help, core{{/str}}"
+        data-bs-html="true"
         tabindex="0"
-        data-trigger="focus">
+        data-bs-trigger="focus">
             <i class="icon fa fa-question-circle text-info fa-fw"
             role="img"
             title="Help with Course visibility"
