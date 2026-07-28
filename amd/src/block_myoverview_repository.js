@@ -85,7 +85,8 @@ export const CARDLIST_REQUIRED_FIELDS = [
     'showshortname',
     'visible',
     'enddate',
-    'summary'
+    'summary',
+    'summaryformat'
 ];
 
 /**

@@ -24,20 +24,20 @@
 
 namespace theme_urcourses_default\external;
 
-use \core_external\external_api;
-use \core_external\external_function_parameters;
-use \core_external\external_value;
-use \core_external\external_single_structure;
-use \core_external\external_multiple_structure;
+use core_external\external_api;
+use core_external\external_function_parameters;
+use core_external\external_value;
+use core_external\external_single_structure;
+use core_external\external_multiple_structure;
 use \theme_urcourses_default\external\course_summary_exporter;
-use \core\exception\invalid_parameter_exception;
-use \context_user;
-use \context_helper;
-use \context_course;
-use \Generator;
-use \core_course_category;
-use \context;
-use \coding_exception;
+use core\exception\invalid_parameter_exception;
+use context_user;
+use context_helper;
+use context_course;
+use Generator;
+use core_course_category;
+use context;
+use coding_exception;
 
 require_once($CFG->dirroot . '/theme/urcourses_default/locallib.php');
 
@@ -598,7 +598,7 @@ class get_enrolled_courses extends external_api {
             }
         }
 
-        // Note: we can not use DISTINCT + text fields due to Oracle and MS limitations, that is why
+        // Note: we can not use DISTINCT + text fields due to MS limitations, that is why
         // we have the subselect there.
         $sql = "SELECT $coursefields $ccselect $timeaccessselect
                 FROM {course} c

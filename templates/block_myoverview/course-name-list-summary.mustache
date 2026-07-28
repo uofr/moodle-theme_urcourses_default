@@ -1,7 +1,7 @@
 {{#visible}}
     <a href="{{viewurl}}" class="aalink coursename">
         {{> core_course/favouriteicon }}
-        <span class="sr-only">
+        <span class="visually-hidden">
             {{#str}}aria:coursename, core_course{{/str}}
         </span>
         {{{fullname}}}
@@ -11,7 +11,7 @@
     {{#canviewhidden}}
         <a href="{{viewurl}}" class="aalink coursename">
             {{> core_course/favouriteicon }}
-            <span class="sr-only">
+            <span class="visually-hidden">
                 {{#str}}aria:coursename, core_course{{/str}}
             </span>
             {{{fullname}}}
@@ -20,7 +20,7 @@
     {{^canviewhidden}}
         <div class="aalink coursename">
             {{> core_course/favouriteicon }}
-            <span class="sr-only">
+            <span class="visually-hidden">
                 {{#str}}aria:coursename, core_course{{/str}}
             </span>
             {{{fullname}}}
