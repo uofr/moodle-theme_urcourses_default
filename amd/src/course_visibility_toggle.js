@@ -24,7 +24,7 @@
 import $ from 'jquery';
 import CustomEvents from 'core/custom_interaction_events';
 import * as Repository from 'theme_urcourses_default/repository';
-import ModalFactory from 'core/modal_factory';
+import ModalSaveCancel from 'core/modal_save_cancel';
 import ModalEvents from 'core/modal_events';
 import Notification from 'core/notification';
 
@@ -45,7 +45,7 @@ export const init = (rootSelector, courseid, visible, strings) => {
     _isCourseVisible = visible;
     _strings = strings;
 
-    ModalFactory.create({type: ModalFactory.types.SAVE_CANCEL})
+    ModalSaveCancel.create()
     .then(modal => {
         _confirmModal = modal;
         _confirmModal.setSaveButtonText(_strings.confirmbutton);
