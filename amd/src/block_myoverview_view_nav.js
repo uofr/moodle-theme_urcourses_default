@@ -25,7 +25,7 @@ import * as CustomEvents from 'core/custom_interaction_events';
 import Notification from 'core/notification';
 import {setUserPreference} from 'core_user/repository';
 import * as View from 'theme_urcourses_default/block_myoverview_view';
-import SELECTORS from 'block_myoverview/selectors';
+import SELECTORS from 'theme_urcourses_default/block_myoverview_selectors';
 
 /**
  * Update the user preference for the block.

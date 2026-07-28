@@ -17,216 +17,31 @@
 /**
  * Class for exporting a course summary from an stdClass.
  *
- * @package    core_course
- * @copyright  2015 Damyon Wiese
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    theme_urcourses_default
  */
 namespace theme_urcourses_default\external;
 defined('MOODLE_INTERNAL') || die();
 
 use renderer_base;
-use moodle_url;
 
 /**
  * Class for exporting a course summary from an stdClass.
  *
- * @copyright  2015 Damyon Wiese
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_summary_exporter extends \core\external\exporter {
-
-    /**
-     * Constructor - saves the persistent object, and the related objects.
-     *
-     * @param mixed $data - Either an stdClass or an array of values.
-     * @param array $related - An optional list of pre-loaded objects related to this object.
-     */
-    public function __construct($data, $related = array()) {
-        if (!array_key_exists('isfavourite', $related)) {
-            $related['isfavourite'] = false;
-        }
-        parent::__construct($data, $related);
-    }
-
-    protected static function define_related() {
-        // We cache the context so it does not need to be retrieved from the course.
-        return array('context' => '\\context', 'isfavourite' => 'bool?');
-    }
+class course_summary_exporter extends \block_currentcourses\external\course_summary_exporter {
 
     protected function get_other_values(renderer_base $output) {
-        global $CFG;
-        $courseimage = self::get_course_image($this->data);
-        if (!$courseimage) {
-            $courseimage = $output->get_generated_image_for_id($this->data->id);
-        }
-        $progress = self::get_course_progress($this->data);
-        $hasprogress = false;
-        if ($progress === 0 || $progress > 0) {
-            $hasprogress = true;
-        }
-        $progress = floor($progress ?? 0);
-        $coursecategory = \core_course_category::get($this->data->category, MUST_EXIST, true);
-        return array(
-            'fullnamedisplay' => get_course_display_name_for_list($this->data),
-            'viewurl' => (new moodle_url('/course/view.php', array('id' => $this->data->id)))->out(false),
-            'courseimage' => $courseimage,
-            'progress' => $progress,
-            'hasprogress' => $hasprogress,
-            'isfavourite' => $this->related['isfavourite'],
-            'hidden' => boolval(get_user_preferences('block_myoverview_hidden_course_' . $this->data->id, 0)),
-            'showshortname' => $CFG->courselistshortnames ? true : false,
-            'coursecategory' => $coursecategory->name,
-            'canviewhidden' => has_capability('moodle/course:viewhiddencourses', $this->related['context']),
-            'ended' => self::is_course_ended($this->data),
-            'started' => self::is_course_started($this->data)
-        );
-    }
-
-    public static function define_properties() {
-        return array(
-            'id' => array(
-                'type' => PARAM_INT,
-            ),
-            'fullname' => array(
-                'type' => PARAM_TEXT,
-            ),
-            'shortname' => array(
-                'type' => PARAM_TEXT,
-            ),
-            'idnumber' => array(
-                'type' => PARAM_RAW,
-            ),
-            'summary' => array(
-                'type' => PARAM_RAW,
-                'null' => NULL_ALLOWED,
-                'default' => null,
-            ),
-            'summaryformat' => array(
-                'type' => PARAM_INT,
-                'default' => FORMAT_MOODLE,
-            ),
-            'startdate' => array(
-                'type' => PARAM_INT,
-            ),
-            'enddate' => array(
-                'type' => PARAM_INT,
-            ),
-            'visible' => array(
-                'type' => PARAM_BOOL,
-            ),
-            'showactivitydates' => [
-                'type' => PARAM_BOOL,
-                'null' => NULL_ALLOWED
-            ],
-            'showcompletionconditions' => [
-                'type' => PARAM_BOOL,
-                'null' => NULL_ALLOWED
-            ],
-            'pdfexportfont' => [
-                'type' => PARAM_TEXT,
-                'null' => NULL_ALLOWED,
-                'default' => null,
-            ],
-        );
-    }
-
-    /**
-     * Get the formatting parameters for the summary.
-     *
-     * @return array
-     */
-    protected function get_format_parameters_for_summary() {
-        return [
-            'component' => 'course',
-            'filearea' => 'summary',
-        ];
+        $othervalues = parent::get_other_values($output);
+        $othervalues['started'] = self::is_course_started($this->data);
+        $othervalues['ended'] = self::is_course_ended($this->data);
+        return $othervalues;
     }
 
     public static function define_other_properties() {
-        return array(
-            'fullnamedisplay' => array(
-                'type' => PARAM_TEXT,
-            ),
-            'viewurl' => array(
-                'type' => PARAM_URL,
-            ),
-            'courseimage' => array(
-                'type' => PARAM_RAW,
-            ),
-            'progress' => array(
-                'type' => PARAM_INT,
-                'optional' => true
-            ),
-            'hasprogress' => array(
-                'type' => PARAM_BOOL
-            ),
-            'isfavourite' => array(
-                'type' => PARAM_BOOL
-            ),
-            'hidden' => array(
-                'type' => PARAM_BOOL
-            ),
-            'timeaccess' => array(
-                'type' => PARAM_INT,
-                'optional' => true
-            ),
-            'showshortname' => array(
-                'type' => PARAM_BOOL
-            ),
-            'coursecategory' => array(
-                'type' => PARAM_TEXT
-            ),
-            'canviewhidden' => array(
-                'type' => PARAM_BOOL
-            ),
-            'ended' => array(
-                'type' => PARAM_BOOL
-            ),
-            'started' => array(
-                'type' => PARAM_BOOL
-            ),
-        );
-    }
-
-    /**
-     * Get the course image if added to course.
-     *
-     * @param object $course
-     * @return string|false url of course image or false if it's not exist.
-     */
-    public static function get_course_image($course) {
-        $image = \cache::make('core', 'course_image')->get($course->id);
-
-        if (is_null($image)) {
-            $image = false;
-        }
-
-        return $image;
-    }
-
-    /**
-     * Get the course pattern datauri.
-     *
-     * The datauri is an encoded svg that can be passed as a url.
-     * @param object $course
-     * @return string datauri
-     * @deprecated 3.7
-     */
-    public static function get_course_pattern($course) {
-        global $OUTPUT;
-        debugging('course_summary_exporter::get_course_pattern() is deprecated. ' .
-            'Please use $OUTPUT->get_generated_image_for_id() instead.', DEBUG_DEVELOPER);
-        return $OUTPUT->get_generated_image_for_id($course->id);
-    }
-
-    /**
-     * Get the course progress percentage.
-     *
-     * @param object $course
-     * @return int progress
-     */
-    public static function get_course_progress($course) {
-        return \core_completion\progress::get_course_progress_percentage($course);
+        $otherproperties = parent::define_other_properties();
+        $otherproperties['started'] = ['type' => PARAM_BOOL];
+        $otherproperties['ended'] = ['type' => PARAM_BOOL];
+        return $otherproperties;
     }
 
     /**
@@ -237,10 +52,12 @@ class course_summary_exporter extends \core\external\exporter {
      * @return bool
      */
     public static function is_course_ended($course) {
-        if ($course->enddate == 0)
+        if ($course->enddate == 0) {
             return false;
-        else
+        }
+        else {
             return (time() > $course->enddate);
+        }
     }
 
     /**
@@ -251,19 +68,5 @@ class course_summary_exporter extends \core\external\exporter {
      */
     public static function is_course_started($course) {
         return (time() > $course->startdate);
-    }
-
-    /**
-     * Get the course color.
-     *
-     * @param int $courseid
-     * @return string hex color code.
-     * @deprecated 3.7
-     */
-    public static function coursecolor($courseid) {
-        global $OUTPUT;
-        debugging('course_summary_exporter::coursecolor() is deprecated. ' .
-            'Please use $OUTPUT->get_generated_color_for_id() instead.', DEBUG_DEVELOPER);
-        return $OUTPUT->get_generated_color_for_id($courseid);
     }
 }

@@ -1,7 +1,7 @@
 {{#visible}}
     <a href="{{viewurl}}" tabindex="-1" class="{{$classouter}}{{/classouter}}">
         <div class="{{$classinner}}{{/classinner}}" style='background-image: url("{{{courseimage}}}");'>
-            <span class="sr-only">{{fullname}}</span>
+            <span class="visually-hidden">{{fullname}}</span>
         </div>
     </a>
 {{/visible}}
@@ -9,14 +9,14 @@
     {{#canviewhidden}}
         <a href="{{viewurl}}" tabindex="-1" class="{{$classouter}}{{/classouter}}">
             <div class="{{$classinner}}{{/classinner}}" style='background-image: url("{{{courseimage}}}");'>
-                <span class="sr-only">{{fullname}}</span>
+                <span class="visually-hidden">{{fullname}}</span>
             </div>
         </a>
     {{/canviewhidden}}
     {{^canviewhidden}}
         <div tabindex="-1" class="{{$classouter}}{{/classouter}}">
             <div class="{{$classinner}}{{/classinner}}" style='background-image: url("{{{courseimage}}}");'>
-                <span class="sr-only">{{fullname}}</span>
+                <span class="visually-hidden">{{fullname}}</span>
             </div>
         </div>
     {{/canviewhidden}}
