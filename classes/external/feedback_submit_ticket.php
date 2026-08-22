@@ -43,36 +43,37 @@ class feedback_submit_ticket extends external_api {
     }
 
     public static function execute($contextid, $problem) {
-        global $DB;
+    global $DB;
 
-        $params = self::validate_parameters(self::execute_parameters(), [
-            'contextid' => $contextid,
-            'problem' => $problem
-        ]);
+    $params = self::validate_parameters(self::execute_parameters(), [
+        'contextid' => $contextid,
+        'problem' => $problem
+    ]);
 
-        $courseid = $params['contextid'];
+    $courseid = $params['contextid'];
 
-        $context = \context_course::instance($courseid);
-        self::validate_context($context);
+    $context = \context_course::instance($courseid);
+    self::validate_context($context);
 
-        require_capability('moodle/course:changesummary', $context);
+    require_capability('moodle/course:changesummary', $context);
 
-        $is_course_exist = $DB->record_exists('course', array('id' => $courseid));
+    $is_course_exist = $DB->record_exists('course', array('id' => $courseid));
 
-        if ($is_course_exist) {
-            $course = get_course($courseid);
-            $new_visibility = !($course->visible);
+    if ($is_course_exist) {
+        $course = get_course($courseid);
+        $new_visibility = !($course->visible);
 
-            $updated_course_record = new \stdClass();
-            $updated_course_record->id = $courseid;
-            $updated_course_record->visible = $new_visibility;
+        $updated_course_record = new \stdClass();
+        $updated_course_record->id = $courseid;
+        $updated_course_record->visible = $new_visibility;
 
-            $DB->update_record('course', $updated_course_record);
+        require_once($GLOBALS['CFG']->dirroot . '/course/lib.php');
+        update_course($updated_course_record);
 
-            return true;
-        }
-        else {
-            return false;
-        }
+        return true;
     }
+    else {
+        return false;
+    }
+}
 }
