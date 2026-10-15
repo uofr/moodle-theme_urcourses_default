@@ -51,6 +51,8 @@ $THEME->editor_scss = ['editor'];
 // The theme_config::get_renderer() method needs it to be directly in the theme_config object.
 $THEME->rendererfactory = 'theme_overridden_renderer_factory';
 
+$THEME->iconsystem = '\\theme_urcourses_default\\output\\icon_system_fontawesome';
+
 // Lastly, we replicate some settings from Boost Union at runtime into UR Courses's settings.
 // This becomes necessary if Moodle core code accesses a theme setting at $this->page->theme->settings->*.
 // In this case, the setting must exist in the currently active theme, otherwise it won't be found.
